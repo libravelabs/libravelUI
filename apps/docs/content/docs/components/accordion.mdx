@@ -1,0 +1,237 @@
+---
+title: Accordion
+description: An Accordion is a grouping of related disclosures. It supports both single and multiple expanded items.
+component: true
+doc:
+  title: Disclosure Group
+  href: https://react-spectrum.adobe.com/react-aria/DisclosureGroup.html
+---
+
+import { PreviewContainer } from "@/components/PreviewContainer";
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { AlertTriangle } from 'lucide-react'
+import { AccordionBasic } from '@/components/showcase/accordion'
+
+## Basic
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+      <AccordionBasic />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+
+export function AccordionBasic() {
+  return (
+    <Accordion>
+      <AccordionItem>
+        <AccordionTrigger>
+          What is the only food that never spoils?
+        </AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Honey! Archaeologists have found pots of honey in ancient
+            Egyptian tombs that are over 3,000 years old and still perfectly
+            edible.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>Can an octopus taste with its arms?</AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Yes! An octopus has taste receptors on its suckers, so it can
+            literally taste what it touches.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>What’s the shortest war in history?</AccordionTrigger>
+        <AccordionContent>
+          <p>
+            The Anglo-Zanzibar War in 1896 lasted between 38 and 45 minutes. ⚔️
+            That’s shorter than most Netflix episodes.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>Do bananas grow on trees?</AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Nope! Bananas actually grow on large herbs that are often
+            mistaken for trees. Technically, banana "trees" are giant plants.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>
+          How many hearts does an octopus have?
+        </AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Three! One pumps blood through its body, and two pump blood
+            through the gills.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+    ```
+
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components="disclosure" />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components class-variance-authority lucide-react clsx twMerge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="TITLE HERE"
+CODE HERE
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add COMPONENTS HERE
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+```
+
+```tsx
+    <Accordion>
+      <AccordionItem>
+        <AccordionTrigger>
+          What is the only food that never spoils?
+        </AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Honey! Archaeologists have found pots of honey in ancient Egyptian
+            tombs that are over 3,000 years old and still perfectly edible.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>Can an octopus taste with its arms?</AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Yes! An octopus has taste receptors on its suckers, so it can
+            literally taste what it touches.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>What’s the shortest war in history?</AccordionTrigger>
+        <AccordionContent>
+          <p>
+            The Anglo-Zanzibar War in 1896 lasted between 38 and 45 minutes. ⚔️
+            That’s shorter than most Netflix episodes.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>Do bananas grow on trees?</AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Nope! Bananas actually grow on large herbs that are often mistaken
+            for trees. Technically, banana "trees" are giant plants.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem>
+        <AccordionTrigger>
+          How many hearts does an octopus have?
+        </AccordionTrigger>
+        <AccordionContent>
+          <p>
+            Three! One pumps blood through its body, and two pump blood through
+            the gills.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+```
+
+## SHOWCASE HERE
+
+SHOWCASE DESCRIPTION HERE
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+PREVIEW HERE
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+    CODE HERE
+    ```
+
+  </Tab>
+</Tabs>
+
+## Props
+
+### Alert Props
+
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the component",
+      type: "string",
+    },
+  }}
+/>
