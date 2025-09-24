@@ -1,0 +1,538 @@
+---
+title: Alert
+description: A styled text component for highlighting important information, warnings, or contextual messages within a UI.
+component: true
+---
+
+import { PreviewContainer } from "@/components/PreviewContainer";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import {
+  AlertVariants,
+  BasicAlert,
+  CustomBuildAlert,
+  CanClosedAlert,
+  ControlledAlert,
+} from "@/components/showcase/alert";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+
+## Basic
+
+The **Alert** component is used to display short, important messages that catch the user's attention. It typically includes a title, description, and an optional icon to indicate the nature of the alert — such as information, success, warning, or error. Use this component to highlight key updates, statuses, or potential issues in the interface.
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+      <BasicAlert />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+export function BasicAlert() {
+  return (
+    <section>
+      <Alert
+        title="Heads Up"
+        message="Please review the information carefully before proceeding."
+      />
+    </section>
+  );
+}
+    ```
+
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+Install following dependencies:
+
+```package-install
+npm install class-variance-authority lucide-react clsx twMerge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/alert.tsx"
+"use client";
+
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
+import { cn } from "@/lib/utils";
+import { X, type LucideProps } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence, MotionProps } from "motion/react";
+
+const alertVariants = cva(
+  "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='translate-'])]:translate-y-0.5 [&_svg:not([class*='text-'])]:text-current",
+  {
+    variants: {
+      variant: {
+        default: "border-border bg-background text-foreground",
+        destructive:
+          "border-destructive bg-destructive/10 text-destructive [&>svg]:text-destructive",
+        warning:
+          "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200 [&>svg]:text-amber-600 dark:[&>svg]:text-amber-400",
+        success:
+          "border-green-200 bg-green-50 text-green-800 dark:border-green-700 dark:bg-green-950/30 dark:text-green-200 [&>svg]:text-green-600 dark:[&>svg]:text-green-400",
+        info: "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-700 dark:bg-blue-950/30 dark:text-blue-200 [&>svg]:text-blue-600 dark:[&>svg]:text-blue-400",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+function AlertRoot({
+  className,
+  variant,
+  ...props
+}: MotionProps &
+  VariantProps<typeof alertVariants> & {
+    className?: string | string[];
+  }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.15, ease: "easeOut" }}
+      data-slot="alert"
+      role="alert"
+      className={cn(alertVariants({ variant }), className)}
+      {...props}
+    />
+  );
+}
+
+function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn(
+        "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function AlertDescription({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn(
+        "text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+interface AlertProps extends VariantProps<typeof alertVariants> {
+  title?: string;
+  message?: string;
+  children?: React.ReactNode;
+  icon?: React.ReactNode | LucideProps;
+  className?: string;
+  canClosed?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+function Alert({
+  variant,
+  title,
+  message,
+  children,
+  icon,
+  className,
+  canClosed = false,
+  open: controlledOpen,
+  onOpenChange: controlledSetOpen,
+}: AlertProps) {
+  const [internalOpen, setInternalOpen] = React.useState(true);
+
+  const isControlled =
+    controlledOpen !== undefined && controlledSetOpen !== undefined;
+
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? controlledSetOpen : setInternalOpen;
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <AlertRoot
+          variant={variant}
+          className={cn("flex w-full items-start gap-2", className)}
+        >
+          {icon && <>{icon}</>}
+
+          <div className="flex-1">
+            {title && <AlertTitle>{title}</AlertTitle>}
+            {children
+              ? children
+              : message && <AlertDescription>{message}</AlertDescription>}
+          </div>
+
+          {canClosed && (
+            <Button
+              onClick={() => setOpen(false)}
+              size="icon"
+              variant="ghost"
+              className="size-5 m-auto"
+              aria-label="Close alert"
+            >
+              <X className="size-4" />
+            </Button>
+          )}
+        </AlertRoot>
+      )}
+    </AnimatePresence>
+  );
+}
+
+export { AlertRoot, Alert, AlertTitle, AlertDescription };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add alert
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Alert } from "@/components/ui/alert";
+```
+
+```tsx
+<section className="space-y-4">
+  <Alert
+    title="Default Alert"
+    message="This is a neutral notification"
+    icon={<Bell className="size-5" data-slot="icon" />}
+  />
+
+  <Alert
+    variant="info"
+    title="Info Alert"
+    message="Heads up! You should know about this"
+    icon={<Info className="size-5" data-slot="icon" />}
+  />
+
+  <Alert
+    variant="success"
+    title="Success Alert"
+    message="Your operation was successful"
+    icon={<CheckCircle className="size-5" data-slot="icon" />}
+  />
+
+  <Alert
+    variant="warning"
+    title="Warning Alert"
+    message="Be careful! Something may not be right"
+    icon={<AlertTriangle className="size-5" data-slot="icon" />}
+  />
+
+  <Alert
+    variant="destructive"
+    title="Error Alert"
+    message="Something went terribly wrong"
+    icon={<XCircle className="size-5" data-slot="icon" />}
+  />
+</section>
+```
+
+## Variants
+
+The **Alert** component provides several variants to display different types of important messages: neutral, info, success, warning, and error.
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+      <AlertVariants />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+    import { Alert } from "@/components/ui/alert";
+    import {
+      Info,
+      CheckCircle,
+      AlertTriangle,
+      XCircle,
+      Bell,
+    } from "lucide-react";
+
+    export function AlertVariants() {
+      return (
+        <section className="space-y-4">
+          <Alert
+            title="Default Alert"
+            message="This is a neutral notification"
+            icon={<Bell className="size-5" data-slot="icon" />}
+          />
+
+          <Alert
+            variant="info"
+            title="Info Alert"
+            message="Heads up! You should know about this"
+            icon={<Info className="size-5" data-slot="icon" />}
+          />
+
+          <Alert
+            variant="success"
+            title="Success Alert"
+            message="Your operation was successful"
+            icon={<CheckCircle className="size-5" data-slot="icon" />}
+          />
+
+          <Alert
+            variant="warning"
+            title="Warning Alert"
+            message="Be careful! Something may not be right"
+            icon={<AlertTriangle className="size-5" data-slot="icon" />}
+          />
+
+          <Alert
+            variant="destructive"
+            title="Error Alert"
+            message="Something went terribly wrong"
+            icon={<XCircle className="size-5" data-slot="icon" />}
+          />
+        </section>
+      );
+    }
+    ```
+
+  </Tab>
+</Tabs>
+
+## Custom Build
+
+The **Custom Alert** is built using low-level primitives like `AlertRoot`, `AlertTitle`, and `AlertDescription`. This setup offers full control over structure and behavior, making it easy to integrate buttons, icons, or custom interactions. It also includes a close action, allowing users to dismiss the alert manually when appropriate.
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+      <CustomBuildAlert />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+export function CustomBuild() {
+  return (
+    <section>
+      <AlertRoot className="flex flex-col gap-4 w-full">
+        <div className="flex gap-2">
+          <Cog />
+          <div>
+            <AlertTitle>Pulled Marcellus? Time to Choose</AlertTitle>
+            <AlertDescription>
+              You’re staring down the barrel — “Kill Bill” or “Save Marcellus”?
+              No turning back once you hit that button.
+            </AlertDescription>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 ml-auto">
+          <Button size="sm" variant="outline">
+            Kill Bill
+          </Button>
+          <Button size="sm">Save Marcellus</Button>
+        </div>
+      </AlertRoot>
+    </section>
+
+);
+}
+```
+
+  </Tab>
+</Tabs>
+
+## Can be Closed
+
+An alert that can be manually dismissed by the user. This pattern improves usability by allowing temporary messages to be closed once they’re no longer needed, keeping the interface clean and focused.
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+      <CanClosedAlert />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+export function CanClosedAlert() {
+  return (
+    <section>
+      <Alert
+        title="Notification"
+        message="You have a new update. Dismiss this alert if it's no longer relevant"
+        canClosed
+        icon={<Bell className="size-5" data-slot="icon" />}
+      />
+    </section>
+  );
+}
+    ```
+
+  </Tab>
+</Tabs>
+
+## Controlled State
+
+An alert that can be manually dismissed by the user. This pattern improves usability by allowing temporary messages to be closed once they’re no longer needed, keeping the interface clean and focused.
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+      <ControlledAlert />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+export function ControlledAlert() {
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+
+return (
+<section>
+<Alert
+title="Notification"
+message="You have a new update. Dismiss this alert if it's no longer relevant"
+canClosed
+open={isOpen}
+onOpenChange={setIsOpen}
+icon={<Bell className="size-5" data-slot="icon" />}
+/>
+</section>
+);
+}
+```
+
+  </Tab>
+</Tabs>
+
+## Props
+
+### Alert
+
+<TypeTable
+  type={{
+    variant: {
+      description: "Defines the visual style of the alert",
+      type: '"default" | "destructive" | "warning" | "info" | "success"',
+      default: '"default"',
+    },
+    title: {
+      description: "The title text displayed in the alert (optional)",
+      type: "string",
+      default: "undefined",
+    },
+    message: {
+      description: "The description or body text of the alert",
+      type: "string",
+      default: "undefined",
+    },
+    icon: {
+      description: "Optional icon element displayed before the text",
+      type: "LucideIcon | ReactNode",
+      default: "undefined",
+    },
+    canClosed: {
+      description: "If true, the alert is dismissible with a close button",
+      type: "boolean",
+      default: "false",
+    },
+    className: {
+      description: "Additional class names for the main alert container",
+      type: "string",
+      default: "undefined",
+    },
+    open: {
+      description: "Controlled open state. Determines if the alert is visible",
+      type: "boolean",
+      default: "undefined",
+    },
+    onOpenChange: {
+      description: "Function to control the open state from a parent component",
+      type: "(open: boolean) => void",
+      default: "undefined",
+    },
+  }}
+/>
+
+### AlertRoot
+<TypeTable
+  type={{
+    variant: {
+      description: "The visual style of the alert",
+      type: `"default" | "destructive" | "warning" | "success" | "info"`,
+      default: `"default"`,
+    },
+    className: {
+      description: "Additional class names for styling",
+      type: "string",
+      default: "undefined",
+    },
+  }}
+/>
+
+### AlertTitle
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for styling the title",
+      type: "string",
+      default: "undefined",
+    },
+    children: {
+      description: "Title content (typically text or heading)",
+      type: "React.ReactNode",
+      default: "undefined",
+    },
+  }}
+/>
+
+### AlertDescription
+
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for styling the description",
+      type: "string",
+      default: "undefined",
+    },
+    children: {
+      description: "Description content (typically text or elements)",
+      type: "React.ReactNode",
+      default: "undefined",
+    },
+  }}
+/>

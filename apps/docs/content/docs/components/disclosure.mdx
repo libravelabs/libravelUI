@@ -1,0 +1,605 @@
+---
+title: Disclosure
+description: A disclosure is a collapsible section of content. It is composed of a a header with a heading and trigger button, and a panel that contains the content.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/Disclosure.html
+---
+
+import { PreviewContainer } from "@/components/PreviewContainer";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import {
+  DisclosureBasic,
+  DisclosureVariants,
+  DisclosureSizes
+} from "@/components/showcase/disclosure";
+
+## Basic
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+        <DisclosureBasic />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+export function DisclosureBasic() {
+  return (
+    <Disclosure>
+      <DisclosureTrigger>What’s included in the Pro plan?</DisclosureTrigger>
+      <DisclosureContent>
+        <p>
+          The Pro plan includes unlimited projects, advanced analytics, priority
+          support, and integrations with third-party tools like Slack and Google
+          Drive.
+        </p>
+      </DisclosureContent>
+    </Disclosure>
+  );
+}
+    ```
+
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components class-variance-authority lucide-react clsx twMerge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+To enable the animation, you need to add the required animation and keyframes either to your global CSS file (e.g., `main.css` or `global.css`) or to your Tailwind config file, depending on the version of Tailwind you're using.
+
+```css title="app/*.css"
+@theme {
+  --animate-disclosure-collapsed: disclosure-collapsed 0.2s linear;
+  --animate-disclosure-expanded: disclosure-expanded 0.2s linear;
+}
+
+@keyframes disclosure-collapsed {
+  from {
+    height: var(--disclosure-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes disclosure-expanded {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--disclosure-height);
+  }
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/disclosure.tsx"
+"use client";
+
+import {
+  Button,
+  Disclosure as DisclosurePrimitive,
+  DisclosurePanel as DisclosureContentPrimitive,
+  DisclosureStateContext,
+  Heading,
+} from "react-aria-components";
+import { ChevronDown } from "lucide-react";
+import { use, useEffect, useRef, createContext, useContext } from "react";
+import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
+
+const DisclosureStyleContext = createContext<
+  VariantProps<typeof disclosureVariants>
+>({
+  variant: "default",
+  size: "sm",
+});
+
+const useDisclosureStyle = () => useContext(DisclosureStyleContext);
+
+const disclosureVariants = cva("w-full", {
+  variants: {
+    variant: {
+      default: "border-b border-border",
+      ghost: "",
+      outline: [
+        "border rounded-xl",
+        "group-data-[variant=outline]:border-b group-data-[variant=outline]:border-border group-data-[variant=outline]:rounded-none",
+      ],
+      solid: [
+        "border bg-background shadow-sm rounded-xl",
+        "group-data-[variant=solid]:border-b group-data-[variant=solid]:border-border group-data-[variant=solid]:rounded-none",
+      ],
+      muted: [
+        "border border-border bg-muted/50 rounded-xl",
+        "group-data-[variant=muted]:border-b group-data-[variant=muted]:border-border group-data-[variant=muted]:rounded-none",
+      ],
+      separated: "border-t last:border-b",
+    },
+    size: {
+      sm: "text-sm",
+      md: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
+      full: "",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "sm",
+  },
+});
+
+const disclosureTriggerVariants = cva(
+  "flex items-center justify-between w-full font-medium transition-all focus:outline-hidden disabled:pointer-events-none disabled:opacity-50 cursor-pointer text-left",
+  {
+    variants: {
+      size: {
+        sm: "px-4 py-3",
+        md: "px-5 py-4",
+        lg: "px-6 py-5",
+        xl: "px-7 py-6",
+        full: "",
+      },
+    },
+    defaultVariants: {
+      size: "sm",
+    },
+  }
+);
+
+const disclosureContentVariants = cva("overflow-hidden text-muted-foreground", {
+  variants: {
+    size: {
+      sm: "px-4 pb-3",
+      md: "px-5 pb-4",
+      lg: "px-6 pb-5",
+      xl: "px-7 pb-6",
+      full: "",
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
+
+type DisclosureProps = React.ComponentProps<typeof DisclosurePrimitive> &
+  VariantProps<typeof disclosureVariants>;
+
+function Disclosure({ variant, size, className, ...props }: DisclosureProps) {
+  return (
+    <DisclosureStyleContext.Provider value={{ variant, size }}>
+      <DisclosurePrimitive
+        className={cn(disclosureVariants({ variant, size }), className)}
+        {...props}
+      />
+    </DisclosureStyleContext.Provider>
+  );
+}
+
+interface DisclosureTriggerProps extends React.ComponentProps<typeof Button> {
+  icon?: React.ReactNode;
+  hideChevron?: boolean;
+}
+
+function DisclosureTrigger({
+  className,
+  icon,
+  hideChevron = false,
+  children,
+  ...props
+}: DisclosureTriggerProps) {
+  const { size } = useDisclosureStyle();
+  const { isExpanded } = use(DisclosureStateContext)!;
+
+  return (
+    <Heading>
+      <Button
+        slot="trigger"
+        className={cn(disclosureTriggerVariants({ size }), className)}
+        {...props}
+      >
+        {(values) => (
+          <>
+            {typeof children === "function" ? (
+              children(values)
+            ) : (
+              <div className="flex items-center gap-2">
+                {icon && <span className="shrink-0">{icon}</span>}
+                <span className="text-left group-hover:underline transition-all duration-200">
+                  {children}
+                </span>
+              </div>
+            )}
+            {!hideChevron && (
+              <ChevronDown
+                data-slot="disclosure-chevron"
+                className={cn(
+                  "size-4 shrink-0 transition duration-300",
+                  isExpanded && "rotate-180"
+                )}
+              />
+            )}
+          </>
+        )}
+      </Button>
+    </Heading>
+  );
+}
+
+type DisclosureContentProps = React.ComponentProps<
+  typeof DisclosureContentPrimitive
+>;
+
+function DisclosureContent({
+  className,
+  children,
+  ...props
+}: DisclosureContentProps) {
+  const { size } = useDisclosureStyle();
+  const { isExpanded } = use(DisclosureStateContext)!;
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = contentRef.current;
+    if (!element) return;
+
+    const ro = new ResizeObserver(([entry]) => {
+      const height = entry.target.clientHeight;
+      element.parentElement?.style.setProperty(
+        "--disclosure-height",
+        `${height}px`
+      );
+    });
+
+    ro.observe(element);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <DisclosureContentPrimitive
+      className={cn(
+        disclosureContentVariants({ size }),
+        "transition-all duration-300 ease-in-out",
+        isExpanded
+          ? "animate-disclosure-expanded"
+          : "animate-disclosure-collapsed pb-0",
+        className
+      )}
+      {...props}
+    >
+      <div
+        ref={contentRef}
+        className={cn(
+          "transition-opacity duration-300 ease-in-out",
+          isExpanded ? "opacity-100" : "opacity-0"
+        )}
+      >
+        {children}
+      </div>
+    </DisclosureContentPrimitive>
+  );
+}
+
+export { Disclosure, DisclosureTrigger, DisclosureContent };
+export type { DisclosureProps, DisclosureTriggerProps, DisclosureContentProps };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add disclosure
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  Disclosure,
+  DisclosureTrigger,
+  DisclosureContent,
+} from "@/components/ui/disclosure";
+```
+
+```tsx
+<Disclosure>
+  <DisclosureTrigger>What’s included in the Pro plan?</DisclosureTrigger>
+  <DisclosureContent>
+    <p>
+      The Pro plan includes unlimited projects, advanced analytics, priority
+      support, and integrations with third-party tools like Slack and Google
+      Drive.
+    </p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+## Variants
+
+The **Disclosure** component provides several variants to display different style.
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+        <DisclosureVariants />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+export function DisclosureVariants() {
+  return (
+    <div className="space-y-6 w-full">
+      <Disclosure>
+        <DisclosureTrigger>
+          What payment methods are accepted?
+        </DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            We accept all major credit cards, including Visa, MasterCard, and
+            American Express. You can also pay using PayPal or bank transfer,
+            depending on your region.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure variant="ghost">
+        <DisclosureTrigger>Can I change my plan later?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            Yes, you can upgrade or downgrade your subscription at any time from
+            your account settings. The changes will take effect immediately, and
+            you’ll only be charged for the prorated amount.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure variant="outline">
+        <DisclosureTrigger>Do you offer support?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            Absolutely. Our support team is available 24/7 via email and live
+            chat. We also have a comprehensive knowledge base to help you
+            troubleshoot common issues.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure variant="solid">
+        <DisclosureTrigger>Is there a free trial available?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            Yes, we offer a 14-day free trial with full access to all features.
+            No credit card is required to start the trial.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure variant="muted">
+        <DisclosureTrigger>How do I cancel my subscription?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            You can cancel your subscription anytime from your billing settings.
+            Once canceled, you’ll continue to have access until the end of your
+            billing cycle.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure variant="separated">
+        <DisclosureTrigger>Where is your company located?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            Our headquarters is located in 221b Baker Street, London. However,
+            we operate remotely and serve customers from all over the world.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+    </div>
+  );
+}
+```
+  </Tab>
+</Tabs>
+
+## Sizes
+
+And yet, another variant of sizes of this component.
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+        <DisclosureSizes />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+```tsx
+export function DisclosureSizes() {
+  return (
+    <section className="space-y-6 w-full">
+      <Disclosure size="sm" variant="outline">
+        <DisclosureTrigger>What is your refund policy?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            We offer full refunds within 30 days of purchase. If you're not
+            satisfied with the product, you can request a refund by contacting
+            our support team.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure size="md" variant="outline">
+        <DisclosureTrigger>How do I change my account email?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            To change your email, go to account settings, click on "Email", and
+            follow the verification steps to update your address.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure size="lg" variant="outline">
+        <DisclosureTrigger>
+          Can I use this on multiple devices?
+        </DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            Yes, your subscription allows usage on up to 5 devices. Just log in
+            using your account credentials and you're good to go.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+
+      <Disclosure size="xl" variant="outline">
+        <DisclosureTrigger>Do you offer team billing?</DisclosureTrigger>
+        <DisclosureContent>
+          <p>
+            We support team-based billing. You can invite team members, assign
+            roles, and manage invoices all from your team dashboard.
+          </p>
+        </DisclosureContent>
+      </Disclosure>
+    </section>
+  );
+}
+    ```
+
+  </Tab>
+</Tabs>
+
+## Props
+
+### Disclosure
+
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the Disclosure container",
+      type: "string",
+      default: "undefined",
+    },
+    variant: {
+      description: "Visual style of the Disclosure container",
+      type: `"default" | "ghost" | "outline" | "solid" | "muted" | "separated"`,
+      default: `"default"`,
+    },
+    size: {
+      description: "Size of the Disclosure, affects padding and font size",
+      type: `"sm" | "md" | "lg" | "xl"`,
+      default: `"sm"`,
+    },
+    children: {
+      description: "Content of the Disclosure (usually trigger and content)",
+      type: "React.ReactNode",
+      default: "undefined",
+    },
+    id: {
+      description: "The HTML ID of the Disclosure",
+      type: "string",
+      default: "undefined",
+    },
+    defaultOpen: {
+      description: "Whether the Disclosure is open by default",
+      type: "boolean",
+      default: "false",
+    },
+    isOpen: {
+      description: "Controlled open state",
+      type: "boolean",
+      default: "undefined",
+    },
+    onOpenChange: {
+      description: "Callback fired when open state changes",
+      type: "(isOpen: boolean) => void",
+      default: "undefined",
+    },
+  }}
+/>
+
+### DisclosureTrigger
+
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the trigger button",
+      type: "string",
+      default: "undefined",
+    },
+    icon: {
+      description: "Icon to display at the start of the trigger",
+      type: "React.ReactNode",
+      default: "undefined",
+    },
+    hideChevron: {
+      description: "Hide the dropdown chevron icon",
+      type: "boolean",
+      default: "false",
+    },
+    children: {
+      description: "Text or custom render function for the trigger label",
+      type: "React.ReactNode | ((props: { isPressed: boolean }) => React.ReactNode)",
+      default: "undefined",
+    },
+    id: {
+      description: "HTML ID of the trigger button",
+      type: "string",
+      default: "undefined",
+    },
+    onPress: {
+      description: "Called when the trigger is clicked or activated",
+      type: "() => void",
+      default: "undefined",
+    },
+    disabled: {
+      description: "Whether the trigger is disabled",
+      type: "boolean",
+      default: "false",
+    },
+  }}
+/>
+
+### DisclosureContent
+
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the content container",
+      type: "string",
+      default: "undefined",
+    },
+    children: {
+      description: "Content shown inside the Disclosure panel",
+      type: "React.ReactNode",
+      default: "undefined",
+    },
+    id: {
+      description: "HTML ID of the disclosure content",
+      type: "string",
+      default: "undefined",
+    },
+  }}
+/>
