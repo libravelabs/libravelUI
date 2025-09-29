@@ -7,40 +7,19 @@ component: true
 import { PreviewContainer } from "@/components/PreviewContainer";
 import { TypeTable } from "fumadocs-ui/components/type-table";
 import {
-  AlertVariants,
-  BasicAlert,
-  CustomBuildAlert,
-  CanClosedAlert,
-  ControlledAlert,
-} from "@/components/showcase/alert";
+  BasicAlertShowcase,
+  VariantsAlertShowcase,
+  CustomBuildAlertShowcase,
+  CanClosedAlertShowcase,
+  ControlledAlertShowcase,
+} from "@/components/docs/alert";
 import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
 ## Basic
 
 The **Alert** component is used to display short, important messages that catch the user's attention. It typically includes a title, description, and an optional icon to indicate the nature of the alert — such as information, success, warning, or error. Use this component to highlight key updates, statuses, or potential issues in the interface.
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-      <BasicAlert />
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-export function BasicAlert() {
-  return (
-    <section>
-      <Alert
-        title="Heads Up"
-        message="Please review the information carefully before proceeding."
-      />
-    </section>
-  );
-}
-    ```
-
-  </Tab>
-</Tabs>
+<BasicAlertShowcase />
 
 ## Installation
 
@@ -66,7 +45,7 @@ export function cn(...inputs: ClassValue[]) {
 
 Copy and paste the following code into your project.
 
-```tsx ts2js title="components/ui/alert.tsx"
+```tsx ts2js title="components/ui/alert"
 "use client";
 
 import * as React from "react";
@@ -273,171 +252,25 @@ import { Alert } from "@/components/ui/alert";
 
 The **Alert** component provides several variants to display different types of important messages: neutral, info, success, warning, and error.
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-      <AlertVariants />
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-    import { Alert } from "@/components/ui/alert";
-    import {
-      Info,
-      CheckCircle,
-      AlertTriangle,
-      XCircle,
-      Bell,
-    } from "lucide-react";
-
-    export function AlertVariants() {
-      return (
-        <section className="space-y-4">
-          <Alert
-            title="Default Alert"
-            message="This is a neutral notification"
-            icon={<Bell className="size-5" data-slot="icon" />}
-          />
-
-          <Alert
-            variant="info"
-            title="Info Alert"
-            message="Heads up! You should know about this"
-            icon={<Info className="size-5" data-slot="icon" />}
-          />
-
-          <Alert
-            variant="success"
-            title="Success Alert"
-            message="Your operation was successful"
-            icon={<CheckCircle className="size-5" data-slot="icon" />}
-          />
-
-          <Alert
-            variant="warning"
-            title="Warning Alert"
-            message="Be careful! Something may not be right"
-            icon={<AlertTriangle className="size-5" data-slot="icon" />}
-          />
-
-          <Alert
-            variant="destructive"
-            title="Error Alert"
-            message="Something went terribly wrong"
-            icon={<XCircle className="size-5" data-slot="icon" />}
-          />
-        </section>
-      );
-    }
-    ```
-
-  </Tab>
-</Tabs>
+<VariantsAlertShowcase />
 
 ## Custom Build
 
 The **Custom Alert** is built using low-level primitives like `AlertRoot`, `AlertTitle`, and `AlertDescription`. This setup offers full control over structure and behavior, making it easy to integrate buttons, icons, or custom interactions. It also includes a close action, allowing users to dismiss the alert manually when appropriate.
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-      <CustomBuildAlert />
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-export function CustomBuild() {
-  return (
-    <section>
-      <AlertRoot className="flex flex-col gap-4 w-full">
-        <div className="flex gap-2">
-          <Cog />
-          <div>
-            <AlertTitle>Pulled Marcellus? Time to Choose</AlertTitle>
-            <AlertDescription>
-              You’re staring down the barrel — “Kill Bill” or “Save Marcellus”?
-              No turning back once you hit that button.
-            </AlertDescription>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 ml-auto">
-          <Button size="sm" variant="outline">
-            Kill Bill
-          </Button>
-          <Button size="sm">Save Marcellus</Button>
-        </div>
-      </AlertRoot>
-    </section>
-
-);
-}
-```
-
-  </Tab>
-</Tabs>
+<CustomBuildAlertShowcase />
 
 ## Can be Closed
 
 An alert that can be manually dismissed by the user. This pattern improves usability by allowing temporary messages to be closed once they’re no longer needed, keeping the interface clean and focused.
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-      <CanClosedAlert />
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-export function CanClosedAlert() {
-  return (
-    <section>
-      <Alert
-        title="Notification"
-        message="You have a new update. Dismiss this alert if it's no longer relevant"
-        canClosed
-        icon={<Bell className="size-5" data-slot="icon" />}
-      />
-    </section>
-  );
-}
-    ```
-
-  </Tab>
-</Tabs>
+<CanClosedAlertShowcase />
 
 ## Controlled State
 
 An alert that can be manually dismissed by the user. This pattern improves usability by allowing temporary messages to be closed once they’re no longer needed, keeping the interface clean and focused.
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-      <ControlledAlert />
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-export function ControlledAlert() {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-
-return (
-<section>
-<Alert
-title="Notification"
-message="You have a new update. Dismiss this alert if it's no longer relevant"
-canClosed
-open={isOpen}
-onOpenChange={setIsOpen}
-icon={<Bell className="size-5" data-slot="icon" />}
-/>
-</section>
-);
-}
-```
-
-  </Tab>
-</Tabs>
+<ControlledAlertShowcase />
 
 ## Props
 

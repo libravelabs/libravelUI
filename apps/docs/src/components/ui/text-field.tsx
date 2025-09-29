@@ -5,7 +5,7 @@ import {
   type TextFieldProps as TextFieldPrimitiveProps,
   type ValidationResult,
 } from "react-aria-components";
-import { Input, type InputProps } from "./field";
+import { Input, type InputProps } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 interface TextFieldProps extends TextFieldPrimitiveProps, InputProps {
@@ -15,6 +15,9 @@ interface TextFieldProps extends TextFieldPrimitiveProps, InputProps {
   error?: string | ((validation: ValidationResult) => string);
   startContent?: InputProps["startContent"];
   endContent?: InputProps["endContent"];
+  isLoading?: InputProps["isLoading"];
+  variant?: InputProps["variant"];
+  size?: InputProps["size"];
 }
 
 function TextField({
@@ -31,6 +34,7 @@ function TextField({
   variant,
   size,
   isPassword,
+  isLoading,
   ...rest
 }: TextFieldProps) {
   const inputProps: InputProps = {
@@ -45,6 +49,7 @@ function TextField({
     variant,
     size,
     isPassword,
+    isLoading,
   };
 
   const textFieldProps: TextFieldPrimitiveProps = {

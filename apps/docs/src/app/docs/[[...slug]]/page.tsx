@@ -62,7 +62,7 @@ export default async function Page(props: {
           href={
             typeof page.data.doc === "string"
               ? page.data.doc
-              : page.data.doc.href
+              : page.data.doc.url
           }
           target="_blank"
           rel="noreferrer"

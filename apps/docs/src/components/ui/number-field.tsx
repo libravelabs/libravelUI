@@ -1,14 +1,16 @@
 "use client";
 
+import * as React from "react";
 import {
   Button,
   type ButtonProps,
   NumberField as NumberFieldPrimitive,
+  useLocale,
   type NumberFieldProps as NumberFieldPrimitiveProps,
   type ValidationResult,
 } from "react-aria-components";
-import { ChevronDown, ChevronUp, Minus, Plus } from "lucide-react";
-import { Input } from "./field";
+import { Minus, Plus } from "lucide-react";
+import { Input } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 interface NumberFieldProps extends NumberFieldPrimitiveProps {
@@ -28,6 +30,8 @@ function NumberField({
   indicator,
   ...props
 }: NumberFieldProps) {
+  const { direction } = useLocale();
+
   return (
     <NumberFieldPrimitive
       {...props}
@@ -53,7 +57,7 @@ function NumberField({
             className="border-s border-border rounded-e-md"
           />
         }
-        classNames={{ wrapper: "px-0 mx-0", input: "text-center" }}
+        classNames={{ wrapper: "px-0.5 mx-0", input: "text-center" }}
       />
     </NumberFieldPrimitive>
   );
@@ -61,34 +65,38 @@ function NumberField({
 
 interface StepperButtonProps extends ButtonProps {
   slot: "increment" | "decrement";
-  indicator?: "chevron" | "default";
+  indicator?: {
+    increment?: React.ReactNode;
+    decrement?: React.ReactNode;
+  };
   className?: string;
 }
 
 function StepperButton({
   slot,
   className,
-  indicator = "default",
+  indicator,
   ...props
 }: StepperButtonProps) {
-  const icon =
-    indicator === "chevron" ? (
-      slot === "increment" ? (
-        <ChevronUp className="size-5" />
-      ) : (
-        <ChevronDown className="size-5" />
-      )
-    ) : slot === "increment" ? (
-      <Plus />
-    ) : (
-      <Minus />
-    );
+  let icon: React.ReactNode;
+
+  if (
+    indicator &&
+    typeof indicator === "object" &&
+    !React.isValidElement(indicator)
+  ) {
+    icon = slot === "increment" ? indicator.increment : indicator.decrement;
+  } else if (React.isValidElement(indicator)) {
+    icon = indicator;
+  } else {
+    icon = slot === "increment" ? <Plus /> : <Minus />;
+  }
 
   return (
     <Button
       className={cn(
         className,
-        "size-[33px] inline-flex items-center justify-center cursor-pointer bg-muted text-muted-foreground pressed:bg-secondary pressed:text-secondary-foreground group-disabled:opacity-30 group-disabled:pointer-events-none"
+        "size-[30px] inline-flex items-center justify-center cursor-pointer bg-muted text-muted-foreground pressed:bg-secondary pressed:text-secondary-foreground group-disabled:opacity-30 group-disabled:pointer-events-none"
       )}
       slot={slot}
       {...props}

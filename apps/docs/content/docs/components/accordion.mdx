@@ -4,97 +4,17 @@ description: An Accordion is a grouping of related disclosures. It supports both
 component: true
 doc:
   title: Disclosure Group
-  href: https://react-spectrum.adobe.com/react-aria/DisclosureGroup.html
+  url: https://react-spectrum.adobe.com/react-aria/DisclosureGroup.html
 ---
 
-import { PreviewContainer } from "@/components/PreviewContainer";
 import { RequiredBlock } from "@/components/required-block";
 import { TypeTable } from "fumadocs-ui/components/type-table";
 import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { AlertTriangle } from 'lucide-react'
-import { AccordionBasic } from '@/components/showcase/accordion'
+import { AccordionBasic, AccordionVariants } from '@/components/docs/accordion'
 
 ## Basic
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-      <AccordionBasic />
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
-
-export function AccordionBasic() {
-  return (
-    <Accordion>
-      <AccordionItem>
-        <AccordionTrigger>
-          What is the only food that never spoils?
-        </AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Honey! Archaeologists have found pots of honey in ancient
-            Egyptian tombs that are over 3,000 years old and still perfectly
-            edible.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>Can an octopus taste with its arms?</AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Yes! An octopus has taste receptors on its suckers, so it can
-            literally taste what it touches.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>What’s the shortest war in history?</AccordionTrigger>
-        <AccordionContent>
-          <p>
-            The Anglo-Zanzibar War in 1896 lasted between 38 and 45 minutes. ⚔️
-            That’s shorter than most Netflix episodes.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>Do bananas grow on trees?</AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Nope! Bananas actually grow on large herbs that are often
-            mistaken for trees. Technically, banana "trees" are giant plants.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>
-          How many hearts does an octopus have?
-        </AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Three! One pumps blood through its body, and two pump blood
-            through the gills.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  );
-}
-    ```
-
-  </Tab>
-</Tabs>
+<AccordionBasic />
 
 ## Installation
 
@@ -122,15 +42,109 @@ export function cn(...inputs: ClassValue[]) {
 
 Copy and paste the following code into your project.
 
-```tsx ts2js title="TITLE HERE"
-CODE HERE
+```tsx ts2js title="components/ui/accordion"
+"use client";
+
+import { cn } from "@/lib/utils";
+import { DisclosureGroup as AccordionPrimitive } from "react-aria-components";
+import type { DisclosureGroupProps as AccordionPrimitiveProps } from "react-aria-components";
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureTrigger,
+  type DisclosureProps,
+} from "@/components/ui/disclosure";
+import { createContext, useContext } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
+const accordionVariants = cva(
+  "group w-full peer cursor-default disabled:cursor-not-allowed disabled:opacity-75",
+  {
+    variants: {
+      variant: {
+        default: "overflow-hidden",
+        ghost: "",
+        outline: "border border-border rounded-xl overflow-hidden",
+        solid: "border bg-background shadow-sm rounded-xl overflow-hidden",
+        muted: "border border-border bg-muted/50 rounded-xl overflow-hidden",
+        separated: "",
+      },
+      size: {
+        sm: "text-sm max-w-lg",
+        md: "max-w-2xl",
+        lg: "text-lg max-w-4xl",
+        full: "max-w-full",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
+
+const AccordionStyleContext = createContext<
+  VariantProps<typeof accordionVariants>
+>({
+  variant: "default",
+  size: "sm",
+});
+
+const useAccordionStyle = () => useContext(AccordionStyleContext);
+
+interface AccordionProps
+  extends AccordionPrimitiveProps,
+    VariantProps<typeof accordionVariants> {
+  ref?: React.RefObject<HTMLDivElement>;
+  multiple?: boolean;
+}
+
+function Accordion({
+  children,
+  ref,
+  className,
+  variant,
+  size,
+  multiple = false,
+  ...props
+}: AccordionProps) {
+  return (
+    <AccordionStyleContext.Provider value={{ variant, size }}>
+      <AccordionPrimitive
+        data-variant={variant}
+        ref={ref}
+        allowsMultipleExpanded={multiple}
+        className={cn(accordionVariants({ variant, size }), className)}
+        {...props}
+      >
+        {(values) => (
+          <div data-slot="accordion-root">
+            {typeof children === "function" ? children(values) : children}
+          </div>
+        )}
+      </AccordionPrimitive>
+    </AccordionStyleContext.Provider>
+  );
+}
+
+function AccordionItem(props: DisclosureProps) {
+  const { variant, size } = useAccordionStyle();
+
+  return <Disclosure variant={variant} size={size} {...props} />;
+}
+
+const AccordionTrigger = DisclosureTrigger;
+const AccordionContent = DisclosureContent;
+
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export type { AccordionProps };
 ```
 
 </Tab>
 <Tab value="CLI">
 
 ```package-install
-npx libravelui@latest add COMPONENTS HERE
+npx libravelui@latest add accordion
 ```
 
 </Tab>
@@ -205,33 +219,50 @@ import {
     </Accordion>
 ```
 
-## SHOWCASE HERE
+## Variants
 
-SHOWCASE DESCRIPTION HERE
+The Accordion component offers visual variants like `default`, `ghost`, `outline`, `solid`, `muted`, and `separated` for different use cases.
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-PREVIEW HERE
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-    CODE HERE
-    ```
-
-  </Tab>
-</Tabs>
+<AccordionVariants />
 
 ## Props
 
-### Alert Props
+### Accordion Props
 
 <TypeTable
   type={{
     className: {
-      description: "Additional class names for the component",
+      description: "Additional class names to apply to the accordion container.",
       type: "string",
+      required: false,
+    },
+    ref: {
+      description: "A React ref to access the accordion container DOM element.",
+      type: "React.RefObject<HTMLDivElement>",
+      required: false,
+    },
+    multiple: {
+      description: "Allow multiple items to be expanded at the same time.",
+      type: "boolean",
+      required: false,
+    },
+    variant: {
+      description:
+        'Visual style of the accordion. Options: `"default"`, `"ghost"`, `"outline"`, `"solid"`, `"muted"`, `"separated"`.',
+      type: `"default" | "ghost" | "outline" | "solid" | "muted" | "separated"`,
+      required: false,
+    },
+    size: {
+      description:
+        'Size of the accordion. Options: `"sm"`, `"md"`, `"lg"`, `"full"`.',
+      type: `"sm" | "md" | "lg" | "full"`,
+      required: false,
+    },
+    children: {
+      description:
+        "Accordion items or a render function that receives the expanded item keys.",
+      type: "React.ReactNode | ((values: Key[]) => React.ReactNode)",
+      required: true,
     },
   }}
 />

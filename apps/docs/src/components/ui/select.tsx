@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import {
   Button,
@@ -61,17 +63,19 @@ function SelectRoot({
     <SelectContext.Provider
       value={{ value, setValue, clear, isOpen, setIsOpen, error }}
     >
-      {label && <Label className="mb-2">{label}</Label>}
-      <SelectPrimitive
-        isOpen={isOpen}
-        onOpenChange={setIsOpen}
-        aria-label={props["aria-label"] ?? "select"}
-        selectedKey={value}
-        onSelectionChange={setValue}
-        {...props}
-      >
-        {props.children}
-      </SelectPrimitive>
+      <div>
+        {label && <Label className="mb-1">{label}</Label>}
+        <SelectPrimitive
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          aria-label={props["aria-label"] ?? "select"}
+          selectedKey={value}
+          onSelectionChange={setValue}
+          {...props}
+        >
+          {props.children}
+        </SelectPrimitive>
+      </div>
     </SelectContext.Provider>
   );
 }
@@ -100,7 +104,7 @@ function SelectTrigger({
         {...props}
         data-state={isOpen}
         className={cn(
-          "min-w-72 max-w-72 border-input data-[placeholder]:text-muted-foreground hover:opacity-70 transition ease-linear [&_svg:not([class*='text-'])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex w-fit items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 truncate",
+          "border-input data-[placeholder]:text-muted-foreground hover:opacity-70 transition ease-linear [&_svg:not([class*='text-'])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex w-fit items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 truncate",
           error
             ? "border border-destructive inset-ring-destructive ring-3 ring-destructive/20 focus-within:inset-ring-destructive focus-within:ring-3 focus-within:ring-destructive/20"
             : "inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 data-[state=true]:inset-ring-ring/70 data-[state=true]:ring-3 data-[state=true]:ring-ring/20",
@@ -159,7 +163,7 @@ function SelectContent<T extends object>({
     <PopoverContent {...popover}>
       <ListBox
         className={cn(
-          "bg-popover text-popover-foreground z-50 min-w-0 w-72 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
+          "bg-popover text-popover-foreground z-50 w-full max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
           className
         )}
         {...props}
@@ -278,28 +282,43 @@ function SelectHeader({
   );
 }
 
-interface SelectProps {
+type SelectProps = SelectPrimitiveProps & {
   placeholder?: string;
   label?: string;
   id?: string | number;
   hideClear?: boolean;
+  classNames?: {
+    root?: string | string[];
+    trigger?: string | string[];
+    content?: string | string[];
+    item?: string | string[];
+  };
   items: {
     label: string;
     id: string | number | boolean;
   }[];
-}
+};
 
 function Select({
   items,
   placeholder,
   hideClear = false,
+  classNames,
   ...props
 }: SelectProps) {
   return (
-    <SelectRoot {...props}>
-      <SelectTrigger placeholder={placeholder} hideClear={hideClear} />
-      <SelectContent items={items}>
-        {(item) => <SelectItem key={item.id}>{item.label}</SelectItem>}
+    <SelectRoot {...props} className={cn(classNames?.root)}>
+      <SelectTrigger
+        placeholder={placeholder}
+        hideClear={hideClear}
+        className={cn(classNames?.trigger)}
+      />
+      <SelectContent items={items} className={cn(classNames?.content)}>
+        {(item) => (
+          <SelectItem key={item.id} className={cn(classNames?.item)}>
+            {item.label}
+          </SelectItem>
+        )}
       </SelectContent>
     </SelectRoot>
   );

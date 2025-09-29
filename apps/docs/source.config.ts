@@ -20,7 +20,7 @@ export const docs = defineDocs({
           zod.string().url(),
           zod.object({
             title: zod.string(),
-            href: zod.string().url(),
+            url: zod.string().url(),
           }),
         ])
         .optional(),

@@ -92,3 +92,4 @@ const AccordionTrigger = DisclosureTrigger;
 const AccordionContent = DisclosureContent;
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export type { AccordionProps };

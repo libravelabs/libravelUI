@@ -33,7 +33,7 @@ export const PreviewContainer = ({
         <Button
           onClick={handleRefresh}
           variant="secondary"
-          className="absolute top-4 right-4 z-2"
+          className="absolute top-0 right-0 z-2"
           size={"icon"}
           aria-label="Refresh preview"
         >
@@ -46,14 +46,14 @@ export const PreviewContainer = ({
           variant="secondary"
           size={"icon"}
           onClick={handleDirection}
-          className="absolute top-4 right-14 z-2"
+          className="absolute top-0 right-10 z-2"
         >
           {direction}
         </Button>
         <div
           key={key}
           className={cn(
-            "border border-border min-h-56 rounded-xl bg-background p-4 flex items-center justify-center not-prose relative",
+            "min-h-56 rounded-xl bg-background flex items-center justify-center not-prose relative",
             className
           )}
         >
