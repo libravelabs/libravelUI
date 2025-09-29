@@ -12,9 +12,9 @@ import { cn } from "@/lib/utils";
 import {
   Description,
   FieldError,
+  Label,
   type InputProps,
 } from "@/components/ui/field";
-import { Label } from "@/components/ui/label";
 import { Check, Minus } from "lucide-react";
 
 interface CheckboxGroupProps

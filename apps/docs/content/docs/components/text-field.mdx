@@ -1,0 +1,184 @@
+---
+title: Text Field
+description: A text field allows users to input plain text, commonly used for names, emails, search queries, and other short-form data.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/TextField.html
+---
+
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasiceTextField, SizesTextField, VariantsTextField, WithFormTextField, StartEndContentTextField } from '@/components/docs/text-field'
+
+## Basic
+
+A text field is an input where you can type something in text, like your name or email.
+<BasiceTextField />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components="field" />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components clsx twMerge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/text-field"
+CODE HERE
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add text-field
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { TextField } from "@/components/ui/text-field";
+```
+
+```tsx
+<TextField
+  name="username"
+  type="text"
+  label="Username"
+  description="Enter your username"
+  placeholder="ihatejunk_"
+  errorMessage="This field is required"
+  startContent={"..."}
+  endContent={"..."}
+/>
+```
+
+## Examples
+
+### Sizes
+Defines the height and overall spacing of the input. Use different sizes to match the component to various UI contexts.
+<SizesTextField />
+
+### Variants
+Controls the visual style of the input, such as default or error states. Use variants to reflect the input’s purpose or status.
+<VariantsTextField />
+
+### Start and End Content
+This example shows how to add customizable elements at the start and end of the input field, such as icons or buttons, to enhance user interaction and improve UI clarity.
+<StartEndContentTextField />
+
+### With Form
+This example demonstrates how to integrate the text field component within a form context, showcasing form validation, error handling, and submission behavior seamlessly.
+<WithFormTextField />
+
+## Props
+
+<TypeTable
+  type={{
+    label: {
+      description: "Label for the input field",
+      type: "string",
+      default: "undefined",
+      required: false,
+    },
+    placeholder: {
+      description: "Placeholder text shown inside the input",
+      type: "string",
+      default: "undefined",
+      required: false,
+    },
+    description: {
+      description: "Additional description text displayed below the input",
+      type: "string",
+      default: "undefined",
+      required: false,
+    },
+    error: {
+      description: "Error message string or a function returning a string based on validation result",
+      type: "string | ((validation: ValidationResult) => string)",
+      default: "undefined",
+      required: false,
+    },
+    startContent: {
+      description: "Content rendered at the start (left) of the input",
+      type: "string | React.ReactNode",
+      default: "undefined",
+      required: false,
+    },
+    endContent: {
+      description: "Content rendered at the end (right) of the input",
+      type: "string | React.ReactNode",
+      default: "undefined",
+      required: false,
+    },
+    className: {
+      description: "Additional class names for the component",
+      type: "string",
+      default: "undefined",
+      required: false,
+    },
+    children: {
+      description: "Optional children or render function to customize input rendering",
+      type: "React.ReactNode | ((values: any) => React.ReactNode)",
+      default: "undefined",
+      required: false,
+    },
+    labelExtra: {
+      description: "Extra content to display beside the label",
+      type: "string | React.ReactNode",
+      default: "undefined",
+      required: false,
+    },
+    classNames: {
+      description: "Custom class names for inner parts of the input",
+      type: "object",
+      default: "undefined",
+      required: false,
+    },
+    variant: {
+      description: "Visual variant of the input field",
+      type: "string",
+      default: "undefined",
+      required: false,
+    },
+    size: {
+      description: "Size variant of the input field",
+      type: "string",
+      default: "undefined",
+      required: false,
+    },
+    isPassword: {
+      description: "If true, input behaves as a password field with visibility toggle",
+      type: "boolean",
+      default: "false",
+      required: false,
+    },
+    isLoading: {
+      description: "If true, shows a loading state",
+      type: "boolean",
+      default: "false",
+      required: false,
+    },
+  }}
+/>

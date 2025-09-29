@@ -5,7 +5,6 @@ component: true
 doc:
 ---
 
-import { PreviewContainer } from "@/components/PreviewContainer";
 import { TypeTable } from "fumadocs-ui/components/type-table";
 import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
@@ -13,19 +12,7 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
 DESCRIPTION HERE
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-PREVIEW HERE
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-CODE HERE
-    ```
-
-  </Tab>
-</Tabs>
+SHOWCASE HERE
 
 ## Installation
 
@@ -35,7 +22,7 @@ CODE HERE
 Install following dependencies:
 
 ```package-install
-npm install class-variance-authority lucide-react clsx twMerge
+npm install react-aria-components class-variance-authority lucide-react clsx twMerge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -79,19 +66,7 @@ Anatomy CODE HERE
 
 SHOWCASE DESCRIPTION HERE
 
-<Tabs items={["Preview", "Code"]}>
-  <Tab value="Preview">
-    <PreviewContainer>
-PREVIEW HERE
-    </PreviewContainer>
-  </Tab>
-  <Tab value="Code">
-```tsx
-    CODE HERE
-    ```
-
-  </Tab>
-</Tabs>
+SHOWCASE HERE
 
 ## Props
 
@@ -103,6 +78,7 @@ PREVIEW HERE
       description: "Additional class names for the component",
       type: "string",
       default: "undefined",
+      required: false
     },
   }}
 />

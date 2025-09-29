@@ -1,11 +1,13 @@
-export function mergeRefs(refs: any[]) {
-  return (value: any) => {
+export function mergeRefs<T>(
+  refs: Array<React.Ref<T> | undefined>
+): React.RefCallback<T> {
+  return (value: T) => {
     for (const ref of refs) {
       if (typeof ref === "function") {
         ref(value);
       } else if (ref != null) {
         try {
-          ref.current = value;
+          (ref as React.MutableRefObject<T>).current = value;
         } catch {}
       }
     }

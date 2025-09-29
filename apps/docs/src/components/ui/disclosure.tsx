@@ -63,7 +63,7 @@ const disclosureTriggerVariants = cva(
         md: "px-5 py-4",
         lg: "px-6 py-5",
         xl: "px-7 py-6",
-        full: "",
+        full: "px-4 py-3",
       },
     },
     defaultVariants: {
@@ -79,7 +79,7 @@ const disclosureContentVariants = cva("overflow-hidden text-muted-foreground", {
       md: "px-5 pb-4",
       lg: "px-6 pb-5",
       xl: "px-7 pb-6",
-      full: "",
+      full: "px-4 pb-3",
     },
   },
   defaultVariants: {

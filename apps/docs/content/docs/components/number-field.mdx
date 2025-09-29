@@ -1,0 +1,255 @@
+---
+title: Number Field
+description: A number field allows a user to enter a number, and increment or decrement the value using stepper buttons.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/NumberField.html
+---
+
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicNumberField, FormatOptionsNumberField, CustomIndicatorNumberField, WithFormNumberField, DisabledNumberField } from '@/components/docs/number-field'
+
+## Basic
+
+<BasicNumberField />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components="field" />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components lucide-react clsx twMerge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/number-field"
+"use client";
+
+import * as React from "react";
+import {
+  Button,
+  type ButtonProps,
+  NumberField as NumberFieldPrimitive,
+  useLocale,
+  type NumberFieldProps as NumberFieldPrimitiveProps,
+  type ValidationResult,
+} from "react-aria-components";
+import { Minus, Plus } from "lucide-react";
+import { Input } from "@/components/ui/field";
+import { cn } from "@/lib/utils";
+
+interface NumberFieldProps extends NumberFieldPrimitiveProps {
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  error?: string | ((validation: ValidationResult) => string);
+  indicator?: StepperButtonProps["indicator"];
+}
+
+function NumberField({
+  label,
+  placeholder,
+  description,
+  className,
+  error,
+  indicator,
+  ...props
+}: NumberFieldProps) {
+  const { direction } = useLocale();
+
+  return (
+    <NumberFieldPrimitive
+      {...props}
+      aria-label={props["aria-label"] ?? label ?? "number-field"}
+      className={cn(className, "group relative w-full")}
+    >
+      <Input
+        label={label}
+        placeholder={placeholder}
+        description={description}
+        error={error}
+        startContent={
+          <StepperButton
+            indicator={indicator}
+            slot="decrement"
+            className={cn(
+              "border-e border-border",
+              direction === "ltr" ? "rounded-r-md" : "rounded-l-md"
+            )}
+          />
+        }
+        endContent={
+          <StepperButton
+            indicator={indicator}
+            slot="increment"
+            className={cn(
+              "border-e border-border",
+              direction === "ltr" ? "rounded-l-md" : "rounded-r-md"
+            )}
+          />
+        }
+        classNames={{ wrapper: "px-0 mx-0", input: "text-center" }}
+      />
+    </NumberFieldPrimitive>
+  );
+}
+
+interface StepperButtonProps extends ButtonProps {
+  slot: "increment" | "decrement";
+  indicator?: {
+    increment?: React.ReactNode;
+    decrement?: React.ReactNode;
+  };
+  className?: string;
+}
+
+function StepperButton({
+  slot,
+  className,
+  indicator,
+  ...props
+}: StepperButtonProps) {
+  let icon: React.ReactNode;
+
+  if (
+    indicator &&
+    typeof indicator === "object" &&
+    !React.isValidElement(indicator)
+  ) {
+    icon = slot === "increment" ? indicator.increment : indicator.decrement;
+  } else if (React.isValidElement(indicator)) {
+    icon = indicator;
+  } else {
+    icon = slot === "increment" ? <Plus /> : <Minus />;
+  }
+
+  return (
+    <Button
+      className={cn(
+        className,
+        "size-[33px] inline-flex items-center justify-center cursor-pointer bg-muted text-muted-foreground pressed:bg-secondary pressed:text-secondary-foreground group-disabled:opacity-30 group-disabled:pointer-events-none"
+      )}
+      slot={slot}
+      {...props}
+    >
+      {icon}
+    </Button>
+  );
+}
+
+export type { NumberFieldProps };
+export { NumberField };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add number-field
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { NumberField } from "@/components/ui/number-field";
+```
+
+```tsx
+<NumberField
+  label="Quantity"
+  aria-label="Quantity"
+  placeholder="0"
+  description="Enter the desired amount."
+  error="Quantity is required"
+  className="w-full max-w-sm"
+  defaultValue={1}
+  minValue={1}
+  maxValue={10}
+  step={1}
+  formatOptions={{ style: "decimal" }}
+  onChange={(value) => console.log("Changed:", value)}
+  indicator={{
+    increment: <ChevronUp className="w-4 h-4" />,
+    decrement: <ChevronDown className="w-4 h-4" />
+  }}
+/>
+```
+
+## Examples
+
+### Format Options
+Demonstrates how to apply formatting rules or constraints to the number input field. Use this to control the appearance or structure of the entered value, such as currency or custom number formats.
+<FormatOptionsNumberField />
+
+### Indicator
+Displays icon buttons as visual indicators within the number input field. Use these to enhance the input's interactivity and guide user behavior, such as showing increment/decrement icons.
+<CustomIndicatorNumberField />
+
+### With Form
+Illustrates how the number input field integrates into a form context, including support for validation, error messages, and form submission handling.
+<WithFormNumberField />
+
+### Disabled
+Displays the number input field in a disabled state to indicate that user interaction is not allowed. Use this when input should be visible but not editable.
+<DisabledNumberField />
+
+## Props
+
+<TypeTable
+  type={{
+    label: {
+      description: "Label text for the number field",
+      type: "string",
+      required: false,
+    },
+    placeholder: {
+      description: "Placeholder text shown inside the input",
+      type: "string",
+      required: false,
+    },
+    description: {
+      description: "Optional description displayed below the input",
+      type: "string",
+      required: false,
+    },
+    error: {
+      description:
+        "Error message or a function that returns a message based on validation result",
+      type: "string | ((validation: ValidationResult) => string)",
+      required: false,
+    },
+    indicator: {
+      description:
+        "Custom icons for the increment and decrement buttons",
+      type: `{ increment?: React.ReactNode; decrement?: React.ReactNode }`,
+      required: false,
+    },
+    className: {
+      description: "Additional class names for the component",
+      type: "string",
+      default: "undefined",
+      required: false
+    },
+  }}
+/>

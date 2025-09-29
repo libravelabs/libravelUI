@@ -119,12 +119,12 @@ interface LoaderProps
     LoaderVariantProps {
   variant?: keyof typeof LOADERS;
   percentage?: number;
-  isIndeterminate?: boolean;
+  isInfinite?: boolean;
   formatOptions?: Intl.NumberFormatOptions;
   ref?: React.RefObject<SVGSVGElement>;
 }
 
-function Loader({ isIndeterminate = true, ref, ...props }: LoaderProps) {
+function Loader({ isInfinite = true, ref, ...props }: LoaderProps) {
   const {
     className,
     variant = DEFAULT_SPINNER,
@@ -141,7 +141,7 @@ function Loader({ isIndeterminate = true, ref, ...props }: LoaderProps) {
       data-slot="loader"
       aria-label={props["aria-label"] ?? "Loading..."}
       formatOptions={props.formatOptions}
-      isIndeterminate={isIndeterminate}
+      isIndeterminate={isInfinite}
     >
       <LoaderPrimitive
         role="presentation"
