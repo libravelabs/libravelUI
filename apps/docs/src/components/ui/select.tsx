@@ -21,9 +21,12 @@ import type {
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
-import { PopoverContent, type PopoverContentProps } from "./popover";
-import { Separator } from "./separator";
-import { FieldError, type FieldErrorProps } from "./field";
+import {
+  PopoverContent,
+  type PopoverContentProps,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { FieldError, type FieldErrorProps } from "@/components/ui/field";
 
 interface SelectContextType {
   value: Key;

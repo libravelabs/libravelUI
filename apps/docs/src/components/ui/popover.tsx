@@ -9,7 +9,7 @@ import {
   OverlayArrow,
   Popover as PopoverPrimitive,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/primitive";
+import { composeTailwindRenderProps } from "@/lib/render-props";
 import {
   DialogBody,
   DialogClose,
@@ -21,29 +21,29 @@ import {
 } from "@/components/ui/dialog";
 
 type PopoverProps = DialogTriggerProps;
-const Popover = (props: PopoverProps) => {
+function Popover(props: PopoverProps) {
   return <DialogTriggerPrimitive {...props} />;
-};
+}
 
 interface PopoverContentProps extends PopoverPrimitiveProps {
   withArrow?: boolean;
   ref?: React.Ref<HTMLDivElement>;
 }
 
-const PopoverContent = ({
+function PopoverContent({
   children,
   withArrow = false,
   className,
   ref,
   ...props
-}: PopoverContentProps) => {
+}: PopoverContentProps) {
   const offset = props.offset ?? (withArrow ? 12 : 8);
   return (
     <PopoverPrimitive
       ref={ref}
       offset={offset}
       className={composeTailwindRenderProps(className, [
-        "min-w-0 w-fit max-w-xs rounded-xl border bg-popover text-popover-foreground shadow-xs outline-hidden transition-transform [--gutter:--spacing(6)] sm:text-sm dark:backdrop-saturate-200 **:[[role=dialog]]:[--gutter:--spacing(4)]",
+        "min-w-0 w-fit max-w-xs p-4 rounded-xl border bg-popover text-popover-foreground shadow-xs outline-hidden transition-transform [--gutter:--spacing(6)] sm:text-sm dark:backdrop-saturate-200 **:[[role=dialog]]:[--gutter:--spacing(4)]",
         "entering:fade-in entering:animate-in",
         "exiting:fade-out exiting:animate-out",
         "placement-start:entering:slide-in-from-end-1 placement-end:entering:slide-in-from-start-1 placement-top:entering:slide-in-from-bottom-1 placement-bottom:entering:slide-in-from-top-1",
@@ -71,7 +71,7 @@ const PopoverContent = ({
       )}
     </PopoverPrimitive>
   );
-};
+}
 
 const PopoverTrigger = DialogTrigger;
 const PopoverClose = DialogClose;

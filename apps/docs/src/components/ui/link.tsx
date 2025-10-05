@@ -29,13 +29,12 @@ const linkVariants = cva(
   }
 );
 
-interface LinkProps
-  extends LinkPrimitiveProps,
-    VariantProps<typeof linkVariants> {
-  ref?: React.RefObject<HTMLAnchorElement>;
-}
+type LinkProps = LinkPrimitiveProps &
+  VariantProps<typeof linkVariants> & {
+    ref?: React.RefObject<HTMLAnchorElement>;
+  };
 
-const Link = ({ className, ref, variant, ...props }: LinkProps) => {
+function Link({ className, ref, variant, ...props }: LinkProps) {
   return (
     <LinkPrimitive
       ref={ref}
@@ -55,7 +54,7 @@ const Link = ({ className, ref, variant, ...props }: LinkProps) => {
       }
     </LinkPrimitive>
   );
-};
+}
 
 export type { LinkProps };
 export { Link };

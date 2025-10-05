@@ -143,4 +143,5 @@ function Alert({
   );
 }
 
+export type { AlertProps };
 export { AlertRoot, Alert, AlertTitle, AlertDescription };

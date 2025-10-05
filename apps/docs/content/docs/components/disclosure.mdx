@@ -10,11 +10,20 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 import {
   DisclosureBasic,
   DisclosureVariants,
+  DisclosureCard
 } from "@/components/docs/disclosure";
+import { Callout } from "fumadocs-ui/components/callout";
 
 ## Basic
-
 <DisclosureBasic />
+
+## Features
+Disclosures can be built with the `<details>` and `<summary>` HTML elements, but this can be difficult to style, especially when adding adjacent interactive elements, like buttons, to the disclosure's heading. Disclosure helps achieve accessible disclosures implemented with the correct ARIA pattern while making custom styling easy.
+
+- Flexible - Structured such that it can be used standalone or combined with other disclosures to form a DisclosureGroup
+- Keyboard Interaction - When focused, a disclosure's visibility can be toggled with either the `Enter` or `Space` key, and the appropriate ARIA attributes are automatically applied.
+- Accessible - Uses `hidden="until-found"` in supported browsers, enabling find-in-page search support and improved search engine visibility for collapsed content
+- Styleable - Keyboard focus, disabled and expanded states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
 
 ## Installation
 
@@ -24,7 +33,7 @@ import {
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx twMerge
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -38,33 +47,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-To enable the animation, you need to add the required animation and keyframes either to your global CSS file (e.g., `main.css` or `global.css`) or to your Tailwind config file, depending on the version of Tailwind you're using.
-
-```css title="app/*.css"
-@theme {
-  --animate-disclosure-collapsed: disclosure-collapsed 0.2s linear;
-  --animate-disclosure-expanded: disclosure-expanded 0.2s linear;
-}
-
-@keyframes disclosure-collapsed {
-  from {
-    height: var(--disclosure-height);
-  }
-  to {
-    height: 0;
-  }
-}
-
-@keyframes disclosure-expanded {
-  from {
-    height: 0;
-  }
-  to {
-    height: var(--disclosure-height);
-  }
-}
-```
-
 Copy and paste the following code into your project.
 
 ```tsx ts2js title="components/ui/disclosure"
@@ -73,14 +55,21 @@ Copy and paste the following code into your project.
 import {
   Button,
   Disclosure as DisclosurePrimitive,
-  DisclosurePanel as DisclosureContentPrimitive,
   DisclosureStateContext,
   Heading,
 } from "react-aria-components";
 import { ChevronDown } from "lucide-react";
-import { use, useEffect, useRef, createContext, useContext } from "react";
+import React, { use, useRef, createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import {
+  AnimatePresence,
+  motion,
+  MotionConfig,
+  type Transition,
+  type Variants,
+} from "motion/react";
+import { type ButtonProps } from "@/components/ui/button";
 
 const DisclosureStyleContext = createContext<
   VariantProps<typeof disclosureVariants>
@@ -133,7 +122,7 @@ const disclosureTriggerVariants = cva(
         md: "px-5 py-4",
         lg: "px-6 py-5",
         xl: "px-7 py-6",
-        full: "",
+        full: "px-4 py-3",
       },
     },
     defaultVariants: {
@@ -149,7 +138,7 @@ const disclosureContentVariants = cva("overflow-hidden text-muted-foreground", {
       md: "px-5 pb-4",
       lg: "px-6 pb-5",
       xl: "px-7 pb-6",
-      full: "",
+      full: "px-4 pb-3",
     },
   },
   defaultVariants: {
@@ -158,33 +147,60 @@ const disclosureContentVariants = cva("overflow-hidden text-muted-foreground", {
 });
 
 type DisclosureProps = React.ComponentProps<typeof DisclosurePrimitive> &
-  VariantProps<typeof disclosureVariants>;
+  VariantProps<typeof disclosureVariants> & {
+    transition?: Transition;
+  };
 
-function Disclosure({ variant, size, className, ...props }: DisclosureProps) {
+function Disclosure({
+  variant,
+  size,
+  className,
+  transition,
+  ...props
+}: DisclosureProps) {
   return (
     <DisclosureStyleContext.Provider value={{ variant, size }}>
-      <DisclosurePrimitive
-        className={cn(disclosureVariants({ variant, size }), className)}
-        {...props}
-      />
+      <MotionConfig transition={transition}>
+        <DisclosurePrimitive
+          className={cn(disclosureVariants({ variant, size }), className)}
+          {...props}
+        />
+      </MotionConfig>
     </DisclosureStyleContext.Provider>
   );
 }
 
-interface DisclosureTriggerProps extends React.ComponentProps<typeof Button> {
+interface DisclosureTriggerProps extends ButtonProps {
   icon?: React.ReactNode;
   hideChevron?: boolean;
+  asChild?: boolean;
+  children?: React.ReactNode | ButtonProps["children"];
 }
 
 function DisclosureTrigger({
   className,
   icon,
   hideChevron = false,
+  asChild = false,
   children,
   ...props
 }: DisclosureTriggerProps) {
   const { size } = useDisclosureStyle();
   const { isExpanded } = use(DisclosureStateContext)!;
+
+  if (asChild) {
+    if (!React.isValidElement(children)) {
+      console.warn(
+        "DisclosureTrigger with asChild expects a single React element as child."
+      );
+      return <>{children}</>;
+    }
+
+    return React.cloneElement(children, {
+      slot: "trigger",
+      ...props,
+    });
+  }
 
   return (
     <Heading>
@@ -200,7 +216,7 @@ function DisclosureTrigger({
             ) : (
               <div className="flex items-center gap-2">
                 {icon && <span className="shrink-0">{icon}</span>}
-                <span className="text-left group-hover:underline transition-all duration-200">
+                <span className="text-left hover:underline transition-all duration-200">
                   {children}
                 </span>
               </div>
@@ -221,62 +237,57 @@ function DisclosureTrigger({
   );
 }
 
-type DisclosureContentProps = React.ComponentProps<
-  typeof DisclosureContentPrimitive
->;
-
 function DisclosureContent({
   className,
   children,
-  ...props
-}: DisclosureContentProps) {
+}: React.ComponentProps<"div">) {
   const { size } = useDisclosureStyle();
   const { isExpanded } = use(DisclosureStateContext)!;
   const contentRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const element = contentRef.current;
-    if (!element) return;
-
-    const ro = new ResizeObserver(([entry]) => {
-      const height = entry.target.clientHeight;
-      element.parentElement?.style.setProperty(
-        "--disclosure-height",
-        `${height}px`
-      );
-    });
-
-    ro.observe(element);
-    return () => ro.disconnect();
-  }, []);
+  const variants: Variants = {
+    expanded: {
+      height: "auto",
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    collapsed: {
+      height: 0,
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
 
   return (
-    <DisclosureContentPrimitive
-      className={cn(
-        disclosureContentVariants({ size }),
-        "transition-all duration-300 ease-in-out",
-        isExpanded
-          ? "animate-disclosure-expanded"
-          : "animate-disclosure-collapsed pb-0",
-        className
+    <AnimatePresence initial={false}>
+      {isExpanded && (
+        <motion.div
+          initial="collapsed"
+          animate="expanded"
+          exit="collapsed"
+          variants={variants}
+          className={cn("overflow-hidden", className)}
+        >
+          <div
+            ref={contentRef}
+            className={cn(disclosureContentVariants({ size }), className)}
+          >
+            {children}
+          </div>
+        </motion.div>
       )}
-      {...props}
-    >
-      <div
-        ref={contentRef}
-        className={cn(
-          "transition-opacity duration-300 ease-in-out",
-          isExpanded ? "opacity-100" : "opacity-0"
-        )}
-      >
-        {children}
-      </div>
-    </DisclosureContentPrimitive>
+    </AnimatePresence>
   );
 }
 
 export { Disclosure, DisclosureTrigger, DisclosureContent };
-export type { DisclosureProps, DisclosureTriggerProps, DisclosureContentProps };
+export type { DisclosureProps, DisclosureTriggerProps };
 ```
 
 </Tab>
@@ -301,22 +312,37 @@ import {
 
 ```tsx
 <Disclosure>
-  <DisclosureTrigger>What’s included in the Pro plan?</DisclosureTrigger>
-  <DisclosureContent>
-    <p>
-      The Pro plan includes unlimited projects, advanced analytics, priority
-      support, and integrations with third-party tools like Slack and Google
-      Drive.
-    </p>
-  </DisclosureContent>
+  <DisclosureTrigger>Title belongs here</DisclosureTrigger>
+  <DisclosureContent>Content belongs here</DisclosureContent>
 </Disclosure>
 ```
+<Callout type="warning" title="Using `asChild`">
+  When using `asChild`, the child must be a `Button` from `react-aria-components`. Native HTML buttons or custom components will not work unless they support `slot="trigger"` and ARIA roles.
 
-## Variants
+  **Correct usage:**
 
+```tsx
+import { Button } from "react-aria-components";
+import { Menu } from "lucide-react";
+
+<DisclosureTrigger asChild>
+  <Button>
+    <Menu />
+    Open Disclosure
+  </Button>
+</DisclosureTrigger>
+```
+</Callout>
+
+## Examples
+
+### Variants
 The **Disclosure** component provides several variants to display different style.
-
 <DisclosureVariants />
+
+### Disclosure Card
+A flexible UI pattern that uses the Disclosure component to reveal additional content on hover, demonstrating its versatility beyond traditional accordion usage. The image background dynamically scales and blurs on hover, while the disclosure panel smoothly reveals contextual information. Ideal for showcasing media details or creating rich, interactive preview cards.
+<DisclosureCard />
 
 ## Props
 
@@ -327,7 +353,6 @@ The **Disclosure** component provides several variants to display different styl
     className: {
       description: "Additional class names for the Disclosure container",
       type: "string",
-      default: "undefined",
     },
     variant: {
       description: "Visual style of the Disclosure container",
@@ -342,12 +367,11 @@ The **Disclosure** component provides several variants to display different styl
     children: {
       description: "Content of the Disclosure (usually trigger and content)",
       type: "React.ReactNode",
-      default: "undefined",
+      required: true
     },
     id: {
       description: "The HTML ID of the Disclosure",
       type: "string",
-      default: "undefined",
     },
     defaultOpen: {
       description: "Whether the Disclosure is open by default",
@@ -357,12 +381,10 @@ The **Disclosure** component provides several variants to display different styl
     isOpen: {
       description: "Controlled open state",
       type: "boolean",
-      default: "undefined",
     },
     onOpenChange: {
       description: "Callback fired when open state changes",
       type: "(isOpen: boolean) => void",
-      default: "undefined",
     },
   }}
 />
@@ -372,39 +394,39 @@ The **Disclosure** component provides several variants to display different styl
 <TypeTable
   type={{
     className: {
-      description: "Additional class names for the trigger button",
+      description: "Additional CSS classes for the trigger button.",
       type: "string",
-      default: "undefined",
     },
     icon: {
-      description: "Icon to display at the start of the trigger",
+      description: "Optional icon displayed before the trigger label.",
       type: "React.ReactNode",
-      default: "undefined",
     },
     hideChevron: {
-      description: "Hide the dropdown chevron icon",
+      description: "If true, hides the dropdown chevron icon.",
       type: "boolean",
-      default: "false",
+      default: false,
+    },
+    asChild: {
+      description: "Renders the trigger as a child component (e.g., for use with custom headings).",
+      type: "boolean",
+      default: false,
     },
     children: {
-      description: "Text or custom render function for the trigger label",
+      description: "The trigger label content. Can be static content or a render function with `isPressed` state.",
       type: "React.ReactNode | ((props: { isPressed: boolean }) => React.ReactNode)",
-      default: "undefined",
     },
     id: {
-      description: "HTML ID of the trigger button",
+      description: "Optional HTML ID for the trigger button.",
       type: "string",
-      default: "undefined",
     },
     onPress: {
-      description: "Called when the trigger is clicked or activated",
+      description: "Callback fired when the trigger is clicked or activated.",
       type: "() => void",
-      default: "undefined",
     },
     disabled: {
-      description: "Whether the trigger is disabled",
+      description: "Disables the trigger button.",
       type: "boolean",
-      default: "false",
+      default: false,
     },
   }}
 />
@@ -416,17 +438,10 @@ The **Disclosure** component provides several variants to display different styl
     className: {
       description: "Additional class names for the content container",
       type: "string",
-      default: "undefined",
     },
     children: {
       description: "Content shown inside the Disclosure panel",
       type: "React.ReactNode",
-      default: "undefined",
-    },
-    id: {
-      description: "HTML ID of the disclosure content",
-      type: "string",
-      default: "undefined",
     },
   }}
 />

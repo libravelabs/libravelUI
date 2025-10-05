@@ -24,7 +24,7 @@ import { BasicNumberField, FormatOptionsNumberField, CustomIndicatorNumberField,
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components lucide-react clsx twMerge
+npm install react-aria-components lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -48,7 +48,6 @@ import {
   Button,
   type ButtonProps,
   NumberField as NumberFieldPrimitive,
-  useLocale,
   type NumberFieldProps as NumberFieldPrimitiveProps,
   type ValidationResult,
 } from "react-aria-components";
@@ -73,8 +72,6 @@ function NumberField({
   indicator,
   ...props
 }: NumberFieldProps) {
-  const { direction } = useLocale();
-
   return (
     <NumberFieldPrimitive
       {...props}
@@ -90,23 +87,17 @@ function NumberField({
           <StepperButton
             indicator={indicator}
             slot="decrement"
-            className={cn(
-              "border-e border-border",
-              direction === "ltr" ? "rounded-r-md" : "rounded-l-md"
-            )}
+            className="border-e border-border rounded-s-md"
           />
         }
         endContent={
           <StepperButton
             indicator={indicator}
             slot="increment"
-            className={cn(
-              "border-e border-border",
-              direction === "ltr" ? "rounded-l-md" : "rounded-r-md"
-            )}
+            className="border-s border-border rounded-e-md"
           />
         }
-        classNames={{ wrapper: "px-0 mx-0", input: "text-center" }}
+        classNames={{ wrapper: "px-0.5 mx-0", input: "text-center" }}
       />
     </NumberFieldPrimitive>
   );
@@ -145,7 +136,7 @@ function StepperButton({
     <Button
       className={cn(
         className,
-        "size-[33px] inline-flex items-center justify-center cursor-pointer bg-muted text-muted-foreground pressed:bg-secondary pressed:text-secondary-foreground group-disabled:opacity-30 group-disabled:pointer-events-none"
+        "size-[30px] inline-flex items-center justify-center cursor-pointer bg-muted text-muted-foreground pressed:bg-secondary pressed:text-secondary-foreground group-disabled:opacity-30 group-disabled:pointer-events-none"
       )}
       slot={slot}
       {...props}
@@ -177,21 +168,20 @@ import { NumberField } from "@/components/ui/number-field";
 
 ```tsx
 <NumberField
-  label="Quantity"
-  aria-label="Quantity"
+  label="Label"
+  aria-label="Label"
   placeholder="0"
-  description="Enter the desired amount."
-  error="Quantity is required"
-  className="w-full max-w-sm"
-  defaultValue={1}
-  minValue={1}
-  maxValue={10}
+  description="Description goes here."
+  error="Error message goes here."
+  defaultValue={0}
+  minValue={0}
+  maxValue={100}
   step={1}
   formatOptions={{ style: "decimal" }}
   onChange={(value) => console.log("Changed:", value)}
   indicator={{
-    increment: <ChevronUp className="w-4 h-4" />,
-    decrement: <ChevronDown className="w-4 h-4" />
+    increment: "INCREMENT INDICATOR GOES HERE (OPTIONAL)",
+    decrement: "DECREMENT INDICATOR GOES HERE (OPTIONAL)"
   }}
 />
 ```
@@ -248,7 +238,6 @@ Displays the number input field in a disabled state to indicate that user intera
     className: {
       description: "Additional class names for the component",
       type: "string",
-      default: "undefined",
       required: false
     },
   }}

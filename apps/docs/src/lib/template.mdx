@@ -22,7 +22,7 @@ SHOWCASE HERE
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components class-variance-authority lucide-react clsx twMerge
+npm install react-aria-components class-variance-authority lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -38,7 +38,7 @@ export function cn(...inputs: ClassValue[]) {
 
 Copy and paste the following code into your project.
 
-```tsx ts2js title="TITLE HERE"
+```tsx ts2js title="components/ui/..."
 CODE HERE
 ```
 
@@ -70,14 +70,11 @@ SHOWCASE HERE
 
 ## Props
 
-### Alert Props
-
 <TypeTable
   type={{
     className: {
       description: "Additional class names for the component",
       type: "string",
-      default: "undefined",
       required: false
     },
   }}

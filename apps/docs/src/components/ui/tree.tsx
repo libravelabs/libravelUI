@@ -2,27 +2,25 @@
 
 import { ChevronRight } from "lucide-react";
 import type {
-  TreeItemContentProps as BranchListItemContentProps,
-  TreeItemContentRenderProps as BranchListItemContentRenderProps,
-  TreeItemProps as BranchListItemProps,
-  TreeProps as BranchListProps,
+  TreeItemContentProps,
+  TreeItemContentRenderProps,
+  TreeItemProps,
+  TreeProps,
 } from "react-aria-components";
 import {
-  Tree as BranchListPrimitive,
-  TreeItem as BranchListItemPrimitive,
-  TreeItemContent as BranchListItemContent,
+  Tree as TreePrimitive,
+  TreeItem as TreeItemPrimitive,
+  TreeItemContent as TreeItemContent,
   Button,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/primitive";
+import { composeTailwindRenderProps } from "@/lib/render-props";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
-function BranchList<T extends object>({
-  className,
-  ...props
-}: BranchListProps<T>) {
+function Tree<T extends object>({ className, ...props }: TreeProps<T>) {
   return (
-    <BranchListPrimitive
+    <TreePrimitive
+      aria-label={props["aria-label"] ?? "tree"}
       className={composeTailwindRenderProps(
         className,
         cn(
@@ -34,18 +32,15 @@ function BranchList<T extends object>({
   );
 }
 
-function BranchListItem<T extends object>({
-  className,
-  ...props
-}: BranchListItemProps<T>) {
+function TreeItem<T extends object>({ className, ...props }: TreeItemProps<T>) {
   return (
-    <BranchListItemPrimitive
+    <TreeItemPrimitive
       className={composeTailwindRenderProps(className, [
         "shrink-0 rounded-lg px-2 py-1.5 pr-2",
-        "group/branch-item relative flex select-none rounded-lg focus:outline-hidden",
+        "group/tree-item relative flex select-none rounded-lg focus:outline-hidden",
         "focus:bg-secondary focus:text-secondary-foreground focus:**:[.text-secondary-foreground]:text-secondary-foreground",
-        "**:data-[slot=avatar]:*:mr-1.5 **:data-[slot=avatar]:*:size-6 **:data-[slot=avatar]:mr-(--mr-icon) **:data-[slot=avatar]:size-6 sm:**:data-[slot=avatar]:*:size-5 sm:**:data-[slot=avatar]:size-5",
-        "*:data-[slot=icon]:mr-(--mr-icon) **:data-[slot=icon]:size-5 **:data-[slot=icon]:shrink-0 sm:**:data-[slot=icon]:size-4",
+        "**:data-[slot=avatar]:*:me-1.5 **:data-[slot=avatar]:*:size-6 **:data-[slot=avatar]:me-(--me-icon) **:data-[slot=avatar]:size-6 sm:**:data-[slot=avatar]:*:size-5 sm:**:data-[slot=avatar]:size-5",
+        "*:data-[slot=icon]:me-(--me-icon) **:data-[slot=icon]:size-5 **:data-[slot=icon]:shrink-0 sm:**:data-[slot=icon]:size-4",
         "cursor-pointer",
       ])}
       {...props}
@@ -53,17 +48,13 @@ function BranchListItem<T extends object>({
   );
 }
 
-interface BranchListContentProps extends BranchListItemContentProps {
+interface TreeContentProps extends TreeItemContentProps {
   className?: string;
 }
 
-function BranchListContent({
-  className,
-  children,
-  ...props
-}: BranchListContentProps) {
+function TreeContent({ className, children, ...props }: TreeContentProps) {
   return (
-    <BranchListItemContent {...props}>
+    <TreeItemContent {...props}>
       {(values) => (
         <div
           className={cn(
@@ -73,7 +64,7 @@ function BranchListContent({
         >
           {values.selectionMode === "multiple" &&
             values.selectionBehavior === "toggle" && (
-              <Checkbox className="mr-2" slot="selection" />
+              <Checkbox slot="selection" />
             )}
           <div
             className={cn(
@@ -82,7 +73,7 @@ function BranchListContent({
             )}
           />
           {values.hasChildItems ? (
-            <BranchListIndicator
+            <TreeIndicator
               values={{
                 isDisabled: values.isDisabled,
                 isExpanded: values.isExpanded,
@@ -94,15 +85,15 @@ function BranchListContent({
           {typeof children === "function" ? children(values) : children}
         </div>
       )}
-    </BranchListItemContent>
+    </TreeItemContent>
   );
 }
 
-function BranchListIndicator({
-  values,
-}: {
-  values: Pick<BranchListItemContentRenderProps, "isDisabled" | "isExpanded">;
-}) {
+interface TreeIndicatorProps {
+  values: Pick<TreeItemContentRenderProps, "isDisabled" | "isExpanded">;
+}
+
+function TreeIndicator({ values }: TreeIndicatorProps) {
   return (
     <Button
       slot="chevron"
@@ -122,5 +113,5 @@ function BranchListIndicator({
   );
 }
 
-export type { BranchListProps, BranchListItemProps };
-export { BranchList, BranchListItem, BranchListContent, BranchListIndicator };
+export type { TreeProps, TreeItemProps };
+export { Tree, TreeItem, TreeContent, TreeIndicator };

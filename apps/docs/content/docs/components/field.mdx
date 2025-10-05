@@ -4,6 +4,7 @@ description: The Field component is fundamental and used by many other component
 component: true
 ---
 
+import { Info } from '@/components/info';
 import { RequiredBlock } from "@/components/required-block";
 import { RelatedComponents } from "@/components/related-components";
 import { TypeTable } from "fumadocs-ui/components/type-table";
@@ -11,11 +12,11 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
 ## Basic
 
-The Field component serves as a foundational building block for many other UI components. Because it is a parent-level component, you won’t find many standalone examples here. Instead, you’ll see how it’s used in context within the components that depend on it. For practical usage and visual examples, please refer to the child components that make use of Field.
+<Info>The Field component serves as a foundational building block for many other UI components. Because it is a parent-level component, you won’t find many standalone examples here. Instead, you’ll see how it’s used in context within the components that depend on it. For practical usage and visual examples, please refer to the child components that make use of Field.</Info>
 
 ## Related Components
 
-<RelatedComponents components={['text-field', 'number-field', "checkbox"]} />
+<RelatedComponents components={['text-field', 'number-field', "checkbox", "checkbox-group"]} />
 
 ## Installation
 
@@ -27,7 +28,7 @@ The Field component serves as a foundational building block for many other UI co
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components class-variance-authority clsx twMerge lucide-react
+npm install react-aria-components class-variance-authority clsx tailwind-merge lucide-react
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -317,28 +318,26 @@ function Input({
               className="content ms-2 flex cursor-pointer items-center"
               onClick={() => setVisible(!visible)}
             >
-              {visible ? (
-                <EyeOff className="size-4.5" />
-              ) : (
-                <Eye className="size-4.5" />
-              )}
+              {visible ? <EyeOff /> : <Eye />}
             </div>
           )}
 
           {isLoading ? (
             <Loader />
-          ) : endContent && typeof endContent === "string" ? (
-            <span className="ms-2 text-muted-foreground">{endContent}</span>
-          ) : (
-            <div
-              className={cn(
-                "content ms-2 flex items-center",
-                classNames?.endContent
-              )}
-            >
-              {endContent}
-            </div>
-          )}
+          ) : endContent ? (
+            typeof endContent === "string" ? (
+              <span className="ms-2 text-muted-foreground">{endContent}</span>
+            ) : (
+              <div
+                className={cn(
+                  "content ms-2 flex items-center",
+                  classNames?.endContent
+                )}
+              >
+                {endContent}
+              </div>
+            )
+          ) : null}
         </FieldGroup>
 
         <Description className={cn("m-0 mt-1", classNames?.description)}>

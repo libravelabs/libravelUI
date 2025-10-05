@@ -10,7 +10,7 @@ import type {
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { Link, type LinkProps } from "./link";
+import { Link } from "@/components/ui/link"; // You can replace Link with the navigation component from your routing framework.
 
 type BreadcrumbsContextProps = {
   separator?: React.ReactNode;
@@ -89,7 +89,7 @@ function BreadcrumbItem({
   emphasis,
   ...props
 }: BreadcrumbPrimitiveProps &
-  LinkProps &
+  React.ComponentProps<typeof Link> &
   VariantProps<typeof breadcrumbItemVariants>) {
   const { separator } = useBreadcrumbsContext();
 
@@ -131,4 +131,5 @@ function BreadcrumbSeparator({
   );
 }
 
+export type { BreadcrumbProps };
 export { Breadcrumb, BreadcrumbItem, BreadcrumbSeparator };

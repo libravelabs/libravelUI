@@ -201,6 +201,7 @@
     transform: translateX(calc(-100% - var(--gap)));
   }
 }
+
 @keyframes marqueeY {
   0% {
     transform: translateY(0%);
@@ -208,4 +209,26 @@
   100% {
     transform: translateY(calc(-100% - var(--gap)));
   }
+}
+
+@utility scrollbar-hidden {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
 }

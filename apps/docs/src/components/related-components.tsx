@@ -1,15 +1,18 @@
 import { Card } from "fumadocs-ui/components/card";
 import { source } from "@/lib/source";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface RelatedComponentsProps {
-  components: string[];
+  components: string | string[];
 }
 
 export async function RelatedComponents({
   components,
 }: RelatedComponentsProps) {
-  const pages = components
+  const slugs = Array.isArray(components) ? components : [components];
+
+  const pages = slugs
     .map((slug) => {
       const page = source.getPage(["components", slug]);
       if (!page) {
@@ -23,7 +26,12 @@ export async function RelatedComponents({
   if (pages.length === 0) return null;
 
   return (
-    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+    <div
+      className={cn(
+        "mt-4 grid gap-3",
+        pages.length === 1 ? "grid-cols-1" : "sm:grid-cols-2"
+      )}
+    >
       {pages.map((page) => (
         <Card
           key={page!.url}

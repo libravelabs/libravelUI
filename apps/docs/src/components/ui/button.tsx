@@ -19,7 +19,10 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:opacity-70",
         destructive: "bg-destructive text-white hover:opacity-70",
-        outline: "border bg-background hover:opacity-70",
+        outline: [
+          "border bg-background hover:opacity-70",
+          "inset-ring inset-ring-input focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20",
+        ],
         secondary: "bg-secondary text-secondary-foreground hover:opacity-70",
         ghost: "hover:bg-foreground/10",
         link: "text-primary underline-offset-4 hover:underline",
@@ -51,10 +54,10 @@ type ButtonProps = ButtonPrimitiveProps &
   VariantProps<typeof buttonVariants> & {
     ref?: React.Ref<HTMLButtonElement>;
     className?: string;
-    disabled?: boolean;
     isLoading?: boolean;
     loader?: React.ReactNode;
     children?: React.ReactNode;
+    plain?: boolean;
   };
 
 function Button({
@@ -63,24 +66,34 @@ function Button({
   size,
   radius,
   isLoading = false,
+  plain = false,
   loader,
   children,
   ...props
 }: ButtonProps) {
+  if (plain) {
+    return (
+      <ButtonPrimitive>
+        {(values) =>
+          typeof children === "function" ? children(values) : children
+        }
+      </ButtonPrimitive>
+    );
+  }
+
   return (
     <ButtonPrimitive
       {...props}
-      isDisabled={props.disabled || isLoading}
-      className={composeRenderProps(className, (className, renderProps) =>
-        cn(
-          buttonVariants({ variant, size, radius, className }),
-          renderProps.className
-        )
+      isDisabled={props.isDisabled || isLoading}
+      className={composeRenderProps(className, (className) =>
+        cn(buttonVariants({ variant, size, radius, className }), className)
       )}
     >
       {(values) => {
         if (isLoading) {
-          return (
+          return size === "icon" ? (
+            loader ?? <Loader className="text-inherit" />
+          ) : (
             <>
               {loader ?? <Loader className="text-inherit" />}
               {children}

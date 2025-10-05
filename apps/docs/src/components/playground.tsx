@@ -1,6 +1,6 @@
 "use client";
 
-import { PreviewContainer } from "./PreviewContainer";
+import { PreviewContainer } from "./preview-container";
 import { DynamicCodeBlock } from "fumadocs-ui/components/dynamic-codeblock";
 import { DocTabs } from "./doc-tabs";
 import * as React from "react";
@@ -12,6 +12,10 @@ interface PlaygroundProps {
 }
 
 export function Playground({ preview, lang = "tsx", code }: PlaygroundProps) {
+  if (!preview) {
+    return <DynamicCodeBlock lang={lang} code={code} />;
+  }
+
   return (
     <DocTabs
       items={[

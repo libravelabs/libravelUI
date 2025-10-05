@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import {
   ColorArea as ColorAreaPrimitive,
@@ -24,11 +26,15 @@ import {
   type ColorFieldProps as ColorFieldPrimitiveProps,
   type ColorPickerProps as ColorPickerPrimitiveProps,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/primitive";
+import { composeTailwindRenderProps } from "@/lib/render-props";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
 import { parseColor, type Color } from "@react-stately/color";
-import { Input, Description, type InputProps } from "@/components/ui/field";
+import {
+  Input,
+  Description,
+  Label,
+  type InputProps,
+} from "@/components/ui/field";
 import {
   Popover,
   PopoverContent,
@@ -243,7 +249,6 @@ interface ColorFieldProps extends ColorFieldPrimitiveProps, InputProps {
 }
 
 function ColorInput({
-  className,
   classNames,
   startContent,
   value: controlledValue,

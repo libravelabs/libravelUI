@@ -13,8 +13,13 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 import { AccordionBasic, AccordionVariants } from '@/components/docs/accordion'
 
 ## Basic
-
 <AccordionBasic />
+
+## Features
+Disclosure groups can be built by combining multiple disclosures built in HTML with the `<details>` and `<summary>` HTML elements, but this can be difficult to style, especially when adding adjacent interactive elements, like buttons, to the disclosure's heading. DisclosureGroup helps achieve accessible disclosures implemented with the correct ARIA pattern while making custom styling easy.
+
+- **Accessible** - Disclosure group is exposed to assistive technology via ARIA. Uses hidden="until-found" in supported browsers, enabling find-in-page search support and improved search engine visibility for collapsed content.
+- **Styleable** - Disclosures include builtin states for styling such as keyboard focus, disabled, and expanded states.
 
 ## Installation
 
@@ -26,7 +31,7 @@ import { AccordionBasic, AccordionVariants } from '@/components/docs/accordion'
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components class-variance-authority lucide-react clsx twMerge
+npm install react-aria-components class-variance-authority lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -162,75 +167,34 @@ import {
 ```
 
 ```tsx
-    <Accordion>
-      <AccordionItem>
-        <AccordionTrigger>
-          What is the only food that never spoils?
-        </AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Honey! Archaeologists have found pots of honey in ancient Egyptian
-            tombs that are over 3,000 years old and still perfectly edible.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>Can an octopus taste with its arms?</AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Yes! An octopus has taste receptors on its suckers, so it can
-            literally taste what it touches.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>What’s the shortest war in history?</AccordionTrigger>
-        <AccordionContent>
-          <p>
-            The Anglo-Zanzibar War in 1896 lasted between 38 and 45 minutes. ⚔️
-            That’s shorter than most Netflix episodes.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>Do bananas grow on trees?</AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Nope! Bananas actually grow on large herbs that are often mistaken
-            for trees. Technically, banana "trees" are giant plants.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionTrigger>
-          How many hearts does an octopus have?
-        </AccordionTrigger>
-        <AccordionContent>
-          <p>
-            Three! One pumps blood through its body, and two pump blood through
-            the gills.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+<Accordion>
+  <AccordionItem>
+    <AccordionTrigger>Trigger goes</AccordionTrigger>
+    <AccordionContent>The content goes here</AccordionContent>
+  </AccordionItem>
+</Accordion>
 ```
 
-## Variants
-
+## Example
+### Variants
 The Accordion component offers visual variants like `default`, `ghost`, `outline`, `solid`, `muted`, and `separated` for different use cases.
 
 <AccordionVariants />
 
 ## Props
-
-### Accordion Props
-
 <TypeTable
   type={{
+    variant: {
+      description:
+        'Visual style of the accordion. Options: `"default"`, `"ghost"`, `"outline"`, `"solid"`, `"muted"`, `"separated"`.',
+      type: `"default" | "ghost" | "outline" | "solid" | "muted" | "separated"`,
+      required: false,
+    },
+    size: {
+      description: 'Size of the accordion. Options: `"sm"`, `"md"`, `"lg"`, `"full"`.',
+      type: `"sm" | "md" | "lg" | "full"`,
+      required: false,
+    },
     className: {
       description: "Additional class names to apply to the accordion container.",
       type: "string",
@@ -246,23 +210,44 @@ The Accordion component offers visual variants like `default`, `ghost`, `outline
       type: "boolean",
       required: false,
     },
-    variant: {
-      description:
-        'Visual style of the accordion. Options: `"default"`, `"ghost"`, `"outline"`, `"solid"`, `"muted"`, `"separated"`.',
-      type: `"default" | "ghost" | "outline" | "solid" | "muted" | "separated"`,
-      required: false,
-    },
-    size: {
-      description:
-        'Size of the accordion. Options: `"sm"`, `"md"`, `"lg"`, `"full"`.',
-      type: `"sm" | "md" | "lg" | "full"`,
-      required: false,
-    },
     children: {
       description:
         "Accordion items or a render function that receives the expanded item keys.",
       type: "React.ReactNode | ((values: Key[]) => React.ReactNode)",
       required: true,
     },
+
+    allowsMultipleExpanded: {
+      description: "Whether multiple items can be expanded at the same time.",
+      type: "boolean",
+      required: false,
+    },
+    isDisabled: {
+      description: "Whether all items are disabled.",
+      type: "boolean",
+      required: false,
+    },
+    expandedKeys: {
+      description: "The currently expanded keys in the group (controlled).",
+      type: "Iterable<Key>",
+      required: false,
+    },
+    defaultExpandedKeys: {
+      description: "The initial expanded keys in the group (uncontrolled).",
+      type: "Iterable<Key>",
+      required: false,
+    },
+    style: {
+      description:
+        "The inline style for the element. A function may be provided to compute the style based on component state.",
+      type: "React.CSSProperties | ((props: DisclosureGroupRenderProps) => React.CSSProperties)",
+      required: false,
+    },
+
+    onExpandedChange: {
+      description: "Handler that is called when items are expanded or collapsed.",
+      type: "(keys: Set<Key>) => any",
+      required: false
+    }
   }}
 />

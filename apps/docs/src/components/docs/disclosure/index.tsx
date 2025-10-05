@@ -8,6 +8,7 @@ import {
   DisclosureVariantsBase,
   getDisclosureVariantsCode,
 } from "./disclosure-variants";
+import { DisclosureCardBase, DisclosureCardCode } from "./disclosure-card";
 
 export function DisclosureBasic() {
   return (
@@ -31,5 +32,11 @@ export function DisclosureVariants() {
       }
       code={getDisclosureVariantsCode({ variant, size })}
     />
+  );
+}
+
+export function DisclosureCard() {
+  return (
+    <Playground preview={<DisclosureCardBase />} code={DisclosureCardCode} />
   );
 }

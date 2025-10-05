@@ -1,0 +1,484 @@
+---
+title: Calendar
+description: A calendar component presents one or more grids of dates, enabling users to view and interact with a range of days. It allows for the selection of a single specific date within the displayed time period.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/Calendar.html
+---
+
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicCalendar, SelectModeCalendar, DisableDatesCalendar, CustomWeekCalendar, ErrorCalendar } from '@/components/docs/calendar'
+
+## Basic
+<BasicCalendar />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components={['button', 'select']} />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components lucide-react clsx tailwind-merge @react-aria/i18n @internationalized/date motion
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/calendar"
+"use client";
+
+import * as React from "react";
+import {
+  Calendar as CalendarPrimitive,
+  CalendarCell,
+  CalendarGrid,
+  CalendarGridBody,
+  CalendarGridHeader as CalendarGridHeaderPrimitive,
+  CalendarHeaderCell,
+  CalendarStateContext,
+  Heading,
+  Text,
+  useLocale,
+} from "react-aria-components";
+import type {
+  CalendarProps as CalendarPrimitiveProps,
+  CalendarState,
+  DateValue,
+} from "react-aria-components";
+import {
+  today,
+  getLocalTimeZone,
+  type CalendarDate,
+} from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  SelectRoot,
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { AnimatePresence, motion } from "motion/react";
+
+interface CalendarProps<T extends DateValue>
+  extends Omit<CalendarPrimitiveProps<T>, "visibleDuration"> {
+  errorMessage?: string;
+  className?: string;
+  selectMode?: boolean;
+}
+
+function Calendar<T extends DateValue>({
+  errorMessage,
+  className,
+  selectMode = false,
+  ...props
+}: CalendarProps<T>) {
+  const now = today(getLocalTimeZone());
+  const [direction, setDirection] = React.useState<"left" | "right">("right");
+  const [animationKey, setAnimationKey] = React.useState<number>(0);
+
+  function navigate(dir: "left" | "right") {
+    setDirection(dir);
+    setAnimationKey((prev) => prev + 1);
+  }
+
+  const slideVariants = {
+    enter: (direction: string) => ({
+      x: direction === "right" ? 300 : -300,
+      opacity: 0,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: string) => ({
+      zIndex: 0,
+      x: direction === "right" ? -300 : 300,
+      opacity: 0,
+    }),
+  };
+
+  return (
+    <CalendarPrimitive
+      data-slot="calendar"
+      defaultValue={now}
+      className={cn("grid gap-4 max-w-fit [&_*]:!border-none", className)}
+      {...props}
+    >
+      <CalendarHeader navigate={navigate} selectMode={selectMode} />
+      <div className="relative overflow-hidden mx-auto">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={animationKey}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 500, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            className="w-fit"
+          >
+            <CalendarGrid weekdayStyle="short" className="bg-background">
+              <CalendarGridHeader />
+              <CalendarGridBody className="[&>tr>td]:p-0.5">
+                {(date) => {
+                  const isToday = date.compare(now) === 0;
+
+                  return (
+                    <CalendarCell
+                      date={date}
+                      className={({ isSelected, isDisabled, isUnavailable }) =>
+                        cn(
+                          "inline-flex size-9 items-center justify-center rounded-md text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+                          "text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
+                          isToday &&
+                            "bg-accent text-accent-foreground font-semibold hover:bg-accent/80 focus-visible:ring-ring",
+                          isSelected &&
+                            "bg-primary !text-primary-foreground hover:bg-primary/70 focus-visible:ring-ring font-semibold",
+                          isDisabled &&
+                            "text-muted-foreground opacity-30 pointer-events-none",
+                          isUnavailable &&
+                            "text-destructive line-through pointer-events-none"
+                        )
+                      }
+                    />
+                  );
+                }}
+              </CalendarGridBody>
+            </CalendarGrid>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {errorMessage && (
+        <Text slot="errorMessage" className="text-destructive text-sm">
+          {errorMessage}
+        </Text>
+      )}
+    </CalendarPrimitive>
+  );
+}
+
+interface CalendarHeaderProps extends React.ComponentProps<"header"> {
+  selectMode?: boolean;
+  isRange?: boolean;
+  navigate: (direction: "left" | "right") => void;
+}
+
+function CalendarHeader({
+  selectMode,
+  isRange,
+  className,
+  navigate,
+}: CalendarHeaderProps) {
+  const { direction } = useLocale();
+  const state = React.use(CalendarStateContext)!;
+
+  const formatter = useDateFormatter({
+    month: "long",
+    year: "numeric",
+    timeZone: state.timeZone,
+  });
+
+  const currentLabel = formatter.format(
+    state.focusedDate.toDate(state.timeZone)
+  );
+
+  return (
+    <header
+      className={cn(
+        "flex w-full items-center justify-between gap-2",
+        className
+      )}
+    >
+      <Button
+        size="icon"
+        variant="ghost"
+        slot="previous"
+        onClick={() => navigate("left")}
+        className="me-1"
+      >
+        {direction === "rtl" ? (
+          <ChevronRight className="size-6" />
+        ) : (
+          <ChevronLeft className="size-6" />
+        )}
+      </Button>
+      {selectMode ? (
+        <div className="flex items-center gap-1">
+          <SelectMonth state={state} />
+          <SelectYear state={state} />
+        </div>
+      ) : isRange ? (
+        <Heading className="flex-1 text-center font-medium" />
+      ) : (
+        <motion.span
+          key={currentLabel}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            y: { type: "spring", stiffness: 500, damping: 30 },
+            opacity: { duration: 1 },
+          }}
+          className="text-base sm:text-lg font-semibold text-foreground text-center px-2"
+        >
+          {currentLabel}
+        </motion.span>
+      )}
+
+      <Button
+        size="icon"
+        variant="ghost"
+        slot="next"
+        onClick={() => navigate("right")}
+        className="ms-1"
+      >
+        {direction === "rtl" ? (
+          <ChevronLeft className="size-6" />
+        ) : (
+          <ChevronRight className="size-6" />
+        )}
+      </Button>
+    </header>
+  );
+}
+
+interface SelectMonthProps {
+  state: CalendarState;
+}
+
+function SelectMonth({ state }: SelectMonthProps) {
+  const formatter = useDateFormatter({
+    month: "long",
+    timeZone: state.timeZone,
+  });
+
+  const months = Array.from(
+    { length: state.focusedDate.calendar.getMonthsInYear(state.focusedDate) },
+    (_, i) => {
+      const date = state.focusedDate.set({ month: i + 1 });
+      return {
+        key: String(i + 1),
+        label: formatter.format(date.toDate(state.timeZone)),
+      };
+    }
+  );
+
+  return (
+    <SelectRoot
+      aria-label="Select month"
+      selectedKey={String(state.focusedDate.month)}
+      onSelectionChange={(key) => {
+        state.setFocusedDate(state.focusedDate.set({ month: Number(key) }));
+      }}
+    >
+      <SelectTrigger hideClear className="min-w-32 max-w-32" />
+      <SelectContent>
+        {months.map((month) => (
+          <SelectItem key={month.key} id={month.key} textValue={month.label}>
+            <SelectLabel>{month.label}</SelectLabel>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </SelectRoot>
+  );
+}
+
+interface SelectYearProps {
+  state: CalendarState;
+}
+
+function SelectYear({ state }: SelectYearProps) {
+  const formatter = useDateFormatter({
+    year: "numeric",
+    timeZone: state.timeZone,
+  });
+
+  const selectedYear = state.focusedDate.year;
+  const startYear = selectedYear - 100;
+  const endYear = selectedYear + 100;
+
+  const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => {
+    const year = startYear + i;
+    const date = state.focusedDate.set({ year });
+    return {
+      key: String(year),
+      value: date,
+      label: formatter.format(date.toDate(state.timeZone)),
+    };
+  });
+
+  return (
+    <SelectRoot
+      aria-label="Select year"
+      selectedKey={String(selectedYear)}
+      onSelectionChange={(key) => {
+        const selected = years.find((y) => y.key === key);
+        if (selected) {
+          state.setFocusedDate(selected.value as CalendarDate);
+        }
+      }}
+    >
+      <SelectTrigger hideClear className="min-w-20" />
+      <SelectContent>
+        {years.map((year) => (
+          <SelectItem key={year.key} id={year.key} textValue={year.label}>
+            <SelectLabel>{year.label}</SelectLabel>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </SelectRoot>
+  );
+}
+
+function CalendarGridHeader() {
+  return (
+    <CalendarGridHeaderPrimitive>
+      {(day) => (
+        <CalendarHeaderCell className="text-center text-sm font-medium bg-background text-muted-foreground">
+          {day.slice(0, 2)}
+        </CalendarHeaderCell>
+      )}
+    </CalendarGridHeaderPrimitive>
+  );
+}
+
+export type {
+  CalendarProps,
+  CalendarHeaderProps,
+  SelectMonthProps,
+  SelectYearProps,
+};
+export { Calendar, CalendarHeader, CalendarGridHeader };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add calendar
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Calendar } from "@/components/ui/calendar";
+```
+
+```tsx
+<Calendar />
+```
+
+## Examples
+
+### Select Mode
+Allows users to select only a month or a year instead of a full date, useful for inputs like billing periods or birth years.
+<SelectModeCalendar />
+
+### Disable Dates
+Prevents users from selecting specific dates by disabling them, commonly used to block holidays, past dates, or unavailable booking days.
+<DisableDatesCalendar />
+
+### Custom Week Format
+Lets users set a custom starting day of the week, such as Friday or Monday, instead of the default Sunday — ideal for regional or cultural preferences.
+<CustomWeekCalendar />
+
+### With Error State
+Highlights invalid date selections, such as weekends, with an error message to guide the user toward choosing acceptable dates.
+<ErrorCalendar />
+
+## Props
+
+### Calendar
+<TypeTable
+  type={{
+    errorMessage: {
+      description: "Error message to display below the calendar",
+      type: "string",
+      required: false,
+    },
+    className: {
+      description: "Additional class names for the component",
+      type: "string",
+      required: false,
+    },
+    selectMode: {
+      description: "Whether to enable month and year selection dropdowns",
+      type: "boolean",
+      required: false,
+    },
+  }}
+/>
+
+### CalendarHeader
+<TypeTable
+  type={{
+    selectMode: {
+      description: "Whether the header should display month/year selectors",
+      type: "boolean",
+      required: false,
+    },
+    isRange: {
+      description: "Whether the calendar is used in range selection mode",
+      type: "boolean",
+      required: false,
+    },
+    navigate: {
+      description: "Function to trigger calendar page transitions",
+      type: "(direction: 'left' | 'right') => void",
+      required: true,
+    },
+    className: {
+      description: "Additional class names for the header",
+      type: "string",
+      required: false,
+    },
+  }}
+/>
+
+### SelectMonth
+<TypeTable
+  type={{
+    state: {
+      description: "Calendar state from react-aria-components",
+      type: "CalendarState",
+      required: true,
+    },
+  }}
+/>
+
+### SelectYear
+<TypeTable
+  type={{
+    state: {
+      description: "Calendar state from react-aria-components",
+      type: "CalendarState",
+      required: true,
+    },
+  }}
+/>

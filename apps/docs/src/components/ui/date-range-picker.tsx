@@ -8,7 +8,7 @@ import {
   type DateValue,
   type ValidationResult,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/primitive";
+import { composeTailwindRenderProps } from "@/lib/render-props";
 import { DateInput } from "@/components/ui/date-field";
 import {
   Description,
