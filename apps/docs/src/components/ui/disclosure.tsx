@@ -3,14 +3,21 @@
 import {
   Button,
   Disclosure as DisclosurePrimitive,
-  DisclosurePanel as DisclosureContentPrimitive,
   DisclosureStateContext,
   Heading,
 } from "react-aria-components";
 import { ChevronDown } from "lucide-react";
-import { use, useEffect, useRef, createContext, useContext } from "react";
+import React, { use, useRef, createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import {
+  AnimatePresence,
+  motion,
+  MotionConfig,
+  type Transition,
+  type Variants,
+} from "motion/react";
+import { type ButtonProps } from "@/components/ui/button";
 
 const DisclosureStyleContext = createContext<
   VariantProps<typeof disclosureVariants>
@@ -88,33 +95,60 @@ const disclosureContentVariants = cva("overflow-hidden text-muted-foreground", {
 });
 
 type DisclosureProps = React.ComponentProps<typeof DisclosurePrimitive> &
-  VariantProps<typeof disclosureVariants>;
+  VariantProps<typeof disclosureVariants> & {
+    transition?: Transition;
+  };
 
-function Disclosure({ variant, size, className, ...props }: DisclosureProps) {
+function Disclosure({
+  variant,
+  size,
+  className,
+  transition,
+  ...props
+}: DisclosureProps) {
   return (
     <DisclosureStyleContext.Provider value={{ variant, size }}>
-      <DisclosurePrimitive
-        className={cn(disclosureVariants({ variant, size }), className)}
-        {...props}
-      />
+      <MotionConfig transition={transition}>
+        <DisclosurePrimitive
+          className={cn(disclosureVariants({ variant, size }), className)}
+          {...props}
+        />
+      </MotionConfig>
     </DisclosureStyleContext.Provider>
   );
 }
 
-interface DisclosureTriggerProps extends React.ComponentProps<typeof Button> {
+interface DisclosureTriggerProps extends ButtonProps {
   icon?: React.ReactNode;
   hideChevron?: boolean;
+  asChild?: boolean;
+  children?: React.ReactNode | ButtonProps["children"];
 }
 
 function DisclosureTrigger({
   className,
   icon,
   hideChevron = false,
+  asChild = false,
   children,
   ...props
 }: DisclosureTriggerProps) {
   const { size } = useDisclosureStyle();
   const { isExpanded } = use(DisclosureStateContext)!;
+
+  if (asChild) {
+    if (!React.isValidElement(children)) {
+      console.warn(
+        "DisclosureTrigger with asChild expects a single React element as child."
+      );
+      return <>{children}</>;
+    }
+
+    return React.cloneElement(children, {
+      slot: "trigger",
+      ...props,
+    });
+  }
 
   return (
     <Heading>
@@ -151,59 +185,54 @@ function DisclosureTrigger({
   );
 }
 
-type DisclosureContentProps = React.ComponentProps<
-  typeof DisclosureContentPrimitive
->;
-
 function DisclosureContent({
   className,
   children,
-  ...props
-}: DisclosureContentProps) {
+}: React.ComponentProps<"div">) {
   const { size } = useDisclosureStyle();
   const { isExpanded } = use(DisclosureStateContext)!;
   const contentRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const element = contentRef.current;
-    if (!element) return;
-
-    const ro = new ResizeObserver(([entry]) => {
-      const height = entry.target.clientHeight;
-      element.parentElement?.style.setProperty(
-        "--disclosure-height",
-        `${height}px`
-      );
-    });
-
-    ro.observe(element);
-    return () => ro.disconnect();
-  }, []);
+  const variants: Variants = {
+    expanded: {
+      height: "auto",
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    collapsed: {
+      height: 0,
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
 
   return (
-    <DisclosureContentPrimitive
-      className={cn(
-        disclosureContentVariants({ size }),
-        "transition-all duration-300 ease-in-out",
-        isExpanded
-          ? "animate-disclosure-expanded"
-          : "animate-disclosure-collapsed pb-0",
-        className
+    <AnimatePresence initial={false}>
+      {isExpanded && (
+        <motion.div
+          initial="collapsed"
+          animate="expanded"
+          exit="collapsed"
+          variants={variants}
+          className={cn("overflow-hidden", className)}
+        >
+          <div
+            ref={contentRef}
+            className={cn(disclosureContentVariants({ size }), className)}
+          >
+            {children}
+          </div>
+        </motion.div>
       )}
-      {...props}
-    >
-      <div
-        ref={contentRef}
-        className={cn(
-          "transition-opacity duration-300 ease-in-out",
-          isExpanded ? "opacity-100" : "opacity-0"
-        )}
-      >
-        {children}
-      </div>
-    </DisclosureContentPrimitive>
+    </AnimatePresence>
   );
 }
 
 export { Disclosure, DisclosureTrigger, DisclosureContent };
-export type { DisclosureProps, DisclosureTriggerProps, DisclosureContentProps };
+export type { DisclosureProps, DisclosureTriggerProps };

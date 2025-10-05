@@ -20,7 +20,7 @@ import { AvatarBasic, InitialAvatar, ShapeAvatar, SizeAvatar, AvatarGroup } from
 Install following dependencies:
 
 ```package-install
-npm install class-variance-authority clsx twMerge
+npm install class-variance-authority clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -142,31 +142,25 @@ import { Avatar } from "@/components/ui/avatar";
 ```
 
 ```tsx
-<Avatar src="https://i.pravatar.cc/100?img=3" alt="Dominic Torpedo" />
+<Avatar src="avatar-src" alt="avatar-alt" />
 ```
 
-## Fallback
+## Examples
 
+### Fallback
 Displays an avatar using user initials when no profile image is available. This ensures consistent styling and fallback behavior while still giving a personalized touch with capitalized initials.
-
 <InitialAvatar />
 
-## Shapes
-
+### Shapes
 Showcases different avatar shapes: **circle** and **square**. The shape can be controlled via the `variant` prop, allowing you to match the avatar’s appearance with your app’s design language.
-
 <ShapeAvatar />
 
-## Sizes
-
+### Sizes
 Demonstrates the avatar in various sizes, from **extra small (xs)** to **extra large (xl)**. The `size` prop offers flexibility for using the avatar in different UI contexts—such as user lists, comments, or main profile views.
-
 <SizeAvatar />
 
-## Avatar Group
-
+### Avatar Group
 Displays a group of avatars representing multiple users. Each avatar can show either a profile image or fallback initials if the image is not available. Avatar groups are commonly used in collaborative interfaces, team listings, or messaging apps.
-
 <AvatarGroup />
 
 ## Props

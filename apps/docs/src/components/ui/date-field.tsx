@@ -9,7 +9,7 @@ import {
   type DateValue,
   type ValidationResult,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/primitive";
+import { composeTailwindRenderProps } from "@/lib/render-props";
 import { Description, FieldError, FieldGroup, Label } from "./field";
 import { cn } from "@/lib/utils";
 

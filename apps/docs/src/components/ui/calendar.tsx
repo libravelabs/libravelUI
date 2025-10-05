@@ -18,7 +18,6 @@ import type {
   CalendarState,
   DateValue,
 } from "react-aria-components";
-import { use, type ComponentProps } from "react";
 import {
   today,
   getLocalTimeZone,
@@ -27,27 +26,27 @@ import {
 import { useDateFormatter } from "@react-aria/i18n";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "./button";
+import { Button } from "@/components/ui/button";
 import {
   SelectRoot,
   SelectContent,
   SelectItem,
   SelectLabel,
   SelectTrigger,
-} from "./select";
+} from "@/components/ui/select";
 import { AnimatePresence, motion } from "motion/react";
 
 interface CalendarProps<T extends DateValue>
   extends Omit<CalendarPrimitiveProps<T>, "visibleDuration"> {
   errorMessage?: string;
   className?: string;
-  canPick?: boolean;
+  selectMode?: boolean;
 }
 
 function Calendar<T extends DateValue>({
   errorMessage,
   className,
-  canPick = false,
+  selectMode = false,
   ...props
 }: CalendarProps<T>) {
   const now = today(getLocalTimeZone());
@@ -80,10 +79,10 @@ function Calendar<T extends DateValue>({
     <CalendarPrimitive
       data-slot="calendar"
       defaultValue={now}
-      className={cn("grid gap-4 max-w-fit", className)}
+      className={cn("grid gap-4 max-w-fit [&_*]:!border-none", className)}
       {...props}
     >
-      <CalendarHeader navigate={navigate} canPick={canPick} />
+      <CalendarHeader navigate={navigate} selectMode={selectMode} />
       <div className="relative overflow-hidden mx-auto">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
@@ -99,9 +98,9 @@ function Calendar<T extends DateValue>({
             }}
             className="w-fit"
           >
-            <CalendarGrid weekdayStyle="short">
+            <CalendarGrid weekdayStyle="short" className="bg-background">
               <CalendarGridHeader />
-              <CalendarGridBody>
+              <CalendarGridBody className="[&>tr>td]:p-0.5">
                 {(date) => {
                   const isToday = date.compare(now) === 0;
 
@@ -110,14 +109,14 @@ function Calendar<T extends DateValue>({
                       date={date}
                       className={({ isSelected, isDisabled, isUnavailable }) =>
                         cn(
-                          "inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-md text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer m-0.5",
+                          "inline-flex size-9 items-center justify-center rounded-md text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
                           "text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
                           isToday &&
                             "bg-accent text-accent-foreground font-semibold hover:bg-accent/80 focus-visible:ring-ring",
                           isSelected &&
-                            "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring font-semibold",
+                            "bg-primary !text-primary-foreground hover:bg-primary/70 focus-visible:ring-ring font-semibold",
                           isDisabled &&
-                            "text-muted-foreground opacity-30 cursor-not-allowed",
+                            "text-muted-foreground opacity-30 pointer-events-none",
                           isUnavailable &&
                             "text-destructive line-through pointer-events-none"
                         )
@@ -140,18 +139,20 @@ function Calendar<T extends DateValue>({
   );
 }
 
+interface CalendarHeaderProps extends React.ComponentProps<"header"> {
+  selectMode?: boolean;
+  isRange?: boolean;
+  navigate: (direction: "left" | "right") => void;
+}
+
 function CalendarHeader({
-  canPick,
+  selectMode,
   isRange,
   className,
   navigate,
-}: ComponentProps<"header"> & {
-  canPick?: boolean;
-  isRange?: boolean;
-  navigate: (direction: "left" | "right") => void;
-}) {
+}: CalendarHeaderProps) {
   const { direction } = useLocale();
-  const state = use(CalendarStateContext)!;
+  const state = React.use(CalendarStateContext)!;
 
   const formatter = useDateFormatter({
     month: "long",
@@ -183,7 +184,7 @@ function CalendarHeader({
           <ChevronLeft className="size-6" />
         )}
       </Button>
-      {canPick ? (
+      {selectMode ? (
         <div className="flex items-center gap-1">
           <SelectMonth state={state} />
           <SelectYear state={state} />
@@ -191,7 +192,7 @@ function CalendarHeader({
       ) : isRange ? (
         <Heading className="flex-1 text-center font-medium" />
       ) : (
-        <motion.h2
+        <motion.span
           key={currentLabel}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -202,7 +203,7 @@ function CalendarHeader({
           className="text-base sm:text-lg font-semibold text-foreground text-center px-2"
         >
           {currentLabel}
-        </motion.h2>
+        </motion.span>
       )}
 
       <Button
@@ -222,7 +223,11 @@ function CalendarHeader({
   );
 }
 
-function SelectMonth({ state }: { state: CalendarState }) {
+interface SelectMonthProps {
+  state: CalendarState;
+}
+
+function SelectMonth({ state }: SelectMonthProps) {
   const formatter = useDateFormatter({
     month: "long",
     timeZone: state.timeZone,
@@ -259,7 +264,11 @@ function SelectMonth({ state }: { state: CalendarState }) {
   );
 }
 
-function SelectYear({ state }: { state: CalendarState }) {
+interface SelectYearProps {
+  state: CalendarState;
+}
+
+function SelectYear({ state }: SelectYearProps) {
   const formatter = useDateFormatter({
     year: "numeric",
     timeZone: state.timeZone,
@@ -306,7 +315,7 @@ function CalendarGridHeader() {
   return (
     <CalendarGridHeaderPrimitive>
       {(day) => (
-        <CalendarHeaderCell className="text-center text-sm font-medium text-muted-foreground">
+        <CalendarHeaderCell className="text-center text-sm font-medium bg-background text-muted-foreground">
           {day.slice(0, 2)}
         </CalendarHeaderCell>
       )}
@@ -314,5 +323,10 @@ function CalendarGridHeader() {
   );
 }
 
-export type { CalendarProps };
+export type {
+  CalendarProps,
+  CalendarHeaderProps,
+  SelectMonthProps,
+  SelectYearProps,
+};
 export { Calendar, CalendarHeader, CalendarGridHeader };

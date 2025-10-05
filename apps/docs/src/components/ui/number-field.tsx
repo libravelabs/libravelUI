@@ -5,7 +5,6 @@ import {
   Button,
   type ButtonProps,
   NumberField as NumberFieldPrimitive,
-  useLocale,
   type NumberFieldProps as NumberFieldPrimitiveProps,
   type ValidationResult,
 } from "react-aria-components";
@@ -30,8 +29,6 @@ function NumberField({
   indicator,
   ...props
 }: NumberFieldProps) {
-  const { direction } = useLocale();
-
   return (
     <NumberFieldPrimitive
       {...props}

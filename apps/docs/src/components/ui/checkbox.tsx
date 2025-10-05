@@ -1,58 +1,14 @@
-import type {
-  CheckboxGroupProps as CheckboxGroupPrimitiveProps,
-  CheckboxProps as CheckboxPrimitiveProps,
-} from "react-aria-components";
+"use client";
+
+import type { CheckboxProps as CheckboxPrimitiveProps } from "react-aria-components";
 import {
-  CheckboxGroup as CheckboxGroupPrimitive,
   Checkbox as CheckboxPrimitive,
   composeRenderProps,
 } from "react-aria-components";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import {
-  Description,
-  FieldError,
-  Label,
-  type InputProps,
-} from "@/components/ui/field";
+import { Description, Label, type FieldProps } from "@/components/ui/field";
 import { Check, Minus } from "lucide-react";
-
-interface CheckboxGroupProps
-  extends CheckboxGroupPrimitiveProps,
-    Omit<InputProps, "placeholder"> {
-  description?: string;
-}
-
-function CheckboxGroup({
-  className,
-  children,
-  description,
-  label,
-  error,
-  ...props
-}: CheckboxGroupProps) {
-  return (
-    <CheckboxGroupPrimitive
-      aria-label="checkbox-group"
-      {...props}
-      className={cn(
-        "flex flex-col gap-3 has-[[slot=description]]:gap-6 has-[[slot=description]]:**:data-[slot=label]:font-medium **:[[slot=description]]:block",
-        className
-      )}
-    >
-      {(values) => (
-        <>
-          <div>
-            {label && <Label>{label}</Label>}
-            {description && <Description>{description}</Description>}
-          </div>
-          {typeof children === "function" ? children(values) : children}
-          <FieldError message={error} />
-        </>
-      )}
-    </CheckboxGroupPrimitive>
-  );
-}
 
 const checkboxVariants = cva("group block w-fit disabled:opacity-50");
 
@@ -71,11 +27,7 @@ const checkboxWrapper = cva("grid group items-center disabled:opacity-50", {
 const checkboxIndicator = cva(
   [
     "relative isolate flex shrink-0 items-center justify-center rounded-sm transition",
-    "bg-background text-muted-foreground inset-ring inset-ring-muted",
-    "focus-within:inset-ring-ring/70 focus-within:ring-3 focus-within:ring-ring/20",
-    "focus-within:hover:inset-ring-ring/70 has-invalid:hover:inset-ring-destructive/70",
-    "invalid:inset-ring-destructive/70 focus-within:invalid:inset-ring-destructive/70 focus-within:invalid:ring-destructive/20",
-    "group-invalid:inset-ring-destructive/70 group-invalid:focus-within:inset-ring-destructive/70 group-invalid:focus-within:ring-destructive/20",
+    "bg-background text-muted-foreground inset-ring inset-ring-accent",
     "cursor-pointer disabled:cursor-not-allowed",
   ],
   {
@@ -83,36 +35,41 @@ const checkboxIndicator = cva(
       size: {
         sm: "size-4 *:data-[slot=check-indicator]:size-3",
         md: "size-4.5 *:data-[slot=check-indicator]:size-4",
+        lg: "size-5 *:data-[slot=check-indicator]:size-4.5",
+        xl: "size-5.5 *:data-[slot=check-indicator]:size-5",
       },
-      state: {
-        default: "",
-        selected:
-          "bg-primary text-primary-foreground dark:inset-ring-primary group-invalid:inset-ring-destructive/70 group-invalid:bg-destructive group-invalid:text-destructive-foreground dark:group-invalid:inset-ring-destructive/70 *:data-[slot=check-indicator]:text-primary-foreground",
-        focus:
-          "inset-ring-primary ring-3 ring-ring/20 group-invalid:inset-ring-destructive/70 group-invalid:text-destructive-foreground group-invalid:ring-destructive/20",
-        invalid:
-          "inset-ring-destructive/70 bg-destructive/20 text-destructive-foreground ring-destructive/20",
+      isSelected: {
+        true: "bg-primary text-primary-foreground dark:inset-ring-primary",
       },
-      disabled: {
+      isIndeterminate: {
+        true: "bg-primary text-primary-foreground dark:inset-ring-primary",
+      },
+      isFocusVisible: {
+        true: "inset-ring-primary ring-3 ring-ring/20 focus-within:inset-ring-ring/70 focus-within:hover:inset-ring-ring/70",
+      },
+      isInvalid: {
+        true: "inset-ring-destructive/70 bg-destructive/20 text-destructive-foreground ring-destructive/20",
+      },
+      isDisabled: {
         true: "opacity-50 cursor-not-allowed",
+      },
+      isReadOnly: {
+        true: "pointer-events-none",
       },
     },
     defaultVariants: {
       size: "md",
-      state: "default",
-      disabled: false,
     },
   }
 );
 
-interface CheckboxProps
-  extends CheckboxPrimitiveProps,
-    VariantProps<typeof checkboxWrapper>,
-    VariantProps<typeof checkboxIndicator> {
-  label?: string;
-  description?: string;
-  error?: InputProps["error"];
-}
+type CheckboxProps = CheckboxPrimitiveProps &
+  VariantProps<typeof checkboxWrapper> &
+  VariantProps<typeof checkboxIndicator> & {
+    label?: string;
+    description?: string;
+    error?: FieldProps["error"];
+  };
 
 function Checkbox({
   className,
@@ -139,6 +96,7 @@ function Checkbox({
               isFocusVisible,
               isInvalid,
               isDisabled,
+              isReadOnly,
             }
           ) => {
             const isStringChild = typeof children === "string";
@@ -149,16 +107,6 @@ function Checkbox({
             ) : isSelected ? (
               <Check data-slot="check-indicator" />
             ) : null;
-
-            const state = error
-              ? "invalid"
-              : isInvalid
-              ? "invalid"
-              : isFocusVisible
-              ? "focus"
-              : isSelected || isIndeterminate
-              ? "selected"
-              : "default";
 
             const content = hasCustomChildren ? (
               isStringChild ? (
@@ -185,8 +133,12 @@ function Checkbox({
                   className={cn(
                     checkboxIndicator({
                       size,
-                      state,
-                      disabled: isDisabled,
+                      isSelected,
+                      isIndeterminate,
+                      isFocusVisible,
+                      isInvalid: !!error || isInvalid,
+                      isDisabled,
+                      isReadOnly,
                     })
                   )}
                 >
@@ -198,10 +150,14 @@ function Checkbox({
           }
         )}
       </CheckboxPrimitive>
-      <FieldError message={error} />
+      {error && typeof error !== "function" && (
+        <p className="text-sm text-destructive group-disabled:opacity-50">
+          {error}
+        </p>
+      )}
     </>
   );
 }
 
-export type { CheckboxGroupProps, CheckboxProps };
-export { CheckboxGroup, Checkbox };
+export type { CheckboxProps };
+export { Checkbox };

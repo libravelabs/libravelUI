@@ -4,7 +4,6 @@ description: A styled text component for highlighting important information, war
 component: true
 ---
 
-import { PreviewContainer } from "@/components/PreviewContainer";
 import { TypeTable } from "fumadocs-ui/components/type-table";
 import {
   BasicAlertShowcase,
@@ -29,7 +28,7 @@ The **Alert** component is used to display short, important messages that catch 
 Install following dependencies:
 
 ```package-install
-npm install class-variance-authority lucide-react clsx twMerge
+npm install class-variance-authority lucide-react clsx tailwind-merge motion
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -63,7 +62,7 @@ const alertVariants = cva(
       variant: {
         default: "border-border bg-background text-foreground",
         destructive:
-          "border-destructive bg-destructive/10 text-destructive [&>svg]:text-destructive",
+          "border-destructive bg-destructive/10 text-destructive [&_svg:not([class*='size-'])]:text-destructive",
         warning:
           "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200 [&>svg]:text-amber-600 dark:[&>svg]:text-amber-400",
         success:
@@ -191,6 +190,7 @@ function Alert({
   );
 }
 
+export type { AlertProps };
 export { AlertRoot, Alert, AlertTitle, AlertDescription };
 ```
 
@@ -214,59 +214,56 @@ import { Alert } from "@/components/ui/alert";
 <section className="space-y-4">
   <Alert
     title="Default Alert"
-    message="This is a neutral notification"
+    message="Alert for default"
     icon={<Bell className="size-5" data-slot="icon" />}
   />
-
   <Alert
     variant="info"
     title="Info Alert"
-    message="Heads up! You should know about this"
+    message="Alert for info"
     icon={<Info className="size-5" data-slot="icon" />}
   />
-
   <Alert
     variant="success"
     title="Success Alert"
-    message="Your operation was successful"
+    message="Alert for success"
     icon={<CheckCircle className="size-5" data-slot="icon" />}
   />
-
   <Alert
     variant="warning"
     title="Warning Alert"
-    message="Be careful! Something may not be right"
+    message="Alert for warning"
     icon={<AlertTriangle className="size-5" data-slot="icon" />}
   />
-
   <Alert
     variant="destructive"
     title="Error Alert"
-    message="Something went terribly wrong"
+    message="Alert for destructive"
     icon={<XCircle className="size-5" data-slot="icon" />}
   />
 </section>
 ```
 
-## Variants
+## Examples
+### Variants
 
 The **Alert** component provides several variants to display different types of important messages: neutral, info, success, warning, and error.
 
 <VariantsAlertShowcase />
 
-## Custom Build
+### Custom Build
 
 The **Custom Alert** is built using low-level primitives like `AlertRoot`, `AlertTitle`, and `AlertDescription`. This setup offers full control over structure and behavior, making it easy to integrate buttons, icons, or custom interactions. It also includes a close action, allowing users to dismiss the alert manually when appropriate.
 
 <CustomBuildAlertShowcase />
 
-## Can be Closed
+### Can be Closed
 
 An alert that can be manually dismissed by the user. This pattern improves usability by allowing temporary messages to be closed once they’re no longer needed, keeping the interface clean and focused.
 
 <CanClosedAlertShowcase />
 
-## Controlled State
+### Controlled State
 
 An alert that can be manually dismissed by the user. This pattern improves usability by allowing temporary messages to be closed once they’re no longer needed, keeping the interface clean and focused.
 
@@ -286,17 +283,14 @@ An alert that can be manually dismissed by the user. This pattern improves usabi
     title: {
       description: "The title text displayed in the alert (optional)",
       type: "string",
-      default: "undefined",
     },
     message: {
       description: "The description or body text of the alert",
       type: "string",
-      default: "undefined",
     },
     icon: {
       description: "Optional icon element displayed before the text",
-      type: "LucideIcon | ReactNode",
-      default: "undefined",
+      type: "React.ReactNode",
     },
     canClosed: {
       description: "If true, the alert is dismissible with a close button",
@@ -306,17 +300,18 @@ An alert that can be manually dismissed by the user. This pattern improves usabi
     className: {
       description: "Additional class names for the main alert container",
       type: "string",
-      default: "undefined",
+    },
+    children: {
+      description: "Optional custom content to replace the default message. Overrides the `message` prop if provided.",
+      type: "React.ReactNode",
     },
     open: {
       description: "Controlled open state. Determines if the alert is visible",
       type: "boolean",
-      default: "undefined",
     },
     onOpenChange: {
       description: "Function to control the open state from a parent component",
       type: "(open: boolean) => void",
-      default: "undefined",
     },
   }}
 />
@@ -332,7 +327,6 @@ An alert that can be manually dismissed by the user. This pattern improves usabi
     className: {
       description: "Additional class names for styling",
       type: "string",
-      default: "undefined",
     },
   }}
 />
@@ -343,12 +337,10 @@ An alert that can be manually dismissed by the user. This pattern improves usabi
     className: {
       description: "Additional class names for styling the title",
       type: "string",
-      default: "undefined",
     },
     children: {
       description: "Title content (typically text or heading)",
       type: "React.ReactNode",
-      default: "undefined",
     },
   }}
 />
@@ -360,12 +352,10 @@ An alert that can be manually dismissed by the user. This pattern improves usabi
     className: {
       description: "Additional class names for styling the description",
       type: "string",
-      default: "undefined",
     },
     children: {
       description: "Description content (typically text or elements)",
       type: "React.ReactNode",
-      default: "undefined",
     },
   }}
 />

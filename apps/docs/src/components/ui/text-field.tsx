@@ -69,7 +69,7 @@ function TextField({
           ) : children ? (
             children
           ) : (
-            <Input {...inputProps} />
+            <Input {...inputProps} type={rest.type} />
           )}
         </>
       )}

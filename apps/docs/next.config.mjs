@@ -4,6 +4,16 @@ import { createMDX } from "fumadocs-mdx/next";
 const config = {
   reactStrictMode: true,
   serverExternalPackages: ["oxc-transform"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 const withMDX = createMDX();

@@ -1,0 +1,217 @@
+---
+title: Link
+description: A link lets users navigate to other pages or resources within a website or app, helping them find related content quickly and easily.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/Link.html
+---
+
+import { BasicLink, LinkVariants, DisabledLink } from '@/components/docs/link'
+import { Info } from '@/components/info';
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+
+<Info>Using the `Link` component is optional but recommended for better accessibility and consistent navigation behavior. You can use the navigation component provided by your routing framework instead.</Info>
+
+
+## Basic
+<BasicLink />
+
+## Features
+Links can be created in HTML with the `<a>` element with an href attribute. However, if the link does not have an href, and is handled client side with JavaScript instead, it will not be exposed to assistive technology properly. Link helps achieve accessible links with either native HTML elements or custom element types.
+
+- **Flexible** – Support for HTML navigation links, JavaScript handled links, and client side routing. Disabled links are also supported.
+- **Accessible** – Implemented as a custom ARIA link when handled via JavaScript, and otherwise as a native HTML link.
+- **Styleable** – Hover, press, and keyboard focus states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components class-variance-authority
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/link"
+"use client";
+
+import {
+  composeRenderProps,
+  Link as LinkPrimitive,
+  type LinkProps as LinkPrimitiveProps,
+} from "react-aria-components";
+import { cva, type VariantProps } from "class-variance-authority";
+
+const linkVariants = cva(
+  "disabled:cursor-default disabled:opacity-60 forced-colors:disabled:text-muted-foreground w-fit cursor-pointer transition-all duration-300",
+  {
+    variants: {
+      variant: {
+        default: "text-current hover:text-foreground",
+        primary: "text-primary hover:text-primary/80",
+        secondary: "text-muted-foreground hover:text-foreground",
+        underline: "text-current hover:underline",
+      },
+      isDisabled: {
+        true: "cursor-not-allowed opacity-50",
+        false: "",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      isDisabled: false,
+    },
+  }
+);
+
+type LinkProps = LinkPrimitiveProps &
+  VariantProps<typeof linkVariants> & {
+    ref?: React.RefObject<HTMLAnchorElement>;
+  };
+
+function Link({ className, ref, variant, ...props }: LinkProps) {
+  return (
+    <LinkPrimitive
+      ref={ref}
+      {...props}
+      className={composeRenderProps(className, (className, renderProps) =>
+        linkVariants({
+          ...renderProps,
+          variant,
+          className,
+        })
+      )}
+    >
+      {(values) =>
+        typeof props.children === "function"
+          ? props.children(values)
+          : props.children
+      }
+    </LinkPrimitive>
+  );
+}
+
+export type { LinkProps };
+export { Link };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add link
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Link } from "@/components/ui/link";
+```
+
+```tsx
+<Link href="#" variant="default">Default Link</Link>
+<Link href="#" variant="primary">Primary Link</Link>
+<Link href="#" variant="secondary">Secondary Link</Link>
+<Link href="#" variant="underline">Underline Link</Link>
+```
+
+## Examples
+
+### Variants
+Links shown in different styles to represent various types of actions or importance. Each variant provides a distinct visual cue to guide user interaction.
+<LinkVariants />
+
+### Disabled
+Disabled links prevent user interaction, indicating that the link is currently unavailable or inactive. They provide clear visual feedback to users that the action cannot be performed.
+<DisabledLink />
+
+## Props
+
+<TypeTable
+  type={{
+    variant: {
+      description: "Visual variant of the link.",
+      type: "'default' | 'primary' | 'secondary' | 'underline'",
+      required: false,
+      default: "'default'",
+    },
+    isDisabled: {
+      description: "Whether the link is disabled (controls styles).",
+      type: "boolean",
+      required: false,
+      default: false,
+    },
+    ref: {
+      description: "Ref to the anchor element.",
+      type: "React.RefObject<HTMLAnchorElement>",
+      required: false,
+    },
+    autoFocus: {
+      description: "Whether the element should receive focus on render.",
+      type: "boolean",
+      required: false,
+    },
+    href: {
+      description: "A URL to link to. See MDN.",
+      type: "Href",
+      required: false,
+    },
+    hrefLang: {
+      description: "Hints at the human language of the linked URL. See MDN.",
+      type: "string",
+      required: false,
+    },
+    target: {
+      description: "The target window for the link. See MDN.",
+      type: "HTMLAttributeAnchorTarget",
+      required: false,
+    },
+    rel: {
+      description: "The relationship between the linked resource and the current page. See MDN.",
+      type: "string",
+      required: false,
+    },
+    download: {
+      description: "Causes the browser to download the linked URL. A string may be provided to suggest a file name. See MDN.",
+      type: "boolean | string",
+      required: false,
+    },
+    ping: {
+      description: "A space-separated list of URLs to ping when the link is followed. See MDN.",
+      type: "string",
+      required: false,
+    },
+    referrerPolicy: {
+      description: "How much of the referrer to send when following the link. See MDN.",
+      type: "HTMLAttributeReferrerPolicy",
+      required: false,
+    },
+    routerOptions: {
+      description: "Options for the configured client side router.",
+      type: "RouterOptions",
+      required: false,
+    },
+    children: {
+      description: "The children of the component. A function may be provided to alter the children based on component state.",
+      type: "ChildrenOrFunction<LinkRenderProps>",
+      required: true,
+    },
+    className: {
+      description: "The CSS className for the element. A function may be provided to compute the class based on component state.",
+      type: "ClassNameOrFunction<LinkRenderProps>",
+      required: false,
+    },
+    style: {
+      description: "The inline style for the element. A function may be provided to compute the style based on component state.",
+      type: "StyleOrFunction<LinkRenderProps>",
+      required: false,
+    },
+  }}
+/>

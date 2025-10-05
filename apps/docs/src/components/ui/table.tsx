@@ -24,7 +24,7 @@ import {
   Table as TablePrimitive,
   useTableOptions,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/primitive";
+import { composeTailwindRenderProps } from "@/lib/render-props";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronDown, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";

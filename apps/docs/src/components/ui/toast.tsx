@@ -9,6 +9,7 @@ function Toast({ ...props }: ToasterProps) {
   return (
     <ToasterPrimitive
       theme={theme as ToasterProps["theme"]}
+      closeButton
       className="toaster group"
       richColors
       toastOptions={{

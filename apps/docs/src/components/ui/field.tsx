@@ -94,7 +94,11 @@ interface FieldProps {
   label?: string;
   placeholder?: string;
   description?: string;
-  error?: string | ((validation: ValidationResult) => string);
+  error?:
+    | string
+    | boolean
+    | React.ReactNode
+    | ((validation: ValidationResult) => string);
 }
 
 interface DescriptionProps extends TextProps {
@@ -166,7 +170,7 @@ const FieldGroup = ({
 interface InputProps
   extends InputPrimitiveProps,
     VariantProps<typeof fieldVariants> {
-  error?: string | ((validation: ValidationResult) => string);
+  error?: FieldProps["error"];
   label?: string | React.ReactNode;
   description?: string;
   startContent?: string | React.ReactNode;
@@ -271,28 +275,26 @@ function Input({
               className="content ms-2 flex cursor-pointer items-center"
               onClick={() => setVisible(!visible)}
             >
-              {visible ? (
-                <EyeOff className="size-4.5" />
-              ) : (
-                <Eye className="size-4.5" />
-              )}
+              {visible ? <EyeOff /> : <Eye />}
             </div>
           )}
 
           {isLoading ? (
             <Loader />
-          ) : endContent && typeof endContent === "string" ? (
-            <span className="ms-2 text-muted-foreground">{endContent}</span>
-          ) : (
-            <div
-              className={cn(
-                "content ms-2 flex items-center",
-                classNames?.endContent
-              )}
-            >
-              {endContent}
-            </div>
-          )}
+          ) : endContent ? (
+            typeof endContent === "string" ? (
+              <span className="ms-2 text-muted-foreground">{endContent}</span>
+            ) : (
+              <div
+                className={cn(
+                  "content ms-2 flex items-center",
+                  classNames?.endContent
+                )}
+              >
+                {endContent}
+              </div>
+            )
+          ) : null}
         </FieldGroup>
 
         <Description className={cn("m-0 mt-1", classNames?.description)}>

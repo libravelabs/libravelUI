@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-aria-components";
+import Link from "next/link";
 
 export function AsChildBadgeBase() {
   return (
@@ -14,7 +14,7 @@ export function AsChildBadgeBase() {
 export const AsChildBadgeCode = `"use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-aria-components";
+import Link from "next/link";
 
 export function AsChildBadgeBase() {
   return (

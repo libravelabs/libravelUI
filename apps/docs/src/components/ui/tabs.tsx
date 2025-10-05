@@ -14,7 +14,7 @@ import type {
 } from "react-aria-components";
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn, getLowerRadiusClass } from "@/lib/utils";
 import { motion } from "motion/react";
 
 const tabsVariants = cva("group/tabs relative flex w-full gap-4", {
@@ -168,7 +168,7 @@ function Tabs({
   variant,
   size,
   orientation = "horizontal",
-  radius,
+  radius = "md",
   width,
   ...props
 }: TabsProps) {
@@ -236,7 +236,7 @@ function TabTrigger({ children, className, ref, ...props }: TabTriggerProps) {
               layoutId="tab-indicator"
               className={cn(
                 "absolute z-10",
-                `rounded-${radius}`,
+                getLowerRadiusClass(radius),
                 variant === "underline" && orientation === "vertical"
                   ? "start-0 w-0.5 h-full bg-primary"
                   : variant === "underline" && orientation === "horizontal"
@@ -273,15 +273,18 @@ function TabContent({ className, children, ref, ...props }: TabContentProps) {
         <motion.div
           initial={{
             opacity: 0,
+            filter: "blur(4px)",
             ...(isVertical ? { x: -12 } : { y: -12 }),
           }}
           animate={{
+            filter: "blur(0px)",
             opacity: 1,
             x: 0,
             y: 0,
           }}
           exit={{
             opacity: 0,
+            filter: "blur(4px)",
             ...(isVertical ? { x: -12 } : { y: -12 }),
           }}
           transition={{

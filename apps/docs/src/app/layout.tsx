@@ -29,7 +29,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       className={`${geist.variable} ${jetbrains_mono.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen scroll-smooth">
         <RootProvider>{children}</RootProvider>
         <Toast />
       </body>

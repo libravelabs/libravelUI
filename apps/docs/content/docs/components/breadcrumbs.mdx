@@ -1,0 +1,303 @@
+---
+title: Breadcrumbs
+description: Breadcrumbs are a navigation tool that displays a sequence of links representing the hierarchical path to the current page or resource within an application. This allows clear visibility of the page's position in the overall structure.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/Breadcrumbs.html
+---
+
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicBreadcrumbs, WithIconBreadcrumbs, CustomSeparatorBreadcrumbs } from '@/components/docs/breadcrumbs'
+
+## Basic
+<BasicBreadcrumbs />
+
+## Features
+Breadcrumbs provide a list of links to parent pages of the current page in hierarchical order. Breadcrumbs helps implement these in an accessible way.
+
+- **Flexible** – Support for HTML navigation links, JavaScript handled links, and client side routing.
+- **Accessible** – Implemented as an ordered list of links. The last link is automatically marked as the current page using aria-current.
+- **Styleable** – Hover, press, and keyboard focus states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components class-variance-authority lucide-react clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/breadcrumb"
+import { createContext, useContext } from "react";
+import {
+  Breadcrumbs as BreadcrumbsPrimitive,
+  Breadcrumb as BreadcrumbPrimitive,
+} from "react-aria-components";
+import type {
+  BreadcrumbsProps as BreadcrumbsPrimitiveProps,
+  BreadcrumbProps as BreadcrumbPrimitiveProps,
+} from "react-aria-components";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import { ChevronRight } from "lucide-react";
+import { Link } from "@/components/ui/link"; // You can replace Link with the navigation component from your routing framework.
+
+type BreadcrumbsContextProps = {
+  separator?: React.ReactNode;
+};
+
+const BreadcrumbsContext = createContext<BreadcrumbsContextProps | undefined>(
+  undefined
+);
+
+function useBreadcrumbsContext() {
+  const context = useContext(BreadcrumbsContext);
+  if (!context) {
+    throw new Error(
+      "useBreadcrumbsContext must be used within BreadcrumbsProvider"
+    );
+  }
+  return context;
+}
+
+const breadcrumbListVariants = cva(
+  "flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground",
+  {
+    variants: {
+      size: {
+        sm: "text-xs gap-1",
+        default: "text-sm gap-1.5",
+        lg: "text-base gap-2",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  }
+);
+
+const breadcrumbItemVariants = cva(
+  "flex items-center gap-1 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm",
+  {
+    variants: {
+      emphasis: {
+        normal: "text-muted-foreground hover:text-foreground",
+        current: "font-medium text-foreground",
+      },
+    },
+    defaultVariants: {
+      emphasis: "normal",
+    },
+  }
+);
+
+type BreadcrumbProps<T> = BreadcrumbsPrimitiveProps<T> &
+  VariantProps<typeof breadcrumbListVariants> & {
+    separator?: BreadcrumbsContextProps["separator"];
+  };
+
+function Breadcrumb<T extends object>({
+  size,
+  separator = <ChevronRight />,
+  className,
+  ...props
+}: BreadcrumbProps<T>) {
+  return (
+    <BreadcrumbsContext.Provider value={{ separator }}>
+      <BreadcrumbsPrimitive
+        className={cn(breadcrumbListVariants({ size }), className)}
+        {...props}
+      />
+    </BreadcrumbsContext.Provider>
+  );
+}
+
+function BreadcrumbItem({
+  className,
+  href,
+  children,
+  emphasis,
+  ...props
+}: BreadcrumbPrimitiveProps &
+  React.ComponentProps<typeof Link> &
+  VariantProps<typeof breadcrumbItemVariants>) {
+  const { separator } = useBreadcrumbsContext();
+
+  return (
+    <BreadcrumbPrimitive
+      className={cn(breadcrumbItemVariants({ emphasis }), className)}
+      {...props}
+    >
+      {({ isCurrent }) => (
+        <>
+          <Link
+            href={href}
+            className="flex items-center gap-1 [&_svg:not([class*='size-'])]:size-4"
+            {...props}
+          >
+            {children}
+          </Link>
+          {!isCurrent && separator !== false && (
+            <BreadcrumbSeparator separator={separator} />
+          )}
+        </>
+      )}
+    </BreadcrumbPrimitive>
+  );
+}
+
+function BreadcrumbSeparator({
+  separator,
+}: React.ComponentProps<"span"> & {
+  separator?: BreadcrumbsContextProps["separator"];
+}) {
+  const shouldRenderDefault =
+    separator === true || separator === undefined || separator === null;
+
+  return (
+    <span className="[&_svg:not([class*='size-'])]:shrink-0 [&_svg:not([class*='size-'])]:text-muted-foreground [&_svg:not([class*='size-'])]:size-4">
+      {shouldRenderDefault ? <ChevronRight /> : separator}
+    </span>
+  );
+}
+
+export type { BreadcrumbProps };
+export { Breadcrumb, BreadcrumbItem, BreadcrumbSeparator };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add breadcrumb
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Breadcrumb, BreadcrumbItem } from "@/components/ui/breadcrumbs";
+```
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/movies">Movies</BreadcrumbItem>
+  <BreadcrumbItem href="/movies/tt0407887">The Departed</BreadcrumbItem>
+</Breadcrumb>
+```
+
+## Examples
+
+### With Icon
+Breadcrumbs with icons for each item, providing visual context and enhancing navigation clarity.
+<WithIconBreadcrumbs />
+
+### Custom Separator
+Breadcrumbs using a custom separator to replace the default arrow, allowing for more personalized styling.
+<CustomSeparatorBreadcrumbs />
+
+## Props
+
+### Breadcrumb
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the breadcrumb container",
+      type: "string",
+      required: false,
+    },
+    size: {
+      description: "Controls the size and spacing of breadcrumb items",
+      type: `"sm" | "default" | "lg"`,
+      required: false,
+    },
+    separator: {
+      description: "Custom separator element shown between breadcrumb items",
+      type: "React.ReactNode",
+      required: false,
+    },
+    isDisabled: {
+      description: "Whether the breadcrumbs are disabled",
+      type: "boolean",
+      required: false,
+    },
+    children: {
+      description: "BreadcrumbItem components to be rendered inside",
+      type: "React.ReactNode | ((item: T) => React.ReactNode)",
+      required: false,
+    },
+    dependencies: {
+      description:
+        "Values that should invalidate the item cache when using dynamic collections",
+      type: "ReadonlyArray<any>",
+      required: false,
+    },
+    items: {
+      description: "Item objects in the collection",
+      type: "Iterable<T>",
+      required: false,
+    },
+    style: {
+      description: "The inline style for the element",
+      type: "CSSProperties",
+      required: false,
+    },
+  }}
+/>
+
+### BreadcrumbItem
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the breadcrumb item",
+      type: "string",
+      required: false,
+    },
+    href: {
+      description: "Destination URL for the breadcrumb link",
+      type: "string",
+      required: false,
+    },
+    emphasis: {
+      description: "Visual emphasis for the item (normal or current page)",
+      type: `"normal" | "current"`,
+      required: false,
+    },
+    children: {
+      description: "Content of the breadcrumb item, typically text or icon",
+      type: "React.ReactNode",
+      required: true,
+    },
+  }}
+/>
+
+### BreadcrumbSeparator
+<TypeTable
+  type={{
+    separator: {
+      description:
+        "Custom separator node. If true or undefined, a default ChevronRight icon is used.",
+      type: "React.ReactNode | boolean",
+      required: false,
+    },
+  }}
+/>

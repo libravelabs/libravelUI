@@ -1,0 +1,175 @@
+---
+title: Separator
+description: A simple line element that visually breaks up content, helping users quickly scan and differentiate sections.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/Menu.html#separator
+---
+
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicSeparator, WithTextSeparator } from '@/components/docs/separator'
+
+## Basic
+<BasicSeparator />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/separator"
+import {
+  Separator as Divider,
+  type SeparatorProps,
+} from "react-aria-components";
+import { cn } from "@/lib/utils";
+
+interface CustomSeparatorProps extends SeparatorProps {
+  text?: string;
+}
+
+function Separator({
+  orientation = "horizontal",
+  text,
+  className,
+  ...props
+}: CustomSeparatorProps) {
+  const isHorizontal = orientation === "horizontal";
+
+  if (!text) {
+    return (
+      <Divider
+        orientation={orientation}
+        {...props}
+        className={cn(
+          "bg-border shrink-0",
+          isHorizontal ? "h-px w-full" : "w-px h-full",
+          className
+        )}
+      />
+    );
+  }
+
+  return (
+    <div
+      role="separator"
+      aria-orientation={orientation}
+      className={cn(
+        "flex items-center justify-center",
+        isHorizontal ? "flex-row w-full" : "flex-col h-full",
+        className
+      )}
+    >
+      <Divider
+        orientation={orientation}
+        {...props}
+        className={cn(
+          "bg-border shrink-0",
+          isHorizontal ? "h-px flex-1" : "w-px flex-1"
+        )}
+      />
+      <span
+        className={cn(
+          "text-sm text-muted-foreground bg-background",
+          isHorizontal ? "px-2" : "py-2"
+        )}
+      >
+        {text}
+      </span>
+      <Divider
+        orientation={orientation}
+        {...props}
+        className={cn(
+          "bg-border shrink-0",
+          isHorizontal ? "h-px flex-1" : "w-px flex-1"
+        )}
+      />
+    </div>
+  );
+}
+
+export { Separator };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add separator
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Separator } from "@/components/ui/separator";
+```
+
+```tsx
+<Separator orientation="horizontal" />
+<Separator orientation="vertical" />
+```
+
+## Example
+### With Text
+<WithTextSeparator />
+
+## Props
+
+<TypeTable
+  type={{
+    orientation: {
+      description:
+        "Direction of the separator. Can be horizontal or vertical.",
+      type: `"horizontal" | "vertical"`,
+      required: false,
+    },
+    text: {
+      description: "Optional text displayed in the center of the separator.",
+      type: "string",
+      required: false,
+    },
+    className: {
+      description: "Additional class names for the component.",
+      type: "string",
+      required: false,
+    },
+    style: {
+      description: "Inline styles for the component.",
+      type: "React.CSSProperties",
+      required: false,
+    },
+    id: {
+      description: "Unique identifier for the separator element.",
+      type: "string",
+      required: false,
+    },
+    role: {
+      description:
+        "ARIA role for accessibility. Defaults to `separator` when text is present.",
+      type: "string",
+      required: false,
+    },
+  }}
+/>

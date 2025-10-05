@@ -30,26 +30,22 @@ export const PreviewContainer = ({
   return (
     <DirectionProvider dir={direction}>
       <div className="relative overflow-hidden">
-        <Button
-          onClick={handleRefresh}
-          variant="secondary"
-          className="absolute top-0 right-0 z-2"
-          size={"icon"}
-          aria-label="Refresh preview"
-        >
-          <RefreshCw
-            className="w-4 h-4 transition-transform duration-300"
-            style={{ transform: `rotate(${rotation}deg)` }}
-          />
-        </Button>
-        <Button
-          variant="secondary"
-          size={"icon"}
-          onClick={handleDirection}
-          className="absolute top-0 right-10 z-2"
-        >
-          {direction}
-        </Button>
+        <div className="absolute right-2 z-2 flex items-center gap-2">
+          <Button variant="secondary" size={"icon"} onClick={handleDirection}>
+            {direction}
+          </Button>
+          <Button
+            onClick={handleRefresh}
+            variant="secondary"
+            size={"icon"}
+            aria-label="Refresh preview"
+          >
+            <RefreshCw
+              className="w-4 h-4 transition-transform duration-300"
+              style={{ transform: `rotate(${rotation}deg)` }}
+            />
+          </Button>
+        </div>
         <div
           key={key}
           className={cn(

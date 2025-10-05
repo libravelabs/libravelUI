@@ -1,0 +1,191 @@
+---
+title: Checkbox Group
+description: A checkbox group lets users select one or more options from a related list. It's useful when multiple selections are allowed and helps organize choices under a common label.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/CheckboxGroup.html
+---
+
+import { Info } from '@/components/info';
+import { RequiredBlock } from "@/components/required-block";
+import { BasicCheckboxGroup, ValidateCheckboxGroup, IndeterminateCheckboxGroup, ControlledCheckboxGroup, DisabledCheckboxGroup } from '@/components/docs/checkbox-group'
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+
+<Info>If you're looking for a single checkbox component that can be used independently, including support for labels, descriptions, and validation, see: [Checkbox](/docs/components/checkbox)</Info>
+
+## Basic
+<BasicCheckboxGroup />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components="field" />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/checkbox-group"
+"use client";
+
+import type { CheckboxGroupProps as CheckboxGroupPrimitiveProps } from "react-aria-components";
+import { CheckboxGroup as CheckboxGroupPrimitive } from "react-aria-components";
+import { cn } from "@/lib/utils";
+import {
+  Description,
+  Label,
+  type FieldProps,
+  type InputProps,
+} from "@/components/ui/field";
+
+type CheckboxGroupProps = CheckboxGroupPrimitiveProps &
+  Omit<InputProps, "placeholder"> & {
+    description?: string;
+    error?: FieldProps["error"];
+  };
+
+function CheckboxGroup({
+  className,
+  children,
+  description,
+  label,
+  error,
+  ...props
+}: CheckboxGroupProps) {
+  return (
+    <CheckboxGroupPrimitive
+      aria-label="checkbox-group"
+      {...props}
+      className={cn(
+        "flex flex-col gap-3 has-[[slot=description]]:gap-6 has-[[slot=description]]:**:data-[slot=label]:font-medium **:[[slot=description]]:block",
+        className
+      )}
+    >
+      {(values) => (
+        <>
+          <div>
+            {label && <Label>{label}</Label>}
+            {description && <Description>{description}</Description>}
+          </div>
+          {typeof children === "function" ? children(values) : children}
+          {error && typeof error !== "function" && (
+            <p className="text-sm text-destructive group-disabled:opacity-50">
+              {error}
+            </p>
+          )}
+        </>
+      )}
+    </CheckboxGroupPrimitive>
+  );
+}
+
+export type { CheckboxGroupProps };
+export { CheckboxGroup };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add checkbox-group
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { CheckboxGroup } from "@/components/ui/checkbox-group";
+import { Checkbox } from "@/components/ui/checkbox";
+```
+
+```tsx
+<CheckboxGroup
+  label="Group Label"
+  description="Group description goes here."
+>
+  <Checkbox
+    value="checkbox-value-1"
+    label="Label goes here"
+    description="Description goes here."
+  />
+  <Checkbox
+    value="checkbox-value-2"
+    label="Label goes here"
+    description="Description goes here."
+  />
+  <Checkbox
+    value="checkbox-value-3"
+    label="Label goes here"
+    description="Description goes here."
+  />
+</CheckboxGroup>
+```
+
+## Examples
+
+### Validate
+Validates a checkbox group by ensuring the user selects at least one option before submitting. Validation prevents empty submissions and guides users to complete required fields.
+<ValidateCheckboxGroup />
+
+### Indeterminate
+This example demonstrates a checkbox group where the parent checkbox shows an indeterminate state (a dash) to indicate that only some of its child checkboxes are selected. The indeterminate state helps users understand that the selection is partial, not fully checked or unchecked.
+<IndeterminateCheckboxGroup />
+
+### Controlled
+A checkbox group managed with React state. Users select options freely, and on submit, a toast shows their selections. Ideal for apps needing full control and validation of inputs.
+<ControlledCheckboxGroup />
+
+### Disabled
+Checkboxes shown in a disabled state prevent user interaction, indicating options that are unavailable or not applicable. Disabled checkboxes provide visual feedback that the choices cannot be changed.
+<DisabledCheckboxGroup />
+
+## Props
+
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the component",
+      type: "string",
+      required: false,
+    },
+    label: {
+      description: "Text label displayed next to the checkbox",
+      type: "string",
+      required: false,
+    },
+    description: {
+      description: "Optional description displayed below the label",
+      type: "string",
+      required: false,
+    },
+    error: {
+      description: "Error message to display below the checkbox",
+      type: "string | boolean | React.ReactNode | ((validation: ValidationResult) => string);",
+      required: false,
+    },
+    children: {
+      description: "Custom label or content to render inside the checkbox",
+      type: "ReactNode | ((props: RenderProps) => ReactNode)",
+      required: false,
+    },
+  }}
+/>

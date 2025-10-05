@@ -30,10 +30,15 @@ const sizes = {
   "3xl": "sm:max-w-3xl",
   "4xl": "sm:max-w-4xl",
   "5xl": "sm:max-w-5xl",
+  full: "max-w-full",
 };
 
 function Dialog({ children, ...props }: DialogPrimitiveProps) {
   return <DialogPrimitive {...props}>{children}</DialogPrimitive>;
+}
+
+interface DialogTriggerProps extends ButtonProps {
+  asPrimitive?: boolean;
 }
 
 function DialogTrigger({
@@ -41,12 +46,10 @@ function DialogTrigger({
   variant,
   size,
   ref,
-  asButton = false,
+  asPrimitive = false,
   ...props
-}: ButtonProps & {
-  asButton?: boolean;
-}) {
-  return asButton ? (
+}: DialogTriggerProps) {
+  return asPrimitive ? (
     <ButtonPrimitive
       className={cn("cursor-pointer ring-0 outline-hidden", props.className)}
     >
@@ -59,12 +62,11 @@ function DialogTrigger({
   );
 }
 
-function DialogModal({
-  size = "lg",
-  children,
-}: React.ComponentProps<typeof Modal> & {
+interface DialogModalProps extends React.ComponentProps<typeof Modal> {
   size?: keyof typeof sizes;
-}) {
+}
+
+function DialogModal({ size = "lg", children }: DialogModalProps) {
   return (
     <Modal
       className={({ isExiting, isEntering }) =>
@@ -91,6 +93,13 @@ function DialogModal({
   );
 }
 
+interface DialogContentProps
+  extends React.ComponentProps<typeof DialogContentPrimitive> {
+  size?: keyof typeof sizes;
+  isBlurred?: boolean;
+  isDismissable?: boolean;
+}
+
 function DialogContent({
   role = "dialog",
   isDismissable,
@@ -98,18 +107,14 @@ function DialogContent({
   size = "lg",
   className,
   ...props
-}: React.ComponentProps<typeof DialogContentPrimitive> & {
-  size?: keyof typeof sizes;
-  isBlurred?: boolean;
-  isDismissable?: boolean;
-}) {
+}: DialogContentProps) {
   return (
     <DialogOverlay isDismissable={isDismissable} isBlurred={isBlurred}>
       <DialogModal size={size}>
         <DialogContentPrimitive
           role={role}
           className={cn(
-            "peer/dialog group/dialog bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
+            "peer/dialog group/dialog bg-popover text-popover-foreground flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
             className
           )}
           {...props}
@@ -121,29 +126,33 @@ function DialogContent({
   );
 }
 
-const DialogOverlay = ({
+interface DialogOverlayProps extends DialogOverlayPrimitiveProps {
+  isBlurred?: boolean;
+}
+
+function DialogOverlay({
   className,
   isDismissable = true,
   isBlurred = false,
   ...props
-}: DialogOverlayPrimitiveProps & {
-  isBlurred?: boolean;
-}) => (
-  <DialogOverlayPrimitive
-    isDismissable={isDismissable}
-    className={({ isExiting, isEntering }) =>
-      cn(
-        "fixed inset-0 z-50 h-(--visual-viewport-height,100vh) bg-black/30 md:p-4",
-        "grid grid-rows-[1fr_auto] justify-items-center sm:grid-rows-[1fr_auto_3fr]",
-        isEntering && "fade-in animate-in duration-300",
-        isExiting && "fade-out animate-out duration-200",
-        isBlurred && "backdrop-blur-sm backdrop-filter",
-        className
-      )
-    }
-    {...props}
-  />
-);
+}: DialogOverlayProps) {
+  return (
+    <DialogOverlayPrimitive
+      isDismissable={isDismissable}
+      className={({ isExiting, isEntering }) =>
+        cn(
+          "fixed inset-0 z-50 h-(--visual-viewport-height,100vh) bg-black/30 md:p-4",
+          "grid grid-rows-[1fr_auto] justify-items-center sm:grid-rows-[1fr_auto_3fr]",
+          isEntering && "fade-in animate-in duration-300",
+          isExiting && "fade-out animate-out duration-200",
+          isBlurred && "backdrop-blur-sm backdrop-filter",
+          className
+        )
+      }
+      {...props}
+    />
+  );
+}
 
 interface DialogHeaderProps extends Omit<React.ComponentProps<"div">, "title"> {
   title?: string;
@@ -302,12 +311,12 @@ function DialogClose({
   );
 }
 
-interface CloseButtonIndicatorProps extends Omit<ButtonProps, "children"> {
+interface DialogCloseIconProps extends Omit<ButtonProps, "children"> {
   className?: string;
   isDismissable?: boolean | undefined;
 }
 
-function DialogCloseIcon({ className, ...props }: CloseButtonIndicatorProps) {
+function DialogCloseIcon({ className, ...props }: DialogCloseIconProps) {
   return props.isDismissable ? (
     <Button
       variant="ghost"
@@ -324,10 +333,13 @@ function DialogCloseIcon({ className, ...props }: CloseButtonIndicatorProps) {
 }
 
 export type {
+  DialogTriggerProps,
+  DialogContentProps,
+  DialogOverlayProps,
   DialogHeaderProps,
   DialogTitleProps,
   DialogDescriptionProps,
-  CloseButtonIndicatorProps,
+  DialogCloseIconProps,
 };
 
 export {

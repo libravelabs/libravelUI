@@ -25,7 +25,7 @@ A text field is an input where you can type something in text, like your name or
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components clsx twMerge
+npm install react-aria-components clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -42,7 +42,87 @@ export function cn(...inputs: ClassValue[]) {
 Copy and paste the following code into your project.
 
 ```tsx ts2js title="components/ui/text-field"
-CODE HERE
+"use client";
+
+import {
+  TextField as TextFieldPrimitive,
+  type TextFieldProps as TextFieldPrimitiveProps,
+  type ValidationResult,
+} from "react-aria-components";
+import { Input, type InputProps } from "@/components/ui/field";
+import { cn } from "@/lib/utils";
+
+interface TextFieldProps extends TextFieldPrimitiveProps, InputProps {
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  error?: string | ((validation: ValidationResult) => string);
+  startContent?: InputProps["startContent"];
+  endContent?: InputProps["endContent"];
+  isLoading?: InputProps["isLoading"];
+  variant?: InputProps["variant"];
+  size?: InputProps["size"];
+}
+
+function TextField({
+  label,
+  placeholder,
+  description,
+  error,
+  startContent,
+  endContent,
+  className,
+  children,
+  labelExtra,
+  classNames,
+  variant,
+  size,
+  isPassword,
+  isLoading,
+  ...rest
+}: TextFieldProps) {
+  const inputProps: InputProps = {
+    placeholder,
+    error,
+    description,
+    startContent,
+    endContent,
+    label,
+    labelExtra,
+    classNames,
+    variant,
+    size,
+    isPassword,
+    isLoading,
+  };
+
+  const textFieldProps: TextFieldPrimitiveProps = {
+    ...rest,
+    "aria-label": rest["aria-label"] ?? label ?? "search-bar",
+  };
+
+  return (
+    <TextFieldPrimitive
+      {...textFieldProps}
+      className={cn(className, "group relative w-full")}
+    >
+      {(values) => (
+        <>
+          {typeof children === "function" ? (
+            children(values)
+          ) : children ? (
+            children
+          ) : (
+            <Input {...inputProps} type={rest.type} />
+          )}
+        </>
+      )}
+    </TextFieldPrimitive>
+  );
+}
+
+export type { TextFieldProps };
+export { TextField };
 ```
 
 </Tab>
@@ -63,12 +143,9 @@ import { TextField } from "@/components/ui/text-field";
 
 ```tsx
 <TextField
-  name="username"
-  type="text"
-  label="Username"
-  description="Enter your username"
-  placeholder="ihatejunk_"
-  errorMessage="This field is required"
+  label="label belongs here"
+  description="You can add description here"
+  error="You can add error message here"
   startContent={"..."}
   endContent={"..."}
 />
@@ -99,73 +176,61 @@ This example demonstrates how to integrate the text field component within a for
     label: {
       description: "Label for the input field",
       type: "string",
-      default: "undefined",
       required: false,
     },
     placeholder: {
       description: "Placeholder text shown inside the input",
       type: "string",
-      default: "undefined",
       required: false,
     },
     description: {
       description: "Additional description text displayed below the input",
       type: "string",
-      default: "undefined",
       required: false,
     },
     error: {
       description: "Error message string or a function returning a string based on validation result",
       type: "string | ((validation: ValidationResult) => string)",
-      default: "undefined",
       required: false,
     },
     startContent: {
       description: "Content rendered at the start (left) of the input",
       type: "string | React.ReactNode",
-      default: "undefined",
       required: false,
     },
     endContent: {
       description: "Content rendered at the end (right) of the input",
       type: "string | React.ReactNode",
-      default: "undefined",
       required: false,
     },
     className: {
       description: "Additional class names for the component",
       type: "string",
-      default: "undefined",
       required: false,
     },
     children: {
       description: "Optional children or render function to customize input rendering",
       type: "React.ReactNode | ((values: any) => React.ReactNode)",
-      default: "undefined",
       required: false,
     },
     labelExtra: {
       description: "Extra content to display beside the label",
       type: "string | React.ReactNode",
-      default: "undefined",
       required: false,
     },
     classNames: {
       description: "Custom class names for inner parts of the input",
       type: "object",
-      default: "undefined",
       required: false,
     },
     variant: {
       description: "Visual variant of the input field",
       type: "string",
-      default: "undefined",
       required: false,
     },
     size: {
       description: "Size variant of the input field",
       type: "string",
-      default: "undefined",
       required: false,
     },
     isPassword: {

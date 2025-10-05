@@ -2,7 +2,7 @@ import {
   Switch as SwitchPrimitive,
   type SwitchProps as SwitchPrimitiveProps,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/primitive";
+import { composeTailwindRenderProps } from "@/lib/render-props";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
