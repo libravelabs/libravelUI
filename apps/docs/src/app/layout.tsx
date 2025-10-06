@@ -30,7 +30,16 @@ export default function Layout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <body className="flex flex-col min-h-screen scroll-smooth">
-        <RootProvider>{children}</RootProvider>
+        <RootProvider
+          search={{
+            links: [
+              ["Home", "/"],
+              ["Docs", "/docs"],
+            ],
+          }}
+        >
+          {children}
+        </RootProvider>
         <Toast />
       </body>
     </html>

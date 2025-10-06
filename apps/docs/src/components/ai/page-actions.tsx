@@ -16,6 +16,8 @@ import {
   PopoverTrigger,
 } from "fumadocs-ui/components/ui/popover";
 import { cva } from "class-variance-authority";
+import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 const cache = new Map<string, string>();
 
@@ -47,6 +49,7 @@ export function LLMCopyButton({
       ]);
     } finally {
       setLoading(false);
+      toast.success("Markdown copied!");
     }
   });
 
@@ -215,19 +218,13 @@ export function ViewOptions({
 
   return (
     <Popover>
-      <PopoverTrigger
-        className={cn(
-          buttonVariants({
-            color: "secondary",
-            size: "sm",
-            className: "gap-2",
-          })
-        )}
-      >
-        Open
-        <ChevronDown className="size-3.5 text-fd-muted-foreground" />
+      <PopoverTrigger asChild>
+        <Button variant="secondary" size="sm" className="gap-2">
+          Open
+          <ChevronDown className="size-3.5 text-fd-muted-foreground" />
+        </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex flex-col overflow-auto">
+      <PopoverContent className="flex flex-col overflow-auto p-1">
         {items.map((item) => (
           <a
             key={item.href}
