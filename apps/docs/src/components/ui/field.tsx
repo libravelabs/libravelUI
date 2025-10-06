@@ -248,7 +248,7 @@ function Input({
         >
           {startContent && typeof startContent === "string" ? (
             <span className="me-2 text-muted-foreground">{startContent}</span>
-          ) : (
+          ) : startContent ? (
             <div
               className={cn(
                 "content me-2 flex items-center",
@@ -257,7 +257,7 @@ function Input({
             >
               {startContent}
             </div>
-          )}
+          ) : null}
 
           <InputPrimitive
             {...props}

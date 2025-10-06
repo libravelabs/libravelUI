@@ -22,6 +22,15 @@ export const docs = defineDocs({
             title: zod.string(),
             url: zod.string().url(),
           }),
+          zod.array(
+            zod.union([
+              zod.string().url(),
+              zod.object({
+                title: zod.string(),
+                url: zod.string().url(),
+              }),
+            ])
+          ),
         ])
         .optional(),
     }),

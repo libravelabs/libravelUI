@@ -7,18 +7,21 @@ import {
 } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
-
+import { redirect } from "next/navigation";
 import { customMetaDataGenerator } from "@/lib/customMetaDataGenerator";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
 import { baseUrl, owner, repo } from "@/lib/github";
+import { DocLinks } from "@/components/doc-links";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
 }) {
   const params = await props.params;
+
+  if (!params.slug || params.slug.length === 0) {
+    redirect("/docs/getting-started/introduction");
+  }
+
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
@@ -57,38 +60,7 @@ export default async function Page(props: {
       <DocsDescription className="mb-0">
         {page.data.description}
       </DocsDescription>
-      {page.data.doc && (
-        <Link
-          href={
-            typeof page.data.doc === "string"
-              ? page.data.doc
-              : page.data.doc.url
-          }
-          target="_blank"
-          rel="noreferrer"
-          className="w-fit"
-        >
-          <Button variant="outline">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 21"
-              data-slot="icon"
-              className="size-5"
-              aria-hidden="true"
-            >
-              <path
-                fill="currentColor"
-                d="M14.667 1.733H22v17.333zm-5.267 0H2v17.334zm2.6 6.4 4.733 10.933h-3.066l-1.4-3.467H8.8z"
-              ></path>
-            </svg>{" "}
-            {typeof page.data.doc === "string"
-              ? page.data.title
-              : page.data.doc.title ?? page.data.title}
-            <ArrowUpRight size={12} />
-          </Button>
-        </Link>
-      )}
+      <DocLinks page={page} />
 
       <DocsBody>
         <MDX components={getMDXComponents()} />
