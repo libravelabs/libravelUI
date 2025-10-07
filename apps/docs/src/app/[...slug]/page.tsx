@@ -9,7 +9,7 @@ export default async function Page({ params }: PageProps) {
   const { slug } = await params;
 
   const joined = slug.join("/");
-  const originalUrl = docs.map((i) => i.slug).find((i) => i === joined);
+  const originalUrl = docs.docs.map((i) => i.slug).find((i) => i === joined);
 
   if (!originalUrl) {
     notFound();
