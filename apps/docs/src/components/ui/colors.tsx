@@ -26,7 +26,6 @@ import {
   type ColorFieldProps as ColorFieldPrimitiveProps,
   type ColorPickerProps as ColorPickerPrimitiveProps,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/render-props";
 import { cn } from "@/lib/utils";
 import { parseColor, type Color } from "@react-stately/color";
 import {
@@ -50,7 +49,7 @@ function ColorArea({ className, ...props }: ColorAreaProps) {
     <ColorAreaPrimitive
       {...props}
       data-slot="color-box"
-      className={composeTailwindRenderProps(
+      className={cn(
         className,
         "size-56 shrink-0 rounded-md bg-muted forced-colors:bg-[GrayText]"
       )}
@@ -88,13 +87,13 @@ function ColorThumb({ className, ...props }: ColorThumbProps) {
   );
 }
 
-function ColorSwatch(props: ColorSwatchProps) {
+function ColorSwatch({ className, ...props }: ColorSwatchProps) {
   return (
     <ColorSwatchPrimitive
       data-slot="color-swatch"
       aria-label={props["aria-label"] ?? "Color swatch"}
-      className={composeTailwindRenderProps(
-        props.className,
+      className={cn(
+        className,
         "inset-ring-1 inset-ring-foreground/10 size-8 shrink-0 rounded-lg"
       )}
       {...props}
@@ -166,7 +165,7 @@ function ColorSwatchPicker({
   return (
     <ColorSwatchPickerPrimitive
       layout={layout}
-      className={composeTailwindRenderProps(className, "flex gap-1")}
+      className={cn(className, "flex gap-1")}
       {...props}
     >
       {children}
@@ -181,7 +180,7 @@ function ColorSwatchPickerItem({
 }: ColorSwatchPickerItemProps) {
   return (
     <ColorSwatchPickerItemPrimitive
-      className={composeTailwindRenderProps(
+      className={cn(
         className,
         "cursor-pointer relative overflow-hidden rounded-sm outline-hidden disabled:opacity-50"
       )}

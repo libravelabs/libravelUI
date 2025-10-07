@@ -7,7 +7,7 @@ import {
 } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
-import { redirect } from "next/navigation";
+
 import { customMetaDataGenerator } from "@/lib/customMetaDataGenerator";
 import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
 import { baseUrl, owner, repo } from "@/lib/github";
@@ -17,11 +17,6 @@ export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
 }) {
   const params = await props.params;
-
-  if (!params.slug || params.slug.length === 0) {
-    redirect("/docs/getting-started/introduction");
-  }
-
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
