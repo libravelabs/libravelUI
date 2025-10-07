@@ -2,7 +2,7 @@ import { docs } from "@/.source";
 import { notFound, redirect } from "next/navigation";
 
 interface PageProps {
-  params: { slug: string };
+  params: { slug: string[] };
 }
 
 export default function Page({ params }: PageProps) {
