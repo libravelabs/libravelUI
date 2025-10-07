@@ -2,13 +2,15 @@ import { docs } from "@/.source";
 import { notFound, redirect } from "next/navigation";
 
 interface PageProps {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }
 
-export default function Page({ params }: PageProps) {
-  const originalUrl = docs
-    .map((i) => i.slug)
-    .find((i) => i === params.slug.join("/"));
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params;
+
+  const joined = slug.join("/");
+  const originalUrl = docs.map((i) => i.slug).find((i) => i === joined);
+
   if (!originalUrl) {
     notFound();
   }
