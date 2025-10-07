@@ -5,7 +5,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "fumadocs-ui/components/ui/popover";
 import { ArrowUpRight, ExternalLinkIcon } from "lucide-react";
 import { cva } from "class-variance-authority";
 
@@ -23,7 +23,7 @@ interface DocLinksProps {
 }
 
 const optionVariants = cva(
-  "text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-fd-accent-foreground hover:bg-fd-accent [&_svg]:size-4"
+  "text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-accent-foreground hover:bg-accent [&_svg]:size-4"
 );
 
 export function DocLinks({ page }: DocLinksProps) {
@@ -62,11 +62,10 @@ export function DocLinks({ page }: DocLinksProps) {
 
   return (
     <Popover>
-      <PopoverTrigger
-        variant="outline"
-        className="flex items-center gap-1 w-fit"
-      >
-        <ReactAriaIcon /> {page.data.title} Docs <ArrowUpRight size={14} />
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-fit">
+          <ReactAriaIcon /> {page.data.title} Docs <ArrowUpRight size={14} />
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col overflow-auto p-1">
         {docsArray.map(({ title: docTitle, url }, i) => (
@@ -78,7 +77,7 @@ export function DocLinks({ page }: DocLinksProps) {
             className={optionVariants()}
           >
             <span>{docTitle === "View Documentation" ? title : docTitle}</span>
-            <ExternalLinkIcon className="text-fd-muted-foreground size-3.5 ms-auto" />
+            <ExternalLinkIcon className="text-muted-foreground size-3.5 ms-auto" />
           </a>
         ))}
       </PopoverContent>

@@ -51,7 +51,7 @@ export function InteractiveCardBase() {
       >
         <motion.div
           className="shadow-lg rounded-lg bg-transparent w-full h-full transform-style-preserve-3d border border-primary"
-          style={{ cardRotateX, cardRotateY }}
+          style={{ rotateX: cardRotateX, rotateY: cardRotateY }}
           transition={{ velocity: 0 }}
         >
           <Card className="h-full flex flex-col justify-between">
