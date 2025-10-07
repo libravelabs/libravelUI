@@ -8,7 +8,7 @@ interface PageProps {
 export default function Page({ params }: PageProps) {
   const originalUrl = docs
     .map((i) => i.slug)
-    .find((i) => i.split("/").pop() === params.slug);
+    .find((i) => i === params.slug.join("/"));
   if (!originalUrl) {
     notFound();
   }
