@@ -4,7 +4,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { X, type LucideProps } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence, MotionProps } from "motion/react";
 
@@ -15,7 +15,7 @@ const alertVariants = cva(
       variant: {
         default: "border-border bg-background text-foreground",
         destructive:
-          "border-destructive bg-destructive/10 text-destructive [&_svg:not([class*='size-'])]:text-destructive",
+          "border-destructive bg-destructive/10 text-destructive [&_svg:not([class*='text-'])]:text-destructive",
         warning:
           "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200 [&>svg]:text-amber-600 dark:[&>svg]:text-amber-400",
         success:
@@ -84,7 +84,7 @@ interface AlertProps extends VariantProps<typeof alertVariants> {
   title?: string;
   message?: string;
   children?: React.ReactNode;
-  icon?: React.ReactNode | LucideProps;
+  icon?: React.ReactNode;
   className?: string;
   canClosed?: boolean;
   open?: boolean;
@@ -117,7 +117,7 @@ function Alert({
           variant={variant}
           className={cn("flex w-full items-start gap-2", className)}
         >
-          {icon && <>{icon}</>}
+          {icon && <div className="shrink-0">{icon}</div>}
 
           <div className="flex-1">
             {title && <AlertTitle>{title}</AlertTitle>}

@@ -24,7 +24,7 @@ import { Loader } from "@/components/ui/loader";
 
 const fieldVariants = cva(
   [
-    "group flex items-center w-full min-w-0 rounded-md border bg-transparent",
+    "group flex items-center w-full rounded-md border bg-transparent",
     "border-input dark:bg-input/30 px-3 py-1",
     "text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground",
     "transition-[color,box-shadow] outline-none",
@@ -64,10 +64,11 @@ const fieldVariants = cva(
         ],
       },
       size: {
-        sm: "h-7 text-sm [&_svg]:size-4",
-        default: "h-9 text-base md:text-sm [&_svg]:size-4.5",
-        lg: "h-11 text-base md:text-base [&_svg]:size-5",
-        xl: "h-13 text-base md:text-base [&_svg]:size-5.5",
+        sm: "h-7 text-sm [&_svg:not([class*='size-'])]:size-4",
+        default:
+          "h-9 text-base md:text-sm [&_svg:not([class*='size-'])]:size-4.5",
+        lg: "h-11 text-base md:text-base [&_svg:not([class*='size-'])]:size-5",
+        xl: "h-13 text-base md:text-base [&_svg:not([class*='size-'])]:size-5.5",
       },
     },
     defaultVariants: {
@@ -167,30 +168,29 @@ const FieldGroup = ({
   );
 };
 
-interface InputProps
-  extends InputPrimitiveProps,
-    VariantProps<typeof fieldVariants> {
-  error?: FieldProps["error"];
-  label?: string | React.ReactNode;
-  description?: string;
-  startContent?: string | React.ReactNode;
-  endContent?: string | React.ReactNode;
-  labelExtra?: string | React.ReactNode;
-  isPassword?: boolean;
-  isLoading?: boolean;
-  size?: VariantProps<typeof fieldVariants>["size"];
-  classNames?: {
-    container?: string;
-    wrapper?: string;
-    input?: string;
-    label?: string;
+type InputProps = InputPrimitiveProps &
+  VariantProps<typeof fieldVariants> & {
+    error?: FieldProps["error"];
+    label?: string | React.ReactNode;
     description?: string;
-    error?: string;
-    startContent?: string;
-    endContent?: string;
-    labelExtra?: string;
+    startContent?: string | React.ReactNode;
+    endContent?: string | React.ReactNode;
+    labelExtra?: string | React.ReactNode;
+    isPassword?: boolean;
+    isLoading?: boolean;
+    size?: VariantProps<typeof fieldVariants>["size"];
+    classNames?: {
+      container?: string;
+      wrapper?: string;
+      input?: string;
+      label?: string;
+      description?: string;
+      error?: string;
+      startContent?: string;
+      endContent?: string;
+      labelExtra?: string;
+    };
   };
-}
 
 function Input({
   error,
