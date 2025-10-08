@@ -1,12 +1,31 @@
 "use client";
 
 import { InfoIcon } from "lucide-react";
-import { Alert, type AlertProps } from "./ui/alert";
+import {
+  AlertDescription,
+  AlertTitle,
+  AlertRoot,
+  type AlertProps,
+} from "@/components/ui/alert";
 
-export function Info({ children, variant, icon }: AlertProps) {
+export function Info({
+  children,
+  variant,
+  title = "",
+  icon = <InfoIcon />,
+}: AlertProps) {
   return (
-    <Alert variant={variant ?? "info"} icon={icon ?? <InfoIcon />}>
-      {children}
-    </Alert>
+    <AlertRoot
+      variant={variant ?? "info"}
+      className="flex flex-col gap-4 w-full"
+    >
+      <div className="flex gap-2 [&_svg:not([class*='size-'])]:size-4">
+        <div className="shrink-0">{icon}</div>
+        <div>
+          <AlertTitle>{title}</AlertTitle>
+          <AlertDescription>{children}</AlertDescription>
+        </div>
+      </div>
+    </AlertRoot>
   );
 }

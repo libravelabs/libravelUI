@@ -19,7 +19,7 @@ function Shortcut({
   ...props
 }: ShortcutProps) {
   const normalizedKeys: string | string[] | undefined = React.useMemo(() => {
-    if (!keys) return undefined;
+    if (!keys) return [];
     if (Array.isArray(keys)) return keys;
     return keys.includes("+") ? keys.split("+").map((k) => k.trim()) : [keys];
   }, [keys]);

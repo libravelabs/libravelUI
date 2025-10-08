@@ -1,3 +1,53 @@
+---
+title: Command
+description: Command offers an accessible interface to build keyboard-driven menus, search fields, and autocomplete inputs by combining input handling, navigation, and selection.
+component: true
+doc:
+    - title: "Autocomplete"
+      url: "https://react-spectrum.adobe.com/react-aria/Autocomplete.html"
+
+    - title: "Search Field"
+      url: "https://react-spectrum.adobe.com/react-aria/SearchField.html"
+
+    - title: "Menu"
+      url: "https://react-spectrum.adobe.com/react-aria/Menu.html"
+---
+
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicComand, WithModalCommand } from "@/components/docs/command"
+
+## Basic
+<BasicComand />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components={["shortcut", "separator"]} />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components lucide-react clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/command"
 import * as React from "react";
 import {
   Autocomplete,
@@ -288,3 +338,237 @@ export {
   CommandShortcut,
   CommandDescription,
 };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add command
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+} from "@/components/ui/command";
+```
+
+```tsx
+<Command>
+  <CommandInput placeholder="Placeholder belongs here" />
+  <CommandList>
+    <CommandGroup title="Group Title">
+      <CommandItem textValue="Item One">
+        <span>Item One</span>
+      </CommandItem>
+      <CommandItem textValue="Item Two">
+        <span>Item Two</span>
+      </CommandItem>
+    </CommandGroup>
+
+    <CommandSeparator />
+
+    <CommandGroup title="Another Group">
+      <CommandItem textValue="Item Three">
+        <span>Item Three</span>
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>
+```
+
+## Example
+### With Modal
+<WithModalCommand />
+
+## Props
+
+### Command
+<TypeTable
+  type={{
+    className: {
+      type: "string",
+      description: "Additional class names for the outer container.",
+      required: false,
+    },
+    items: {
+      type: `{ id: string; label: string }[]`,
+      description: "Optional list of items to render in the command menu.",
+      required: false,
+    },
+    onAction: {
+      type: "(key: string) => void",
+      description: "Callback fired when an item is selected.",
+      required: false,
+    },
+  }}
+/>
+
+### CommandInput
+<TypeTable
+  type={{
+    placeholder: {
+      type: "string",
+      description: "Placeholder text for the input field.",
+      required: false,
+    },
+    children: {
+      type: "React.ReactNode",
+      description: "Optional custom children inside the input field.",
+      required: false,
+    },
+    className: {
+      type: "string",
+      description: "Additional class names for the input field.",
+      required: false,
+    },
+  }}
+/>
+
+### CommandList
+<TypeTable
+  type={{
+    className: {
+      type: "string",
+      description: "Additional class names for the list container.",
+      required: false,
+    },
+    children: {
+      type: "React.ReactNode",
+      description: "List content including groups or items.",
+      required: false,
+    },
+  }}
+/>
+
+### CommandGroup
+<TypeTable
+  type={{
+    title: {
+      type: "string",
+      description: "Optional group label shown above items.",
+      required: false,
+    },
+    items: {
+      type: "Iterable<object>",
+      description: "Data items to render inside the group, used with Collection.",
+      required: false,
+    },
+    children: {
+      type: "React.ReactNode",
+      description: "Group content, usually <CommandItem> components.",
+      required: false,
+    },
+    className: {
+      type: "string",
+      description: "Additional class names for the group container.",
+      required: false,
+    },
+  }}
+/>
+
+### CommandItem
+<TypeTable
+  type={{
+    textValue: {
+      type: "string",
+      description: "Accessible text value for filtering/searching.",
+      required: false,
+    },
+    destructive: {
+      type: "boolean",
+      description: "Displays the item in a 'danger' style for destructive actions.",
+      required: false,
+    },
+    isDisabled: {
+      type: "boolean",
+      description: "Disables the item and prevents selection.",
+      required: false,
+    },
+    children: {
+      type: "React.ReactNode",
+      description: "Visual content of the item.",
+      required: false,
+    },
+    className: {
+      type: "string",
+      description: "Additional class names for the item.",
+      required: false,
+    },
+  }}
+/>
+
+
+### CommandEmpty
+<TypeTable
+  type={{
+    children: {
+      type: "React.ReactNode",
+      description: "Custom message when the list is empty.",
+      required: false,
+    },
+    className: {
+      type: "string",
+      description: "Additional class names for the empty state.",
+      required: false,
+    },
+  }}
+/>
+
+### CommandSeparator
+<TypeTable
+  type={{
+    className: {
+      type: "string",
+      description: "Additional class names for the separator.",
+      required: false,
+    },
+  }}
+/>
+
+### CommandShortcut
+<TypeTable
+  type={{
+    keys: {
+      type: "string | string[]",
+      description: "Keyboard shortcut to display beside the item.",
+      required: false,
+    },
+    className: {
+      type: "string",
+      description: "Additional class names for the shortcut display.",
+      required: false,
+    },
+  }}
+/>
+
+### CommandDescription
+<TypeTable
+  type={{
+    children: {
+      type: "React.ReactNode",
+      description: "Description text for the command item.",
+      required: false,
+    },
+    className: {
+      type: "string",
+      description: "Additional class names for the description.",
+      required: false,
+    },
+    ref: {
+      type: "React.Ref<HTMLDivElement>",
+      description: "Optional ref for the element.",
+      required: false,
+    },
+  }}
+/>

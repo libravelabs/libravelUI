@@ -11,12 +11,11 @@ import { TypeTable } from "fumadocs-ui/components/type-table";
 import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
 ## Basic
-
-<Info>The Field component serves as a foundational building block for many other UI components. Because it is a parent-level component, you won’t find many standalone examples here. Instead, you’ll see how it’s used in context within the components that depend on it. For practical usage and visual examples, please refer to the child components that make use of Field.</Info>
+<Info title="Building Block">This component serves as a foundational building block for many other UI components. Because it functions at the parent level, you won’t find many standalone examples here. Instead, you’ll see it used in context within the components that rely on it. For practical usage and visual examples, please refer to the child components that make use of it.</Info>
 
 ## Related Components
 
-<RelatedComponents components={['text-field', 'number-field', "checkbox", "checkbox-group"]} />
+<RelatedComponents components={['text-field', 'number-field', "checkbox", "checkbox-group", "colors"]} />
 
 ## Installation
 
@@ -111,10 +110,10 @@ const fieldVariants = cva(
         ],
       },
       size: {
-        sm: "h-7 text-sm [&_svg]:size-4",
-        default: "h-9 text-base md:text-sm [&_svg]:size-4.5",
-        lg: "h-11 text-base md:text-base [&_svg]:size-5",
-        xl: "h-13 text-base md:text-base [&_svg]:size-5.5",
+        sm: "h-7 text-sm [&_svg:not([class*='size-'])]:size-4",
+        default: "h-9 text-base md:text-sm [&_svg:not([class*='size-'])]:size-4.5",
+        lg: "h-11 text-base md:text-base [&_svg:not([class*='size-'])]:size-5",
+        xl: "h-13 text-base md:text-base [&_svg:not([class*='size-'])]:size-5.5",
       },
     },
     defaultVariants: {

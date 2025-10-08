@@ -1,0 +1,161 @@
+---
+title: Shortcut
+description: Shortcut (also known as Keyboard or KBD) support ensures smooth navigation via the keyboard. It's essential for users who rely on keyboard-only interaction and appreciated by power users for quick, efficient access to features.
+component: true
+doc:
+     title: "Keyboard"
+     url: "https://react-spectrum.adobe.com/react-aria/interactions.html#keyboard-and-focus-behavior"
+---
+
+import { Info } from '@/components/info';
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { RelatedComponents } from "@/components/related-components";
+
+## Basic
+<Info title="Building Block">This component serves as a foundational building block for many other UI components. Because it functions at the parent level, you won’t find many standalone examples here. Instead, you’ll see it used in context within the components that rely on it. For practical usage and visual examples, please refer to the child components that make use of it.</Info>
+
+## Related components
+<RelatedComponents components={["command"]} />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/shortcut"
+import * as React from "react";
+import { Keyboard as ShortcutPrimitive } from "react-aria-components";
+import { cn } from "@/lib/utils";
+
+interface ShortcutProps extends React.HTMLAttributes<HTMLElement> {
+  keys?: string | string[];
+  children?: React.ReactNode;
+  classNames?: {
+    container?: string;
+    kbd?: string;
+  };
+}
+
+function Shortcut({
+  keys,
+  children,
+  classNames,
+  className,
+  ...props
+}: ShortcutProps) {
+  const normalizedKeys: string | string[] | undefined = React.useMemo(() => {
+    if (!keys) return [];
+    if (Array.isArray(keys)) return keys;
+    return keys.includes("+") ? keys.split("+").map((k) => k.trim()) : [keys];
+  }, [keys]);
+
+  return (
+    <ShortcutPrimitive
+      className={cn(
+        "hidden lg:inline-flex items-center gap-1 text-sm font-mono text-muted-foreground group-hover:text-foreground group-focus-visible:text-foreground group-focus-visible:opacity-100 group-disabled:opacity-50",
+        classNames?.container,
+        className
+      )}
+      {...props}
+    >
+      {children ? (
+        <kbd
+          className={cn(
+            "pointer-events-none inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono font-medium text-muted-foreground opacity-100 select-none",
+            classNames?.kbd
+          )}
+        >
+          {children}
+        </kbd>
+      ) : (
+        normalizedKeys.map((key, index) => (
+          <kbd
+            key={index}
+            className={cn(
+              "pointer-events-none inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono font-medium text-muted-foreground opacity-100 select-none",
+              classNames?.kbd
+            )}
+          >
+            {key}
+          </kbd>
+        ))
+      )}
+    </ShortcutPrimitive>
+  );
+}
+
+export type { ShortcutProps };
+export { Shortcut };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add shortcut
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Shortcut } from "@/components/ui/shortcut";
+```
+
+```tsx
+<Shortcut keys="Ctrl+S" />
+<Shortcut keys={["Ctrl", "Alt", "Delete"]} />
+<Shortcut>⌘ + C</Shortcut>
+```
+
+## Props
+
+<TypeTable
+  type={{
+    keys: {
+      type: "string | string[]",
+      description:
+        "Keyboard shortcut to display. Can be a string like 'Ctrl+S' or an array like ['Ctrl', 'S'].",
+      required: false,
+    },
+    children: {
+      type: "React.ReactNode",
+      description:
+        "Custom content to render inside the shortcut (overrides the `keys` prop).",
+      required: false,
+    },
+    classNames: {
+      type: `{ container?: string; kbd?: string }`,
+      description:
+        "Object for styling the wrapper (`container`) and individual `<kbd>` elements (`kbd`).",
+      required: false,
+    },
+    className: {
+      type: "string",
+      description: "Additional class names for the container element.",
+      required: false,
+    },
+  }}
+/>

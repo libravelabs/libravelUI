@@ -163,16 +163,14 @@ function SelectContent<T extends object>({
   ...props
 }: SelectContentProps<T>) {
   return (
-    <PopoverContent {...popover}>
-      <ListBox
-        className={cn(
-          "bg-popover text-popover-foreground z-50 w-full max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </ListBox>
+    <PopoverContent
+      {...popover}
+      className={cn(
+        "bg-popover text-popover-foreground z-50 w-(--trigger-width) max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
+        className
+      )}
+    >
+      <ListBox {...props}>{children}</ListBox>
     </PopoverContent>
   );
 }

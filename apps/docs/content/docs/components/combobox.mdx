@@ -1,3 +1,45 @@
+---
+title: ComboBox
+description: A ComboBox is an advanced dropdown that lets users search, filter, and select options interactively, combining the convenience of a text input with a list of selectable items.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/ComboBox.html
+---
+
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicCombobox, GroupedComboBox } from "@/components/docs/combobox"
+
+## Basic
+<BasicCombobox />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components={["field", "popover", "separator"]} />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components class-variance-authority lucide-react clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/combobox"
 "use client";
 
 import * as React from "react";
@@ -324,3 +366,185 @@ export {
   ComboBoxSeparator,
   ComboBoxHeader,
 };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add combobox
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  ComboBox,
+  ComboBoxRoot,
+  ComboBoxInput,
+  ComboBoxContent,
+  ComboBoxGroup,
+  ComboBoxItem,
+} from "@/components/ui/combobox";
+```
+
+```tsx
+{/* ComboBox (your simplified wrapper usage) */}
+<ComboBox items={items} placeholder="placeholder here..." />
+
+{/* ComboBoxRoot (wrapper for the whole ComboBox) */}
+<ComboBoxRoot label="Label goes here if needed">
+  <ComboBoxInput placeholder="Select something..." />
+  <ComboBoxContent>
+    <ComboBoxGroup title="Group Title (optional)">
+      <ComboBoxItem textValue="item-textValue-1">Item Label 1</ComboBoxItem>
+      <ComboBoxItem textValue="item-textValue-2">Item Label 2</ComboBoxItem>
+    </ComboBoxGroup>
+
+    <ComboBoxItem textValue="item-textValue-3">Item Label 3</ComboBoxItem>
+    <ComboBoxItem textValue="item-textValue-4">Item Label 4</ComboBoxItem>
+  </ComboBoxContent>
+</ComboBoxRoot>
+```
+
+## Example
+### Grouped ComboBox
+<GroupedComboBox />
+
+## Props
+
+### ComboBox
+<TypeTable
+  type={{
+    label: {
+      description: "Optional label shown above the ComboBox",
+      type: "string",
+      required: false
+    },
+    placeholder: {
+      description: "Placeholder text for the input field",
+      type: "string",
+      required: false
+    },
+    items: {
+      description: "List of selectable items (with optional grouping and disabled state)",
+      type: "Array<{ label: string; value: string; group?: string; disabled?: boolean }>",
+      required: true
+    },
+    className: {
+      description: "Additional class names for the root ComboBox container",
+      type: "string",
+      required: false
+    },
+  }}
+/>
+
+### ComboBoxRoot
+<TypeTable
+  type={{
+    label: {
+      description: "Optional label for the ComboBox",
+      type: "string",
+      required: false
+    },
+    className: {
+      description: "Additional class names for the ComboBoxRoot container",
+      type: "string",
+      required: false
+    },
+  }}
+/>
+
+
+### ComboBoxInput
+<TypeTable
+  type={{
+    placeholder: {
+      description: "Placeholder text shown when no selection is made",
+      type: "string",
+      required: false
+    },
+    className: {
+      description: "Additional class names for the input element",
+      type: "string",
+      required: false
+    },
+  }}
+/>
+
+### ComboBoxContent
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the dropdown content container",
+      type: "string",
+      required: false
+    },
+  }}
+/>
+
+### ComboBoxGroup
+<TypeTable
+  type={{
+    title: {
+      description: "Title for the group section",
+      type: "string",
+      required: true
+    },
+    className: {
+      description: "Additional class names for the group container",
+      type: "string",
+      required: false
+    },
+  }}
+/>
+
+### ComboBoxItem
+<TypeTable
+  type={{
+    key: {
+      description: "Unique key for the item (required when rendering lists)",
+      type: "string",
+      required: true
+    },
+    className: {
+      description: "Additional class names for the item",
+      type: "string",
+      required: false
+    },
+    disabled: {
+      description: "Disables selection of this item",
+      type: "boolean",
+      required: false
+    },
+  }}
+/>
+
+### Items
+<TypeTable
+  type={{
+    label: {
+      description: "The text shown to the user",
+      type: "string",
+      required: true
+    },
+    value: {
+      description: "The unique value of the item (used as key too)",
+      type: "string",
+      required: true
+    },
+    group: {
+      description: "Optional group this item belongs to",
+      type: "string",
+      required: false
+    },
+    disabled: {
+      description: "Whether this item is disabled",
+      type: "boolean",
+      required: false
+    }
+  }}
+/>

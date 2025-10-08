@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=TASA+Orbiter:wght@400..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -41,9 +43,6 @@
   --sidebar-accent-foreground: oklch(0.3729 0.0306 259.7328);
   --sidebar-border: oklch(0.8687 0.0043 56.366);
   --sidebar-ring: oklch(0.5854 0.2041 277.1173);
-  --font-sans: "Bricolage Grotesque", sans-serif;
-  --font-serif: Lora, serif;
-  --font-mono: "Geist Mono", monospace;
   --radius: 0.625rem;
   --shadow-2xs: 2px 2px 10px 4px hsl(240 4% 60% / 0.09);
   --shadow-xs: 2px 2px 10px 4px hsl(240 4% 60% / 0.09);
@@ -111,6 +110,13 @@
 }
 
 @theme inline {
+  --font-sans: "Bricolage Grotesque", "Tasa Orbiter", 'Geist', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: Lora, serif;
+  --font-mono: "Geist Mono", monospace;
+  --font-bricolage-grotesque: 'Bricolage Grotesque', sans-serif;
+  --font-tasa-orbiter: 'Tasa Orbiter', sans-serif;
+  --font-geist: "Geist", sans-serif
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -144,10 +150,6 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-serif: var(--font-serif);
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -164,15 +166,6 @@
 
   --animate-marquee: marquee 30s linear infinite;
   --animate-marqueeY: marqueeY 200s linear infinite;
-  --animate-disclosure-collapsed: disclosure-collapsed 0.2s linear;
-  --animate-disclosure-expanded: disclosure-expanded 0.2s linear;
-}
-
-@theme {
-  --animate-marquee: marquee 30s linear infinite;
-  --animate-marqueeY: marqueeY 200s linear infinite;
-  --animate-disclosure-collapsed: disclosure-collapsed 0.2s linear;
-  --animate-disclosure-expanded: disclosure-expanded 0.2s linear;
 }
 
 @keyframes disclosure-collapsed {
