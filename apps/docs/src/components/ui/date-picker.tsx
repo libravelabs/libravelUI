@@ -33,7 +33,7 @@ function DatePicker<T extends DateValue>({
   label,
   className,
   description,
-  errorMessage,
+  error,
   placement,
   ...props
 }: DatePickerProps<T>) {
@@ -47,14 +47,14 @@ function DatePicker<T extends DateValue>({
       <FieldGroup className="min-w-72 inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 group-open:inset-ring-ring/70 group-open:ring-3 group-open:ring-ring/20">
         <DateInput className="w-full" />
         <PopoverTrigger
-          asButton
+          asPrimitive
           className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
         >
-          <CalendarIcon />
+          <CalendarIcon className="text-muted-foreground" />
         </PopoverTrigger>
       </FieldGroup>
       {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
+      <FieldError>{error}</FieldError>
 
       <PopoverContent
         withArrow={false}

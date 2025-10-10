@@ -48,6 +48,8 @@ export function cn(...inputs: ClassValue[]) {
 Copy and paste the following code into your project.
 
 ```tsx ts2js title="components/ui/command"
+"use client"
+
 import * as React from "react";
 import {
   Autocomplete,
@@ -238,14 +240,14 @@ function CommandGroup<T extends object>({
 }
 
 interface CommandItemProps extends MenuItemProps {
-  destructive?: boolean;
+  variant?: "default" | "destructive";
 }
 
 function CommandItem({
   className,
   children,
   textValue,
-  destructive = false,
+  variant = "default",
   ...props
 }: CommandItemProps) {
   const tv = textValue ?? (typeof children === "string" ? children : undefined);
@@ -259,8 +261,9 @@ function CommandItem({
         "hover:bg-accent hover:text-accent-foreground hover:ps-3 transition-all ease-linear",
         props.isDisabled &&
           "opacity-50 pointer-events-none cursor-not-allowed hover:bg-transparent focus:outline-none",
-        destructive &&
-          "[&_svg:not([class*='text-'])]:text-destructive [&>*]:text-destructive hover:bg-destructive/10 [&>*]:hover:text-destructive",
+        variant === "destructive"
+          ? "text-destructive [&_svg]:!text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive"
+          : "focus:bg-accent focus:text-accent-foreground",
         className
       )}
       {...props}
@@ -379,7 +382,7 @@ import {
     <CommandSeparator />
 
     <CommandGroup title="Another Group">
-      <CommandItem textValue="Item Three">
+      <CommandItem textValue="Item Three" variant="destructive">
         <span>Item Three</span>
       </CommandItem>
     </CommandGroup>
@@ -485,9 +488,9 @@ import {
       description: "Accessible text value for filtering/searching.",
       required: false,
     },
-    destructive: {
-      type: "boolean",
-      description: "Displays the item in a 'danger' style for destructive actions.",
+    variant: {
+      type: "'default' | 'destructive'",
+      description: "Visual style variant of the command item.",
       required: false,
     },
     isDisabled: {

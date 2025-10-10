@@ -70,7 +70,7 @@ import { Loader } from "@/components/ui/loader";
 
 const fieldVariants = cva(
   [
-    "group flex items-center w-full min-w-0 rounded-md border bg-transparent",
+    "group flex items-center w-full rounded-md border bg-transparent",
     "border-input dark:bg-input/30 px-3 py-1",
     "text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground",
     "transition-[color,box-shadow] outline-none",
@@ -111,7 +111,8 @@ const fieldVariants = cva(
       },
       size: {
         sm: "h-7 text-sm [&_svg:not([class*='size-'])]:size-4",
-        default: "h-9 text-base md:text-sm [&_svg:not([class*='size-'])]:size-4.5",
+        default:
+          "h-9 text-base md:text-sm [&_svg:not([class*='size-'])]:size-4.5",
         lg: "h-11 text-base md:text-base [&_svg:not([class*='size-'])]:size-5",
         xl: "h-13 text-base md:text-base [&_svg:not([class*='size-'])]:size-5.5",
       },
@@ -140,7 +141,11 @@ interface FieldProps {
   label?: string;
   placeholder?: string;
   description?: string;
-  error?: string | ((validation: ValidationResult) => string);
+  error?:
+    | string
+    | boolean
+    | React.ReactNode
+    | ((validation: ValidationResult) => string);
 }
 
 interface DescriptionProps extends TextProps {
@@ -164,6 +169,7 @@ const Description = ({ ref, className, ...props }: DescriptionProps) => {
 interface FieldErrorProps extends FieldErrorPrimitiveProps {
   ref?: React.RefObject<HTMLElement>;
   message?: FieldProps["error"];
+  asDefault?: boolean;
 }
 
 const FieldError = ({
@@ -171,8 +177,23 @@ const FieldError = ({
   ref,
   message,
   children,
+  asDefault = false,
   ...props
 }: FieldErrorProps) => {
+  if (asDefault) {
+    return (
+      <p
+        {...props}
+        className={cn(
+          "text-sm text-destructive group-disabled:opacity-50",
+          className
+        )}
+      >
+        {message ?? children}
+      </p>
+    );
+  }
+
   return (
     <FieldErrorPrimitive
       ref={ref}
@@ -209,30 +230,29 @@ const FieldGroup = ({
   );
 };
 
-interface InputProps
-  extends InputPrimitiveProps,
-    VariantProps<typeof fieldVariants> {
-  error?: string | ((validation: ValidationResult) => string);
-  label?: string | React.ReactNode;
-  description?: string;
-  startContent?: string | React.ReactNode;
-  endContent?: string | React.ReactNode;
-  labelExtra?: string | React.ReactNode;
-  isPassword?: boolean;
-  isLoading?: boolean;
-  size?: VariantProps<typeof fieldVariants>["size"];
-  classNames?: {
-    container?: string;
-    wrapper?: string;
-    input?: string;
-    label?: string;
+type InputProps = InputPrimitiveProps &
+  VariantProps<typeof fieldVariants> & {
+    error?: FieldProps["error"];
+    label?: string | React.ReactNode;
     description?: string;
-    error?: string;
-    startContent?: string;
-    endContent?: string;
-    labelExtra?: string;
+    startContent?: string | React.ReactNode;
+    endContent?: string | React.ReactNode;
+    labelExtra?: string | React.ReactNode;
+    isPassword?: boolean;
+    isLoading?: boolean;
+    size?: VariantProps<typeof fieldVariants>["size"];
+    classNames?: {
+      container?: string;
+      wrapper?: string;
+      input?: string;
+      label?: string;
+      description?: string;
+      error?: string;
+      startContent?: string;
+      endContent?: string;
+      labelExtra?: string;
+    };
   };
-}
 
 function Input({
   error,
@@ -289,8 +309,15 @@ function Input({
           )}
         >
           {startContent && typeof startContent === "string" ? (
-            <span className="me-2 text-muted-foreground">{startContent}</span>
-          ) : (
+            <span
+              className={cn(
+                classNames?.startContent,
+                "me-2 text-muted-foreground"
+              )}
+            >
+              {startContent}
+            </span>
+          ) : startContent ? (
             <div
               className={cn(
                 "content me-2 flex items-center",
@@ -299,7 +326,7 @@ function Input({
             >
               {startContent}
             </div>
-          )}
+          ) : null}
 
           <InputPrimitive
             {...props}
@@ -325,7 +352,14 @@ function Input({
             <Loader />
           ) : endContent ? (
             typeof endContent === "string" ? (
-              <span className="ms-2 text-muted-foreground">{endContent}</span>
+              <span
+                className={cn(
+                  classNames?.endContent,
+                  "ms-2 text-muted-foreground"
+                )}
+              >
+                {endContent}
+              </span>
             ) : (
               <div
                 className={cn(

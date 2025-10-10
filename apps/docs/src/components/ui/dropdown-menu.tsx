@@ -48,7 +48,7 @@ function DropdownMenuContent<T extends object>({
   ...props
 }: DropdownMenuContentProps<T>) {
   return (
-    <DropdownMenuPortal withArrow={withArrow} {...popover}>
+    <DropdownMenuPortal withArrow={withArrow} className="p-0" {...popover}>
       <Menu
         data-slot="dropdown-menu-content"
         className={cn(
@@ -82,17 +82,19 @@ function DropdownMenuGroup({
   );
 }
 
+interface DropdownMenuItemProps extends React.ComponentProps<typeof MenuItem> {
+  inset?: boolean;
+  variant?: "default" | "destructive";
+  href?: string;
+}
+
 function DropdownMenuItem({
   className,
   inset,
   variant = "default",
   children,
   ...props
-}: React.ComponentProps<typeof MenuItem> & {
-  inset?: boolean;
-  variant?: "default" | "destructive";
-  href?: string;
-}) {
+}: DropdownMenuItemProps) {
   const textValue =
     props.textValue || (typeof children === "string" ? children : undefined);
 
@@ -110,7 +112,7 @@ function DropdownMenuItem({
           variant === "destructive"
             ? "text-destructive [&_svg]:!text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive"
             : "focus:bg-accent focus:text-accent-foreground",
-          inset && "ps-8",
+          inset && "ps-8 hover:ps-9",
           className
         )
       }
@@ -246,3 +248,5 @@ export {
   DropdownMenuSubContent,
   DropdownMenuDescription,
 };
+
+export type { DropdownMenuItemProps };

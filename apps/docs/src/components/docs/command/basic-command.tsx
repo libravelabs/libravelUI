@@ -90,7 +90,7 @@ export function BasicCommandBase() {
         <CommandSeparator />
 
         <CommandGroup title="Danger Zone">
-          <CommandItem destructive textValue="Logout">
+          <CommandItem variant="destructive" textValue="Logout">
             <LogOut />
             <span>Logout</span>
             <CommandShortcut keys="⌘Q" />
@@ -193,7 +193,7 @@ export function BasicCommand() {
         <CommandSeparator />
 
         <CommandGroup title="Danger Zone">
-          <CommandItem destructive textValue="Logout">
+          <CommandItem variant="destructive" textValue="Logout">
             <LogOut />
             <span>Logout</span>
             <CommandShortcut keys="⌘Q" />

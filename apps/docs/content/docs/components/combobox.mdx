@@ -191,12 +191,16 @@ function ComboBoxContent<T extends object>({
   const { triggerRef } = useComboBoxContext();
 
   return (
-    <PopoverContent
-      {...popover}
-      triggerRef={triggerRef}
-      className={cn("p-1 w-[calc(var(--trigger-width)+24px)]", className)}
-    >
-      <ListBox {...props}>{children}</ListBox>
+    <PopoverContent {...popover} triggerRef={triggerRef} className="p-0">
+      <ListBox
+        {...props}
+        className={cn(
+          "bg-popover text-popover-foreground z-50 w-[calc(var(--trigger-width)+24px)] max-h-[35rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
+          className
+        )}
+      >
+        {children}
+      </ListBox>
     </PopoverContent>
   );
 }

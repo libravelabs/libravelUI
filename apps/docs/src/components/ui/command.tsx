@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react";
 import {
   Autocomplete,
@@ -188,14 +190,14 @@ function CommandGroup<T extends object>({
 }
 
 interface CommandItemProps extends MenuItemProps {
-  destructive?: boolean;
+  variant?: "default" | "destructive";
 }
 
 function CommandItem({
   className,
   children,
   textValue,
-  destructive = false,
+  variant = "default",
   ...props
 }: CommandItemProps) {
   const tv = textValue ?? (typeof children === "string" ? children : undefined);
@@ -209,8 +211,9 @@ function CommandItem({
         "hover:bg-accent hover:text-accent-foreground hover:ps-3 transition-all ease-linear",
         props.isDisabled &&
           "opacity-50 pointer-events-none cursor-not-allowed hover:bg-transparent focus:outline-none",
-        destructive &&
-          "[&_svg:not([class*='text-'])]:text-destructive [&>*]:text-destructive hover:bg-destructive/10 [&>*]:hover:text-destructive",
+        variant === "destructive"
+          ? "text-destructive [&_svg]:!text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive"
+          : "focus:bg-accent focus:text-accent-foreground",
         className
       )}
       {...props}
