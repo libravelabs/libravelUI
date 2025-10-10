@@ -9,8 +9,12 @@ import {
   type DateValue,
   type ValidationResult,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/render-props";
-import { Description, FieldError, FieldGroup, Label } from "./field";
+import {
+  Description,
+  FieldError,
+  FieldGroup,
+  Label,
+} from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 interface DateFieldProps<T extends DateValue>
@@ -20,6 +24,15 @@ interface DateFieldProps<T extends DateValue>
   error?: string | ((validation: ValidationResult) => string);
   startContent?: React.ReactNode;
   endContent?: React.ReactNode;
+  classNames?: {
+    wrapper?: string | string[];
+    label?: string | string[];
+    group?: string | string[];
+    startContent?: string | string[];
+    endContent?: string | string[];
+    description?: string | string[];
+    error?: string | string[];
+  };
 }
 
 function DateField<T extends DateValue>({
@@ -28,35 +41,64 @@ function DateField<T extends DateValue>({
   label,
   description,
   error,
+  classNames,
   ...props
 }: DateFieldProps<T>) {
   return (
     <DateFieldPrimitive
       {...props}
       aria-label={props["aria-label"] ?? label ?? "date-field"}
-      className={composeTailwindRenderProps(
+      className={cn(
         props.className,
+        classNames?.wrapper,
         "group flex flex-col gap-y-1"
       )}
     >
-      {label && <Label>{label}</Label>}
-      <FieldGroup>
+      {label && <Label className={cn(classNames?.label)}>{label}</Label>}
+      <FieldGroup className={cn(classNames?.group)}>
         {startContent && typeof startContent === "string" ? (
-          <span className="ms-2 text-muted-foreground">{startContent}</span>
-        ) : (
-          startContent
-        )}
+          <span
+            className={cn(
+              classNames?.startContent,
+              "me-2 text-muted-foreground"
+            )}
+          >
+            {startContent}
+          </span>
+        ) : startContent ? (
+          <div
+            className={cn(
+              "content me-2 flex items-center",
+              classNames?.startContent
+            )}
+          >
+            {startContent}
+          </div>
+        ) : null}
         <DateInput />
-        {endContent ? (
-          typeof endContent === "string" ? (
-            <span className="me-2 text-muted-foreground">{endContent}</span>
-          ) : (
-            endContent
-          )
+        {endContent && typeof endContent === "string" ? (
+          <span
+            className={cn(classNames?.endContent, "ms-2 text-muted-foreground")}
+          >
+            {endContent}
+          </span>
+        ) : endContent ? (
+          <div
+            className={cn(
+              "content me-2 flex items-center",
+              classNames?.endContent
+            )}
+          >
+            {endContent}
+          </div>
         ) : null}
       </FieldGroup>
-      {description && <Description>{description}</Description>}
-      <FieldError>{error}</FieldError>
+      {description && (
+        <Description className={cn(classNames?.description)}>
+          {description}
+        </Description>
+      )}
+      <FieldError className={cn(classNames?.error)}>{error}</FieldError>
     </DateFieldPrimitive>
   );
 }
@@ -64,7 +106,7 @@ function DateField<T extends DateValue>({
 function DateInput({ className, ...props }: Omit<DateInputProps, "children">) {
   return (
     <DateInputPrimitive
-      className={composeTailwindRenderProps(
+      className={cn(
         className,
         "px-3 py-2 text-base text-foreground placeholder-muted-foreground outline-hidden sm:px-2.5 sm:py-1.5 sm:text-sm/6"
       )}

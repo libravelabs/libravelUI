@@ -1,0 +1,293 @@
+---
+title: Date Field
+description: An input field designed specifically for entering and choosing dates, with support for multiple date formats and built-in validation.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/DateField.html
+---
+
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicDateField, DateTimeField, StartEndContentDateField, ValidatedDateField, ReadonlyAndDisabledDateField } from '@/components/docs/date-field'
+
+## Basic
+<BasicDateField />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components="field" />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/date-field"
+"use client";
+
+import {
+  DateField as DateFieldPrimitive,
+  type DateFieldProps as DateFieldPrimitiveProps,
+  DateInput as DateInputPrimitive,
+  type DateInputProps,
+  DateSegment,
+  type DateValue,
+  type ValidationResult,
+} from "react-aria-components";
+import {
+  Description,
+  FieldError,
+  FieldGroup,
+  Label,
+} from "@/components/ui/field";
+import { cn } from "@/lib/utils";
+
+interface DateFieldProps<T extends DateValue>
+  extends DateFieldPrimitiveProps<T> {
+  label?: string;
+  description?: string;
+  error?: string | ((validation: ValidationResult) => string);
+  startContent?: React.ReactNode;
+  endContent?: React.ReactNode;
+  classNames?: {
+    wrapper?: string | string[];
+    label?: string | string[];
+    group?: string | string[];
+    startContent?: string | string[];
+    endContent?: string | string[];
+    description?: string | string[];
+    error?: string | string[];
+  };
+}
+
+function DateField<T extends DateValue>({
+  startContent,
+  endContent,
+  label,
+  description,
+  error,
+  classNames,
+  ...props
+}: DateFieldProps<T>) {
+  return (
+    <DateFieldPrimitive
+      {...props}
+      aria-label={props["aria-label"] ?? label ?? "date-field"}
+      className={cn(
+        props.className,
+        classNames?.wrapper,
+        "group flex flex-col gap-y-1"
+      )}
+    >
+      {label && <Label className={cn(classNames?.label)}>{label}</Label>}
+      <FieldGroup className={cn(classNames?.group)}>
+        {startContent && typeof startContent === "string" ? (
+          <span
+            className={cn(
+              classNames?.startContent,
+              "me-2 text-muted-foreground"
+            )}
+          >
+            {startContent}
+          </span>
+        ) : startContent ? (
+          <div
+            className={cn(
+              "content me-2 flex items-center",
+              classNames?.startContent
+            )}
+          >
+            {startContent}
+          </div>
+        ) : null}
+        <DateInput />
+        {endContent && typeof endContent === "string" ? (
+          <span
+            className={cn(classNames?.endContent, "ms-2 text-muted-foreground")}
+          >
+            {endContent}
+          </span>
+        ) : endContent ? (
+          <div
+            className={cn(
+              "content me-2 flex items-center",
+              classNames?.endContent
+            )}
+          >
+            {endContent}
+          </div>
+        ) : null}
+      </FieldGroup>
+      {description && (
+        <Description className={cn(classNames?.description)}>
+          {description}
+        </Description>
+      )}
+      <FieldError className={cn(classNames?.error)}>{error}</FieldError>
+    </DateFieldPrimitive>
+  );
+}
+
+function DateInput({ className, ...props }: Omit<DateInputProps, "children">) {
+  return (
+    <DateInputPrimitive
+      className={cn(
+        className,
+        "px-3 py-2 text-base text-foreground placeholder-muted-foreground outline-hidden sm:px-2.5 sm:py-1.5 sm:text-sm/6"
+      )}
+      {...props}
+    >
+      {(segment) => (
+        <DateSegment
+          segment={segment}
+          className={cn(
+            "inline shrink-0 rounded px-1.5 type-literal:px-0 text-foreground tracking-wider caret-transparent outline-0 forced-color-adjust-none data-placeholder:not-data-focused:text-muted-foreground sm:p-0.5 sm:py-0.5 sm:text-sm forced-colors:text-[ButtonText]",
+            "focus:bg-accent focus:text-accent-foreground focus:data-invalid:bg-destructive focus:data-invalid:text-destructive-foreground forced-colors:focus:bg-[Highlight] forced-colors:focus:text-[HighlightText]",
+            "disabled:opacity-50 forced-colors:disabled:text-[GrayText]"
+          )}
+        />
+      )}
+    </DateInputPrimitive>
+  );
+}
+
+export type { DateFieldProps };
+export { DateField, DateInput };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add date-field
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { DateField } from "@/components/ui/date-field";
+```
+
+```tsx
+<DateField />
+<DateField isReadOnly />
+<DateField isDisabled />
+```
+
+## Examples
+
+### Date Time
+<DateTimeField />
+
+### Start and End Content
+<StartEndContentDateField />
+
+### With Validation
+<ValidatedDateField />
+
+### Readonly and Disabled
+<ReadonlyAndDisabledDateField />
+
+## Props
+
+### DateField
+<TypeTable
+  type={{
+    label: {
+      description: "Label for the date field",
+      type: "string",
+      required: false,
+    },
+    description: {
+      description: "Optional helper text displayed below the field",
+      type: "string",
+      required: false,
+    },
+    error: {
+      description:
+        "Error message or a function that returns an error message based on validation",
+      type: "string | ((validation: ValidationResult) => string)",
+      required: false,
+    },
+    startContent: {
+      description: "Content displayed at the start of the input (icon or text)",
+      type: "React.ReactNode",
+      required: false,
+    },
+    endContent: {
+      description: "Content displayed at the end of the input (icon or text)",
+      type: "React.ReactNode",
+      required: false,
+    },
+    classNames: {
+      description:
+        "Custom class names for individual parts of the component",
+      type: `{
+        wrapper?: string | string[],
+        label?: string | string[],
+        group?: string | string[],
+        startContent?: string | string[],
+        endContent?: string | string[],
+        description?: string | string[],
+        error?: string | string[],
+      }`,
+      required: false,
+    },
+    className: {
+      description: "Additional class names for the component wrapper",
+      type: "string",
+      required: false,
+    },
+    isDisabled: {
+      description: "Disables the field so it cannot be interacted with",
+      type: "boolean",
+      required: false,
+    },
+    isReadOnly: {
+      description: "Makes the field read-only without allowing edits",
+      type: "boolean",
+      required: false,
+    },
+  }}
+/>
+
+### DateInput
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the date input element",
+      type: "string",
+      required: false,
+    },
+    isDisabled: {
+      description: "Disables the input so it cannot be interacted with",
+      type: "boolean",
+      required: false,
+    },
+    isReadonly: {
+      description: "Makes the input read-only without allowing edits",
+      type: "boolean",
+      required: false,
+    },
+  }}
+/>

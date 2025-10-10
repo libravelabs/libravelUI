@@ -123,6 +123,7 @@ const Description = ({ ref, className, ...props }: DescriptionProps) => {
 interface FieldErrorProps extends FieldErrorPrimitiveProps {
   ref?: React.RefObject<HTMLElement>;
   message?: FieldProps["error"];
+  asDefault?: boolean;
 }
 
 const FieldError = ({
@@ -130,8 +131,23 @@ const FieldError = ({
   ref,
   message,
   children,
+  asDefault = false,
   ...props
 }: FieldErrorProps) => {
+  if (asDefault) {
+    return (
+      <p
+        {...props}
+        className={cn(
+          "text-sm text-destructive group-disabled:opacity-50",
+          className
+        )}
+      >
+        {message ?? children}
+      </p>
+    );
+  }
+
   return (
     <FieldErrorPrimitive
       ref={ref}
@@ -247,7 +263,14 @@ function Input({
           )}
         >
           {startContent && typeof startContent === "string" ? (
-            <span className="me-2 text-muted-foreground">{startContent}</span>
+            <span
+              className={cn(
+                classNames?.startContent,
+                "me-2 text-muted-foreground"
+              )}
+            >
+              {startContent}
+            </span>
           ) : startContent ? (
             <div
               className={cn(
@@ -283,7 +306,14 @@ function Input({
             <Loader />
           ) : endContent ? (
             typeof endContent === "string" ? (
-              <span className="ms-2 text-muted-foreground">{endContent}</span>
+              <span
+                className={cn(
+                  classNames?.endContent,
+                  "ms-2 text-muted-foreground"
+                )}
+              >
+                {endContent}
+              </span>
             ) : (
               <div
                 className={cn(

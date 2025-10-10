@@ -1,3 +1,44 @@
+---
+title: Context Menu
+description: Instantly reveals a contextual menu at the precise location of your right-click, allowing users to quickly interact with actions that are relevant to the current element or interface state.
+component: true
+---
+
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicContextMenu, WithCardContextMenu } from '@/components/docs/context-menu'
+
+## Basic
+<BasicContextMenu />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+<RequiredBlock components={["popover", "dropdown-menu"]} />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/context-menu"
 "use client";
 
 import * as React from "react";
@@ -151,3 +192,104 @@ export {
   ContextMenuSubContent,
   ContextMenuDescription,
 };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add context-menu
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuTrigger,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuDescription,
+  ContextMenuSeparator,
+  ContextMenuGroup,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubTrigger,
+  ContextMenuSubContent,
+} from "@/components/ui/context-menu";
+```
+
+```tsx
+<ContextMenu>
+  <ContextMenuTrigger className="h-36 w-72 border-2 border-dashed rounded-xl flex items-center justify-center text-sm text-muted-foreground">
+    Right click anywhere in this box
+  </ContextMenuTrigger>
+
+  <ContextMenuContent>
+    <ContextMenuItem>ITEM GOES HERE</ContextMenuItem>
+    <ContextMenuItem>ITEM GOES HERE</ContextMenuItem>
+    <ContextMenuSeparator />
+    <ContextMenuItem>ITEM GOES HERE</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Example
+
+### With Card
+A context menu where the trigger element is implemented using a Card component, allowing the menu to be activated by interacting with the card UI.
+<WithCardContextMenu />
+
+## Props
+
+### ContextMenuTrigger
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the component",
+      type: "string",
+      required: false
+    },
+  }}
+/>
+
+### ContextMenuContent
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the content container",
+      type: "string",
+      required: false,
+    },
+    popover: {
+      description: "Props passed down to <PopoverContent>",
+      type: "PopoverContentProps",
+      required: false,
+    },
+    withArrow: {
+      description: "Whether to show an arrow on the popover",
+      type: "boolean",
+      required: false,
+    },
+    children: {
+      description: "Content of the menu",
+      type: "React.ReactNode",
+      required: false,
+    },
+  }}
+/>
+
+### ContextMenu
+<TypeTable
+  type={{
+    children: {
+      description: "Content inside the ContextMenu",
+      type: "React.ReactNode",
+      required: true,
+    },
+  }}
+/>
