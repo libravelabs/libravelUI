@@ -1,14 +1,14 @@
 "use client";
 
 import type { DateDuration } from "@internationalized/date";
-import type { Placement } from "@react-types/overlays";
 import {
   DateRangePicker as DateRangePickerPrimitive,
+  PopoverProps,
   type DateRangePickerProps as DateRangePickerPrimitiveProps,
   type DateValue,
   type ValidationResult,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "@/lib/render-props";
+import { cn } from "@/lib/utils";
 import { DateInput } from "@/components/ui/date-field";
 import {
   Description,
@@ -27,7 +27,7 @@ interface DateRangePickerProps<T extends DateValue>
   errorMessage?: string | ((validation: ValidationResult) => string);
   visibleDuration?: DateDuration;
   pageBehavior?: "visible" | "single";
-  placement?: Placement;
+  placement?: PopoverProps["placement"];
 }
 
 function DateRangePicker<T extends DateValue>({
@@ -42,14 +42,11 @@ function DateRangePicker<T extends DateValue>({
   return (
     <DateRangePickerPrimitive
       aria-label={props["aria-label"] ?? "range-date-picker"}
-      className={composeTailwindRenderProps(
-        className,
-        "group flex flex-col gap-y-1"
-      )}
+      className={cn(className, "group flex flex-col gap-y-1")}
       {...props}
     >
       {label && <Label>{label}</Label>}
-      <FieldGroup className="min-w-72 inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 group-open:inset-ring-ring/70 group-open:ring-3 group-open:ring-ring/20">
+      <FieldGroup className="inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 group-open:inset-ring-ring/70 group-open:ring-3 group-open:ring-ring/20">
         <DateInput slot="start" />
         <span
           aria-hidden="true"
@@ -57,12 +54,12 @@ function DateRangePicker<T extends DateValue>({
         >
           –
         </span>
-        <DateInput className="me-auto" slot="end" />
+        <DateInput slot="end" />
         <PopoverTrigger
-          asButton
+          asPrimitive
           className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
         >
-          <CalendarIcon />
+          <CalendarIcon className="ms-auto text-muted-foreground" />
         </PopoverTrigger>
       </FieldGroup>
       {description && <Description>{description}</Description>}
@@ -70,7 +67,7 @@ function DateRangePicker<T extends DateValue>({
       <PopoverContent
         withArrow={false}
         placement={placement}
-        className="p-2 flex min-w-auto max-w-none snap-x justify-center"
+        className="p-2 flex min-w-auto max-w-none w-auto snap-x justify-center"
         {...props}
       >
         <RangeCalendar visibleDuration={visibleDuration} />

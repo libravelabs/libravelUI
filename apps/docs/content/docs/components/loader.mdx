@@ -14,6 +14,12 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 ## Basic
 <BasicLoader />
 
+## Features
+The `<progress>` HTML element can be used to build a progress bar, however it is very difficult to style cross browser. ProgressBar helps achieve accessible progress bars and spinners that can be styled as needed.
+
+- `Accessible` – Follows the ARIA progressbar pattern, supporting both determinate and indeterminate progress bars. A nested label is automatically associated with the progress bar semantically.
+- `International` – The value is formatted as a percentage or custom format according to the user's locale.
+
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
@@ -22,7 +28,7 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components class-variance-authority lucide-react clsx tailwind-merge
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.

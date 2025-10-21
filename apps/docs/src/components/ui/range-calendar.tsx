@@ -17,7 +17,7 @@ import { FieldError } from "@/components/ui/field";
 import { CalendarGridHeader } from "@/components/ui/calendar";
 import { today, getLocalTimeZone, parseDate } from "@internationalized/date";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "./button";
+import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "motion/react";
 
 interface RangeCalendarProps<T extends DateValue>
@@ -137,14 +137,24 @@ function RangeCalendar<T extends DateValue>({
                             isSelected,
                             isDisabled,
                             isUnavailable,
+                            isSelectionStart,
+                            isSelectionEnd,
                           }) =>
                             cn(
-                              "inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-md text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer m-0.5",
-                              "text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-                              isToday &&
-                                "bg-accent text-accent-foreground font-semibold hover:bg-accent/80 focus-visible:ring-ring",
+                              "inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+                              "text-foreground hover:bg-primary/20 focus-visible:ring-ring",
+                              "rounded-md",
+                              isSelectionStart &&
+                                "bg-primary text-primary-foreground hover:bg-primary/70 rounded-s-lg rounded-e-none",
+                              isSelectionEnd &&
+                                "bg-primary text-primary-foreground hover:bg-primary/70 rounded-e-lg rounded-s-none",
                               isSelected &&
-                                "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring font-semibold",
+                                !isSelectionStart &&
+                                !isSelectionEnd &&
+                                "bg-accent text-accent-foreground rounded-none",
+                              isToday &&
+                                !isSelected &&
+                                "bg-accent text-accent-foreground font-semibold",
                               isDisabled &&
                                 "text-muted-foreground opacity-30 cursor-not-allowed",
                               isUnavailable &&
@@ -152,31 +162,8 @@ function RangeCalendar<T extends DateValue>({
                             )
                           }
                         >
-                          {({
-                            formattedDate,
-                            isSelected,
-                            isSelectionStart,
-                            isSelectionEnd,
-                            isDisabled,
-                          }) => (
-                            <span
-                              className={cn(
-                                "flex size-full items-center justify-center rounded-lg tabular-nums forced-color-adjust-none transition-all duration-200",
-                                isSelected &&
-                                  (isSelectionStart || isSelectionEnd)
-                                  ? "bg-primary text-primary-foreground group-invalid/calendar-cell:bg-destructive group-invalid/calendar-cell:text-destructive-foreground forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:group-invalid/calendar-cell:bg-[Mark]"
-                                  : isSelected
-                                  ? [
-                                      "group-hover/calendar-cell:bg-primary/15 dark:group-hover/calendar-cell:bg-primary/20 forced-colors:group-hover/calendar-cell:bg-[Highlight]",
-                                      "group-pressed/calendar-cell:bg-(--cell) forced-colors:text-[HighlightText] forced-colors:group-pressed/calendar-cell:bg-[Highlight]",
-                                      "group-invalid/calendar-cell:group-hover/calendar-cell:bg-destructive/20 group-invalid/calendar-cell:group-pressed/calendar-cell:bg-destructive/30 forced-colors:group-invalid/calendar-cell:group-pressed/calendar-cell:bg-[Mark]",
-                                      "group-invalid/calendar-cell:text-destructive forced-colors:group-invalid:group-hover/calendar-cell:bg-[Mark]",
-                                    ]
-                                  : "group-hover/calendar-cell:bg-secondary-foreground/15 group-pressed/calendar-cell:bg-secondary-foreground/20 forced-colors:group-pressed/calendar-cell:bg-[Highlight]",
-                                isDisabled &&
-                                  "opacity-50 forced-colors:text-[GrayText]"
-                              )}
-                            >
+                          {({ formattedDate }) => (
+                            <span className="flex size-full items-center justify-center tabular-nums forced-color-adjust-none transition-all duration-200">
                               {formattedDate}
                             </span>
                           )}

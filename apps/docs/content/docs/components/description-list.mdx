@@ -1,0 +1,134 @@
+---
+title: Description List
+description: A semantic structure used to display pairs of terms and their corresponding descriptions. Ideal for presenting structured data like metadata, definitions, or key-value content in a readable format.
+component: true
+---
+
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicDescriptionList, CardDescriptionList } from '@/components/docs/description-list'
+
+## Basic
+<BasicDescriptionList />
+
+## Features
+- Displays structured term–description pairs.
+- Semantically correct using HTML’s `<dl>`, `<dt>`, and `<dd>`.
+- Ideal for metadata, glossaries, and technical specs.
+- Supports flexible layouts (vertical or horizontal) with CSS or utility classes.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+
+Install following dependencies:
+
+```package-install
+npm install clsx tailwind-merge
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/description-list"
+import { cn } from "@/lib/utils";
+
+function DescriptionList({ className, ...props }: React.ComponentProps<"dl">) {
+  return (
+    <dl
+      className={cn(
+        "grid grid-cols-1 text-base/6 sm:grid-cols-[min(50%,calc(var(--spacing)*80))_auto] sm:text-sm/6",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function DescriptionTerm({ className, ...props }: React.ComponentProps<"dt">) {
+  return (
+    <dt
+      className={cn(
+        "col-start-1 border-t pt-3 text-muted-foreground first:border-none sm:py-3",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function DescriptionDetails({
+  className,
+  ...props
+}: React.ComponentProps<"dd">) {
+  return (
+    <dd
+      className={cn(
+        "pt-1 pb-3 text-foreground sm:border-t sm:nth-2:border-none sm:py-3",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+export { DescriptionList, DescriptionTerm, DescriptionDetails };
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add description-list
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  DescriptionList,
+  DescriptionTerm,
+  DescriptionDetails,
+} from "@/components/ui/description-list";
+```
+
+```tsx
+<DescriptionList>
+  <DescriptionTerm>Term 1</DescriptionTerm>
+  <DescriptionDetails>Details 1</DescriptionDetails>
+
+  <DescriptionTerm>Term 2</DescriptionTerm>
+  <DescriptionDetails>Details 2</DescriptionDetails>
+</DescriptionList>
+```
+
+## Example
+### With Card
+Shows a list of descriptions inside a styled card for clear and structured presentation.
+<CardDescriptionList />
+
+## Props
+
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the component",
+      type: "string",
+      required: false
+    },
+  }}
+/>

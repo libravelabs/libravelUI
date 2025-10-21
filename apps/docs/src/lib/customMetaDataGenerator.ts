@@ -36,7 +36,7 @@ export function customMetaDataGenerator({
   twitterCard = "summary_large_image",
 }: PageSEOProps): Metadata {
   const siteTitle = "LibravelUI";
-  const fullTitle = `${title} — ${siteTitle}`;
+  const fullTitle = `${title} - ${siteTitle}`;
 
   const metadataImage =
     ogImage ||

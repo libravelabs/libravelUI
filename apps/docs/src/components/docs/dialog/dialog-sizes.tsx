@@ -31,7 +31,7 @@ const dialogSizes = {
 
 export function DialogSizesBase({ size, onSizeChange }: DialogSizesBaseProps) {
   return (
-    <div className="flex flex-col gap-4 w-full min-h-48">
+    <div className="flex flex-col gap-4 w-full min-h-48 px-2 md:px-4">
       <Select
         items={Object.entries(dialogSizes).map(([id, label]) => ({
           id,
@@ -41,7 +41,7 @@ export function DialogSizesBase({ size, onSizeChange }: DialogSizesBaseProps) {
         onSelectionChange={(key) =>
           onSizeChange(key as keyof typeof dialogSizes)
         }
-        classNames={{ trigger: "min-w-32", content: "min-w-32" }}
+        classNames={{ trigger: "max-w-32" }}
         aria-label="Select Dialog Size"
       />
 

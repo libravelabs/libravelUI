@@ -1,0 +1,110 @@
+---
+title: Progress Bar
+description: Progress bars show either determinate or indeterminate progress of an operation over time.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/ProgressBar.html
+new: true
+---
+
+## Basic
+
+<Playground comp="progress-bar/basic" />
+
+## Features
+
+The `<progress>` HTML element can be used to build a progress bar, however it is very difficult to style cross browser. ProgressBar helps achieve accessible progress bars and spinners that can be styled as needed.
+
+- **Accessible** – Follows the [ARIA progressbar pattern](https://www.w3.org/TR/wai-aria-1.2/#progressbar), supporting both determinate and indeterminate progress bars. A nested label is automatically associated with the progress bar semantically.
+- **International** – The value is formatted as a percentage or custom format according to the user's locale.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="field" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/progress-bar" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add progress-bar
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { ProgressBar } from "@/components/ui/progress-bar";
+```
+
+```tsx
+<ProgressBar label="Memory usage" value={80} />
+```
+
+## Examples
+
+### Custom Label Value
+
+Displays a progress bar with a custom label for the value.
+
+<Playground comp="progress-bar/custom-label-value" />
+
+### Decimal
+
+Shows a progress bar with a decimal-based value representation.
+
+<Playground comp="progress-bar/decimal" />
+
+## Props
+
+<TypeTable
+  type={{
+    label: {
+      description:
+        "The label for the progress bar. Displayed above the progress indicator.",
+      type: "string",
+      required: false,
+    },
+    ref: {
+      description:
+        "A React ref that can be used to reference the progress bar DOM element.",
+      type: "React.RefObject<HTMLDivElement>",
+      required: false,
+    },
+    className: {
+      description: "Additional class names for styling the component.",
+      type: "string",
+      required: false,
+    },
+    valueText: {
+      description:
+        "Text to be displayed representing the current value of the progress bar.",
+      type: "string",
+      required: false,
+    },
+    isIndeterminate: {
+      description:
+        "Indicates whether the progress bar is in an indeterminate state.",
+      type: "boolean",
+      required: false,
+    },
+    percentage: {
+      description: "The current progress as a percentage (0 to 100).",
+      type: "number",
+      required: false,
+    },
+  }}
+/>

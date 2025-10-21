@@ -13,6 +13,12 @@ import { BasicPopover, FormPopover, PopoverPositions } from '@/components/docs/p
 ## Basic
 <BasicPopover />
 
+## Features
+- `Styleable` – States for entry and exit animations are included for easy styling, and an optional arrow element can be rendered.
+- `Accessible` – The trigger and popover are automatically associated semantically via ARIA. Content outside the popover is hidden from assistive technologies while it is open. The popover closes when interacting outside, or pressing the Escape key.
+- `Focus management` – Focus is moved into the popover on mount, and restored to the trigger element on unmount.
+- `Positioning` – The popover is positioned relative to the trigger element, and automatically flips and adjusts to avoid overlapping with the edge of the browser window.
+
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
@@ -23,7 +29,7 @@ import { BasicPopover, FormPopover, PopoverPositions } from '@/components/docs/p
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components clsx tailwind-merge
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -103,7 +109,7 @@ function PopoverContent({
       ref={ref}
       offset={offset}
       className={composeTailwindRenderProps(className, [
-        "w-(--trigger-width) p-1 rounded-xl border bg-popover text-popover-foreground shadow-xs outline-hidden transition-transform [--gutter:--spacing(6)] sm:text-sm dark:backdrop-saturate-200 **:[[role=dialog]]:[--gutter:--spacing(4)]",
+        "w-auto p-1 rounded-xl border bg-popover text-popover-foreground shadow-xs outline-hidden transition-transform [--gutter:--spacing(6)] sm:text-sm dark:backdrop-saturate-200 **:[[role=dialog]]:[--gutter:--spacing(4)]",
         "entering:fade-in entering:animate-in",
         "exiting:fade-out exiting:animate-out",
         "placement-start:entering:slide-in-from-end-1 placement-end:entering:slide-in-from-start-1 placement-top:entering:slide-in-from-bottom-1 placement-bottom:entering:slide-in-from-top-1",
@@ -119,7 +125,8 @@ function PopoverContent({
                 width={12}
                 height={12}
                 viewBox="0 0 12 12"
-                className="group-placement-start:-rotate-90 block fill-popover stroke-border group-placement-bottom:rotate-180 group-placement-end:rotate-90 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
+                className="group-placement-start:-rotate-90 block fill-popover stroke-border group-placement-bottom:rotate-180 group-placement-end:rotate-90 group-placement-right:rotate-90
+                group-placement-left:-rotate-90 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
               >
                 <path d="M0 0 L6 6 L12 0" />
               </svg>

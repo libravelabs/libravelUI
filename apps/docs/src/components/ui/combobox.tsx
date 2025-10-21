@@ -153,7 +153,7 @@ function ComboBoxContent<T extends object>({
       <ListBox
         {...props}
         className={cn(
-          "bg-popover text-popover-foreground z-50 w-[calc(var(--trigger-width)+24px)] max-h-[35rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
+          "bg-popover text-popover-foreground z-50 w-[calc(var(--trigger-width)+24px)] max-h-[30rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
           className
         )}
       >

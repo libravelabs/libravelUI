@@ -1,20 +1,20 @@
 "use client";
 
+import { useEffect, use } from "react";
 import type {
   DialogProps,
   DialogTriggerProps,
   ModalOverlayProps,
 } from "react-aria-components";
 import {
-  composeRenderProps,
   DialogTrigger as DialogTriggerPrimitive,
   Dialog as DialogContentPrimitive,
   Modal,
   ModalOverlay,
+  OverlayTriggerStateContext,
 } from "react-aria-components";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-
 import {
   DialogBody,
   DialogClose,
@@ -25,6 +25,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  AnimationPlaybackControls,
+  animate,
+} from "motion/react";
 
 type Sides = "top" | "bottom" | "left" | "right";
 
@@ -43,22 +50,15 @@ const generateCompoundVariants = (sides: Array<Sides>) => {
 };
 
 const dockContentStyles = cva(
-  "fixed z-50 grid gap-4 border-muted-foreground/20 bg-popover text-popover-foreground shadow-lg transition ease-in-out dark:border-border",
+  "fixed z-50 grid gap-4 border-muted-foreground/20 bg-popover text-popover-foreground shadow-lg dark:border-border",
   {
     variants: {
-      isEntering: {
-        true: "fade-in animate-in duration-300",
-      },
-      isExiting: {
-        true: "fade-out animate-out duration-200",
-      },
       side: {
-        top: "entering:slide-in-from-top exiting:slide-out-to-top inset-x-0 top-0 border-b",
-        bottom:
-          "entering:slide-in-from-bottom exiting:slide-out-to-bottom inset-x-0 bottom-0 border-t",
-        left: "entering:slide-in-from-left exiting:slide-out-to-left inset-y-0 left-0 h-auto w-3/4 overflow-y-auto border-r sm:max-w-sm",
+        top: "inset-x-0 top-0 border-b",
+        bottom: "inset-x-0 bottom-0 border-t",
+        left: "inset-y-0 left-0 h-auto w-3/4 overflow-y-auto border-r sm:max-w-sm",
         right:
-          "entering:slide-in-from-right exiting:slide-out-to-right inset-y-0 right-0 h-auto w-3/4 overflow-y-auto border-l sm:max-w-sm",
+          "inset-y-0 right-0 h-auto w-3/4 overflow-y-auto border-l sm:max-w-sm",
       },
       isFloat: {
         false: "border-border rounded-none",
@@ -86,7 +86,12 @@ interface DockContentProps
   isBlurred?: boolean;
   isFloat?: boolean;
   side?: Sides;
+  notch?: boolean;
+  shouldScaleBackground?: boolean;
 }
+
+const DockOverlay = motion.create(ModalOverlay);
+const DockRoot = motion.create(Modal);
 
 function DockContent({
   className,
@@ -96,56 +101,144 @@ function DockContent({
   role = "dialog",
   closeButton = true,
   isFloat = false,
+  notch = true,
+  shouldScaleBackground = false,
   children,
   ...props
 }: DockContentProps) {
+  const state = use(OverlayTriggerStateContext)!;
   const isDismissable = isDismissableInternal ?? role !== "alertdialog";
+  const isOpen = props?.isOpen ?? state?.isOpen;
+  const setOpen = props?.onOpenChange ?? state?.setOpen;
+
+  const w = typeof window !== "undefined" ? window.innerWidth : 0;
+  const h = typeof window !== "undefined" ? window.innerHeight : 0;
+  const offsetMotion = useMotionValue(
+    side === "left" || side === "right" ? w : h
+  );
+
+  useEffect(() => {
+    if (!shouldScaleBackground) return;
+
+    const element = document.querySelector("[data-dock]") as HTMLElement | null;
+    if (!element) {
+      console.warn(
+        "Dock: 'shouldScaleBackground' is true but no element with [data-dock] was found. Add data-dock attribute to the layout wrapper."
+      );
+      return;
+    }
+
+    let controls: AnimationPlaybackControls | undefined;
+
+    if (element) {
+      if (isOpen) {
+        controls = animate(
+          element,
+          { scale: 0.99 },
+          { duration: 0.3, ease: "easeInOut" }
+        );
+      } else {
+        controls = animate(
+          element,
+          { scale: 1 },
+          { duration: 0.3, ease: "easeInOut" }
+        );
+      }
+
+      return () => {
+        controls?.stop();
+        element.style.removeProperty("transform");
+      };
+    }
+  }, [isOpen, shouldScaleBackground]);
 
   return (
-    <ModalOverlay
-      isDismissable={isDismissable}
-      className={({ isEntering, isExiting }) =>
-        cn(
-          "fixed inset-0 z-50 h-(--visual-viewport-height,100vh) w-screen overflow-hidden bg-black/30",
-          isEntering && "fade-in animate-in duration-300",
-          isExiting && "fade-out animate-out duration-300",
-          isBlurred && "backdrop-blur-sm backdrop-filter"
-        )
-      }
-      {...props}
-    >
-      <Modal
-        className={composeRenderProps(className, (className, renderProps) =>
-          dockContentStyles({
-            ...renderProps,
-            side,
-            isFloat,
-            className,
-          })
-        )}
-      >
-        <DialogContentPrimitive
-          aria-label={props["aria-label"]}
-          role={role}
+    <AnimatePresence>
+      {isOpen && (
+        <DockOverlay
+          isDismissable={isDismissable}
+          isOpen={isOpen}
+          onOpenChange={setOpen}
+          animate={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
           className={cn(
-            "bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
-            !isFloat && "rounded-none"
+            "fixed inset-0 z-50 h-(--visual-viewport-height,100vh) w-screen overflow-hidden",
+            isBlurred && "backdrop-blur-sm backdrop-filter"
           )}
+          {...props}
         >
-          {(values) => (
-            <>
-              {typeof children === "function" ? children(values) : children}
-              {closeButton && (
-                <DialogCloseIcon
-                  className="top-2.5 right-2.5"
-                  isDismissable={isDismissable}
-                />
+          <DockRoot
+            className={cn(dockContentStyles({ side, isFloat }), className)}
+            initial={{
+              x: side === "left" ? "-100%" : side === "right" ? "100%" : 0,
+              y: side === "top" ? "-100%" : side === "bottom" ? "100%" : 0,
+            }}
+            animate={{ x: 0, y: 0 }}
+            exit={{
+              x: side === "left" ? "-100%" : side === "right" ? "100%" : 0,
+              y: side === "top" ? "-100%" : side === "bottom" ? "100%" : 0,
+            }}
+            style={
+              side === "top" || side === "bottom"
+                ? { y: offsetMotion }
+                : { x: offsetMotion }
+            }
+            transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
+            drag={side === "left" || side === "right" ? "x" : "y"}
+            whileDrag={{ cursor: "grabbing" }}
+            dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
+            onDragEnd={(_, { offset, velocity }) => {
+              if (
+                side === "bottom" &&
+                (velocity.y > 150 || offset.y > h * 0.25)
+              )
+                return setOpen(false);
+              if (side === "top" && (velocity.y < -150 || offset.y < -h * 0.25))
+                return setOpen(false);
+              if (side === "left" && velocity.x < -150) return setOpen(false);
+              if (side === "right" && velocity.x > 150) return setOpen(false);
+
+              animate(offsetMotion, 0, {
+                type: "inertia",
+                bounceStiffness: 600,
+                bounceDamping: 40,
+                min: 0,
+                max: 0,
+              });
+            }}
+            dragElastic={0.3}
+            dragPropagation
+          >
+            <DialogContentPrimitive
+              aria-label={props["aria-label"]}
+              role={role}
+              className={cn(
+                "bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
+                !isFloat && "rounded-none"
               )}
-            </>
-          )}
-        </DialogContentPrimitive>
-      </Modal>
-    </ModalOverlay>
+            >
+              {(values) => (
+                <>
+                  {notch && side === "bottom" && (
+                    <div className="notch sticky top-0 mx-auto h-1.5 w-10 shrink-0 touch-pan-y rounded-full bg-foreground/20" />
+                  )}
+                  {typeof children === "function" ? children(values) : children}
+                  {notch && side === "top" && (
+                    <div className="notch sticky bottom-0 mx-auto h-1.5 w-10 shrink-0 touch-pan-y rounded-full bg-foreground/20" />
+                  )}
+                  {closeButton && (
+                    <DialogCloseIcon
+                      className="top-2.5 right-2.5"
+                      isDismissable={isDismissable}
+                    />
+                  )}
+                </>
+              )}
+            </DialogContentPrimitive>
+          </DockRoot>
+        </DockOverlay>
+      )}
+    </AnimatePresence>
   );
 }
 

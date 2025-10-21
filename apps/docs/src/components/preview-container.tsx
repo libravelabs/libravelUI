@@ -9,11 +9,13 @@ import { Button } from "./ui/button";
 interface PreviewContainerProps {
   children: React.ReactNode;
   className?: string;
+  hideButtons?: boolean;
 }
 
 export const PreviewContainer = ({
   children,
   className,
+  hideButtons = false,
 }: PreviewContainerProps) => {
   const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
   const [key, setKey] = useState(0);
@@ -30,22 +32,24 @@ export const PreviewContainer = ({
   return (
     <DirectionProvider dir={direction}>
       <div className="relative overflow-hidden">
-        <div className="absolute right-2 z-2 flex items-center gap-2">
-          <Button variant="secondary" size={"icon"} onClick={handleDirection}>
-            {direction}
-          </Button>
-          <Button
-            onClick={handleRefresh}
-            variant="secondary"
-            size={"icon"}
-            aria-label="Refresh preview"
-          >
-            <RefreshCw
-              className="w-4 h-4 transition-transform duration-300"
-              style={{ transform: `rotate(${rotation}deg)` }}
-            />
-          </Button>
-        </div>
+        {!hideButtons && (
+          <div className="absolute right-2 z-2 flex items-center gap-2">
+            <Button variant="secondary" size={"icon"} onClick={handleDirection}>
+              {direction}
+            </Button>
+            <Button
+              onClick={handleRefresh}
+              variant="secondary"
+              size={"icon"}
+              aria-label="Refresh preview"
+            >
+              <RefreshCw
+                className="w-4 h-4 transition-transform duration-300"
+                style={{ transform: `rotate(${rotation}deg)` }}
+              />
+            </Button>
+          </div>
+        )}
         <div
           key={key}
           className={cn(

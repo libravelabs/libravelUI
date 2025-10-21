@@ -29,7 +29,14 @@ export default function Layout({ children }: { children: ReactNode }) {
       className={`${geist.variable} ${jetbrains_mono.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="flex flex-col min-h-screen scroll-smooth">
+      <head>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+        />
+      </head>
+      <body>
         <RootProvider
           search={{
             links: [
@@ -38,7 +45,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             ],
           }}
         >
-          {children}
+          <main data-dock className="flex flex-col min-h-screen scroll-smooth">
+            {children}
+          </main>
         </RootProvider>
         <Toast />
       </body>

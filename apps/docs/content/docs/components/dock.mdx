@@ -1,0 +1,623 @@
+---
+title: Dock
+description: A dock for displaying supplementary content alongside the main interface without interrupting the user’s primary workflow.
+component: true
+doc:
+     - title: Dialog
+       doc: https://react-spectrum.adobe.com/react-aria/Dialog.html
+     - title: Modal
+       doc: https://react-spectrum.adobe.com/react-aria/Modal.html
+---
+
+import { Alert } from '@/components/ui/alert';
+import { RequiredBlock } from "@/components/required-block";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { BasicDock, DockPositions, FloatDock, StickyDock } from '@/components/docs/dock'
+import { TriangleAlert } from 'lucide-react'
+
+## Basic
+<BasicDock />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+<Tab value="Manual">
+<RequiredBlock components="dialog" />
+
+Install following dependencies:
+
+```package-install
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+```
+
+Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+```ts ts2js title="lib/utils.ts"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Copy and paste the following code into your project.
+
+```tsx ts2js title="components/ui/dock"
+"use client";
+
+import { useEffect, use } from "react";
+import type {
+  DialogProps,
+  DialogTriggerProps,
+  ModalOverlayProps,
+} from "react-aria-components";
+import {
+  DialogTrigger as DialogTriggerPrimitive,
+  Dialog as DialogContentPrimitive,
+  Modal,
+  ModalOverlay,
+  OverlayTriggerStateContext,
+} from "react-aria-components";
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import {
+  DialogBody,
+  DialogClose,
+  DialogCloseIcon,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  AnimationPlaybackControls,
+  animate,
+} from "motion/react";
+
+type Sides = "top" | "bottom" | "left" | "right";
+
+const generateCompoundVariants = (sides: Array<Sides>) => {
+  return sides.map((side) => ({
+    side,
+    isFloat: true,
+    class: cn(
+      "rounded-lg ring-1",
+      side === "top" && "top-2 inset-x-2 border-b-0",
+      side === "bottom" && "bottom-2 inset-x-2 border-t-0",
+      side === "left" && "left-2 inset-y-2 border-r-0",
+      side === "right" && "right-2 inset-y-2 border-l-0"
+    ),
+  }));
+};
+
+const dockContentStyles = cva(
+  "fixed z-50 grid gap-4 border-muted-foreground/20 bg-popover text-popover-foreground shadow-lg dark:border-border",
+  {
+    variants: {
+      side: {
+        top: "inset-x-0 top-0 border-b",
+        bottom: "inset-x-0 bottom-0 border-t",
+        left: "inset-y-0 left-0 h-auto w-3/4 overflow-y-auto border-r sm:max-w-sm",
+        right:
+          "inset-y-0 right-0 h-auto w-3/4 overflow-y-auto border-l sm:max-w-sm",
+      },
+      isFloat: {
+        false: "border-border rounded-none",
+        true: "ring-foreground/5 dark:ring-border rounded-lg",
+      },
+    },
+    compoundVariants: generateCompoundVariants([
+      "top",
+      "bottom",
+      "left",
+      "right",
+    ]),
+  }
+);
+
+type DockProps = DialogTriggerProps;
+function Dock(props: DockProps) {
+  return <DialogTriggerPrimitive {...props} />;
+}
+
+interface DockContentProps
+  extends Omit<ModalOverlayProps, "children">,
+    Pick<DialogProps, "aria-label" | "role" | "aria-labelledby" | "children"> {
+  closeButton?: boolean;
+  isBlurred?: boolean;
+  isFloat?: boolean;
+  side?: Sides;
+  notch?: boolean;
+  shouldScaleBackground?: boolean;
+}
+
+const DockOverlay = motion.create(ModalOverlay);
+const DockRoot = motion.create(Modal);
+
+function DockContent({
+  className,
+  isBlurred = false,
+  isDismissable: isDismissableInternal,
+  side = "right",
+  role = "dialog",
+  closeButton = true,
+  isFloat = false,
+  notch = true,
+  shouldScaleBackground = false,
+  children,
+  ...props
+}: DockContentProps) {
+  const state = use(OverlayTriggerStateContext)!;
+  const isDismissable = isDismissableInternal ?? role !== "alertdialog";
+  const isOpen = props?.isOpen ?? state?.isOpen;
+  const setOpen = props?.onOpenChange ?? state?.setOpen;
+
+  const w = typeof window !== "undefined" ? window.innerWidth : 0;
+  const h = typeof window !== "undefined" ? window.innerHeight : 0;
+  const offsetMotion = useMotionValue(
+    side === "left" || side === "right" ? w : h
+  );
+
+  useEffect(() => {
+    if (!shouldScaleBackground) return;
+
+    const element = document.querySelector("[data-dock]") as HTMLElement | null;
+    if (!element) {
+      console.warn(
+        "Dock: 'shouldScaleBackground' is true but no element with [data-dock] was found. Add data-dock attribute to the layout wrapper."
+      );
+      return;
+    }
+    
+    let controls: AnimationPlaybackControls | undefined;
+
+    if (element) {
+      if (isOpen) {
+        controls = animate(
+          element,
+          { scale: 0.99 },
+          { duration: 0.3, ease: "easeInOut" }
+        );
+      } else {
+        controls = animate(
+          element,
+          { scale: 1 },
+          { duration: 0.3, ease: "easeInOut" }
+        );
+      }
+
+      return () => {
+        controls?.stop();
+        element.style.removeProperty("transform");
+      };
+    }
+  }, [isOpen, shouldScaleBackground]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <DockOverlay
+          isDismissable={isDismissable}
+          isOpen={isOpen}
+          onOpenChange={setOpen}
+          animate={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+          className={cn(
+            "fixed inset-0 z-50 h-(--visual-viewport-height,100vh) w-screen overflow-hidden",
+            isBlurred && "backdrop-blur-sm backdrop-filter"
+          )}
+          {...props}
+        >
+          <DockRoot
+            className={cn(dockContentStyles({ side, isFloat }), className)}
+            initial={{
+              x: side === "left" ? "-100%" : side === "right" ? "100%" : 0,
+              y: side === "top" ? "-100%" : side === "bottom" ? "100%" : 0,
+            }}
+            animate={{ x: 0, y: 0 }}
+            exit={{
+              x: side === "left" ? "-100%" : side === "right" ? "100%" : 0,
+              y: side === "top" ? "-100%" : side === "bottom" ? "100%" : 0,
+            }}
+            style={
+              side === "top" || side === "bottom"
+                ? { y: offsetMotion }
+                : { x: offsetMotion }
+            }
+            transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
+            drag={side === "left" || side === "right" ? "x" : "y"}
+            whileDrag={{ cursor: "grabbing" }}
+            dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
+            onDragEnd={(_, { offset, velocity }) => {
+              if (
+                side === "bottom" &&
+                (velocity.y > 150 || offset.y > h * 0.25)
+              )
+                return setOpen(false);
+              if (side === "top" && (velocity.y < -150 || offset.y < -h * 0.25))
+                return setOpen(false);
+              if (side === "left" && velocity.x < -150) return setOpen(false);
+              if (side === "right" && velocity.x > 150) return setOpen(false);
+
+              animate(offsetMotion, 0, {
+                type: "inertia",
+                bounceStiffness: 600,
+                bounceDamping: 40,
+                min: 0,
+                max: 0,
+              });
+            }}
+            dragElastic={0.3}
+            dragPropagation
+          >
+            <DialogContentPrimitive
+              aria-label={props["aria-label"]}
+              role={role}
+              className={cn(
+                "bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
+                !isFloat && "rounded-none"
+              )}
+            >
+              {(values) => (
+                <>
+                  {notch && side === "bottom" && (
+                    <div className="notch sticky top-0 mx-auto h-1.5 w-10 shrink-0 touch-pan-y rounded-full bg-foreground/20" />
+                  )}
+                  {typeof children === "function" ? children(values) : children}
+                  {notch && side === "top" && (
+                    <div className="notch sticky bottom-0 mx-auto h-1.5 w-10 shrink-0 touch-pan-y rounded-full bg-foreground/20" />
+                  )}
+                  {closeButton && (
+                    <DialogCloseIcon
+                      className="top-2.5 right-2.5"
+                      isDismissable={isDismissable}
+                    />
+                  )}
+                </>
+              )}
+            </DialogContentPrimitive>
+          </DockRoot>
+        </DockOverlay>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function DockFooter({
+  className,
+  children,
+}: React.ComponentProps<typeof DialogFooter>) {
+  return (
+    <DialogFooter className={cn("mt-auto", className)}>{children}</DialogFooter>
+  );
+}
+
+const DockTrigger = DialogTrigger;
+const DockHeader = DialogHeader;
+const DockTitle = DialogTitle;
+const DockDescription = DialogDescription;
+const DockBody = DialogBody;
+const DockClose = DialogClose;
+
+export type { DockProps, DockContentProps, Sides };
+export {
+  Dock,
+  DockTrigger,
+  DockFooter,
+  DockHeader,
+  DockTitle,
+  DockDescription,
+  DockBody,
+  DockClose,
+  DockContent,
+};
+```
+
+</Tab>
+<Tab value="CLI">
+
+```package-install
+npx libravelui@latest add dock
+```
+
+</Tab>
+</Tabs>
+
+## Anatomy
+<Alert variant="warning" title="Scale Background" icon={<TriangleAlert />}>**Note:** If you use `shouldScaleBackground`, add `data-dock` to the parent container (e.g. your main layout wrapper) so it can be scaled correctly.</Alert>
+
+```tsx
+import {
+  DockContent,
+  DockHeader,
+  DockTitle,
+  DockDescription,
+  Dock,
+  DockFooter,
+  DockTrigger,
+  DockBody,
+} from "@/components/ui/dock";
+```
+
+```tsx
+<Dock>
+  <DockTrigger>Open Dock</DockTrigger>
+
+  <DockContent side="right" shouldScaleBackground>
+    <DockHeader>
+      <DockTitle>CONTENT BELONGS HERE</DockTitle>
+      <DockDescription>CONTENT BELONGS HERE</DockDescription>
+    </DockHeader>
+
+    <DockBody>CONTENT BELONGS HERE</DockBody>
+
+    <DockFooter>CONTENT BELONGS HERE</DockFooter>
+  </DockContent>
+</Dock>
+```
+
+## Examples
+
+### Positions
+Flexible placement options for the dock component on any side of the screen. Useful for building responsive layouts with precise control.
+<DockPositions />
+
+### Float
+A floating dock that hovers above other content, enabling quick interactions without disrupting the main layout. Ideal for tooltips or quick actions.
+<FloatDock />
+
+### Sticky
+A dock that stays fixed in place while scrolling. Great for persistent navigation or quick access to key features.
+<StickyDock />
+
+## Props
+
+### Dock
+<TypeTable
+  type={{
+    children: {
+      description: "The trigger element that opens the dock.",
+      type: "React.ReactNode",
+      required: true
+    },
+    defaultOpen: {
+      description: "Whether the dock is open by default (uncontrolled).",
+      type: "boolean",
+      required: false
+    },
+    isOpen: {
+      description: "Controls the open state of the dock (controlled).",
+      type: "boolean",
+      required: false
+    },
+    onOpenChange: {
+      description: "Callback fired when the open state changes.",
+      type: "(isOpen: boolean) => void",
+      required: false
+    }
+  }}
+/>
+
+### DockContent
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names to style the dock content.",
+      type: "string",
+      required: false
+    },
+    children: {
+      description: "The content of the dock. Can be a node or render function.",
+      type: "React.ReactNode | ((props: any) => React.ReactNode)",
+      required: true
+    },
+    side: {
+      description: "The side of the screen where the dock appears.",
+      type: `"top" | "bottom" | "left" | "right"`,
+      required: false
+    },
+    isFloat: {
+      description: "If true, the dock appears floating with padding and rounded edges.",
+      type: "boolean",
+      required: false
+    },
+    isBlurred: {
+      description: "Applies a backdrop blur to the overlay background.",
+      type: "boolean",
+      required: false
+    },
+    closeButton: {
+      description: "Whether to show a close button inside the dock.",
+      type: "boolean",
+      required: false
+    },
+    notch: {
+      description: "Shows a draggable notch on top or bottom of the dock.",
+      type: "boolean",
+      required: false
+    },
+    shouldScaleBackground: {
+      description: "Applies a scaling animation to the background when dock is open.",
+      type: "boolean",
+      required: false
+    },
+    role: {
+      description: "Accessibility role of the dialog container.",
+      type: `"dialog" | "alertdialog"`,
+      required: false
+    },
+    "aria-label": {
+      description: "Accessibility label for the dialog if no title is provided.",
+      type: "string",
+      required: false
+    },
+    "aria-labelledby": {
+      description: "ID of the element that labels the dialog.",
+      type: "string",
+      required: false
+    },
+    isOpen: {
+      description: "Controls whether the dock is open.",
+      type: "boolean",
+      required: false
+    },
+    onOpenChange: {
+      description: "Callback fired when the dock open state changes.",
+      type: "(isOpen: boolean) => void",
+      required: false
+    },
+    isDismissable: {
+      description: "Allows closing the dock by clicking outside or pressing Escape.",
+      type: "boolean",
+      required: false
+    }
+  }}
+/>
+
+### DockTrigger
+<TypeTable
+  type={{
+    children: {
+      description: "The trigger element to open the dock.",
+      type: "React.ReactNode",
+      required: true
+    },
+    defaultOpen: {
+      description: "Whether the dock is open by default.",
+      type: "boolean",
+      required: false
+    },
+    isOpen: {
+      description: "Controls the open state of the dock.",
+      type: "boolean",
+      required: false
+    },
+    onOpenChange: {
+      description: "Callback fired when the open state changes.",
+      type: "(isOpen: boolean) => void",
+      required: false
+    }
+  }}
+/>
+
+### DockFooter
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the footer container.",
+      type: "string",
+      required: false
+    },
+    children: {
+      description: "Footer content, usually action buttons.",
+      type: "React.ReactNode",
+      required: true
+    }
+  }}
+/>
+
+### DockHeader
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the header container.",
+      type: "string",
+      required: false
+    },
+    title: {
+      description: "Title text of the dock header.",
+      type: "string",
+      required: false
+    },
+    description: {
+      description: "Description text shown below the title.",
+      type: "string",
+      required: false
+    },
+    children: {
+      description: "Custom content or override for the header.",
+      type: "React.ReactNode",
+      required: false
+    }
+  }}
+/>
+
+### DockTitle
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the title element.",
+      type: "string",
+      required: false
+    },
+    children: {
+      description: "The title content.",
+      type: "React.ReactNode",
+      required: true
+    }
+  }}
+/>
+
+### DockDescription
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the description element.",
+      type: "string",
+      required: false
+    },
+    children: {
+      description: "The description content.",
+      type: "React.ReactNode",
+      required: true
+    }
+  }}
+/>
+
+### DockBody
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the body container.",
+      type: "string",
+      required: false
+    },
+    children: {
+      description: "Main scrollable content of the dock.",
+      type: "React.ReactNode",
+      required: true
+    }
+  }}
+/>
+
+### DockClose
+<TypeTable
+  type={{
+    className: {
+      description: "Additional class names for the close button.",
+      type: "string",
+      required: false
+    },
+    children: {
+      description: "Optional content for the close button.",
+      type: "React.ReactNode",
+      required: false
+    },
+    variant: {
+      description: "Visual style of the button.",
+      type: "string",
+      required: false
+    },
+    onPress: {
+      description: "Callback when the close button is pressed.",
+      type: "() => void",
+      required: false
+    }
+  }}
+/>

@@ -1,72 +1,59 @@
 ---
-title: 
-description: 
+title:
+description:
 component: true
 doc:
+new: true
 ---
-
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
 ## Basic
 
-DESCRIPTION HERE
+<Playground comp="" />
 
-SHOWCASE HERE
+## Features
+
+[FEATURES HERE]
 
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
+    <RequiredBlock components="field" />
+    Install following dependencies:
 
-Install following dependencies:
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge motion
+    ```
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
-```
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    Copy and paste the following code into your project.
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    <ComponentSource comp="components/ui/[COMPONENTS HERE]" />
 
-Copy and paste the following code into your project.
-
-```tsx ts2js title="components/ui/..."
-CODE HERE
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add COMPONENTS HERE
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add [COMPONENTS HERE]
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
-IMPORT CODE HERE
+[ANATOMY IMPORT HERE]
 ```
 
 ```tsx
-Anatomy CODE HERE
+[ANATOMY CODE]
 ```
 
-## SHOWCASE HERE
+## Examples
 
-SHOWCASE DESCRIPTION HERE
-
-SHOWCASE HERE
+[EXAMPLES HERE]
 
 ## Props
 
@@ -75,7 +62,7 @@ SHOWCASE HERE
     className: {
       description: "Additional class names for the component",
       type: "string",
-      required: false
+      required: false,
     },
   }}
 />

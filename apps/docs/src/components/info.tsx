@@ -22,7 +22,7 @@ export function Info({
       <div className="flex gap-2 [&_svg:not([class*='size-'])]:size-4">
         <div className="shrink-0">{icon}</div>
         <div>
-          <AlertTitle>{title}</AlertTitle>
+          {title && <AlertTitle>{title}</AlertTitle>}
           <AlertDescription>{children}</AlertDescription>
         </div>
       </div>

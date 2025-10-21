@@ -1,8 +1,8 @@
 import React from "react";
-import ReactPlayer from "react-player";
+// import ReactPlayer from "react-player";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ReactPlayerProps } from "react-player/types";
+// import type { ReactPlayerProps } from "react-player/types";
 import {
   Play,
   Pause,
@@ -30,8 +30,8 @@ const videoPlayerVariants = cva(
 );
 
 interface VideoPlayerProps
-  extends ReactPlayerProps,
-    VariantProps<typeof videoPlayerVariants> {
+  // extends ReactPlayerProps,
+  extends VariantProps<typeof videoPlayerVariants> {
   src: string;
   poster?: string;
   showControls?: boolean;
@@ -49,7 +49,7 @@ function VideoPlayer({
 }: VideoPlayerProps) {
   return (
     <div className={cn(videoPlayerVariants({ size }), className)}>
-      <ReactPlayer
+      {/* <ReactPlayer
         className="object-cover"
         src={src}
         light={poster}
@@ -57,7 +57,7 @@ function VideoPlayer({
         width="100%"
         height="100%"
         {...props}
-      />
+      /> */}
 
       {showControls && <Controls />}
     </div>
