@@ -192,7 +192,6 @@ type InputProps = InputPrimitiveProps &
     startContent?: string | React.ReactNode;
     endContent?: string | React.ReactNode;
     labelExtra?: string | React.ReactNode;
-    isPassword?: boolean;
     isLoading?: boolean;
     size?: VariantProps<typeof fieldVariants>["size"];
     classNames?: {
@@ -218,7 +217,6 @@ function Input({
   classNames,
   variant,
   size,
-  isPassword = false,
   isLoading = false,
   ...props
 }: InputProps) {
@@ -293,7 +291,7 @@ function Input({
             )}
           />
 
-          {(props.type === "password" || isPassword) && (
+          {props.type === "password" && (
             <div
               className="content ms-2 flex cursor-pointer items-center"
               onClick={() => setVisible(!visible)}

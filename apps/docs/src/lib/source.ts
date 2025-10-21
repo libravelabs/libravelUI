@@ -1,3 +1,5 @@
+"use server";
+
 import { docs } from "@/.source";
 import { loader } from "fumadocs-core/source";
 

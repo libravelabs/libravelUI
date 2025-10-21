@@ -248,7 +248,10 @@ function DialogBody({ className, ref, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-body"
       ref={ref}
-      className={cn("flex flex-col gap-4", className)}
+      className={cn(
+        "flex flex-col gap-4 max-h-[calc(var(--visual-viewport-height)-(var(--dialog-header-height)+var(--dialog-footer-height))*2)] overflow-auto",
+        className
+      )}
       {...props}
     />
   );

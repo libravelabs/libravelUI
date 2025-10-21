@@ -13,6 +13,15 @@ import { BasicCombobox, GroupedComboBox } from "@/components/docs/combobox"
 ## Basic
 <BasicCombobox />
 
+## Features
+A combo box can be built using the `<datalist>` HTML element, but this is very limited in functionality and difficult to style. ComboBox helps achieve accessible combo box and autocomplete components that can be styled as needed.
+
+- `Flexible` – Support for selecting pre-defined values, custom values, controlled and uncontrolled state, custom filter functions, async loading, disabled items, validation, and multiple menu trigger options.
+- `Keyboard navigation` – ComboBox can be opened and navigated using the arrow keys, along with page up/down, home/end, etc. The list of options is filtered while typing into the input, and items can be selected with the enter key.
+- `Accessible` – Follows the ARIA combobox pattern, with support for items and sections, and slots for label and description elements within each item. Custom localized announcements are included for option focusing, filtering, and selection using an ARIA live region to ensure announcements are clear and consistent.
+- `Validation` – Support for native HTML constraint validation with customizable UI, custom validation functions, realtime validation, and server-side validation errors.
+- `Styleable` – Items include builtin states for styling, such as hover, press, focus, selected, and disabled.
+
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
@@ -23,7 +32,7 @@ import { BasicCombobox, GroupedComboBox } from "@/components/docs/combobox"
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components class-variance-authority lucide-react clsx tailwind-merge
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -195,7 +204,7 @@ function ComboBoxContent<T extends object>({
       <ListBox
         {...props}
         className={cn(
-          "bg-popover text-popover-foreground z-50 w-[calc(var(--trigger-width)+24px)] max-h-[35rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
+          "bg-popover text-popover-foreground z-50 w-[calc(var(--trigger-width)+24px)] max-h-[30rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
           className
         )}
       >
@@ -416,6 +425,7 @@ import {
 
 ## Example
 ### Grouped ComboBox
+A ComboBox with custom groupings, allowing structured options using separators, labels, and grouped sections.
 <GroupedComboBox />
 
 ## Props

@@ -44,7 +44,7 @@ function PopoverContent({
       ref={ref}
       offset={offset}
       className={composeTailwindRenderProps(className, [
-        "w-(--trigger-width) p-1 rounded-xl border bg-popover text-popover-foreground shadow-xs outline-hidden transition-transform [--gutter:--spacing(6)] sm:text-sm dark:backdrop-saturate-200 **:[[role=dialog]]:[--gutter:--spacing(4)]",
+        "w-auto p-1 rounded-xl border bg-popover text-popover-foreground shadow-xs outline-hidden transition-transform [--gutter:--spacing(6)] sm:text-sm dark:backdrop-saturate-200 **:[[role=dialog]]:[--gutter:--spacing(4)]",
         "entering:fade-in entering:animate-in",
         "exiting:fade-out exiting:animate-out",
         "placement-start:entering:slide-in-from-end-1 placement-end:entering:slide-in-from-start-1 placement-top:entering:slide-in-from-bottom-1 placement-bottom:entering:slide-in-from-top-1",
@@ -60,7 +60,8 @@ function PopoverContent({
                 width={12}
                 height={12}
                 viewBox="0 0 12 12"
-                className="group-placement-start:-rotate-90 block fill-popover stroke-border group-placement-bottom:rotate-180 group-placement-end:rotate-90 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
+                className="group-placement-start:-rotate-90 block fill-popover stroke-border group-placement-bottom:rotate-180 group-placement-end:rotate-90 group-placement-right:rotate-90
+                group-placement-left:-rotate-90 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
               >
                 <path d="M0 0 L6 6 L12 0" />
               </svg>

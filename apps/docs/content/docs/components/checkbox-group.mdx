@@ -11,10 +11,17 @@ import { BasicCheckboxGroup, ValidateCheckboxGroup, IndeterminateCheckboxGroup, 
 import { TypeTable } from "fumadocs-ui/components/type-table";
 import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
-<Info>If you're looking for a single checkbox component that can be used independently, including support for labels, descriptions, and validation, see: [Checkbox](/docs/components/checkbox)</Info>
+<Info title="Standalone Checkbox Component">If you're looking for a single checkbox component that can be used independently, including support for labels, descriptions, and validation, see: [Checkbox](/docs/components/checkbox)</Info>
 
 ## Basic
 <BasicCheckboxGroup />
+
+## Features
+Checkbox groups can be built in HTML with the `<fieldset>` and `<input>` elements, however these can be difficult to style. CheckboxGroup helps achieve accessible checkbox groups that can be styled as needed.
+
+- `Accessible` – Checkbox groups are exposed to assistive technology via ARIA, and automatically associate a nested `<Label>`. Description and error message help text slots are supported as well.
+- `HTML form integration` – Each individual checkbox uses a visually hidden `<input>` element under the hood, which enables HTML form integration and autofill.
+- `Validation` – Support for native HTML constraint validation with customizable UI, custom validation functions, and server-side validation errors.
 
 ## Installation
 
@@ -26,7 +33,7 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components clsx tailwind-merge
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.

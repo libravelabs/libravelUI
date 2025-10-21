@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
 
 import { customMetaDataGenerator } from "@/lib/customMetaDataGenerator";
-import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
+import { CopyButton, LLMOptions } from "@/components/ai/page-actions";
 import { baseUrl, owner, repo } from "@/lib/github";
 import { DocLinks } from "@/components/doc-links";
 
@@ -48,8 +48,8 @@ export default async function Page(props: {
       <DocsTitle className="flex items-center gap-2 justify-between w-full">
         {page.data.title}
         <div className="flex gap-2">
-          <LLMCopyButton markdownUrl={`${page.url}.mdx`} />
-          <ViewOptions markdownUrl={`${page.url}.mdx`} githubUrl={baseUrl} />
+          <CopyButton markdownUrl={`${page.url}.mdx`} />
+          <LLMOptions markdownUrl={`${page.url}.mdx`} githubUrl={baseUrl} />
         </div>
       </DocsTitle>
       <DocsDescription className="mb-0">

@@ -1,10 +1,12 @@
+"use client";
+
 import { motion } from "motion/react";
 import {
   ProgressBar as ProgressBarPrimitive,
   type ProgressBarProps as ProgressBarPrimitiveProps,
 } from "react-aria-components";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/field";
 
 interface ProgressBarProps extends ProgressBarPrimitiveProps {
   label?: string;

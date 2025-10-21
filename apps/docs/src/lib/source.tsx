@@ -1,6 +1,6 @@
+import React from "react";
 import { loader } from "fumadocs-core/source";
 import { docs } from "@/.source";
-import { createMDXSource } from "fumadocs-mdx";
 import { icons } from "lucide-react";
 import { createElement } from "react";
 import { Badge } from "@/components/ui/badge";

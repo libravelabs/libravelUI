@@ -16,7 +16,7 @@ interface SearchBarProps extends SearchBarPrimitiveProps {
   description?: string;
   placeholder?: string;
   error?: string | ((validation: ValidationResult) => string);
-  isPending?: boolean;
+  isLoading?: boolean;
   endContent?: InputProps["endContent"];
 }
 
@@ -28,7 +28,7 @@ function SearchBar({
   error,
   children,
   endContent,
-  isPending,
+  isLoading,
   ...props
 }: SearchBarProps) {
   return (
@@ -47,7 +47,7 @@ function SearchBar({
             <Input
               label={label}
               placeholder={placeholder}
-              startContent={isPending ? <Loader variant="spin" /> : <Search />}
+              startContent={isLoading ? <Loader variant="spin" /> : <Search />}
               endContent={
                 <>
                   {!values.isEmpty && (

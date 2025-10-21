@@ -33,7 +33,6 @@ function TextField({
   classNames,
   variant,
   size,
-  isPassword,
   isLoading,
   ...rest
 }: TextFieldProps) {
@@ -48,7 +47,6 @@ function TextField({
     classNames,
     variant,
     size,
-    isPassword,
     isLoading,
   };
 

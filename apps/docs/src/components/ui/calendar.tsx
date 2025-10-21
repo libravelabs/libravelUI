@@ -252,7 +252,7 @@ function SelectMonth({ state }: SelectMonthProps) {
         state.setFocusedDate(state.focusedDate.set({ month: Number(key) }));
       }}
     >
-      <SelectTrigger hideClear className="min-w-32 max-w-32" />
+      <SelectTrigger hideClear />
       <SelectContent>
         {months.map((month) => (
           <SelectItem key={month.key} id={month.key} textValue={month.label}>
@@ -299,7 +299,7 @@ function SelectYear({ state }: SelectYearProps) {
         }
       }}
     >
-      <SelectTrigger hideClear className="min-w-20" />
+      <SelectTrigger hideClear />
       <SelectContent>
         {years.map((year) => (
           <SelectItem key={year.key} id={year.key} textValue={year.label}>

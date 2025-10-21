@@ -3,20 +3,25 @@
 import * as React from "react";
 import {
   FileTrigger,
-  Button as AriaButton,
+  Button as ButtonPrimitive,
   type FileDropItem,
   isFileDropItem,
 } from "react-aria-components";
-import { Label } from "@/components/ui/label";
 import { File, Film, Music, Trash2, UploadCloud, X } from "lucide-react";
-import { Description } from "@/components/ui/field";
+import { Label, Description } from "@/components/ui/field";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DropZone, type DropZoneProps } from "@/components/ui/drop-zone";
-import { motion, AnimatePresence } from "framer-motion";
-import { ProgressBar } from "./progress-bar";
+import {
+  DropZone,
+  dropZoneSizes,
+  type DropZoneProps,
+} from "@/components/ui/drop-zone";
+import { motion, AnimatePresence } from "motion/react";
+import { ProgressBar } from "@/components/ui/progress-bar";
+import { cn } from "@/lib/utils";
 
 interface FileState {
+  id: string;
   file: File;
   preview: string;
   progress: number;
@@ -24,7 +29,6 @@ interface FileState {
 }
 
 interface DragAndDropProps extends DropZoneProps {
-  children?: React.ReactNode;
   icon?: React.ReactNode;
   label?: string;
   description?: string;
@@ -43,6 +47,12 @@ interface DragAndDropProps extends DropZoneProps {
   onClear?: () => void;
   disableErrorMessage?: boolean;
   isDisabled?: boolean;
+  hideClearButton?: boolean;
+  multiple?: boolean;
+  classNames?: {
+    wrapper?: string | string[];
+    dropZone?: string | string[];
+  };
 }
 
 function DragAndDrop({
@@ -65,6 +75,11 @@ function DragAndDrop({
   onClear,
   disableErrorMessage = false,
   isDisabled = false,
+  hideClearButton = false,
+  size,
+  className,
+  classNames,
+  multiple = false,
   ...props
 }: DragAndDropProps) {
   const isAllTypes =
@@ -88,6 +103,19 @@ function DragAndDrop({
     if (!controlledFiles) setInternalFiles(newFiles);
   };
 
+  const updateFiles = (updater: (prev: FileState[]) => FileState[]) => {
+    if (controlledFiles) {
+      const updated = updater(controlledFiles);
+      onFilesChange?.(updated);
+    } else {
+      setInternalFiles((prev) => {
+        const updated = updater(prev);
+        onFilesChange?.(updated);
+        return updated;
+      });
+    }
+  };
+
   const setErrors = (newErrors: string[]) => {
     onErrorsChange?.(newErrors);
     if (!controlledErrors && !disableErrorMessage) setInternalErrors(newErrors);
@@ -98,7 +126,7 @@ function DragAndDrop({
     const validFiles: File[] = [];
 
     for (const f of selected) {
-      if (!isAllTypes && !acceptedTypes.includes(f.type)) {
+      if (!isAllTypes && !acceptedTypes.includes(f.type as MimeType)) {
         newErrors.push(`Unsupported file format: ${f.name}`);
         continue;
       }
@@ -130,13 +158,13 @@ function DragAndDrop({
       return fs;
     });
 
-    setFiles([...files, ...newFileStates]);
+    setFiles(multiple ? [...files, ...newFileStates] : newFileStates);
 
     newFileStates.forEach((fileState) => {
       let progress = 0;
       const interval = setInterval(() => {
         progress += Math.random() * 20;
-        setFiles((prev) =>
+        updateFiles((prev) =>
           prev.map((f) =>
             f.id === fileState.id
               ? {
@@ -153,7 +181,7 @@ function DragAndDrop({
   };
 
   return (
-    <div className="space-y-4 max-w-md md:max-w-xl">
+    <div className={cn("space-y-4", className, classNames?.wrapper)}>
       <DropZone
         {...props}
         isDisabled={isDisabled}
@@ -169,22 +197,26 @@ function DragAndDrop({
           const selectedFiles = await Promise.all(
             dropped.map((f) => f.getFile())
           );
-          handleFiles(selectedFiles);
+          handleFiles(multiple ? selectedFiles : selectedFiles.slice(0, 1));
         }}
         className="p-0"
       >
         {({ isDropTarget }) => (
           <FileTrigger
-            allowsMultiple
+            allowsMultiple={multiple}
             {...(!isAllTypes && { acceptedFileTypes: acceptedTypes })}
             onSelect={(e) => {
               const selected = e ? Array.from(e) : [];
-              handleFiles(selected);
+              handleFiles(multiple ? selected : selected.slice(0, 1));
             }}
           >
-            <AriaButton
+            <ButtonPrimitive
               isDisabled={isDisabled}
-              className="w-full min-h-[200px] min-w-xl p-6 rounded-lg"
+              className={cn(
+                dropZoneSizes({ size }),
+                "w-full p-6 rounded-lg",
+                classNames?.dropZone
+              )}
             >
               {(values) =>
                 typeof children === "function" ? (
@@ -195,7 +227,13 @@ function DragAndDrop({
                   <div className="grid items-center justify-center">
                     <div className="mx-auto">{icon}</div>
                     <Label className="mx-auto text-lg">
-                      {isDropTarget ? "Drop files here" : label}
+                      {isDropTarget
+                        ? multiple
+                          ? "Drop files here"
+                          : "Drop a file here"
+                        : multiple
+                        ? label
+                        : label.replace(/files/i, "file")}
                     </Label>
                     {isDropTarget && (
                       <Label className="mx-auto mb-2">Release to upload</Label>
@@ -211,7 +249,7 @@ function DragAndDrop({
                   </div>
                 )
               }
-            </AriaButton>
+            </ButtonPrimitive>
           </FileTrigger>
         )}
       </DropZone>
@@ -224,33 +262,34 @@ function DragAndDrop({
         </div>
       )}
 
-      {files.length > 0 && (
+      {files.length > 0 && !hidePreview && (
         <>
-          <div className="flex w-full items-center justify-between [&_button]:text-destructive">
-            <span>{`Files (${files.length})`}</span>
-            <Button
-              onClick={() => {
-                setFiles([]);
-                setErrors([]);
-                onClear?.();
-              }}
-              variant="link"
-            >
-              <Trash2 className="size-3" />
-              Clear all
-            </Button>
-          </div>
-
-          {!hidePreview && (
-            <FilesPreview
-              files={files}
-              isLoading={isLoading}
-              onRemove={(f) => {
-                setFiles(files.filter((ff) => ff.file !== f.file));
-                onFileRemove?.(f);
-              }}
-            />
+          {!hideClearButton && (
+            <div className="flex w-full items-center justify-between [&_button]:text-destructive">
+              <span>{`File${multiple ? "s" : ""} (${files.length})`}</span>
+              <Button
+                onClick={() => {
+                  setFiles([]);
+                  setErrors([]);
+                  onClear?.();
+                }}
+                variant="link"
+              >
+                <Trash2 className="size-3" />
+                Clear all
+              </Button>
+            </div>
           )}
+
+          <FilesPreview
+            files={multiple ? files : files.slice(0, 1)}
+            isLoading={isLoading}
+            size={size}
+            onRemove={(f) => {
+              setFiles(files.filter((ff) => ff.file !== f.file));
+              onFileRemove?.(f);
+            }}
+          />
         </>
       )}
     </div>
@@ -261,9 +300,10 @@ interface FilesPreviewProps {
   files: FileState[];
   isLoading?: boolean;
   onRemove?: (file: FileState) => void;
+  size?: DropZoneProps["size"];
 }
 
-function FilesPreview({ files, isLoading, onRemove }: FilesPreviewProps) {
+function FilesPreview({ files, size, onRemove }: FilesPreviewProps) {
   const getFileType = (file: File) => {
     if (file.type.startsWith("image/")) return "image";
     if (file.type.startsWith("video/")) return "video";
@@ -280,7 +320,7 @@ function FilesPreview({ files, isLoading, onRemove }: FilesPreviewProps) {
           const type = getFileType(f.file);
           return (
             <motion.div
-              key={f.file.name}
+              key={f.id}
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -331,15 +371,15 @@ function FilesPreview({ files, isLoading, onRemove }: FilesPreviewProps) {
                           cy="1.25"
                           r="1.15"
                         >
-                          <stop offset="50%" stop-color="#000000"></stop>
-                          <stop offset="56%" stop-color="#0a0a0a"></stop>
-                          <stop offset="63%" stop-color="#262626"></stop>
-                          <stop offset="69%" stop-color="#4f4f4f"></stop>
-                          <stop offset="75%" stop-color="#808080"></stop>
-                          <stop offset="81%" stop-color="#b1b1b1"></stop>
-                          <stop offset="88%" stop-color="#dadada"></stop>
-                          <stop offset="94%" stop-color="#f6f6f6"></stop>
-                          <stop offset="100%" stop-color="#ffffff"></stop>
+                          <stop offset="50%" stopColor="#000000"></stop>
+                          <stop offset="56%" stopColor="#0a0a0a"></stop>
+                          <stop offset="63%" stopColor="#262626"></stop>
+                          <stop offset="69%" stopColor="#4f4f4f"></stop>
+                          <stop offset="75%" stopColor="#808080"></stop>
+                          <stop offset="81%" stopColor="#b1b1b1"></stop>
+                          <stop offset="88%" stopColor="#dadada"></stop>
+                          <stop offset="94%" stopColor="#f6f6f6"></stop>
+                          <stop offset="100%" stopColor="#ffffff"></stop>
                         </radialGradient>
                         <mask id="mask-1">
                           <rect
@@ -394,7 +434,7 @@ function FilesPreview({ files, isLoading, onRemove }: FilesPreviewProps) {
                 <Button
                   onClick={() => onRemove?.(f)}
                   size="icon"
-                  variant="outline"
+                  variant="secondary"
                   className="absolute top-2 start-2 size-6"
                 >
                   <X size={18} />

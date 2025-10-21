@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Check, ChevronRight } from "lucide-react";
 import { useMemo } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export type StepProps = {
   title: string;
@@ -22,15 +23,15 @@ export function Stepper({
   useLink = false,
   title,
 }: StepperProps) {
-  const location = useLocation();
+  const pathname = usePathname();
 
   const currentStep = useMemo(() => {
     if (!useLink) return activeStep;
     const index = steps.findIndex(
-      (step) => step.href && location.pathname.startsWith(step.href!)
+      (step) => step.href && pathname.startsWith(step.href!)
     );
     return index === -1 ? 0 : index;
-  }, [location.pathname, useLink, steps, activeStep]);
+  }, [pathname, useLink, steps, activeStep]);
 
   return (
     <div className="flex flex-col items-center space-y-6">
@@ -81,7 +82,7 @@ export function Stepper({
             <div key={index} className="flex items-center gap-4">
               {useLink && step.href && !isDisabled ? (
                 <Link
-                  to={step.href}
+                  href={step.href}
                   className="flex items-center gap-2 transition-all"
                 >
                   {stepContent}

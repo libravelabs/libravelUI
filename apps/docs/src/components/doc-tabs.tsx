@@ -1,18 +1,67 @@
 "use client";
 
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import * as React from "react";
+import {
+  Tabs,
+  TabList,
+  TabTrigger,
+  TabContent,
+  type TabsProps,
+} from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
-interface DocTabsProps {
-  items: { label: string; value: string; content: React.ReactNode }[];
-}
+type DocTabItem = {
+  label: React.ReactNode;
+  value: string;
+  content: React.ReactNode;
+};
 
-export function DocTabs({ items, ...props }: DocTabsProps) {
+type DocTabsProps = TabsProps & {
+  items: DocTabItem[];
+  defaultValue?: string;
+  className?: string;
+  classNames?: {
+    content?: string | string[];
+  };
+};
+
+export function DocTabs({
+  items,
+  defaultValue,
+  className,
+  variant = "underline",
+  classNames,
+  ...props
+}: DocTabsProps) {
+  const [selectedKey, setSelectedKey] = React.useState<string>(
+    defaultValue ?? items[0]?.value ?? ""
+  );
+
   return (
-    <Tabs items={items.map((i) => i.label)} {...props}>
+    <Tabs
+      selectedKey={selectedKey}
+      onSelectionChange={(key) => setSelectedKey(String(key))}
+      className={className}
+      width="full"
+      variant={variant}
+      {...props}
+    >
+      <TabList>
+        {items.map((item) => (
+          <TabTrigger key={item.value} id={item.value}>
+            {item.label}
+          </TabTrigger>
+        ))}
+      </TabList>
+
       {items.map((item) => (
-        <Tab key={item.value} value={item.label}>
+        <TabContent
+          key={item.value}
+          id={item.value}
+          className={cn(classNames?.content)}
+        >
           {item.content}
-        </Tab>
+        </TabContent>
       ))}
     </Tabs>
   );

@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { customMetaDataGenerator } from "@/lib/customMetaDataGenerator";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { BasicDockBase } from "@/components/docs/dock/basic-dock";
 
 export const metadata = customMetaDataGenerator({
   title: "LibravelUI",
@@ -7,18 +10,20 @@ export const metadata = customMetaDataGenerator({
 
 export default function HomePage() {
   return (
-    <main className="flex flex-1 flex-col justify-center text-center">
-      <h1 className="mb-4 text-2xl font-bold">Hello World</h1>
+    <main className="flex flex-1 flex-col justify-center items-center gap-4">
+      <h1 className="text-2xl font-bold">LibravelUI</h1>
       <p className="text-fd-muted-foreground">
-        You can open{" "}
-        <Link
-          href="/docs"
-          className="text-fd-foreground font-semibold underline"
-        >
-          /docs
-        </Link>{" "}
-        and see the documentation.
+        Modern, responsive, customizable UI components. Copy, adapt, and
+        personalize them.
       </p>
+      <div className="flex items-center gap-4">
+        <BasicDockBase />
+        <Link href="/docs">
+          <Button>
+            See Documentation <ArrowRight />
+          </Button>
+        </Link>
+      </div>
     </main>
   );
 }

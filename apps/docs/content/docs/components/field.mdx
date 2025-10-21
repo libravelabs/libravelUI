@@ -27,7 +27,7 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components class-variance-authority clsx tailwind-merge lucide-react
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority clsx tailwind-merge lucide-react
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -238,7 +238,6 @@ type InputProps = InputPrimitiveProps &
     startContent?: string | React.ReactNode;
     endContent?: string | React.ReactNode;
     labelExtra?: string | React.ReactNode;
-    isPassword?: boolean;
     isLoading?: boolean;
     size?: VariantProps<typeof fieldVariants>["size"];
     classNames?: {
@@ -264,7 +263,6 @@ function Input({
   classNames,
   variant,
   size,
-  isPassword = false,
   isLoading = false,
   ...props
 }: InputProps) {
@@ -339,7 +337,7 @@ function Input({
             )}
           />
 
-          {(props.type === "password" || isPassword) && (
+          {(props.type === "password") && (
             <div
               className="content ms-2 flex cursor-pointer items-center"
               onClick={() => setVisible(!visible)}
@@ -495,11 +493,6 @@ npx libravelui@latest add field
     labelExtra: {
       description: "Content rendered on the right side of the label row.",
       type: "string | React.ReactNode",
-      required: false,
-    },
-    isPassword: {
-      description: "Whether the input is a password field with toggle visibility.",
-      type: "boolean",
       required: false,
     },
     classNames: {

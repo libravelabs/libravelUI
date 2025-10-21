@@ -30,7 +30,7 @@ The HTML `<dialog>` element can be used to build dialogs. However, it is not yet
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components lucide-react clsx tailwind-merge
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
@@ -297,7 +297,10 @@ function DialogBody({ className, ref, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-body"
       ref={ref}
-      className={cn("flex flex-col gap-4", className)}
+      className={cn(
+        "flex flex-col gap-4 max-h-[calc(var(--visual-viewport-height)-(var(--dialog-header-height)+var(--dialog-footer-height))*2)] overflow-auto",
+        className
+      )}
       {...props}
     />
   );

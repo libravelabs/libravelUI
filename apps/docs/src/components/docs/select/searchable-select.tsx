@@ -15,7 +15,7 @@ export function SearchableSelectBase() {
   return (
     <SelectRoot>
       <SelectTrigger />
-      <PopoverContent>
+      <PopoverContent className="w-(--trigger-width)">
         <Autocomplete filter={contains}>
           <SelectSearch className="rounded-lg bg-background" autoFocus />
           <ListBox className="max-h-96 overflow-y-auto mt-2" items={movies}>
@@ -124,7 +124,7 @@ export function SearchableSelect() {
   return (
     <SelectRoot>
       <SelectTrigger />
-      <PopoverContent>
+      <PopoverContent className="w-(--trigger-width)">
         <Autocomplete filter={contains}>
           <SelectSearch className="rounded-lg bg-background" autoFocus />
           <ListBox className="max-h-96 overflow-y-auto" items={movies}>

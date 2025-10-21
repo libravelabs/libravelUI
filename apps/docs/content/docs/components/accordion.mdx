@@ -7,15 +7,12 @@ doc:
   url: https://react-spectrum.adobe.com/react-aria/DisclosureGroup.html
 ---
 
-import { RequiredBlock } from "@/components/required-block";
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { AccordionBasic, AccordionVariants } from '@/components/docs/accordion'
-
 ## Basic
-<AccordionBasic />
+
+<Playground comp="accordion/basic" />
 
 ## Features
+
 Disclosure groups can be built by combining multiple disclosures built in HTML with the `<details>` and `<summary>` HTML elements, but this can be difficult to style, especially when adding adjacent interactive elements, like buttons, to the disclosure's heading. DisclosureGroup helps achieve accessible disclosures implemented with the correct ARIA pattern while making custom styling easy.
 
 - **Accessible** - Disclosure group is exposed to assistive technology via ARIA. Uses hidden="until-found" in supported browsers, enabling find-in-page search support and improved search engine visibility for collapsed content.
@@ -24,135 +21,28 @@ Disclosure groups can be built by combining multiple disclosures built in HTML w
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
+    <RequiredBlock components="field" />
+    Install following dependencies:
 
-<RequiredBlock components="disclosure" />
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge motion
+    ```
 
-Install following dependencies:
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
-```
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Copy and paste the following code into your project.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="components/ui/accordion" />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
-
-Copy and paste the following code into your project.
-
-```tsx ts2js title="components/ui/accordion"
-"use client";
-
-import { cn } from "@/lib/utils";
-import { DisclosureGroup as AccordionPrimitive } from "react-aria-components";
-import type { DisclosureGroupProps as AccordionPrimitiveProps } from "react-aria-components";
-import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureTrigger,
-  type DisclosureProps,
-} from "@/components/ui/disclosure";
-import { createContext, useContext } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-
-const accordionVariants = cva(
-  "group w-full peer cursor-default disabled:cursor-not-allowed disabled:opacity-75",
-  {
-    variants: {
-      variant: {
-        default: "overflow-hidden",
-        ghost: "",
-        outline: "border border-border rounded-xl overflow-hidden",
-        solid: "border bg-background shadow-sm rounded-xl overflow-hidden",
-        muted: "border border-border bg-muted/50 rounded-xl overflow-hidden",
-        separated: "",
-      },
-      size: {
-        sm: "text-sm max-w-lg",
-        md: "max-w-2xl",
-        lg: "text-lg max-w-4xl",
-        full: "max-w-full",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "md",
-    },
-  }
-);
-
-const AccordionStyleContext = createContext<
-  VariantProps<typeof accordionVariants>
->({
-  variant: "default",
-  size: "sm",
-});
-
-const useAccordionStyle = () => useContext(AccordionStyleContext);
-
-interface AccordionProps
-  extends AccordionPrimitiveProps,
-    VariantProps<typeof accordionVariants> {
-  ref?: React.RefObject<HTMLDivElement>;
-  multiple?: boolean;
-}
-
-function Accordion({
-  children,
-  ref,
-  className,
-  variant,
-  size,
-  multiple = false,
-  ...props
-}: AccordionProps) {
-  return (
-    <AccordionStyleContext.Provider value={{ variant, size }}>
-      <AccordionPrimitive
-        data-variant={variant}
-        ref={ref}
-        allowsMultipleExpanded={multiple}
-        className={cn(accordionVariants({ variant, size }), className)}
-        {...props}
-      >
-        {(values) => (
-          <div data-slot="accordion-root">
-            {typeof children === "function" ? children(values) : children}
-          </div>
-        )}
-      </AccordionPrimitive>
-    </AccordionStyleContext.Provider>
-  );
-}
-
-function AccordionItem(props: DisclosureProps) {
-  const { variant, size } = useAccordionStyle();
-
-  return <Disclosure variant={variant} size={size} {...props} />;
-}
-
-const AccordionTrigger = DisclosureTrigger;
-const AccordionContent = DisclosureContent;
-
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
-export type { AccordionProps };
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add accordion
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add accordion
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
@@ -176,12 +66,15 @@ import {
 ```
 
 ## Example
+
 ### Variants
+
 The Accordion component offers visual variants like `default`, `ghost`, `outline`, `solid`, `muted`, and `separated` for different use cases.
 
-<AccordionVariants />
+<Playground comp="accordion/variants" />
 
 ## Props
+
 <TypeTable
   type={{
     variant: {
@@ -249,5 +142,6 @@ The Accordion component offers visual variants like `default`, `ghost`, `outline
       type: "(keys: Set<Key>) => any",
       required: false
     }
-  }}
+
+}}
 />

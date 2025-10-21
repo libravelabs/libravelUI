@@ -11,10 +11,17 @@ import { BasicCheckbox, WithDescriptionCheckbox, CheckboxSizes, CustomChildrenCh
 import { TypeTable } from "fumadocs-ui/components/type-table";
 import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
-<Info>If you're looking for how to group multiple checkboxes together under a shared label or manage them as a single form field, see: [Checkbox Group](/docs/components/checkbox-group)</Info>
+<Info title="Grouping Multiple Checkboxes">If you're looking for how to group multiple checkboxes together under a shared label or manage them as a single form field, see: [Checkbox Group](/docs/components/checkbox-group)</Info>
 
 ## Basic
 <BasicCheckbox />
+
+## Features
+Checkboxes can be built with the `<input>` HTML element, but this can be difficult to style. Checkbox helps achieve accessible checkboxes that can be styled as needed.
+
+- `Styleable` – Hover, press, keyboard focus, selection, and indeterminate states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+- `Accessible` – Uses a visually hidden `<input>` element under the hood, which also enables HTML form integration and autofill. A label element is built-in to ensure the checkbox is usable with assistive technologies.
+- `Cross-browser` – Mouse, touch, keyboard, and focus interactions are normalized to ensure consistency across browsers and devices.
 
 ## Installation
 
@@ -26,7 +33,7 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 Install following dependencies:
 
 ```package-install
-npm install react-aria-components class-variance-authority lucide-react clsx tailwind-merge
+npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
 ```
 
 Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.

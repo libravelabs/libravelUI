@@ -9,19 +9,18 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
-import { buttonVariants } from "fumadocs-ui/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "fumadocs-ui/components/ui/popover";
+} from "@/components/ui/popover";
 import { cva } from "class-variance-authority";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 
 const cache = new Map<string, string>();
 
-export function LLMCopyButton({
+export function CopyButton({
   /**
    * A URL to fetch the raw Markdown/MDX content of page
    */
@@ -30,7 +29,7 @@ export function LLMCopyButton({
   markdownUrl: string;
 }) {
   const [isLoading, setLoading] = useState(false);
-  const [checked, onClick] = useCopyButton(async () => {
+  const [checked, onCopyClick] = useCopyButton(async () => {
     const cached = cache.get(markdownUrl);
     if (cached) return navigator.clipboard.writeText(cached);
 
@@ -54,20 +53,15 @@ export function LLMCopyButton({
   });
 
   return (
-    <button
-      disabled={isLoading}
-      className={cn(
-        buttonVariants({
-          color: "secondary",
-          size: "sm",
-          className: "gap-2 [&_svg]:size-3.5 [&_svg]:text-fd-muted-foreground",
-        })
-      )}
-      onClick={onClick}
+    <Button
+      variant="secondary"
+      size="sm"
+      isLoading={isLoading}
+      onClick={onCopyClick}
     >
       {checked ? <Check /> : <Copy />}
       Copy Markdown
-    </button>
+    </Button>
   );
 }
 
@@ -75,7 +69,7 @@ const optionVariants = cva(
   "text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-fd-accent-foreground hover:bg-fd-accent [&_svg]:size-4"
 );
 
-export function ViewOptions({
+export function LLMOptions({
   markdownUrl,
   githubUrl,
 }: {
@@ -218,11 +212,9 @@ export function ViewOptions({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="secondary" size="sm" className="gap-2">
-          Open
-          <ChevronDown className="size-3.5 text-fd-muted-foreground" />
-        </Button>
+      <PopoverTrigger variant="secondary" size="sm" className="gap-2">
+        Open
+        <ChevronDown className="size-3.5 text-fd-muted-foreground" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col overflow-auto p-1">
         {items.map((item) => (
