@@ -1,0 +1,158 @@
+[
+  {
+    "displayName": "DropdownMenu",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DropdownMenuPortal",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogTrigger",
+    "description": "",
+    "props": {
+      "asPrimitive": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "size": {
+        "type": "\"default\" | \"xs\" | \"sm\" | \"lg\" | \"icon-xs\" | \"icon-sm\" | \"icon\" | \"icon-lg\" | \"icon-xl\" | \"icon-2xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "radius": {
+        "type": "\"sm\" | \"lg\" | \"none\" | \"md\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isLoading": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "loader": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "plain": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DropdownMenuContent",
+    "description": "",
+    "props": {
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "The CSS [className](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) for the element. A function may be provided to compute the class based on component state.",
+        "defaultValue": null
+      },
+      "popover": {
+        "type": "PopoverContentProps",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "withArrow": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DropdownMenuGroup",
+    "description": "",
+    "props": {
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DropdownMenuLabel",
+    "description": "",
+    "props": {
+      "inset": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DropdownMenuItem",
+    "description": "",
+    "props": {
+      "inset": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      }
+    }
+  },
+  {
+    "displayName": "DropdownMenuSeparator",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DropdownMenuHeader",
+    "description": "",
+    "props": {
+      "separator": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      }
+    }
+  },
+  {
+    "displayName": "DropdownMenuShortcut",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DropdownMenuSub",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DropdownMenuDescription",
+    "description": "",
+    "props": {}
+  }
+]

@@ -2,7 +2,7 @@
 
 import { ColorSlider } from "@/components/ui/colors";
 
-export function ColorSliderBase() {
+export default function ColorSliderBasic() {
   return (
     <ColorSlider
       label="Fill color"
@@ -11,18 +11,3 @@ export function ColorSliderBase() {
     />
   );
 }
-
-export const ColorSliderCode = `"use client";
-
-import { ColorSlider } from "@/components/ui/color-picker";
-
-export function ColorSliderExample() {
-  return (
-    <ColorSlider
-      label="Fill color"
-      channel="alpha"
-      defaultValue="hsl(0, 100%, 50%)"
-    />
-  );
-}
-`;

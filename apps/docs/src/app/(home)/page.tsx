@@ -2,7 +2,7 @@ import Link from "next/link";
 import { customMetaDataGenerator } from "@/lib/customMetaDataGenerator";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { BasicDockBase } from "@/components/docs/dock/basic-dock";
+import { BasicDockBase } from "@/components/docs/dock/basic";
 
 export const metadata = customMetaDataGenerator({
   title: "LibravelUI",

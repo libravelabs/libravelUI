@@ -1,0 +1,36 @@
+[
+  {
+    "displayName": "Tree",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "TreeItem",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "TreeContent",
+    "description": "",
+    "props": {
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "TreeIndicator",
+    "description": "",
+    "props": {
+      "values": {
+        "type": "Pick<TreeItemContentRenderProps, \"isDisabled\" | \"isExpanded\">",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

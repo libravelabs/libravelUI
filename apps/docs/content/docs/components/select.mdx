@@ -5,15 +5,12 @@ component: true
 doc: https://react-spectrum.adobe.com/react-aria/Select.html
 ---
 
-import { RequiredBlock } from "@/components/required-block";
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { BasicSelect, SearchableSelect, GroupedSelect } from '@/components/docs/select'
-
 ## Basic
-<BasicSelect />
+
+<Playground comp="select/basic" />
 
 ## Features
+
 A select can be built using the `<select>` and `<option>` HTML elements, but this is not possible to style consistently cross browser, especially the options. Select helps achieve accessible select components that can be styled as needed without compromising on high quality interactions.
 
 - `Flexible` – Support for controlled and uncontrolled state, async loading, disabled items, validation, sections, complex items, and more.
@@ -26,399 +23,30 @@ A select can be built using the `<select>` and `<option>` HTML elements, but thi
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
 
 <RequiredBlock components={["field", "popover", "separator", "command"]} />
 
-Install following dependencies:
+    Install following dependencies:
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components lucide-react clsx tailwind-merge
-```
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    Copy and paste the following code into your project.
 
-Copy and paste the following code into your project.
+    <ComponentSource comp="components/ui/select" />
 
-```tsx ts2js title="components/ui/select"
-"use client";
-
-import * as React from "react";
-import {
-  Button,
-  ListBox,
-  ListBoxItem,
-  ListBoxSection,
-  Select as SelectPrimitive,
-  SelectValue,
-  Header,
-  Collection,
-} from "react-aria-components";
-import type {
-  ButtonProps,
-  Key,
-  SelectProps as SelectPrimitiveProps,
-  PopoverProps,
-  ListBoxProps,
-} from "react-aria-components";
-import { Check, ChevronsUpDown, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  PopoverContent,
-  type PopoverContentProps,
-} from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
-import { Label, FieldError, type FieldProps } from "@/components/ui/field";
-import { CommandInput } from "@/components/ui/command";
-
-interface SelectContextType {
-  value: Key | Key[];
-  setValue: (val: Key | Key[]) => void;
-  clear: () => void;
-  isOpen: PopoverProps["isOpen"];
-  setIsOpen: PopoverProps["onOpenChange"];
-  error?: FieldProps["error"];
-}
-
-const SelectContext = React.createContext<SelectContextType | null>(null);
-
-function useSelectContext() {
-  const ctx = React.useContext(SelectContext);
-  if (!ctx) throw new Error("Select components must be used within SelectRoot");
-  return ctx;
-}
-
-type SelectRootProps = SelectPrimitiveProps & {
-  defaultValue?: Key | Key[];
-  label?: string;
-  error?: FieldProps["error"];
-  multiple?: boolean;
-};
-
-function SelectRoot({
-  defaultValue = "",
-  label,
-  error,
-  multiple = false,
-  ...props
-}: SelectRootProps) {
-  const [value, setValue] = React.useState<Key | Key[]>(defaultValue);
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const clear = () => setValue(Array.isArray(value) ? [] : "");
-
-  const handleSelectionChange = (key: Key | Key[] | null) => {
-    if (key === null) {
-      setValue(Array.isArray(value) ? [] : "");
-    } else {
-      setValue(key);
-    }
-  };
-
-  return (
-    <SelectContext.Provider
-      value={{ value, setValue, clear, isOpen, setIsOpen, error }}
-    >
-      <div className="grid gap-1">
-        {label && <Label>{label}</Label>}
-        <SelectPrimitive
-          isOpen={isOpen}
-          onOpenChange={setIsOpen}
-          aria-label={props["aria-label"] ?? "select"}
-          selectedKey={value}
-          onSelectionChange={handleSelectionChange}
-          multiple={multiple}
-          {...props}
-        >
-          {props.children}
-        </SelectPrimitive>
-      </div>
-    </SelectContext.Provider>
-  );
-}
-
-interface SelectTriggerProps extends ButtonProps {
-  label?: string;
-  placeholder?: string;
-  hideClear?: boolean;
-}
-
-function SelectTrigger({
-  className,
-  label,
-  placeholder,
-  hideClear = false,
-  ...props
-}: SelectTriggerProps) {
-  const { isOpen, value, setValue, error } = useSelectContext();
-
-  const isValueEmpty =
-    (Array.isArray(value) && value.length === 0) || value === "";
-
-  return (
-    <>
-      {label && <Label>{label}</Label>}
-
-      <Button
-        {...props}
-        data-state={isOpen}
-        className={cn(
-          "min-w-0 w-full border-input data-[placeholder]:text-muted-foreground hover:opacity-70 transition ease-linear [&_svg:not([class*='text-'])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 truncate",
-          error
-            ? "border border-destructive inset-ring-destructive ring-3 ring-destructive/20 focus-within:inset-ring-destructive focus-within:ring-3 focus-within:ring-destructive/20"
-            : "inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 data-[state=true]:inset-ring-ring/70 data-[state=true]:ring-3 data-[state=true]:ring-ring/20",
-          "cursor-pointer disabled:cursor-not-allowed",
-          className
-        )}
-      >
-        <SelectValue
-          data-slot="select-value"
-          className="flex-1 truncate text-start data-placeholder:text-muted-foreground"
-        >
-          {({ defaultChildren, isPlaceholder }) =>
-            isPlaceholder ? placeholder : defaultChildren
-          }
-        </SelectValue>
-
-        <div className="flex items-center gap-2 shrink-0">
-          {!isValueEmpty && !hideClear && (
-            <span
-              onPointerDownCapture={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setValue(Array.isArray(value) ? [] : "");
-              }}
-              className="rounded p-1 hover:bg-muted focus:outline-none"
-              tabIndex={-1}
-              aria-label="Clear selected item"
-              role="button"
-            >
-              <X className="size-3" />
-            </span>
-          )}
-
-          <ChevronsUpDown
-            data-slot="chevron"
-            className="-me-1 shrink-0 text-muted-foreground group-open/select:text-foreground group-disabled/select:opacity-50 sm:me-0"
-          />
-        </div>
-      </Button>
-      <FieldError asDefault message={error} className="mt-1" />
-    </>
-  );
-}
-
-interface SelectContentProps<T extends object> extends ListBoxProps<T> {
-  popover?: PopoverContentProps;
-}
-
-function SelectContent<T extends object>({
-  children,
-  popover,
-  className,
-  ...props
-}: SelectContentProps<T>) {
-  return (
-    <PopoverContent
-      {...popover}
-      className={cn(
-        "bg-popover text-popover-foreground z-50 w-(--trigger-width) max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
-        className
-      )}
-    >
-      <ListBox {...props}>{children}</ListBox>
-    </PopoverContent>
-  );
-}
-
-function SelectGroup({
-  title,
-  children,
-  ...props
-}: React.ComponentProps<typeof ListBoxSection> & {
-  title?: string;
-}) {
-  return (
-    <ListBoxSection data-slot="dropdown-menu-group" {...props}>
-      {title && (
-        <Header className="col-span-full px-2 py-2 font-medium text-muted-foreground/70 text-sm/6 sm:py-1.5 sm:text-xs/5">
-          {title}
-        </Header>
-      )}
-      <Collection>{children}</Collection>
-    </ListBoxSection>
-  );
-}
-
-function SelectItem({
-  className,
-  inset,
-  children,
-  ...props
-}: React.ComponentProps<typeof ListBoxItem> & {
-  inset?: boolean;
-  href?: string;
-}) {
-  const textValue =
-    props.textValue || (typeof children === "string" ? children : undefined);
-
-  return (
-    <ListBoxItem
-      data-slot="dropdown-menu-item"
-      textValue={textValue}
-      className={({ isDisabled, isSelected }) =>
-        cn(
-          "hover:bg-accent hover:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-          isDisabled && "pointer-events-none opacity-50",
-          isSelected && "[&_svg:not([data-slot='indicator'])]:hidden",
-          inset && "ps-8",
-          className
-        )
-      }
-      {...props}
-    >
-      {(values) => (
-        <>
-          {values.isSelected && (
-            <Check className="size-4" data-slot="indicator" />
-          )}
-
-          {typeof children === "function" ? children(values) : children}
-        </>
-      )}
-    </ListBoxItem>
-  );
-}
-
-function SelectLabel({
-  className,
-  inset,
-  ...props
-}: React.ComponentProps<typeof Label> & {
-  inset?: boolean;
-}) {
-  return (
-    <Label
-      data-slot="dropdown-menu-label"
-      data-inset={inset}
-      className={cn("text-sm font-medium data-[inset]:ps-8", className)}
-      {...props}
-    />
-  );
-}
-
-function SelectSeparator({
-  className,
-  ...props
-}: React.ComponentProps<typeof Separator>) {
-  return (
-    <Separator
-      data-slot="dropdown-menu-separator"
-      className={cn("bg-border shrink-0 h-px w-full -mx-1 my-1", className)}
-      {...props}
-    />
-  );
-}
-
-function SelectHeader({
-  className,
-  separator = false,
-  ...props
-}: React.ComponentProps<typeof Header> & {
-  separator?: boolean;
-}) {
-  return (
-    <Header
-      className={cn(
-        "col-span-full px-2.5 py-2 font-semibold text-base sm:text-sm",
-        separator && "-mx-1 mb-1 border-b sm:px-3 sm:pb-[0.625rem]",
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-type SelectProps = SelectPrimitiveProps & {
-  placeholder?: string;
-  label?: string;
-  id?: string | number;
-  hideClear?: boolean;
-  classNames?: {
-    root?: string | string[];
-    trigger?: string | string[];
-    content?: string | string[];
-    item?: string | string[];
-  };
-  items: {
-    label: string;
-    id: string | number | boolean;
-  }[];
-  multiple?: boolean;
-};
-
-function Select({
-  items,
-  placeholder,
-  hideClear = false,
-  classNames,
-  multiple = false,
-  ...props
-}: SelectProps) {
-  return (
-    <SelectRoot {...props} multiple={multiple} className={cn(classNames?.root)}>
-      <SelectTrigger
-        placeholder={placeholder}
-        hideClear={hideClear}
-        className={cn(classNames?.trigger)}
-      />
-      <SelectContent items={items} className={cn(classNames?.content)}>
-        {(item) => (
-          <SelectItem
-            key={item.id as SelectProps["id"]}
-            className={cn(classNames?.item)}
-          >
-            {item.label}
-          </SelectItem>
-        )}
-      </SelectContent>
-    </SelectRoot>
-  );
-}
-
-const SelectSearch = CommandInput;
-
-export {
-  Select,
-  SelectRoot,
-  SelectTrigger,
-  SelectSearch,
-  SelectContent,
-  SelectItem,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator,
-  SelectHeader,
-};
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add select
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add select
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
@@ -437,19 +65,11 @@ import {
 ```
 
 ```tsx
-<SelectRoot
-  label="Label goes here"
-  multiple={false}
->
-  <SelectTrigger
-    placeholder="Placeholder goes here"
-    hideClear={false}
-  />
+<SelectRoot label="Label goes here" multiple={false}>
+  <SelectTrigger placeholder="Placeholder goes here" hideClear={false} />
 
   <SelectContent>
-    <SelectHeader separator>
-      Header text goes here
-    </SelectHeader>
+    <SelectHeader separator>Header text goes here</SelectHeader>
 
     <SelectGroup title="Group title here">
       <SelectItem key="item-1" textValue="Searchable label">
@@ -463,16 +83,12 @@ import {
     <SelectSeparator />
 
     <SelectGroup>
-      <SelectLabel inset>
-        Label inside group
-      </SelectLabel>
+      <SelectLabel inset>Label inside group</SelectLabel>
 
       <SelectItem key="item-3" textValue="Searchable label">
         Visible label 3
       </SelectItem>
-      <SelectItem key="item-4">
-        Visible label 4
-      </SelectItem>
+      <SelectItem key="item-4">Visible label 4</SelectItem>
     </SelectGroup>
   </SelectContent>
 </SelectRoot>
@@ -481,199 +97,17 @@ import {
 ## Examples
 
 ### Searchable
+
 Allows users to filter the available options by typing into an input field. Ideal for large datasets or when quick access is important. Use `textValue` on each item to ensure accurate search behavior, especially if the display value includes custom JSX or non-text content.
-<SearchableSelect />
+
+<Playground comp="select/searchable" />
 
 ### Grouped
+
 Organizes options into visually separated groups using `SelectGroup`. Useful for categorizing items (e.g. by genre, region, or type) and improving navigability in dropdowns with many items. Combine with `SelectSeparator`, `SelectHeader`, and `SelectLabel` for additional structure and clarity.
-<GroupedSelect />
+
+<Playground comp="select/grouped" />
 
 ## Props
 
-### SelectRoot
-<TypeTable
-  type={{
-    label: {
-      description: "Label shown above the select field",
-      type: "string",
-      required: false,
-    },
-    name: {
-      description: "Form field name for submission",
-      type: "string",
-      required: false,
-    },
-    defaultValue: {
-      description: "Initial selected key or array of keys",
-      type: "Key | Key[]",
-      required: false,
-    },
-    error: {
-      description: "Validation error message",
-      type: "string",
-      required: false,
-    },
-    multiple: {
-      description: "Enables selection of multiple items",
-      type: "boolean",
-      required: false,
-    },
-    children: {
-      description: "Nested trigger and content components",
-      type: "React.ReactNode",
-      required: true,
-    },
-    className: {
-      description: "Additional class names for the root element",
-      type: "string",
-      required: false,
-    },
-  }}
-/>
-
-### SelectTrigger
-<TypeTable
-  type={{
-    placeholder: {
-      description: "Text shown when no item is selected",
-      type: "string",
-      required: false,
-    },
-    label: {
-      description: "Optional label above the trigger button",
-      type: "string",
-      required: false,
-    },
-    hideClear: {
-      description: "Hide the clear (X) button",
-      type: "boolean",
-      required: false,
-    },
-    className: {
-      description: "Additional class names for the trigger button",
-      type: "string",
-      required: false,
-    },
-  }}
-/>
-
-### SelectContent
-<TypeTable
-  type={{
-    children: {
-      description: "ListBox items or groups to render in the dropdown",
-      type: "React.ReactNode",
-      required: true,
-    },
-    className: {
-      description: "Additional class names for the dropdown container",
-      type: "string",
-      required: false,
-    },
-    popover: {
-      description: "Props forwarded to the PopoverContent wrapper",
-      type: "PopoverContentProps",
-      required: false,
-    },
-  }}
-/>
-
-### SelectItem
-<TypeTable
-  type={{
-    key: {
-      description: "Unique identifier for the item",
-      type: "Key",
-      required: true,
-    },
-    textValue: {
-      description: "String used for searching and accessibility",
-      type: "string",
-      required: false,
-    },
-    inset: {
-      description: "Applies left padding for alignment",
-      type: "boolean",
-      required: false,
-    },
-    className: {
-      description: "Additional class names for the item",
-      type: "string",
-      required: false,
-    },
-    children: {
-      description: "Content rendered inside the item",
-      type: "React.ReactNode",
-      required: true,
-    },
-  }}
-/>
-
-### SelectGroup
-<TypeTable
-  type={{
-    title: {
-      description: "Optional group label shown as a header",
-      type: "string",
-      required: false,
-    },
-    children: {
-      description: "SelectItems to group under this section",
-      type: "React.ReactNode",
-      required: true,
-    },
-  }}
-/>
-
-### SelectLabel
-<TypeTable
-  type={{
-    inset: {
-      description: "Apply indentation for nested visual hierarchy",
-      type: "boolean",
-      required: false,
-    },
-    className: {
-      description: "Additional class names for the label",
-      type: "string",
-      required: false,
-    },
-    children: {
-      description: "Label text",
-      type: "React.ReactNode",
-      required: true,
-    },
-  }}
-/>
-
-### SelectSeparator
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the separator",
-      type: "string",
-      required: false,
-    },
-  }}
-/>
-
-### SelectHeader
-<TypeTable
-  type={{
-    separator: {
-      description: "Adds a bottom border to separate from content",
-      type: "boolean",
-      required: false,
-    },
-    className: {
-      description: "Additional class names for the header",
-      type: "string",
-      required: false,
-    },
-    children: {
-      description: "Header content (usually a string)",
-      type: "React.ReactNode",
-      required: true,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/select" />

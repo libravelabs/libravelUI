@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "Link",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"primary\" | \"secondary\" | \"underline\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      }
+    }
+  }
+]

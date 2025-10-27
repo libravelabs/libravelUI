@@ -1,0 +1,20 @@
+[
+  {
+    "displayName": "PreviewContainer",
+    "description": "",
+    "props": {
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "hideButtons": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      }
+    }
+  }
+]

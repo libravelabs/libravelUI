@@ -1,0 +1,134 @@
+[
+  {
+    "displayName": "MultipleSelect",
+    "description": "",
+    "props": {
+      "items": {
+        "type": "T",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "defaultSelectedKeys": {
+        "type": "\"all\" | Set<Key>",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "maxItems": {
+        "type": "number",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "hideClear": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isDisabled": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "any",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "onSelectionChange": {
+        "type": "(keys: Selection) => void",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "MultipleSelectRoot",
+    "description": "",
+    "props": {
+      "items": {
+        "type": "T",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "defaultSelectedKeys": {
+        "type": "\"all\" | Set<Key>",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "maxItems": {
+        "type": "number",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "hideClear": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": "Select options"
+      },
+      "isDisabled": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "any",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "onSelectionChange": {
+        "type": "(keys: Selection) => void",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "CommandItem",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      }
+    }
+  },
+  {
+    "displayName": "CommandGroup",
+    "description": "",
+    "props": {
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

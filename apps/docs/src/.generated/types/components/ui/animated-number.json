@@ -1,0 +1,26 @@
+[
+  {
+    "displayName": "AnimatedNumber",
+    "description": "",
+    "props": {
+      "value": {
+        "type": "number",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "duration": {
+        "type": "number",
+        "required": false,
+        "description": "",
+        "defaultValue": "50"
+      },
+      "minStepTime": {
+        "type": "number",
+        "required": false,
+        "description": "",
+        "defaultValue": "40"
+      }
+    }
+  }
+]

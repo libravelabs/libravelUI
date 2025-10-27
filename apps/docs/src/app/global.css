@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=TASA+Orbiter:wght@400..800&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -46,15 +48,20 @@
   --radius: 0.625rem;
   --shadow-2xs: 2px 2px 10px 4px hsl(240 4% 60% / 0.09);
   --shadow-xs: 2px 2px 10px 4px hsl(240 4% 60% / 0.09);
-  --shadow-sm: 2px 2px 10px 4px hsl(240 4% 60% / 0.18),
+  --shadow-sm:
+    2px 2px 10px 4px hsl(240 4% 60% / 0.18),
     2px 1px 2px 3px hsl(240 4% 60% / 0.18);
-  --shadow: 2px 2px 10px 4px hsl(240 4% 60% / 0.18),
+  --shadow:
+    2px 2px 10px 4px hsl(240 4% 60% / 0.18),
     2px 1px 2px 3px hsl(240 4% 60% / 0.18);
-  --shadow-md: 2px 2px 10px 4px hsl(240 4% 60% / 0.18),
+  --shadow-md:
+    2px 2px 10px 4px hsl(240 4% 60% / 0.18),
     2px 2px 4px 3px hsl(240 4% 60% / 0.18);
-  --shadow-lg: 2px 2px 10px 4px hsl(240 4% 60% / 0.18),
+  --shadow-lg:
+    2px 2px 10px 4px hsl(240 4% 60% / 0.18),
     2px 4px 6px 3px hsl(240 4% 60% / 0.18);
-  --shadow-xl: 2px 2px 10px 4px hsl(240 4% 60% / 0.18),
+  --shadow-xl:
+    2px 2px 10px 4px hsl(240 4% 60% / 0.18),
     2px 8px 10px 3px hsl(240 4% 60% / 0.18);
   --shadow-2xl: 2px 2px 10px 4px hsl(240 4% 60% / 0.45);
   --tracking-normal: 0em;
@@ -96,27 +103,29 @@
   --sidebar-ring: var(--primary);
   --shadow-2xs: 2px 2px 10px 4px hsl(0 0% 0% / 0.09);
   --shadow-xs: 2px 2px 10px 4px hsl(0 0% 0% / 0.09);
-  --shadow-sm: 2px 2px 10px 4px hsl(0 0% 0% / 0.18),
-    2px 1px 2px 3px hsl(0 0% 0% / 0.18);
-  --shadow: 2px 2px 10px 4px hsl(0 0% 0% / 0.18),
-    2px 1px 2px 3px hsl(0 0% 0% / 0.18);
-  --shadow-md: 2px 2px 10px 4px hsl(0 0% 0% / 0.18),
-    2px 2px 4px 3px hsl(0 0% 0% / 0.18);
-  --shadow-lg: 2px 2px 10px 4px hsl(0 0% 0% / 0.18),
-    2px 4px 6px 3px hsl(0 0% 0% / 0.18);
-  --shadow-xl: 2px 2px 10px 4px hsl(0 0% 0% / 0.18),
-    2px 8px 10px 3px hsl(0 0% 0% / 0.18);
+  --shadow-sm:
+    2px 2px 10px 4px hsl(0 0% 0% / 0.18), 2px 1px 2px 3px hsl(0 0% 0% / 0.18);
+  --shadow:
+    2px 2px 10px 4px hsl(0 0% 0% / 0.18), 2px 1px 2px 3px hsl(0 0% 0% / 0.18);
+  --shadow-md:
+    2px 2px 10px 4px hsl(0 0% 0% / 0.18), 2px 2px 4px 3px hsl(0 0% 0% / 0.18);
+  --shadow-lg:
+    2px 2px 10px 4px hsl(0 0% 0% / 0.18), 2px 4px 6px 3px hsl(0 0% 0% / 0.18);
+  --shadow-xl:
+    2px 2px 10px 4px hsl(0 0% 0% / 0.18), 2px 8px 10px 3px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 2px 2px 10px 4px hsl(0 0% 0% / 0.45);
 }
 
 @theme inline {
-  --font-sans: "Bricolage Grotesque", "Tasa Orbiter", 'Geist', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans:
+    "Bricolage Grotesque", "Tasa Orbiter", "Geist", ui-sans-serif, system-ui,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
   --font-serif: Lora, serif;
-  --font-mono: "Geist Mono", monospace;
-  --font-bricolage-grotesque: 'Bricolage Grotesque', sans-serif;
-  --font-tasa-orbiter: 'Tasa Orbiter', sans-serif;
-  --font-geist: "Geist", sans-serif
-
+  --font-mono: "Geist Mono", "JetBrains Mono", monospace;
+  --font-bricolage-grotesque: "Bricolage Grotesque", sans-serif;
+  --font-tasa-orbiter: "Tasa Orbiter", sans-serif;
+  --font-geist: "Geist", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

@@ -129,9 +129,9 @@ function Alert({
           {canClosed && (
             <Button
               onClick={() => setOpen(false)}
-              size="icon"
+              size="icon-xs"
               variant="ghost"
-              className="size-5 m-auto"
+              className="m-auto"
               aria-label="Close alert"
             >
               <X className="size-4" />

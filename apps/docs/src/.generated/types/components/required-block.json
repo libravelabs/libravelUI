@@ -1,0 +1,26 @@
+[
+  {
+    "displayName": "RequiredBlock",
+    "description": "",
+    "props": {
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": "Required Component"
+      },
+      "message": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "components": {
+        "type": "string | string",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

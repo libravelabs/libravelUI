@@ -1,0 +1,150 @@
+[
+  {
+    "displayName": "ComboBox",
+    "description": "",
+    "props": {
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "hideClear": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "classNames": {
+        "type": {
+          "root": "string | string[] | undefined",
+          "trigger": "string | string[] | undefined",
+          "content": "string | string[] | undefined",
+          "item": "string | string[] | undefined"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "ComboBoxRoot",
+    "description": "",
+    "props": {
+      "defaultValue": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "ComboBoxInput",
+    "description": "",
+    "props": {
+      "label": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "hideClear": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      }
+    }
+  },
+  {
+    "displayName": "ComboBoxContent",
+    "description": "",
+    "props": {
+      "popover": {
+        "type": "PopoverContentProps",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "ComboBoxItem",
+    "description": "",
+    "props": {
+      "inset": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "ComboBoxGroup",
+    "description": "",
+    "props": {
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "ComboBoxLabel",
+    "description": "",
+    "props": {
+      "inset": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "ComboBoxSeparator",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "ComboBoxHeader",
+    "description": "",
+    "props": {
+      "separator": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      }
+    }
+  }
+]

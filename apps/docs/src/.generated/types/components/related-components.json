@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "RelatedComponents",
+    "description": "",
+    "props": {
+      "components": {
+        "type": "string | string",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

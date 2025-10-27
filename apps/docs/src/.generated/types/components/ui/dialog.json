@@ -1,0 +1,116 @@
+[
+  {
+    "displayName": "Dialog",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogContent",
+    "description": "",
+    "props": {
+      "size": {
+        "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"3xl\" | \"4xl\" | \"5xl\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "lg"
+      },
+      "isBlurred": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isDismissable": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DialogOverlay",
+    "description": "",
+    "props": {
+      "isBlurred": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      }
+    }
+  },
+  {
+    "displayName": "DialogClose",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "outline"
+      }
+    }
+  },
+  {
+    "displayName": "DialogTrigger",
+    "description": "",
+    "props": {
+      "asPrimitive": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "size": {
+        "type": "\"xs\" | \"sm\" | \"lg\" | \"default\" | \"icon-xs\" | \"icon-sm\" | \"icon\" | \"icon-lg\" | \"icon-xl\" | \"icon-2xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DialogHeader",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogTitle",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogDescription",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogBody",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogFooter",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogCloseIcon",
+    "description": "",
+    "props": {
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "The CSS [className](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) for the element. A function may be provided to compute the class based on component state.",
+        "defaultValue": null
+      }
+    }
+  }
+]

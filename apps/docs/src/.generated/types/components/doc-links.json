@@ -1,0 +1,16 @@
+[
+  {
+    "displayName": "DocLinks",
+    "description": "",
+    "props": {
+      "page": {
+        "type": {
+          "data": "PageData"
+        },
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

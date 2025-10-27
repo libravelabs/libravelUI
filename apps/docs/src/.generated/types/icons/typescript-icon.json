@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "TypeScriptIcon",
+    "description": "",
+    "props": {
+      "size": {
+        "type": "number",
+        "required": false,
+        "description": "",
+        "defaultValue": "24"
+      }
+    }
+  }
+]

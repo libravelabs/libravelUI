@@ -1,0 +1,20 @@
+[
+  {
+    "displayName": "TypeTable",
+    "description": "",
+    "props": {
+      "type": {
+        "type": "Record<string, TypeDefinition>",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

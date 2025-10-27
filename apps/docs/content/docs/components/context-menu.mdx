@@ -4,204 +4,37 @@ description: Instantly reveals a contextual menu at the precise location of your
 component: true
 ---
 
-import { RequiredBlock } from "@/components/required-block";
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { BasicContextMenu, WithCardContextMenu } from '@/components/docs/context-menu'
-
 ## Basic
-<BasicContextMenu />
+
+<Playground comp="context-menu/basic" />
 
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
 
 <RequiredBlock components={["popover", "dropdown-menu"]} />
 
-Install following dependencies:
+    Install following dependencies:
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge
-```
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    Copy and paste the following code into your project.
 
-Copy and paste the following code into your project.
+    <ComponentSource comp="components/ui/context-menu" />
 
-```tsx ts2js title="components/ui/context-menu"
-"use client";
-
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Menu, type MenuProps } from "react-aria-components";
-import {
-  PopoverContent,
-  type PopoverContentProps,
-} from "@/components/ui/popover";
-import {
-  DropdownMenuDescription,
-  DropdownMenuGroup,
-  DropdownMenuHeader,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-} from "@/components/ui/dropdown-menu";
-
-interface ContextMenuContextType {
-  triggerRef: React.RefObject<HTMLElement | null>;
-  offset: { offset: number; crossOffset: number } | null;
-  setOffset: React.Dispatch<
-    React.SetStateAction<{ offset: number; crossOffset: number } | null>
-  >;
-}
-
-const ContextMenuContext = React.createContext<ContextMenuContextType | null>(
-  null
-);
-
-function useContextMenuCtx() {
-  const ctx = React.useContext(ContextMenuContext);
-  if (!ctx) {
-    throw new Error("ContextMenu components must be used inside <ContextMenu>");
-  }
-  return ctx;
-}
-
-function ContextMenu({ children }: { children: React.ReactNode }) {
-  const [offset, setOffset] = React.useState<{
-    offset: number;
-    crossOffset: number;
-  } | null>(null);
-
-  const triggerRef = React.useRef<HTMLElement>(null);
-
-  return (
-    <ContextMenuContext.Provider value={{ triggerRef, offset, setOffset }}>
-      {children}
-    </ContextMenuContext.Provider>
-  );
-}
-
-type ContextMenuTriggerProps = React.HTMLAttributes<HTMLElement>;
-
-function ContextMenuTrigger({ className, ...props }: ContextMenuTriggerProps) {
-  const { triggerRef, setOffset } = useContextMenuCtx();
-
-  function onContextMenu(e: React.MouseEvent<HTMLElement>) {
-    e.preventDefault();
-    const rect = e.currentTarget.getBoundingClientRect();
-    setOffset({
-      offset: e.clientY - rect.bottom,
-      crossOffset: e.clientX - rect.left,
-    });
-  }
-
-  return (
-    <div
-      ref={triggerRef as ContextMenuContextType["triggerRef"]}
-      className={cn("cursor-default select-none", className)}
-      aria-haspopup="menu"
-      onContextMenu={onContextMenu}
-      {...props}
-    />
-  );
-}
-
-interface ContextMenuContentProps<T>
-  extends MenuProps<T>,
-    Pick<PopoverContentProps, "withArrow"> {
-  className?: string;
-  popover?: PopoverContentProps;
-}
-
-function ContextMenuContent<T extends object>({
-  className,
-  popover,
-  withArrow,
-  children,
-  ...props
-}: ContextMenuContentProps<T>) {
-  const { triggerRef, offset, setOffset } = useContextMenuCtx();
-
-  return (
-    offset && (
-      <PopoverContent
-        withArrow={withArrow}
-        {...popover}
-        isOpen={!!offset}
-        shouldFlip={false}
-        triggerRef={triggerRef}
-        placement="bottom start"
-        offset={offset.offset}
-        crossOffset={offset.crossOffset}
-        onOpenChange={() => setOffset(null)}
-        className="p-0"
-      >
-        <Menu
-          data-slot="context-menu-content"
-          className={cn(
-            "bg-popover text-popover-foreground z-50 w-(--trigger-width) max-h-[35rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
-            className
-          )}
-          {...props}
-        >
-          {children}
-        </Menu>
-      </PopoverContent>
-    )
-  );
-}
-
-const ContextMenuItem = DropdownMenuItem;
-const ContextMenuLabel = DropdownMenuLabel;
-const ContextMenuSeparator = DropdownMenuSeparator;
-const ContextMenuHeader = DropdownMenuHeader;
-const ContextMenuGroup = DropdownMenuGroup;
-const ContextMenuShortcut = DropdownMenuShortcut;
-const ContextMenuSub = DropdownMenuSub;
-const ContextMenuSubTrigger = DropdownMenuSubTrigger;
-const ContextMenuSubContent = DropdownMenuSubContent;
-const ContextMenuDescription = DropdownMenuDescription;
-
-export {
-  ContextMenu,
-  ContextMenuTrigger,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuLabel,
-  ContextMenuSeparator,
-  ContextMenuHeader,
-  ContextMenuGroup,
-  ContextMenuShortcut,
-  ContextMenuSub,
-  ContextMenuSubTrigger,
-  ContextMenuSubContent,
-  ContextMenuDescription,
-};
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add context-menu
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add context-menu
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
@@ -241,55 +74,11 @@ import {
 ## Example
 
 ### With Card
+
 A context menu where the trigger element is implemented using a Card component, allowing the menu to be activated by interacting with the card UI.
-<WithCardContextMenu />
+
+<Playground comp="context-menu/with-card" />
 
 ## Props
 
-### ContextMenuTrigger
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the component",
-      type: "string",
-      required: false
-    },
-  }}
-/>
-
-### ContextMenuContent
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the content container",
-      type: "string",
-      required: false,
-    },
-    popover: {
-      description: "Props passed down to <PopoverContent>",
-      type: "PopoverContentProps",
-      required: false,
-    },
-    withArrow: {
-      description: "Whether to show an arrow on the popover",
-      type: "boolean",
-      required: false,
-    },
-    children: {
-      description: "Content of the menu",
-      type: "React.ReactNode",
-      required: false,
-    },
-  }}
-/>
-
-### ContextMenu
-<TypeTable
-  type={{
-    children: {
-      description: "Content inside the ContextMenu",
-      type: "React.ReactNode",
-      required: true,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/context-menu" />

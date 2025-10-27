@@ -1,0 +1,37 @@
+[
+  {
+    "displayName": "Tooltip",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "TooltipTrigger",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "outline"
+      }
+    }
+  },
+  {
+    "displayName": "TooltipContent",
+    "description": "",
+    "props": {
+      "showArrow": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": true
+      },
+      "inverse": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

@@ -1,0 +1,149 @@
+---
+title: Dropdown Menu
+description: A component that reveals a list of options when activated, allowing users to select one or multiple items.
+component: true
+doc:
+  - title: Menu
+    doc: https://react-spectrum.adobe.com/react-aria/Menu.html
+  - title: Dialog
+    doc: https://react-spectrum.adobe.com/react-aria/Dialog.html
+---
+
+## Basic
+
+<Playground comp="dropdown-menu/basic" />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components={["shortcut", "dialog", "label", "popover"]} />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/dropdown-menu" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add dropdown-menu
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "@/components/ui/dropdown-menu";
+```
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+
+  <DropdownMenuContent popover={{ placement: "top" }} withArrow>
+    <DropdownMenuGroup title="Account">
+      <DropdownMenuItem>
+        Profile
+        <DropdownMenuShortcut keys="⇧⌘P" />
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        Billing
+        <DropdownMenuShortcut keys="⌘B" />
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        Settings
+        <DropdownMenuShortcut keys="⌘S" />
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        Keyboard shortcuts
+        <DropdownMenuShortcut keys="⌘K" />
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+
+    <DropdownMenuSeparator />
+
+    <DropdownMenuGroup title="Team Management">
+      <DropdownMenuItem>Team</DropdownMenuItem>
+
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
+        <DropdownMenuSubContent>
+          <DropdownMenuItem>Email</DropdownMenuItem>
+          <DropdownMenuItem>Message</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>More...</DropdownMenuItem>
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+
+      <DropdownMenuItem>
+        New Team
+        <DropdownMenuShortcut keys="⌘+T" />
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+
+    <DropdownMenuSeparator />
+
+    <DropdownMenuGroup title="Resources">
+      <DropdownMenuItem>GitHub</DropdownMenuItem>
+      <DropdownMenuItem>Support</DropdownMenuItem>
+      <DropdownMenuItem isDisabled>API</DropdownMenuItem>
+    </DropdownMenuGroup>
+
+    <DropdownMenuSeparator />
+
+    <DropdownMenuGroup title="Danger Zone">
+      <DropdownMenuItem variant="destructive">
+        Log out
+        <DropdownMenuShortcut keys="⇧⌘Q" />
+      </DropdownMenuItem>
+    </DropdownMenuGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## Examples
+
+### Custom trigger
+
+Uses a custom trigger element, giving full control over the trigger’s appearance and behavior.
+
+<Playground comp="dropdown-menu/custom-trigger" />
+
+### Multiple Selection
+
+Allows users to select multiple items simultaneously from the menu. This is useful when more than one choice needs to be applied at once, such as filtering options, tagging, or batch actions.
+
+<Playground comp="dropdown-menu/multiple-selection" />
+
+### Single Selection
+
+Allows the user to select one option from the menu at a time, suitable for settings or filters where only a single choice is applicable.
+
+<Playground comp="dropdown-menu/single-selection" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/dropdown-menu" />

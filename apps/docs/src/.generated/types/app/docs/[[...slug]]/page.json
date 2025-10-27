@@ -1,0 +1,26 @@
+[
+  {
+    "displayName": "page",
+    "description": "",
+    "props": {
+      "params": {
+        "type": "Promise<{ slug?: string[] | undefined; }>",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "generateMetadata",
+    "description": "",
+    "props": {
+      "params": {
+        "type": "Promise<{ slug?: string[] | undefined; }>",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

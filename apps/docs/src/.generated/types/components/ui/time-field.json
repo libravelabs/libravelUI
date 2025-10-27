@@ -1,0 +1,72 @@
+[
+  {
+    "displayName": "TimeField",
+    "description": "",
+    "props": {
+      "errorMessage": {
+        "type": "string | (validation: ValidationResult) => string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "label": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"ghost\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "startContent": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "endContent": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "labelExtra": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "classNames": {
+        "type": {
+          "container": "string | undefined",
+          "wrapper": "string | undefined",
+          "input": "string | undefined",
+          "label": "string | undefined",
+          "description": "string | undefined",
+          "error": "string | undefined",
+          "startContent": "string | undefined",
+          "endContent": "string | undefined",
+          "labelExtra": "string | undefined"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

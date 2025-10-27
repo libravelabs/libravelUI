@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "Loader",
+    "description": "",
+    "props": {
+      "isInfinite": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": true
+      }
+    }
+  }
+]

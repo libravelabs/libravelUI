@@ -5,19 +5,16 @@ component: true
 doc: https://react-spectrum.adobe.com/react-aria/DateRangePicker.html
 ---
 
-import { RequiredBlock } from "@/components/required-block";
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { BasicDateRangePicker, VisibleDurationDateRangePicker, ValidatedDateRangePicker, ReadOnlyRequiredDateRangePicker } from '@/components/docs/date-range-picker'
-
 ## Basic
-<BasicDateRangePicker />
+
+<Playground comp="date-range-picker/basic" />
 
 ## Features
+
 A date range picker can be built using two separate `<input type="date">` elements, but this is very limited in functionality, lacking in internationalization capabilities, inconsistent between browsers, and difficult to style. DateRangePicker helps achieve accessible and international date and time range pickers that can be styled as needed.
 
 - **Dates and times** – Support for dates and times with configurable granularity.
-International – Support for 13 calendar systems used around the world, including Gregorian, Buddhist, Islamic, Persian, and more. Locale-specific formatting, number systems, hour cycles, and right-to-left support are available as well.
+  International – Support for 13 calendar systems used around the world, including Gregorian, Buddhist, Islamic, Persian, and more. Locale-specific formatting, number systems, hour cycles, and right-to-left support are available as well.
 - **Time zone aware** – Dates and times can optionally include a time zone. All modifications follow time zone rules such as daylight saving time.
 - **Accessible** – Each date and time unit is displayed as an individually focusable and editable segment, which allows users an easy way to edit dates using the keyboard, in any date format and locale. Users can also open a calendar popover to select date ranges in a standard month grid. Localized screen reader messages are included to announce when the selection and visible date range change.
 - **Touch friendly** – Date segments are editable using an easy to use numeric keypad, date ranges can be selected by dragging over dates in the calendar using a touch screen, and all interactions are accessible using touch-based screen readers.
@@ -27,123 +24,36 @@ International – Support for 13 calendar systems used around the world, includi
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
 
-<RequiredBlock components={["date-field", "field", "popover", "range-calendar"]} />
+<RequiredBlock
+  components={["date-field", "field", "popover", "range-calendar"]}
+/>
 
-Install following dependencies:
+    Install following dependencies:
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge @internationalized/date motion/react
-```
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion @internationalized/date
+    ```
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    Copy and paste the following code into your project.
 
-Copy and paste the following code into your project.
+    <ComponentSource comp="components/ui/date-range-picker" />
 
-```tsx ts2js title="components/ui/date-range-picker"
-"use client";
-
-import type { DateDuration } from "@internationalized/date";
-import {
-  DateRangePicker as DateRangePickerPrimitive,
-  PopoverProps,
-  type DateRangePickerProps as DateRangePickerPrimitiveProps,
-  type DateValue,
-  type ValidationResult,
-} from "react-aria-components";
-import { cn } from "@/lib/utils";
-import { DateInput } from "@/components/ui/date-field";
-import {
-  Description,
-  FieldError,
-  FieldGroup,
-  Label,
-} from "@/components/ui/field";
-import { CalendarIcon } from "lucide-react";
-import { PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { RangeCalendar } from "@/components/ui/range-calendar";
-
-interface DateRangePickerProps<T extends DateValue>
-  extends DateRangePickerPrimitiveProps<T> {
-  label?: string;
-  description?: string;
-  errorMessage?: string | ((validation: ValidationResult) => string);
-  visibleDuration?: DateDuration;
-  pageBehavior?: "visible" | "single";
-  placement?: PopoverProps["placement"];
-}
-
-function DateRangePicker<T extends DateValue>({
-  label,
-  className,
-  description,
-  errorMessage,
-  placement = "bottom",
-  visibleDuration = { months: 1 },
-  ...props
-}: DateRangePickerProps<T>) {
-  return (
-    <DateRangePickerPrimitive
-      aria-label={props["aria-label"] ?? "range-date-picker"}
-      className={cn(className, "group flex flex-col gap-y-1")}
-      {...props}
-    >
-      {label && <Label>{label}</Label>}
-      <FieldGroup className="inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 group-open:inset-ring-ring/70 group-open:ring-3 group-open:ring-ring/20">
-        <DateInput slot="start" />
-        <span
-          aria-hidden="true"
-          className="-mx-2 text-foreground group-disabled:text-muted-foreground forced-colors:text-muted-foreground forced-colors:group-disabled:text-muted-foreground"
-        >
-          –
-        </span>
-        <DateInput slot="end" />
-        <PopoverTrigger
-          asPrimitive
-          className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
-        >
-          <CalendarIcon className="ms-auto" />
-        </PopoverTrigger>
-      </FieldGroup>
-      {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
-      <PopoverContent
-        withArrow={false}
-        placement={placement}
-        className="p-2 flex min-w-auto max-w-none w-auto snap-x justify-center"
-        {...props}
-      >
-        <RangeCalendar visibleDuration={visibleDuration} />
-      </PopoverContent>
-    </DateRangePickerPrimitive>
-  );
-}
-
-export type { DateRangePickerProps };
-export { DateRangePicker };
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add date-range-picker
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add date-range-picker
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
+
 ```tsx
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 ```
@@ -155,60 +65,30 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 ## Examples
 
 ### Visible Duration
+
 The `visibleDuration` prop lets you define how long the date range should be displayed. You can pass an object that specifies:
+
 - `years`: How many years to include before or after.
 - `months`: How many months to show in the range.
 - `weeks`: Number of weeks to cover.
 - `days`: Number of days to span.
 
 For more details, check the `react-aria-component` documentation on [visible durations](https://react-spectrum.adobe.com/react-aria/RangeCalendar.html#multi-month).
-<VisibleDurationDateRangePicker />
+
+<Playground comp="date-range-picker/visible-duration" />
 
 ### With Validation
+
 Date range picker with validation to ensure correct and complete user input.
-<ValidatedDateRangePicker />
+
+<Playground comp="date-range-picker/validated" />
 
 ### ReadOnly and Disabled
+
 Date range picker configured to be read-only or disabled, preventing user edits.
-<ReadOnlyRequiredDateRangePicker />
+
+<Playground comp="date-range-picker/readonly-disabled" />
 
 ## Props
 
-<TypeTable
-  type={{
-  label: {
-      description: "The label for the date range picker input",
-      type: "string",
-      required: false,
-    },
-    className: {
-      description: "Additional class names for the component",
-      type: "string",
-      required: false,
-    },
-    description: {
-      description: "A description or helper text displayed below the input",
-      type: "string",
-      required: false,
-    },
-    errorMessage: {
-      description:
-        "Error message to display. Can be a string or a function that receives validation result and returns a string",
-      type: "string | (validation: ValidationResult) => string",
-      required: false,
-    },
-    placement: {
-      description: "Placement of the popover relative to the input",
-      type: `PopoverProps['placement']`,
-      required: false,
-      default: `"bottom"`,
-    },
-    visibleDuration: {
-      description:
-        "Duration of visible calendar range shown in the popover, e.g. how many months to show",
-      type: "DateDuration",
-      required: false,
-      default: `{ months: 1 }`,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/date-range-picker" />

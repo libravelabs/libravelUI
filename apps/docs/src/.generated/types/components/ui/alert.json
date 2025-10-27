@@ -1,0 +1,84 @@
+[
+  {
+    "displayName": "AlertRoot",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"warning\" | \"success\" | \"info\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "className": {
+        "type": "string | string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "Alert",
+    "description": "",
+    "props": {
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "message": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "icon": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "canClosed": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "open": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "onOpenChange": {
+        "type": "(open: boolean) => void",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"warning\" | \"success\" | \"info\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      }
+    }
+  },
+  {
+    "displayName": "AlertTitle",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "AlertDescription",
+    "description": "",
+    "props": {}
+  }
+]

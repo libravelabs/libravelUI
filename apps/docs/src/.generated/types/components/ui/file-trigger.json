@@ -1,0 +1,56 @@
+[
+  {
+    "displayName": "FileTrigger",
+    "description": "",
+    "props": {
+      "pending": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "defaultCamera": {
+        "type": "\"user\" | \"environment\"",
+        "required": false,
+        "description": "Specifies the use of a media capture mechanism to capture the media on the spot.",
+        "defaultValue": null
+      },
+      "acceptDirectory": {
+        "type": "boolean",
+        "required": false,
+        "description": "Enables the selection of directories instead of individual files.",
+        "defaultValue": null
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "outline"
+      },
+      "size": {
+        "type": "\"default\" | \"xs\" | \"sm\" | \"lg\" | \"icon-xs\" | \"icon-sm\" | \"icon\" | \"icon-lg\" | \"icon-xl\" | \"icon-2xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "radius": {
+        "type": "\"sm\" | \"lg\" | \"none\" | \"md\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "md"
+      }
+    }
+  }
+]
