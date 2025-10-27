@@ -84,6 +84,7 @@ const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
     );
   }
 );
+ToggleGroup.displayName = "ToggleGroup";
 
 const sizePad: Record<SIZE, string> = {
   sm: "px-2.5 py-1",
@@ -128,8 +129,8 @@ const ToggleItem = React.forwardRef<HTMLButtonElement, ToggleProps>(
               state: isSelected
                 ? "selected"
                 : isDisabled
-                ? "disabled"
-                : "default",
+                  ? "disabled"
+                  : "default",
             }),
             className
           )
@@ -141,5 +142,6 @@ const ToggleItem = React.forwardRef<HTMLButtonElement, ToggleProps>(
     );
   }
 );
+ToggleItem.displayName = "ToggleItem";
 
 export { ToggleItem, ToggleGroup };

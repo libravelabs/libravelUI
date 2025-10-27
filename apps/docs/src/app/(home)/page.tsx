@@ -2,7 +2,6 @@ import Link from "next/link";
 import { customMetaDataGenerator } from "@/lib/customMetaDataGenerator";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { BasicDockBase } from "@/components/docs/dock/basic";
 
 export const metadata = customMetaDataGenerator({
   title: "LibravelUI",
@@ -17,7 +16,6 @@ export default function HomePage() {
         personalize them.
       </p>
       <div className="flex items-center gap-4">
-        <BasicDockBase />
         <Link href="/docs">
           <Button>
             See Documentation <ArrowRight />

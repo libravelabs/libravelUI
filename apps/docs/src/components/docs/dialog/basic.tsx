@@ -30,7 +30,7 @@ export default function BasicDialog() {
             <DialogBody>
               <p>
                 This action cannot be undone. Please confirm if you want to
-                continue. If you're unsure, feel free to cancel.
+                continue. If you&apos;re unsure, feel free to cancel.
               </p>
             </DialogBody>
 
