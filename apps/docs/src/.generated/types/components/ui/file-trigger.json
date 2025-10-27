@@ -3,7 +3,7 @@
     "displayName": "FileTrigger",
     "description": "",
     "props": {
-      "pending": {
+      "isLoading": {
         "type": "boolean",
         "required": false,
         "description": "",
@@ -27,7 +27,7 @@
         "description": "Enables the selection of directories instead of individual files.",
         "defaultValue": null
       },
-      "disabled": {
+      "isDisabled": {
         "type": "boolean",
         "required": false,
         "description": "",

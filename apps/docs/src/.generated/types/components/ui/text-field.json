@@ -3,26 +3,26 @@
     "displayName": "TextField",
     "description": "",
     "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"ghost\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
       "label": {
-        "type": "string",
+        "type": "ReactNode",
         "required": false,
         "description": "",
         "defaultValue": null
       },
       "description": {
         "type": "string",
-        "required": false,
-        "description": "",
-        "defaultValue": null
-      },
-      "placeholder": {
-        "type": "string",
-        "required": false,
-        "description": "",
-        "defaultValue": null
-      },
-      "error": {
-        "type": "string | (validation: ValidationResult) => string",
         "required": false,
         "description": "",
         "defaultValue": null
@@ -39,26 +39,14 @@
         "description": "",
         "defaultValue": null
       },
-      "isLoading": {
-        "type": "boolean",
-        "required": false,
-        "description": "",
-        "defaultValue": null
-      },
-      "variant": {
-        "type": "\"default\" | \"destructive\" | \"ghost\"",
-        "required": false,
-        "description": "",
-        "defaultValue": null
-      },
-      "size": {
-        "type": "undefined",
-        "required": false,
-        "description": "",
-        "defaultValue": null
-      },
       "labelExtra": {
         "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isLoading": {
+        "type": "boolean",
         "required": false,
         "description": "",
         "defaultValue": null

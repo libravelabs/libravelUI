@@ -6,29 +6,28 @@ import { Button, type buttonVariants } from "@/components/ui/button";
 import { Camera, Folder, Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
-import { Loader } from "@/components/ui/loader";
 
 interface FileTriggerProps
   extends FileTriggerPrimitiveProps,
     VariantProps<typeof buttonVariants> {
-  pending?: boolean;
+  isLoading?: boolean;
   className?: string;
   defaultCamera?: "user" | "environment";
   acceptDirectory?: boolean;
-  disabled?: boolean;
+  isDisabled?: boolean;
 }
 
 function FileTrigger({
   variant = "outline",
   size = "default",
   radius = "md",
-  pending = false,
+  isLoading = false,
   className,
   children,
   defaultCamera,
-  acceptDirectory,
-  allowsMultiple,
-  disabled,
+  acceptDirectory = false,
+  allowsMultiple = false,
+  isDisabled = false,
   ...props
 }: FileTriggerProps) {
   return (
@@ -38,12 +37,11 @@ function FileTrigger({
         variant={variant}
         size={size}
         radius={radius}
-        disabled={disabled}
+        isLoading={isLoading}
+        isDisabled={isDisabled}
         className={cn(className)}
       >
-        {pending ? (
-          <Loader className="size-4" />
-        ) : defaultCamera ? (
+        {isLoading ? null : defaultCamera ? (
           <Camera className="size-4" />
         ) : acceptDirectory ? (
           <Folder className="size-4" />
@@ -51,13 +49,13 @@ function FileTrigger({
           <Paperclip className="size-4" />
         )}
 
-        <span className="ms-2">
+        <span>
           {children ??
             (allowsMultiple
               ? "Browse files..."
               : acceptDirectory
-              ? "Browse folder..."
-              : "Browse file...")}
+                ? "Browse folder..."
+                : "Browse file...")}
         </span>
       </Button>
     </FileTriggerPrimitive>
