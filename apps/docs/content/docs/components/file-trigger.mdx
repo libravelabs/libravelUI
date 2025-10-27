@@ -20,7 +20,7 @@ A file input can be created with an `<input type=“file”>` element, but this 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
   <Tab value="Manual">
 
-    <RequiredBlock components={["button", "loader"]} />
+    <RequiredBlock components="button" />
 
     Install following dependencies:
 
@@ -47,16 +47,47 @@ A file input can be created with an `<input type=“file”>` element, but this 
 ## Anatomy
 
 ```tsx
-[ANATOMY IMPORT HERE]
+import { FileTrigger } from "@/components/ui/file-trigger";
 ```
 
 ```tsx
-[ANATOMY CODE]
+<FileTrigger />
 ```
 
 ## Examples
 
-<Playground comp="file-trigger/" />
+### Accepted Type
+
+Allows only specific file types to be selected, ensuring uploads meet the required format.
+
+<Playground comp="file-trigger/media-capture" />
+
+### Media Capture
+
+To specify the media capture mechanism to capture media on the spot, pass user for the user-facing camera or environment for the outward-facing camera via the defaultCamera prop.
+
+This behavior only works on mobile devices. On desktop devices, it will open the file system like normal. [Read more about capture](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/capture).
+
+<Playground comp="file-trigger/media-capture" />
+
+### Multiple Files
+
+Lets users upload several files simultaneously for easier batch submission.
+
+<Playground comp="file-trigger/multiple" />
+
+### Loading
+
+Shows a loading indicator while files are being uploaded, providing clear feedback during the process.
+
+<Playground comp="file-trigger/loading" />
+
+### With Drop Zone
+
+Uses the Drag and Drop, which contains the FileTrigger component inside it. This allows users to upload files by either dragging them into the drop zone or selecting them manually. For more details, see:
+
+<RelatedComponents components="drag-and-drop" />
+<Playground comp="drag-and-drop/basic" />
 
 ## Props
 

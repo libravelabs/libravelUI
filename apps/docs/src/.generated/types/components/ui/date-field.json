@@ -40,8 +40,8 @@
           "group": "string | string[] | undefined",
           "startContent": "string | string[] | undefined",
           "endContent": "string | string[] | undefined",
-          "description": "string | undefined",
-          "error": "string | undefined"
+          "description": "string | ... 1 more ... | undefined",
+          "error": "string | ... 1 more ... | undefined"
         },
         "required": false,
         "description": "",
