@@ -5,18 +5,18 @@ component: true
 doc: https://react-spectrum.adobe.com/react-aria/Checkbox.html
 ---
 
-import { Info } from '@/components/info';
-import { RequiredBlock } from "@/components/required-block";
-import { BasicCheckbox, WithDescriptionCheckbox, CheckboxSizes, CustomChildrenCheckbox, ControlledCheckbox, ErrorCheckbox, DisabledCheckbox } from '@/components/docs/checkbox'
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-
-<Info title="Grouping Multiple Checkboxes">If you're looking for how to group multiple checkboxes together under a shared label or manage them as a single form field, see: [Checkbox Group](/docs/components/checkbox-group)</Info>
+<Info title="Grouping Multiple Checkboxes">
+  If you're looking for how to group multiple checkboxes together under a shared
+  label or manage them as a single form field, see: [Checkbox
+  Group](/docs/components/checkbox-group)
+</Info>
 
 ## Basic
-<BasicCheckbox />
+
+<Playground comp="checkbox/basic" />
 
 ## Features
+
 Checkboxes can be built with the `<input>` HTML element, but this can be difficult to style. Checkbox helps achieve accessible checkboxes that can be styled as needed.
 
 - `Styleable` – Hover, press, keyboard focus, selection, and indeterminate states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
@@ -26,198 +26,30 @@ Checkboxes can be built with the `<input>` HTML element, but this can be difficu
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
 
 <RequiredBlock components="field" />
 
-Install following dependencies:
+    Install following dependencies:
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
-```
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    Copy and paste the following code into your project.
 
-Copy and paste the following code into your project.
+    <ComponentSource comp="components/ui/checkbox" />
 
-```tsx ts2js title="components/ui/checkbox"
-"use client";
-
-import type { CheckboxProps as CheckboxPrimitiveProps } from "react-aria-components";
-import {
-  Checkbox as CheckboxPrimitive,
-  composeRenderProps,
-} from "react-aria-components";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Description, Label, type FieldProps } from "@/components/ui/field";
-import { Check, Minus } from "lucide-react";
-
-const checkboxVariants = cva("group block w-fit disabled:opacity-50");
-
-const checkboxWrapper = cva("grid group items-center disabled:opacity-50", {
-  variants: {
-    withDescription: {
-      true: "grid-cols-[1.125rem_1fr] sm:grid-cols-[1rem_1fr] gap-x-3 gap-y-1 *:data-[slot=indicator]:mt-0.75 sm:*:data-[slot=indicator]:mt-1 items-center",
-      false: "grid-cols-[auto_1fr] gap-x-2",
-    },
-  },
-  defaultVariants: {
-    withDescription: false,
-  },
-});
-
-const checkboxIndicator = cva(
-  [
-    "relative isolate flex shrink-0 items-center justify-center rounded-sm transition",
-    "bg-background text-muted-foreground inset-ring inset-ring-accent",
-    "cursor-pointer disabled:cursor-not-allowed",
-  ],
-  {
-    variants: {
-      size: {
-        sm: "size-4 *:data-[slot=check-indicator]:size-3",
-        md: "size-4.5 *:data-[slot=check-indicator]:size-4",
-        lg: "size-5 *:data-[slot=check-indicator]:size-4.5",
-        xl: "size-5.5 *:data-[slot=check-indicator]:size-5",
-      },
-      isSelected: {
-        true: "bg-primary text-primary-foreground dark:inset-ring-primary",
-      },
-      isIndeterminate: {
-        true: "bg-primary text-primary-foreground dark:inset-ring-primary",
-      },
-      isFocusVisible: {
-        true: "inset-ring-primary ring-3 ring-ring/20 focus-within:inset-ring-ring/70 focus-within:hover:inset-ring-ring/70",
-      },
-      isInvalid: {
-        true: "inset-ring-destructive/70 bg-destructive/20 text-destructive-foreground ring-destructive/20",
-      },
-      isDisabled: {
-        true: "opacity-50 cursor-not-allowed",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-    },
-  }
-);
-
-type CheckboxProps = CheckboxPrimitiveProps &
-  VariantProps<typeof checkboxWrapper> &
-  VariantProps<typeof checkboxIndicator> & {
-    label?: string;
-    description?: string;
-    error?: FieldProps["error"];
-  };
-
-function Checkbox({
-  className,
-  children,
-  description,
-  label,
-  size,
-  error,
-  ...props
-}: CheckboxProps) {
-  return (
-    <>
-      <CheckboxPrimitive
-        {...props}
-        className={cn(checkboxVariants(), className)}
-      >
-        {composeRenderProps(
-          children,
-          (
-            children,
-            {
-              isSelected,
-              isIndeterminate,
-              isFocusVisible,
-              isInvalid,
-              isDisabled,
-            }
-          ) => {
-            const isStringChild = typeof children === "string";
-            const hasCustomChildren = typeof children !== "undefined";
-
-            const indicator = isIndeterminate ? (
-              <Minus data-slot="check-indicator" />
-            ) : isSelected ? (
-              <Check data-slot="check-indicator" />
-            ) : null;
-
-            const content = hasCustomChildren ? (
-              isStringChild ? (
-                <Label>{children}</Label>
-              ) : (
-                <>{children}</>
-              )
-            ) : (
-              <>
-                {label && <Label>{label}</Label>}
-                {description && <Description>{description}</Description>}
-              </>
-            );
-
-            return (
-              <div
-                className={cn(
-                  checkboxWrapper({ withDescription: !!description }),
-                  className
-                )}
-              >
-                <span
-                  data-slot="indicator"
-                  className={cn(
-                    checkboxIndicator({
-                      size,
-                      isSelected,
-                      isIndeterminate,
-                      isFocusVisible,
-                      isInvalid: !!error || isInvalid,
-                      isDisabled,
-                    })
-                  )}
-                >
-                  {indicator}
-                </span>
-                <div>{content}</div>
-              </div>
-            );
-          }
-        )}
-      </CheckboxPrimitive>
-      {error && (
-        <p className="text-sm text-destructive group-disabled:opacity-50">
-          {error}
-        </p>
-      )}
-    </>
-  );
-}
-
-export type { CheckboxProps };
-export { Checkbox };
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add checkbox
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add checkbox
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
@@ -242,63 +74,35 @@ import { Checkbox } from "@/components/ui/checkbox";
 ## Examples
 
 ### Sizes
+
 Demonstrates different checkbox sizes to accommodate various UI needs. Use smaller sizes for compact interfaces and larger sizes for improved accessibility or visual emphasis.
-<CheckboxSizes />
+
+<Playground comp="checkbox/sizes" />
 
 ### With Description
+
 This example demonstrates how to use checkboxes with accompanying descriptions. Descriptions provide additional context or guidance about the checkbox’s purpose, helping users better understand what they are selecting. Each checkbox includes a label and a brief explanation underneath it.
-<WithDescriptionCheckbox />
+
+<Playground comp="checkbox/with-desc" />
 
 ### Custom Children
+
 Allows full customization of the checkbox content using a render function or custom JSX. Useful when the default label and description structure is not sufficient for specific UI needs.
-<CustomChildrenCheckbox />
+
+<Playground comp="checkbox/custom-child" />
 
 ### Controlled
+
 Demonstrates how to control the checkbox state using React state. This pattern is useful when the checkbox needs to respond to or affect external logic or UI.
-<ControlledCheckbox />
+
+<Playground comp="checkbox/controlled" />
 
 ### With Error state
-Demonstrates how to display an error message below the checkbox. Useful for form validation feedback when the checkbox input is required or contains invalid data.
-<ErrorCheckbox />
 
-### Disabled
-Shows how to render checkboxes in a disabled state. Disabled checkboxes appear inactive and cannot be interacted with by the user, often used to indicate unavailable options.
-<DisabledCheckbox />
+Demonstrates how to display an error message below the checkbox. Useful for form validation feedback when the checkbox input is required or contains invalid data.
+
+<Playground comp="checkbox/with-error" />
 
 ## Props
 
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the component",
-      type: "string",
-      required: false,
-    },
-    label: {
-      description: "Text label displayed next to the checkbox",
-      type: "string",
-      required: false,
-    },
-    description: {
-      description: "Optional description displayed below the label",
-      type: "string",
-      required: false,
-    },
-    error: {
-      description: "Error message to display below the checkbox",
-      type: "string | boolean | React.ReactNode | ((validation: ValidationResult) => string);",
-      required: false,
-    },
-    size: {
-      description: "Visual size of the checkbox indicator",
-      type: `"sm" | "md" | "lg" | "xl"`,
-      default: `"md"`,
-      required: false,
-    },
-    children: {
-      description: "Custom label or content to render inside the checkbox",
-      type: "ReactNode | ((props: RenderProps) => ReactNode)",
-      required: false,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/checkbox" />

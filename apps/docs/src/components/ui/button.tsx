@@ -32,7 +32,12 @@ const buttonVariants = cva(
         xs: "h-6 gap-0.5 px-2 has-[>svg]:px-1.5",
         sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 px-6 has-[>svg]:px-4",
+        "icon-xs": "size-5",
+        "icon-sm": "size-6",
         icon: "size-9",
+        "icon-lg": "size-12",
+        "icon-xl": "size-14",
+        "icon-2xl": "size-16",
       },
       radius: {
         none: "rounded-none",
@@ -91,8 +96,8 @@ function Button({
     >
       {(values) => {
         if (isLoading) {
-          return size === "icon" ? (
-            loader ?? <Loader className="text-inherit" />
+          return size && size.includes("icon") ? (
+            (loader ?? <Loader className="text-inherit" />)
           ) : (
             <>
               {loader ?? <Loader className="text-inherit" />}

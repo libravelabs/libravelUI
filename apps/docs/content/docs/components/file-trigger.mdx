@@ -1,0 +1,63 @@
+---
+title: File Trigger
+description: File Triggers let you fetch files from your system, working like a digital hook to pull in content from local drives or cloud storage.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/FileTrigger.html
+---
+
+## Basic
+
+<Playground comp="file-trigger/basic" />
+
+## Features
+
+A file input can be created with an `<input type=“file”>` element, but this supports limited styling options and may not integrate well with the overall design of a website or application. To overcome this, `FileTrigger` extends the functionality of the standard file input element by working with a pressable child such as a Button to create accessible file inputs that can be styled as needed.
+
+- **Customizable** – Works with any pressable React Aria or React Spectrum component, and custom components built with [usePress](https://react-spectrum.adobe.com/react-aria/usePress.html).
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+    <RequiredBlock components={["button", "loader"]} />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/file-trigger" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add file-trigger
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+[ANATOMY IMPORT HERE]
+```
+
+```tsx
+[ANATOMY CODE]
+```
+
+## Examples
+
+<Playground comp="file-trigger/" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/file-trigger" />

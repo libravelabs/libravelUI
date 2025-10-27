@@ -4,75 +4,50 @@ description: Multiple Select is an interface component that enables the selectio
 component: true
 ---
 
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { BasicMultipleSelect } from '@/components/docs/multiple-select'
-
 ## Basic
-<BasicMultipleSelect />
+
+<Playground comp="multiple-select/basic" />
 
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
+    Install following dependencies:
 
-Install following dependencies:
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
-```
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    Copy and paste the following code into your project.
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    <ComponentSource comp="components/ui/multiple-select" />
 
-Copy and paste the following code into your project.
-
-```tsx ts2js title="components/ui/..."
-CODE HERE
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add COMPONENTS HERE
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add multiple-select
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
-IMPORT CODE HERE
+[ANATOMY IMPORT HERE]
 ```
 
 ```tsx
-Anatomy CODE HERE
+[ANATOMY CODE]
 ```
 
-## SHOWCASE HERE
+## Examples
 
-SHOWCASE DESCRIPTION HERE
-
-SHOWCASE HERE
+{/* <Playground comp="" /> */}
 
 ## Props
 
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the component",
-      type: "string",
-      required: false
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/multiple-select" />

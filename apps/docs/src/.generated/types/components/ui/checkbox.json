@@ -1,0 +1,32 @@
+[
+  {
+    "displayName": "Checkbox",
+    "description": "",
+    "props": {
+      "size": {
+        "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

@@ -5,51 +5,45 @@ component: true
 doc: https://react-spectrum.adobe.com/react-aria/DropZone.html
 ---
 
-import { RequiredBlock } from "@/components/required-block";
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { BasicDropZone, DropZoneVariants } from '@/components/docs/drop-zone'
-
 ## Basic
-<BasicDropZone />
+
+<Playground comp="drop-zone/basic" />
+
+## Features
+
+There is no native element to implement a drop zone in HTML. DropZone helps achieve accessible dropzone components that can be styled as needed.
+
+- **Styleable** – Hover, keyboard focus, and the drop target states are provided for easy styling. These styles only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+- **Accessible** – Support for native drag and drop via mouse and touch, as well as keyboard and screen reader interactions. Copy and paste is also supported as a keyboard accessible alternative.
+- **Flexible** – Files, directories, and custom data types can be dropped, and the contents of the drop zone can be fully customized.
 
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
+  
 <RequiredBlock components="field" />
 
-Install following dependencies:
+    Install following dependencies:
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority clsx tailwind-merge
-```
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    Copy and paste the following code into your project.
 
-Copy and paste the following code into your project.
+    <ComponentSource comp="components/ui/drop-zone" />
 
-```tsx ts2js title="components/ui/drop-zone"
-CODE HERE
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add drop-zone
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add drop-zone
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
@@ -63,44 +57,13 @@ import { DropZone } from "@/components/ui/drop-zone";
 ```
 
 ## Example
+
 ### Variants
+
 Customizable styles and sizes for the DropZone component. Great for adapting to different layouts and visual themes.
-<DropZoneVariants />
+
+<Playground comp="drop-zone/variants" />
 
 ## Props
 
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the component",
-      type: "string",
-      required: false,
-    },
-    variant: {
-      description: "Visual style of the drop zone",
-      type: `"default" | "dashed" | "ghost"`,
-      required: false,
-    },
-    size: {
-      description: "Controls padding, height, and max width",
-      type:
-        `"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full"`,
-      required: false,
-    },
-    isDropTarget: {
-      description: "Whether the drop zone is currently a drop target",
-      type: "boolean",
-      required: false,
-    },
-    label: {
-      description: "Optional label displayed above the drop zone",
-      type: "string",
-      required: false,
-    },
-    description: {
-      description: "Optional helper text displayed below the drop zone",
-      type: "string",
-      required: false,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/drop-zone" />

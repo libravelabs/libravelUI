@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "Separator",
+    "description": "",
+    "props": {
+      "text": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

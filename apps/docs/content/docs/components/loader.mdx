@@ -3,218 +3,45 @@ title: Loader
 description: A sleek, lightweight loading indicator designed to elevate user experience by clearly signaling ongoing background activity with smooth, modern animations.
 component: true
 doc:
-     title: ProgressBar
-     url: https://react-spectrum.adobe.com/react-aria/ProgressBar.html
+  title: ProgressBar
+  url: https://react-spectrum.adobe.com/react-aria/ProgressBar.html
 ---
 
-import { BasicLoader, LoaderVariants, LoaderSizes, LoaderColors } from '@/components/docs/loader'
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-
 ## Basic
-<BasicLoader />
+
+<Playground comp="loader/basic" />
 
 ## Features
+
 The `<progress>` HTML element can be used to build a progress bar, however it is very difficult to style cross browser. ProgressBar helps achieve accessible progress bars and spinners that can be styled as needed.
 
-- `Accessible` – Follows the ARIA progressbar pattern, supporting both determinate and indeterminate progress bars. A nested label is automatically associated with the progress bar semantically.
-- `International` – The value is formatted as a percentage or custom format according to the user's locale.
+- **Accessible** – Follows the ARIA progressbar pattern, supporting both determinate and indeterminate progress bars. A nested label is automatically associated with the progress bar semantically.
+- **International** – The value is formatted as a percentage or custom format according to the user's locale.
 
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
+    Install following dependencies:
 
-Install following dependencies:
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge
-```
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    Copy and paste the following code into your project.
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    <ComponentSource comp="components/ui/loader" />
 
-Copy and paste the following code into your project.
-
-```tsx ts2js title="components/ui/loader"
-import { LoaderIcon } from "lucide-react";
-import { ProgressBar } from "react-aria-components";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-
-const loaderStyles = cva("relative", {
-  variants: {
-    color: {
-      foreground: "text-foreground",
-      primary: "text-primary",
-      secondary: "text-secondary",
-      success: "text-green-600",
-      warning: "text-yellow-600",
-      destructive: "text-destructive",
-    },
-    size: {
-      sm: "size-4",
-      md: "size-6",
-      lg: "size-8",
-      xl: "size-10",
-    },
-  },
-  defaultVariants: {
-    color: "foreground",
-    size: "sm",
-  },
-});
-
-type LoaderVariantProps = VariantProps<typeof loaderStyles>;
-
-function Bars({ className, ...props }: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      className={cn("size-4", className)}
-      data-slot="icon"
-      viewBox="0 0 135 140"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-      {...props}
-    >
-      {["0.5s", "0.25s", "0s", "0.25s", "0.5s"].map((begin, i) => (
-        <rect key={i} x={i * 30} y="10" width="15" height="120" rx="6">
-          <animate
-            attributeName="height"
-            begin={begin}
-            dur="1s"
-            values="120;110;100;90;80;70;60;50;40;140;120"
-            calcMode="linear"
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="y"
-            begin={begin}
-            dur="1s"
-            values="10;15;20;25;30;35;40;45;50;0;10"
-            calcMode="linear"
-            repeatCount="indefinite"
-          />
-        </rect>
-      ))}
-    </svg>
-  );
-}
-
-function Ring(props: React.SVGProps<SVGSVGElement>) {
-  return <LoaderIcon {...props} />;
-}
-
-function Spin({ className, ...props }: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      className={cn("size-4", className)}
-      data-slot="icon"
-      viewBox="0 0 2400 2400"
-      {...props}
-    >
-      <g strokeWidth="200" strokeLinecap="round" fill="none">
-        <line x1="1200" y1="600" x2="1200" y2="100" />
-        <line opacity="0.5" x1="1200" y1="2300" x2="1200" y2="1800" />
-        <line opacity="0.917" x1="900" y1="680.4" x2="650" y2="247.4" />
-        <line opacity="0.417" x1="1750" y1="2152.6" x2="1500" y2="1719.6" />
-        <line opacity="0.833" x1="680.4" y1="900" x2="247.4" y2="650" />
-        <line opacity="0.333" x1="2152.6" y1="1750" x2="1719.6" y2="1500" />
-        <line opacity="0.75" x1="600" y1="1200" x2="100" y2="1200" />
-        <line opacity="0.25" x1="2300" y1="1200" x2="1800" y2="1200" />
-        <line opacity="0.667" x1="680.4" y1="1500" x2="247.4" y2="1750" />
-        <line opacity="0.167" x1="2152.6" y1="650" x2="1719.6" y2="900" />
-        <line opacity="0.583" x1="900" y1="1719.6" x2="650" y2="2152.6" />
-        <line opacity="0.083" x1="1750" y1="247.4" x2="1500" y2="680.4" />
-        <animateTransform
-          attributeName="transform"
-          attributeType="XML"
-          type="rotate"
-          keyTimes="0;0.08333;0.16667;0.25;0.33333;0.41667;0.5;0.58333;0.66667;0.75;0.83333;0.91667"
-          values="0 1199 1199;30 1199 1199;60 1199 1199;90 1199 1199;120 1199 1199;150 1199 1199;180 1199 1199;210 1199 1199;240 1199 1199;270 1199 1199;300 1199 1199;330 1199 1199"
-          dur="0.83333s"
-          begin="0.08333s"
-          repeatCount="indefinite"
-          calcMode="discrete"
-        />
-      </g>
-    </svg>
-  );
-}
-
-const LOADERS = {
-  bars: Bars,
-  ring: Ring,
-  spin: Spin,
-};
-
-const DEFAULT_SPINNER = "spin";
-
-interface LoaderProps
-  extends Omit<
-      React.ComponentPropsWithoutRef<"svg">,
-      "display" | "opacity" | "color"
-    >,
-    LoaderVariantProps {
-  variant?: keyof typeof LOADERS;
-  percentage?: number;
-  isInfinite?: boolean;
-  formatOptions?: Intl.NumberFormatOptions;
-  ref?: React.RefObject<SVGSVGElement>;
-}
-
-function Loader({ isInfinite = true, ref, ...props }: LoaderProps) {
-  const {
-    className,
-    variant = DEFAULT_SPINNER,
-    color,
-    size,
-    ...spinnerProps
-  } = props;
-
-  const LoaderPrimitive =
-    LOADERS[variant in LOADERS ? variant : DEFAULT_SPINNER];
-
-  return (
-    <ProgressBar
-      data-slot="loader"
-      aria-label={props["aria-label"] ?? "Loading..."}
-      formatOptions={props.formatOptions}
-      isIndeterminate={isInfinite}
-    >
-      <LoaderPrimitive
-        role="presentation"
-        ref={ref}
-        {...spinnerProps}
-        className={cn(loaderStyles({ color, size }), [
-          variant === "ring" && "animate-spin",
-          variant === "spin" && "stroke-current",
-          className,
-        ])}
-      />
-    </ProgressBar>
-  );
-}
-
-export { Loader };
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add loader
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add loader
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
@@ -232,64 +59,23 @@ import { Loader } from "@/components/ui/loader";
 ## Examples
 
 ### Variants
+
 Showcases the different styles or types of loaders available, such as `bars`, `ring`, or `spin` icons. Each variant has a unique animation or visual appearance.
-<LoaderVariants />
+
+<Playground comp="loader/variants" />
 
 ### Sizes
+
 Displays the loader in various sizes, from `sm` to `xl`, allowing you to adjust the loader’s dimensions to fit different UI needs.
-<LoaderSizes />
+
+<Playground comp="loader/sizes" />
 
 ### Colors
+
 Illustrates how the loader’s color can be customized using predefined color schemes (like `primary`, `secondary`, `success`, `warning`, `destructive`, or default `foreground`), helping to match the loader’s appearance with your app’s theme or status.
-<LoaderColors />
+
+<Playground comp="loader/colors" />
 
 ## Props
 
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the component",
-      type: "string",
-      required: false
-    },
-        variant: {
-      description: "Type of loader spinner to display",
-      type: `"bars" | "ring" | "spin"`,
-      default: `"spin"`,
-      required: false,
-    },
-    color: {
-      description: "Color variant of the loader",
-      type: `"foreground" | "primary" | "secondary" | "success" | "warning" | "destructive"`,
-      default: `"foreground"`,
-      required: false,
-    },
-    size: {
-      description: "Size variant of the loader",
-      type: `"sm" | "md" | "lg" | "xl"`,
-      default: `"sm"`,
-      required: false,
-    },
-    percentage: {
-      description: "Progress percentage when used as determinate progress bar",
-      type: "number",
-      required: false,
-    },
-    isInfinite: {
-      description: "Whether the loader is infinite",
-      type: "boolean",
-      default: "true",
-      required: false,
-    },
-    formatOptions: {
-      description: "Options for formatting progress percentage",
-      type: "Intl.NumberFormatOptions",
-      required: false,
-    },
-    ref: {
-      description: "Ref object forwarded to the SVG element",
-      type: "React.RefObject<SVGSVGElement>",
-      required: false,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/loader" />

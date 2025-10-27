@@ -27,8 +27,8 @@ function CheckboxGroup({
 }: CheckboxGroupProps) {
   return (
     <CheckboxGroupPrimitive
-      aria-label={props["aria-label"] ?? "checkbox-group"}
       {...props}
+      aria-label={props["aria-label"] ?? "checkbox-group"}
       className={cn(
         "flex flex-col gap-3 has-[[slot=description]]:gap-6 has-[[slot=description]]:**:data-[slot=label]:font-medium **:[[slot=description]]:block",
         className

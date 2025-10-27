@@ -1,0 +1,25 @@
+[
+  {
+    "displayName": "DialogSizesBase",
+    "description": "",
+    "props": {
+      "size": {
+        "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"3xl\" | \"4xl\" | \"5xl\" | \"full\"",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "onSizeChange": {
+        "type": "(size: \"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"3xl\" | \"4xl\" | \"5xl\" | \"full\") => void",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "getDialogSizesCode",
+    "description": "",
+    "props": {}
+  }
+]

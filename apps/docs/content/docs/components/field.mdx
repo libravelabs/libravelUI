@@ -4,514 +4,57 @@ description: The Field component is fundamental and used by many other component
 component: true
 ---
 
-import { Info } from '@/components/info';
-import { RequiredBlock } from "@/components/required-block";
-import { RelatedComponents } from "@/components/related-components";
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-
 ## Basic
-<Info title="Building Block">This component serves as a foundational building block for many other UI components. Because it functions at the parent level, you won’t find many standalone examples here. Instead, you’ll see it used in context within the components that rely on it. For practical usage and visual examples, please refer to the child components that make use of it.</Info>
+
+<Info title="Building Block">
+  This component serves as a foundational building block for many other UI
+  components. Because it functions at the parent level, you won’t find many
+  standalone examples here. Instead, you’ll see it used in context within the
+  components that rely on it. For practical usage and visual examples, please
+  refer to the child components that make use of it.
+</Info>
 
 ## Related Components
 
-<RelatedComponents components={['text-field', 'number-field', "checkbox", "checkbox-group", "colors"]} />
+<RelatedComponents
+  components={[
+    "text-field",
+    "number-field",
+    "checkbox",
+    "checkbox-group",
+    "colors",
+  ]}
+/>
 
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
 
 <RequiredBlock components={["number-field", "loader"]} />
 
-Install following dependencies:
+    Install following dependencies:
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority clsx tailwind-merge lucide-react
-```
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    Copy and paste the following code into your project.
 
-Copy and paste the following code into your project.
+    <ComponentSource comp="components/ui/field" />
 
-```tsx ts2js title="components/ui/field"
-"use client";
-
-import * as React from "react";
-import type {
-  FieldErrorProps as FieldErrorPrimitiveProps,
-  GroupProps,
-  InputProps as InputPrimitiveProps,
-  TextProps,
-  ValidationResult,
-  LabelProps as LabelPrimitiveProps,
-} from "react-aria-components";
-import {
-  FieldError as FieldErrorPrimitive,
-  Label as LabelPrimitive,
-  Group,
-  Input as InputPrimitive,
-  Text,
-} from "react-aria-components";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Eye, EyeOff } from "lucide-react";
-import { NumberField } from "@/components/ui/number-field";
-import { Loader } from "@/components/ui/loader";
-
-const fieldVariants = cva(
-  [
-    "group flex items-center w-full rounded-md border bg-transparent",
-    "border-input dark:bg-input/30 px-3 py-1",
-    "text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground",
-    "transition-[color,box-shadow] outline-none",
-    "disabled:pointer-events-none disabled:opacity-80",
-
-    "file:border-0 file:bg-transparent file:text-sm file:font-medium file:inline-flex file:h-7",
-
-    "[&>.content]:text-neutral-400",
-    "group-disabled:[&_svg]:opacity-50",
-
-    "hover:inset-ring-[color-mix(in_oklab,var(--color-input)_50%,var(--color-muted-foreground)_25%)]",
-    "focus-within:hover:inset-ring-ring/70",
-
-    "has-invalid:hover:inset-ring-destructive/70",
-    "invalid:inset-ring-destructive/70",
-    "focus-within:invalid:inset-ring-destructive/70 focus-within:invalid:ring-destructive/20",
-    "group-invalid:inset-ring-destructive/70",
-    "group-invalid:focus-within:inset-ring-destructive/70",
-    "group-invalid:focus-within:ring-destructive/20",
-  ],
-  {
-    variants: {
-      variant: {
-        default: [
-          "inset-ring inset-ring-input",
-          "focus-within:inset-ring-ring/70",
-          "focus-within:ring-3 focus-within:ring-ring/20",
-        ],
-        destructive: [
-          "inset-ring-destructive ring-3 ring-destructive/20",
-          "focus-within:inset-ring-destructive",
-          "focus-within:ring-3 focus-within:ring-destructive/20",
-        ],
-        ghost: [
-          "border-none bg-transparent shadow-none",
-          "focus-within:inset-ring-0 focus-within:ring-0",
-        ],
-      },
-      size: {
-        sm: "h-7 text-sm [&_svg:not([class*='size-'])]:size-4",
-        default:
-          "h-9 text-base md:text-sm [&_svg:not([class*='size-'])]:size-4.5",
-        lg: "h-11 text-base md:text-base [&_svg:not([class*='size-'])]:size-5",
-        xl: "h-13 text-base md:text-base [&_svg:not([class*='size-'])]:size-5.5",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-);
-
-function Label({ className, ...props }: LabelPrimitiveProps) {
-  return (
-    <LabelPrimitive
-      data-slot="label"
-      className={cn(
-        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-interface FieldProps {
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  error?:
-    | string
-    | boolean
-    | React.ReactNode
-    | ((validation: ValidationResult) => string);
-}
-
-interface DescriptionProps extends TextProps {
-  ref?: React.RefObject<HTMLElement>;
-}
-
-const Description = ({ ref, className, ...props }: DescriptionProps) => {
-  return (
-    <Text
-      ref={ref}
-      {...props}
-      slot="description"
-      className={cn(
-        "text-sm text-muted-foreground group-disabled:opacity-50",
-        className
-      )}
-    />
-  );
-};
-
-interface FieldErrorProps extends FieldErrorPrimitiveProps {
-  ref?: React.RefObject<HTMLElement>;
-  message?: FieldProps["error"];
-  asDefault?: boolean;
-}
-
-const FieldError = ({
-  className,
-  ref,
-  message,
-  children,
-  asDefault = false,
-  ...props
-}: FieldErrorProps) => {
-  if (asDefault) {
-    return (
-      <p
-        {...props}
-        className={cn(
-          "text-sm text-destructive group-disabled:opacity-50",
-          className
-        )}
-      >
-        {message ?? children}
-      </p>
-    );
-  }
-
-  return (
-    <FieldErrorPrimitive
-      ref={ref}
-      {...props}
-      className={cn(
-        "text-sm text-destructive group-disabled:opacity-50",
-        className
-      )}
-    >
-      {message ?? children}
-    </FieldErrorPrimitive>
-  );
-};
-
-interface FieldGroupProps
-  extends GroupProps,
-    VariantProps<typeof fieldVariants> {
-  ref?: React.RefObject<HTMLDivElement>;
-}
-
-const FieldGroup = ({
-  className,
-  ref,
-  variant,
-  size,
-  ...props
-}: FieldGroupProps) => {
-  return (
-    <Group
-      {...props}
-      ref={ref}
-      className={cn(fieldVariants({ variant: variant, size }), className)}
-    />
-  );
-};
-
-type InputProps = InputPrimitiveProps &
-  VariantProps<typeof fieldVariants> & {
-    error?: FieldProps["error"];
-    label?: string | React.ReactNode;
-    description?: string;
-    startContent?: string | React.ReactNode;
-    endContent?: string | React.ReactNode;
-    labelExtra?: string | React.ReactNode;
-    isLoading?: boolean;
-    size?: VariantProps<typeof fieldVariants>["size"];
-    classNames?: {
-      container?: string;
-      wrapper?: string;
-      input?: string;
-      label?: string;
-      description?: string;
-      error?: string;
-      startContent?: string;
-      endContent?: string;
-      labelExtra?: string;
-    };
-  };
-
-function Input({
-  error,
-  description,
-  startContent,
-  endContent,
-  label,
-  labelExtra,
-  classNames,
-  variant,
-  size,
-  isLoading = false,
-  ...props
-}: InputProps) {
-  const [visible, setVisible] = React.useState(false);
-
-  const variantClass = error ? "destructive" : variant || "default";
-  const inputType =
-    props.type === "password" ? (visible ? "text" : "password") : props.type;
-
-  if (props.type === "number") return <NumberField />;
-
-  return (
-    <div className={cn("grid gap-2", classNames?.container)}>
-      {(label || labelExtra) && (
-        <div className="flex justify-between items-center">
-          {label && (
-            <Label
-              htmlFor={props.id || props.name}
-              className={cn(classNames?.label)}
-            >
-              {label}
-            </Label>
-          )}
-          {labelExtra && (
-            <div
-              className={cn(
-                "content flex items-center",
-                classNames?.labelExtra
-              )}
-            >
-              {labelExtra}
-            </div>
-          )}
-        </div>
-      )}
-
-      <div>
-        <FieldGroup
-          className={cn(
-            fieldVariants({ variant: variantClass, size }),
-            props.className || classNames?.wrapper
-          )}
-        >
-          {startContent && typeof startContent === "string" ? (
-            <span
-              className={cn(
-                classNames?.startContent,
-                "me-2 text-muted-foreground"
-              )}
-            >
-              {startContent}
-            </span>
-          ) : startContent ? (
-            <div
-              className={cn(
-                "content me-2 flex items-center",
-                classNames?.startContent
-              )}
-            >
-              {startContent}
-            </div>
-          ) : null}
-
-          <InputPrimitive
-            {...props}
-            type={inputType}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${props.id}-error` : undefined}
-            className={cn(
-              "ring-0 flex-1 border-none bg-transparent p-0 shadow-none outline-hidden focus:outline-hidden focus:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70",
-              classNames?.input
-            )}
-          />
-
-          {(props.type === "password") && (
-            <div
-              className="content ms-2 flex cursor-pointer items-center"
-              onClick={() => setVisible(!visible)}
-            >
-              {visible ? <EyeOff /> : <Eye />}
-            </div>
-          )}
-
-          {isLoading ? (
-            <Loader />
-          ) : endContent ? (
-            typeof endContent === "string" ? (
-              <span
-                className={cn(
-                  classNames?.endContent,
-                  "ms-2 text-muted-foreground"
-                )}
-              >
-                {endContent}
-              </span>
-            ) : (
-              <div
-                className={cn(
-                  "content ms-2 flex items-center",
-                  classNames?.endContent
-                )}
-              >
-                {endContent}
-              </div>
-            )
-          ) : null}
-        </FieldGroup>
-
-        <Description className={cn("m-0 mt-1", classNames?.description)}>
-          {description}
-        </Description>
-      </div>
-      <FieldError
-        id={`${props.id}-error`}
-        message={error}
-        className={cn("-mt-2", classNames?.error)}
-      />
-    </div>
-  );
-}
-
-export type { FieldProps, InputProps, DescriptionProps, FieldErrorProps };
-export { Description, Label, FieldError, FieldGroup, Input };
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add field
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add field
+    ```
+  </Tab>
 </Tabs>
 
 ## Props
 
-### Label Props
-
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the label.",
-      type: "string",
-      required: false,
-    },
-  }}
-/>
-
-### FieldGroup Props
-<TypeTable
-  type={{
-    variant: {
-      description: "Visual variant of the field group container.",
-      type: `"default" | "destructive" | "ghost"`,
-      default: "default",
-      required: false,
-    },
-    size: {
-      description: "Size of the field group.",
-      type: `"default" | "sm" | "lg" | "xl"`,
-      default: "default",
-      required: false,
-    },
-    className: {
-      description: "Additional class names for the group container.",
-      type: "string",
-      required: false,
-    },
-  }}
-/>
-
-### Description Props
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the description text.",
-      type: "string",
-      required: false,
-    },
-  }}
-/>
-
-### FieldError Props
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for the error message.",
-      type: "string",
-      required: false,
-    },
-    message: {
-      description: "Error message to display. Overrides children.",
-      type: "string | ((validation: ValidationResult) => string)",
-      required: false,
-    },
-  }}
-/>
-
-### Input Props
-<TypeTable
-  type={{
-    error: {
-      description: "Displays error message or validation error.",
-      type: "string | ((validation: ValidationResult) => string)",
-      required: false,
-    },
-    label: {
-      description: "Label text or custom React node for the input.",
-      type: "string | React.ReactNode",
-      required: false,
-    },
-    description: {
-      description: "Description shown below the input field.",
-      type: "string",
-      required: false,
-    },
-    startContent: {
-      description: "Content rendered before the input (e.g. icon).",
-      type: "string | React.ReactNode",
-      required: false,
-    },
-    endContent: {
-      description: "Content rendered after the input (e.g. icon, button).",
-      type: "string | React.ReactNode",
-      required: false,
-    },
-    labelExtra: {
-      description: "Content rendered on the right side of the label row.",
-      type: "string | React.ReactNode",
-      required: false,
-    },
-    classNames: {
-      description:
-        "Custom class names for input sub-elements. Keys: container, wrapper, input, label, description, error, startContent, endContent, labelExtra (all optional, all strings).",
-      type: "object",
-      required: false,
-    },
-    variant: {
-      description: "Visual variant of the field style.",
-      type: '"default" | "destructive" | "ghost"',
-      default: "default",
-      required: false,
-    },
-    size: {
-      description: "Size of the input field.",
-      type: '"default" | "sm" | "lg" | "xl"',
-      default: "default",
-      required: false,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/field" />

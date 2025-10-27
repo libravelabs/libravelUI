@@ -1,0 +1,147 @@
+[
+  {
+    "displayName": "Popover",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogTrigger",
+    "description": "",
+    "props": {
+      "asPrimitive": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "size": {
+        "type": "\"default\" | \"xs\" | \"sm\" | \"lg\" | \"icon-xs\" | \"icon-sm\" | \"icon\" | \"icon-lg\" | \"icon-xl\" | \"icon-2xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "radius": {
+        "type": "\"sm\" | \"lg\" | \"none\" | \"md\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isLoading": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "loader": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "plain": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DialogClose",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "outline"
+      },
+      "size": {
+        "type": "\"default\" | \"xs\" | \"sm\" | \"lg\" | \"icon-xs\" | \"icon-sm\" | \"icon\" | \"icon-lg\" | \"icon-xl\" | \"icon-2xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "radius": {
+        "type": "\"sm\" | \"lg\" | \"none\" | \"md\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isLoading": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "loader": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "plain": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DialogDescription",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "PopoverContent",
+    "description": "",
+    "props": {
+      "withArrow": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      }
+    }
+  },
+  {
+    "displayName": "DialogBody",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogFooter",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "DialogHeader",
+    "description": "",
+    "props": {
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DialogTitle",
+    "description": "",
+    "props": {}
+  }
+]

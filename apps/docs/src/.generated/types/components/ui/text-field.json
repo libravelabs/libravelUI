@@ -1,0 +1,84 @@
+[
+  {
+    "displayName": "TextField",
+    "description": "",
+    "props": {
+      "label": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "string | (validation: ValidationResult) => string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "startContent": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "endContent": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isLoading": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"ghost\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "size": {
+        "type": "undefined",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "labelExtra": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "classNames": {
+        "type": {
+          "container": "string | undefined",
+          "wrapper": "string | undefined",
+          "input": "string | undefined",
+          "label": "string | undefined",
+          "description": "string | undefined",
+          "error": "string | undefined",
+          "startContent": "string | undefined",
+          "endContent": "string | undefined",
+          "labelExtra": "string | undefined"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

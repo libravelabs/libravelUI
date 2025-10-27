@@ -1,0 +1,20 @@
+[
+  {
+    "displayName": "Badge",
+    "description": "",
+    "props": {
+      "asChild": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "variant": {
+        "type": "\"default\" | \"success\" | \"secondary\" | \"destructive\" | \"outline\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      }
+    }
+  }
+]

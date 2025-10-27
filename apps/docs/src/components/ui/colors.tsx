@@ -50,8 +50,8 @@ function ColorArea({ className, ...props }: ColorAreaProps) {
       {...props}
       data-slot="color-box"
       className={cn(
-        className,
-        "size-56 shrink-0 rounded-md bg-muted forced-colors:bg-[GrayText]"
+        "size-56 shrink-0 rounded-md bg-muted forced-colors:bg-[GrayText]",
+        className
       )}
       style={({ defaultStyle, isDisabled }) => ({
         ...defaultStyle,
@@ -93,8 +93,8 @@ function ColorSwatch({ className, ...props }: ColorSwatchProps) {
       data-slot="color-swatch"
       aria-label={props["aria-label"] ?? "Color swatch"}
       className={cn(
-        className,
-        "inset-ring-1 inset-ring-foreground/10 size-8 shrink-0 rounded-lg"
+        "inset-ring-1 inset-ring-foreground/10 size-8 shrink-0 rounded-lg",
+        className
       )}
       {...props}
     />
@@ -165,7 +165,7 @@ function ColorSwatchPicker({
   return (
     <ColorSwatchPickerPrimitive
       layout={layout}
-      className={cn(className, "flex gap-1")}
+      className={cn("flex gap-1", className)}
       {...props}
     >
       {children}
@@ -181,8 +181,8 @@ function ColorSwatchPickerItem({
   return (
     <ColorSwatchPickerItemPrimitive
       className={cn(
-        className,
-        "cursor-pointer relative overflow-hidden rounded-sm outline-hidden disabled:opacity-50"
+        "cursor-pointer relative overflow-hidden rounded-sm outline-hidden disabled:opacity-50",
+        className
       )}
       {...props}
     >
@@ -193,7 +193,7 @@ function ColorSwatchPickerItem({
               <ColorSwatch
                 className={cn(
                   (values.isSelected || values.isFocused || values.isPressed) &&
-                    "border-2 border-foreground",
+                    "border-2 border-foreground size-5",
                   values.isDisabled && "opacity-50"
                 )}
               />

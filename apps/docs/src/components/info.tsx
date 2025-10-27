@@ -11,7 +11,7 @@ import {
 export function Info({
   children,
   variant,
-  title = "",
+  title,
   icon = <InfoIcon />,
 }: AlertProps) {
   return (

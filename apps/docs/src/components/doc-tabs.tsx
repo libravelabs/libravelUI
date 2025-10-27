@@ -58,7 +58,7 @@ export function DocTabs({
         <TabContent
           key={item.value}
           id={item.value}
-          className={cn(classNames?.content)}
+          className={cn("bg-background", classNames?.content)}
         >
           {item.content}
         </TabContent>

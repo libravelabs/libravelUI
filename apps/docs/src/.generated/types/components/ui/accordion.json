@@ -1,0 +1,121 @@
+[
+  {
+    "displayName": "Accordion",
+    "description": "",
+    "props": {
+      "multiple": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "variant": {
+        "type": "\"default\" | \"ghost\" | \"outline\" | \"solid\" | \"muted\" | \"separated\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "size": {
+        "type": "\"sm\" | \"md\" | \"lg\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "md"
+      }
+    }
+  },
+  {
+    "displayName": "AccordionItem",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"ghost\" | \"outline\" | \"solid\" | \"muted\" | \"separated\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "size": {
+        "type": "\"sm\" | \"md\" | \"lg\" | \"full\" | \"xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "md"
+      },
+      "transition": {
+        "type": "ValueAnimationTransition<any> | TransitionWithValueOverrides<any>",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DisclosureTrigger",
+    "description": "",
+    "props": {
+      "icon": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "hideChevron": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "asChild": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "children": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "The children of the component. A function may be provided to alter the children based on component state.",
+        "defaultValue": null
+      },
+      "variant": {
+        "type": "\"default\" | \"ghost\" | \"outline\" | \"link\" | \"destructive\" | \"secondary\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "size": {
+        "type": "\"default\" | \"sm\" | \"lg\" | \"xs\" | \"icon-xs\" | \"icon-sm\" | \"icon\" | \"icon-lg\" | \"icon-xl\" | \"icon-2xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "md"
+      },
+      "radius": {
+        "type": "\"sm\" | \"md\" | \"lg\" | \"full\" | \"none\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isLoading": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "loader": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "plain": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "DisclosureContent",
+    "description": "",
+    "props": {}
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "displayName": "Skeleton",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "SkeletonText",
+    "description": "",
+    "props": {
+      "lines": {
+        "type": "number",
+        "required": false,
+        "description": "",
+        "defaultValue": "3"
+      }
+    }
+  }
+]

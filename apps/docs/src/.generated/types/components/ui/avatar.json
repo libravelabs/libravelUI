@@ -1,0 +1,38 @@
+[
+  {
+    "displayName": "Avatar",
+    "description": "",
+    "props": {
+      "src": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": "null"
+      },
+      "initials": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "alt": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "size": {
+        "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "md"
+      },
+      "variant": {
+        "type": "\"circle\" | \"square\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "circle"
+      }
+    }
+  }
+]

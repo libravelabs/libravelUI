@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "getMDXComponents",
+    "description": "",
+    "props": {
+      "wrapper": {
+        "type": "string | (props: any) => any | new (props: any) => JSX.ElementClass",
+        "required": false,
+        "description": "If a wrapper component is defined, the MDX content will be wrapped inside of it.",
+        "defaultValue": null
+      }
+    }
+  }
+]

@@ -1,0 +1,105 @@
+[
+  {
+    "displayName": "Description",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "Label",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "FieldError",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "FieldGroup",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"ghost\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "size": {
+        "type": "\"default\" | \"sm\" | \"lg\" | \"xl\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      }
+    }
+  },
+  {
+    "displayName": "Input",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\" | \"ghost\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "error": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "label": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "startContent": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "endContent": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "labelExtra": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "isLoading": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "classNames": {
+        "type": {
+          "container": "string | undefined",
+          "wrapper": "string | undefined",
+          "input": "string | undefined",
+          "label": "string | undefined",
+          "description": "string | undefined",
+          "error": "string | undefined",
+          "startContent": "string | undefined",
+          "endContent": "string | undefined",
+          "labelExtra": "string | undefined"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

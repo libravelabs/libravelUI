@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "Heading",
+    "description": "",
+    "props": {
+      "level": {
+        "type": "1 | 2 | 3 | 4 | 5 | 6",
+        "required": false,
+        "description": "",
+        "defaultValue": "1"
+      }
+    }
+  }
+]

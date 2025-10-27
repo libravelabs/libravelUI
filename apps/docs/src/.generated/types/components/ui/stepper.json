@@ -1,0 +1,36 @@
+[
+  {
+    "displayName": "Stepper",
+    "description": "",
+    "props": {
+      "steps": {
+        "type": {
+          "title": "string",
+          "description": "string",
+          "href": "string"
+        },
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "activeStep": {
+        "type": "number",
+        "required": false,
+        "description": "",
+        "defaultValue": "0"
+      },
+      "useLink": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      },
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

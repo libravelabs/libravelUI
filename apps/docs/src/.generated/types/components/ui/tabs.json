@@ -1,0 +1,47 @@
+[
+  {
+    "displayName": "Tabs",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"ghost\" | \"outline\" | \"underline\" | \"solid\" | \"muted\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "width": {
+        "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"3xl\" | \"4xl\" | \"5xl\" | \"6xl\" | \"7xl\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "xl"
+      },
+      "size": {
+        "type": "\"default\" | \"sm\" | \"lg\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "radius": {
+        "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"3xl\" | \"none\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "xl"
+      }
+    }
+  },
+  {
+    "displayName": "TabList",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "TabTrigger",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "TabContent",
+    "description": "",
+    "props": {}
+  }
+]

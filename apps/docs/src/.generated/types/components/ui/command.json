@@ -1,0 +1,90 @@
+[
+  {
+    "displayName": "Command",
+    "description": "",
+    "props": {
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "items": {
+        "type": {
+          "id": "string",
+          "label": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "onAction": {
+        "type": "(key: string) => void",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "CommandInput",
+    "description": "",
+    "props": {
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": "Search item..."
+      }
+    }
+  },
+  {
+    "displayName": "CommandList",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "CommandGroup",
+    "description": "",
+    "props": {
+      "title": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "CommandItem",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"destructive\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      }
+    }
+  },
+  {
+    "displayName": "CommandEmpty",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "CommandSeparator",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "CommandShortcut",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "CommandDescription",
+    "description": "",
+    "props": {}
+  }
+]

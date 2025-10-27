@@ -1,0 +1,50 @@
+[
+  {
+    "displayName": "DisclosureVariantsBase",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "undefined | \"default\" | \"ghost\" | \"outline\" | \"solid\" | \"muted\" | \"separated\"",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "size": {
+        "type": "undefined | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\"",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "onVariantChange": {
+        "type": "(v: \"default\" | \"ghost\" | \"outline\" | \"solid\" | \"muted\" | \"separated\" | undefined) => void",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "onSizeChange": {
+        "type": "(s: \"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\" | undefined) => void",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "getDisclosureVariantsCode",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "undefined | \"default\" | \"ghost\" | \"outline\" | \"solid\" | \"muted\" | \"separated\"",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "size": {
+        "type": "undefined | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\"",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

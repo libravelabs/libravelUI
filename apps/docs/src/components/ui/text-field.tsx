@@ -8,17 +8,18 @@ import {
 import { Input, type InputProps } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-interface TextFieldProps extends TextFieldPrimitiveProps, InputProps {
-  label?: string;
-  description?: string;
-  placeholder?: string;
-  error?: string | ((validation: ValidationResult) => string);
-  startContent?: InputProps["startContent"];
-  endContent?: InputProps["endContent"];
-  isLoading?: InputProps["isLoading"];
-  variant?: InputProps["variant"];
-  size?: InputProps["size"];
-}
+type TextFieldProps = TextFieldPrimitiveProps &
+  InputProps & {
+    label?: string;
+    description?: string;
+    placeholder?: string;
+    error?: string | ((validation: ValidationResult) => string);
+    startContent?: InputProps["startContent"];
+    endContent?: InputProps["endContent"];
+    isLoading?: InputProps["isLoading"];
+    variant?: InputProps["variant"];
+    size?: InputProps["size"];
+  };
 
 function TextField({
   label,

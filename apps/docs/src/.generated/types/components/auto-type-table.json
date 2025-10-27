@@ -1,0 +1,14 @@
+[
+  {
+    "displayName": "AutoTypeTable",
+    "description": "",
+    "props": {
+      "comp": {
+        "type": "string",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

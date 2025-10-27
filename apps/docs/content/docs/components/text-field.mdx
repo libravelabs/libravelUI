@@ -5,16 +5,12 @@ component: true
 doc: https://react-spectrum.adobe.com/react-aria/TextField.html
 ---
 
-import { RequiredBlock } from "@/components/required-block";
-import { TypeTable } from "fumadocs-ui/components/type-table";
-import { Tabs, Tab } from "fumadocs-ui/components/tabs";
-import { BasiceTextField, SizesTextField, VariantsTextField, WithFormTextField, StartEndContentTextField } from '@/components/docs/text-field'
-
 ## Basic
-A text field is an input where you can type something in text, like your name or email.
-<BasiceTextField />
+
+<Playground comp="text-field/basic" />
 
 ## Features
+
 Text fields can be built with `<input>` or `<textarea>` and `<label>` elements, but you must manually ensure that they are semantically connected via ids for accessibility. TextField helps automate this, and handle other accessibility features while allowing for custom styling.
 
 - `Accessible` – Uses a native `<input>` element. Label, description, and error message elements are automatically associated with the field.
@@ -23,119 +19,30 @@ Text fields can be built with `<input>` or `<textarea>` and `<label>` elements, 
 ## Installation
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
-<Tab value="Manual">
+  <Tab value="Manual">
 
 <RequiredBlock components="field" />
 
-Install following dependencies:
+    Install following dependencies:
 
-```package-install
-npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge
-```
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
 
-Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
 
-```ts ts2js title="lib/utils.ts"
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+    <ComponentSource comp="lib/utils" isReact={false} />
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+    Copy and paste the following code into your project.
 
-Copy and paste the following code into your project.
+    <ComponentSource comp="components/ui/text-field" />
 
-```tsx ts2js title="components/ui/text-field"
-"use client";
-
-import {
-  TextField as TextFieldPrimitive,
-  type TextFieldProps as TextFieldPrimitiveProps,
-  type ValidationResult,
-} from "react-aria-components";
-import { Input, type InputProps } from "@/components/ui/field";
-import { cn } from "@/lib/utils";
-
-interface TextFieldProps extends TextFieldPrimitiveProps, InputProps {
-  label?: string;
-  description?: string;
-  placeholder?: string;
-  error?: string | ((validation: ValidationResult) => string);
-  startContent?: InputProps["startContent"];
-  endContent?: InputProps["endContent"];
-  isLoading?: InputProps["isLoading"];
-  variant?: InputProps["variant"];
-  size?: InputProps["size"];
-}
-
-function TextField({
-  label,
-  placeholder,
-  description,
-  error,
-  startContent,
-  endContent,
-  className,
-  children,
-  labelExtra,
-  classNames,
-  variant,
-  size,
-  isLoading,
-  ...rest
-}: TextFieldProps) {
-  const inputProps: InputProps = {
-    placeholder,
-    error,
-    description,
-    startContent,
-    endContent,
-    label,
-    labelExtra,
-    classNames,
-    variant,
-    size,
-    isLoading,
-  };
-
-  const textFieldProps: TextFieldPrimitiveProps = {
-    ...rest,
-    "aria-label": rest["aria-label"] ?? label ?? "search-bar",
-  };
-
-  return (
-    <TextFieldPrimitive
-      {...textFieldProps}
-      className={cn(className, "group relative w-full")}
-    >
-      {(values) => (
-        <>
-          {typeof children === "function" ? (
-            children(values)
-          ) : children ? (
-            children
-          ) : (
-            <Input {...inputProps} type={rest.type} />
-          )}
-        </>
-      )}
-    </TextFieldPrimitive>
-  );
-}
-
-export type { TextFieldProps };
-export { TextField };
-```
-
-</Tab>
-<Tab value="CLI">
-
-```package-install
-npx libravelui@latest add text-field
-```
-
-</Tab>
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add text-field
+    ```
+  </Tab>
 </Tabs>
 
 ## Anatomy
@@ -157,90 +64,29 @@ import { TextField } from "@/components/ui/text-field";
 ## Examples
 
 ### Sizes
+
 Defines the height and overall spacing of the input. Use different sizes to match the component to various UI contexts.
-<SizesTextField />
+
+<Playground comp="text-field/sizes" />
 
 ### Variants
+
 Controls the visual style of the input, such as default or error states. Use variants to reflect the input’s purpose or status.
-<VariantsTextField />
+
+<Playground comp="text-field/variants" />
 
 ### Start and End Content
+
 This example shows how to add customizable elements at the start and end of the input field, such as icons or buttons, to enhance user interaction and improve UI clarity.
-<StartEndContentTextField />
+
+<Playground comp="text-field/start-end-content" />
 
 ### With Form
+
 This example demonstrates how to integrate the text field component within a form context, showcasing form validation, error handling, and submission behavior seamlessly.
-<WithFormTextField />
+
+<Playground comp="text-field/with-form" />
 
 ## Props
 
-<TypeTable
-  type={{
-    label: {
-      description: "Label for the input field",
-      type: "string",
-      required: false,
-    },
-    placeholder: {
-      description: "Placeholder text shown inside the input",
-      type: "string",
-      required: false,
-    },
-    description: {
-      description: "Additional description text displayed below the input",
-      type: "string",
-      required: false,
-    },
-    error: {
-      description: "Error message string or a function returning a string based on validation result",
-      type: "string | ((validation: ValidationResult) => string)",
-      required: false,
-    },
-    startContent: {
-      description: "Content rendered at the start (left) of the input",
-      type: "string | React.ReactNode",
-      required: false,
-    },
-    endContent: {
-      description: "Content rendered at the end (right) of the input",
-      type: "string | React.ReactNode",
-      required: false,
-    },
-    className: {
-      description: "Additional class names for the component",
-      type: "string",
-      required: false,
-    },
-    children: {
-      description: "Optional children or render function to customize input rendering",
-      type: "React.ReactNode | ((values: any) => React.ReactNode)",
-      required: false,
-    },
-    labelExtra: {
-      description: "Extra content to display beside the label",
-      type: "string | React.ReactNode",
-      required: false,
-    },
-    classNames: {
-      description: "Custom class names for inner parts of the input",
-      type: "object",
-      required: false,
-    },
-    variant: {
-      description: "Visual variant of the input field",
-      type: "string",
-      required: false,
-    },
-    size: {
-      description: "Size variant of the input field",
-      type: "string",
-      required: false,
-    },
-    isLoading: {
-      description: "If true, shows a loading state",
-      type: "boolean",
-      default: "false",
-      required: false,
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/text-field" />

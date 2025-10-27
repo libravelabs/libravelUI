@@ -1,0 +1,43 @@
+[
+  {
+    "displayName": "Textarea",
+    "description": "",
+    "props": {
+      "classNames": {
+        "type": {
+          "wrapper": "string | string[] | undefined",
+          "input": "string | string[] | undefined",
+          "description": "string | string[] | undefined",
+          "errorState": "string | string[] | undefined"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "error": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

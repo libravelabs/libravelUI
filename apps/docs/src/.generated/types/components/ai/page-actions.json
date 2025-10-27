@@ -1,0 +1,32 @@
+[
+  {
+    "displayName": "CopyButton",
+    "description": "",
+    "props": {
+      "markdownUrl": {
+        "type": "string",
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "LLMOptions",
+    "description": "",
+    "props": {
+      "markdownUrl": {
+        "type": "string",
+        "required": true,
+        "description": "A URL to the raw Markdown/MDX content of page",
+        "defaultValue": null
+      },
+      "githubUrl": {
+        "type": "string",
+        "required": true,
+        "description": "Source file URL on GitHub",
+        "defaultValue": null
+      }
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "displayName": "Slider",
+    "description": "",
+    "props": {
+      "output": {
+        "type": "\"inline\" | \"tooltip\" | \"none\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "inline"
+      }
+    }
+  },
+  {
+    "displayName": "SliderFiller",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "SliderTrack",
+    "description": "",
+    "props": {}
+  },
+  {
+    "displayName": "SliderThumb",
+    "description": "",
+    "props": {}
+  }
+]

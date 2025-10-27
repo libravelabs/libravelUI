@@ -7,7 +7,8 @@
     "dev": "next dev --turbo",
     "start": "next start",
     "postinstall": "fumadocs-mdx",
-    "lint": "eslint"
+    "lint": "eslint",
+    "docgen": "bunx tsx src/scripts/generate-docs.ts"
   },
   "dependencies": {
     "@next/third-parties": "^15.5.3",
@@ -27,8 +28,10 @@
     "oxc-transform": "^0.91.0",
     "react": "^19.1.1",
     "react-aria-components": "^1.12.2",
+    "react-docgen-typescript": "^2.4.0",
     "react-dom": "^19.1.1",
     "react-element-to-jsx-string": "^17.0.1",
+    "react-markdown": "^10.1.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.7",
     "tailwindcss-react-aria-components": "^2.0.1",

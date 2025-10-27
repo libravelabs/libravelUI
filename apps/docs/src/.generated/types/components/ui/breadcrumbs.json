@@ -1,0 +1,44 @@
+[
+  {
+    "displayName": "Breadcrumb",
+    "description": "",
+    "props": {
+      "size": {
+        "type": "\"default\" | \"sm\" | \"lg\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "default"
+      },
+      "separator": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": "<ChevronRight />"
+      }
+    }
+  },
+  {
+    "displayName": "BreadcrumbItem",
+    "description": "",
+    "props": {
+      "emphasis": {
+        "type": "\"normal\" | \"current\"",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  },
+  {
+    "displayName": "BreadcrumbSeparator",
+    "description": "",
+    "props": {
+      "separator": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

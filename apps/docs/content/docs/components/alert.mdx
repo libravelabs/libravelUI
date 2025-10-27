@@ -12,7 +12,7 @@ component: true
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
   <Tab value="Manual">
-    <RequiredBlock components="field" />
+    <RequiredBlock components="button" />
     Install following dependencies:
 
     ```package-install
@@ -103,94 +103,4 @@ An alert that can be manually dismissed by the user. This pattern improves usabi
 
 ## Props
 
-### Alert
-
-<TypeTable
-  type={{
-    variant: {
-      description: "Defines the visual style of the alert",
-      type: '"default" | "destructive" | "warning" | "info" | "success"',
-      default: '"default"',
-    },
-    title: {
-      description: "The title text displayed in the alert (optional)",
-      type: "string",
-    },
-    message: {
-      description: "The description or body text of the alert",
-      type: "string",
-    },
-    icon: {
-      description: "Optional icon element displayed before the text",
-      type: "React.ReactNode",
-    },
-    canClosed: {
-      description: "If true, the alert is dismissible with a close button",
-      type: "boolean",
-      default: "false",
-    },
-    className: {
-      description: "Additional class names for the main alert container",
-      type: "string",
-    },
-    children: {
-      description:
-        "Optional custom content to replace the default message. Overrides the `message` prop if provided.",
-      type: "React.ReactNode",
-    },
-    open: {
-      description: "Controlled open state. Determines if the alert is visible",
-      type: "boolean",
-    },
-    onOpenChange: {
-      description: "Function to control the open state from a parent component",
-      type: "(open: boolean) => void",
-    },
-  }}
-/>
-
-### AlertRoot
-
-<TypeTable
-  type={{
-    variant: {
-      description: "The visual style of the alert",
-      type: `"default" | "destructive" | "warning" | "success" | "info"`,
-      default: `"default"`,
-    },
-    className: {
-      description: "Additional class names for styling",
-      type: "string",
-    },
-  }}
-/>
-
-### AlertTitle
-
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for styling the title",
-      type: "string",
-    },
-    children: {
-      description: "Title content (typically text or heading)",
-      type: "React.ReactNode",
-    },
-  }}
-/>
-
-### AlertDescription
-
-<TypeTable
-  type={{
-    className: {
-      description: "Additional class names for styling the description",
-      type: "string",
-    },
-    children: {
-      description: "Description content (typically text or elements)",
-      type: "React.ReactNode",
-    },
-  }}
-/>
+<AutoTypeTable comp="@/components/ui/alert" />

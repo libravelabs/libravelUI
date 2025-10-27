@@ -1,0 +1,38 @@
+[
+  {
+    "displayName": "DocTabs",
+    "description": "",
+    "props": {
+      "variant": {
+        "type": "\"default\" | \"ghost\" | \"outline\" | \"underline\" | \"solid\" | \"muted\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "underline"
+      },
+      "items": {
+        "type": {
+          "label": "React.ReactNode",
+          "value": "string",
+          "content": "React.ReactNode"
+        },
+        "required": true,
+        "description": "",
+        "defaultValue": null
+      },
+      "defaultValue": {
+        "type": "string",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "classNames": {
+        "type": {
+          "content": "string | string[] | undefined"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      }
+    }
+  }
+]

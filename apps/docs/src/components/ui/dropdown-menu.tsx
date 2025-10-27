@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Check, ChevronRight, CircleSmall } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Shortcut, type ShortcutProps } from "@/components/ui/shortcut";
 import {
