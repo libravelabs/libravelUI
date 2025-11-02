@@ -10,7 +10,7 @@ import { Monitor, Moon, Sun, type LucideIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { type HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { ButtonProps } from "./button";
+import { ButtonProps } from "@/components/ui/button";
 
 const themes: {
   label: string;

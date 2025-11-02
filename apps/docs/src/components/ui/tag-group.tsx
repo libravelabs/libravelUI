@@ -12,8 +12,7 @@ import {
   Tag as TagPrimitive,
 } from "react-aria-components";
 import { composeTailwindRenderProps } from "@/lib/render-props";
-import { Label } from "@/components/ui/label";
-import { Description } from "@/components/ui/field";
+import { Description, Label } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 interface TagGroupProps extends TagGroupPrimitiveProps {

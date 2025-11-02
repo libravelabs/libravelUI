@@ -40,7 +40,7 @@ function DatePicker<T extends DateValue>({
   return (
     <DatePickerPrimitive
       aria-label={props["aria-label"] ?? "date-picker"}
-      className={cn("group flex flex-col gap-y-1", className)}
+      className={cn("group grid gap-2", className)}
       {...props}
     >
       {label && <Label>{label}</Label>}
@@ -53,8 +53,8 @@ function DatePicker<T extends DateValue>({
           <CalendarIcon className="text-muted-foreground" />
         </PopoverTrigger>
       </FieldGroup>
-      {description && <Description>{description}</Description>}
-      <FieldError>{error}</FieldError>
+      {!error && description && <Description>{description}</Description>}
+      {error && <FieldError className="-mt-1">{error}</FieldError>}
 
       <PopoverContent
         withArrow={false}

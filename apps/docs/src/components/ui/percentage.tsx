@@ -4,7 +4,7 @@ import {
   Meter as PercentagePrimitive,
   type MeterProps as PercentagePrimitiveProps,
 } from "react-aria-components";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 interface PercentageProps extends PercentagePrimitiveProps {
@@ -16,14 +16,14 @@ function Percentage({ label, className, ...props }: PercentageProps) {
     <PercentagePrimitive
       {...props}
       className={cn("flex min-w-56 flex-col gap-1", className)}
-      aria-label={label ?? "progress-bar"}
+      aria-label={label ?? "percentage"}
     >
       {({ percentage, valueText }) => {
         const barColorClass = getColorClass(percentage);
         return (
           <>
             <div className="flex w-full justify-between gap-2">
-              <Label>{label}</Label>
+              {label && <Label>{label}</Label>}
               <span
                 className={cn(
                   "text-sm tabular-nums",
@@ -33,10 +33,7 @@ function Percentage({ label, className, ...props }: PercentageProps) {
                 )}
               >
                 {percentage >= 80 && (
-                  <AlertCircle
-                    aria-label="Alert"
-                    className="inline-block size-4 stroke-destructive text-destructive align-text-bottom"
-                  />
+                  <AlertCircle className="inline-block size-4 stroke-destructive text-destructive align-text-bottom" />
                 )}
                 {` ${valueText}`}
               </span>
@@ -50,7 +47,12 @@ function Percentage({ label, className, ...props }: PercentageProps) {
                 )}
                 initial={{ width: 0 }}
                 animate={{ width: `${percentage}%` }}
-                transition={{ duration: 0.5 }}
+                transition={{
+                  type: "spring",
+                  damping: 10,
+                  mass: 0.75,
+                  stiffness: 100,
+                }}
               />
             </div>
           </>

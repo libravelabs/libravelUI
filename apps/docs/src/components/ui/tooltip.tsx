@@ -46,7 +46,7 @@ function Tooltip(props: TooltipProps) {
 }
 
 function TooltipTrigger({
-  variant = "outline",
+  variant = "ghost",
   ...props
 }: React.ComponentProps<typeof Button>) {
   return <Button variant={variant} {...props} />;

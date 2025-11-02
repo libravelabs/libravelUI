@@ -4,37 +4,61 @@ import {
   Button,
   SearchField as SearchBarPrimitive,
   type SearchFieldProps as SearchBarPrimitiveProps,
-  type ValidationResult,
 } from "react-aria-components";
-import { Input, type InputProps } from "./field";
+import { Input, type InputProps } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
-import { Loader } from "./loader";
+import { Loader } from "@/components/ui/loader";
 import { Search, X } from "lucide-react";
 
-interface SearchBarProps extends SearchBarPrimitiveProps {
-  label?: string;
-  description?: string;
-  placeholder?: string;
-  error?: string | ((validation: ValidationResult) => string);
-  isLoading?: boolean;
-  endContent?: InputProps["endContent"];
-}
+type SearchBarProps = SearchBarPrimitiveProps & InputProps;
 
 function SearchBar({
-  label,
   placeholder,
-  description,
-  className,
   error,
-  children,
+  description,
   endContent,
+  label,
+  labelExtra,
+  classNames = {
+    wrapper: "group-disabled:[&_svg]:opacity-50",
+    input:
+      "[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
+  },
+  variant,
+  size,
+  isDisabled,
   isLoading,
+  className,
+  children,
   ...props
 }: SearchBarProps) {
+  const inputProps: InputProps = {
+    placeholder,
+    error,
+    description,
+    endContent,
+    label,
+    labelExtra,
+    classNames,
+    variant,
+    size,
+    isDisabled,
+    isLoading,
+  };
+
+  const SearchFieldProps: SearchBarPrimitiveProps = {
+    ...props,
+    "aria-label":
+      typeof props["aria-label"] === "string"
+        ? props["aria-label"]
+        : typeof label === "string"
+          ? label
+          : "text-field",
+  };
+
   return (
     <SearchBarPrimitive
-      {...props}
-      aria-label={props["aria-label"] ?? label ?? "search-bar"}
+      {...SearchFieldProps}
       className={cn(className, "group relative w-full")}
     >
       {(values) => (
@@ -45,8 +69,7 @@ function SearchBar({
             children
           ) : (
             <Input
-              label={label}
-              placeholder={placeholder}
+              {...inputProps}
               startContent={isLoading ? <Loader variant="spin" /> : <Search />}
               endContent={
                 <>
@@ -61,13 +84,6 @@ function SearchBar({
                   {endContent}
                 </>
               }
-              description={description}
-              error={error}
-              classNames={{
-                wrapper: "group-disabled:[&_svg]:opacity-50",
-                input:
-                  "[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
-              }}
             />
           )}
         </>

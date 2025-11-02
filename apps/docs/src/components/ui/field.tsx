@@ -19,48 +19,56 @@ import {
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
-import { NumberField } from "@/components/ui/number-field";
+import { NumberField, NumberFieldProps } from "@/components/ui/number-field";
 import { Loader } from "@/components/ui/loader";
 
 const fieldVariants = cva(
   [
-    "group flex items-center w-full rounded-md border bg-transparent",
-    "border-input dark:bg-input/30 px-3 py-1",
+    "group flex items-center w-full min-w-0",
+    "px-3 py-1 border bg-transparent",
     "text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground",
     "transition-[color,box-shadow] outline-none",
     "disabled:pointer-events-none disabled:opacity-80",
-
     "file:border-0 file:bg-transparent file:text-sm file:font-medium file:inline-flex file:h-7",
-
     "[&>.content]:text-neutral-400",
     "group-disabled:[&_svg]:opacity-50",
-
-    "hover:inset-ring-[color-mix(in_oklab,var(--color-input)_50%,var(--color-muted-foreground)_25%)]",
-    "focus-within:hover:inset-ring-ring/70",
-
-    "has-invalid:hover:inset-ring-destructive/70",
-    "invalid:inset-ring-destructive/70",
-    "focus-within:invalid:inset-ring-destructive/70 focus-within:invalid:ring-destructive/20",
-    "group-invalid:inset-ring-destructive/70",
-    "group-invalid:focus-within:inset-ring-destructive/70",
-    "group-invalid:focus-within:ring-destructive/20",
+    "transition-all ease-in-out",
   ],
   {
     variants: {
       variant: {
         default: [
-          "inset-ring inset-ring-input",
-          "focus-within:inset-ring-ring/70",
-          "focus-within:ring-3 focus-within:ring-ring/20",
+          "border-input inset-ring inset-ring-input",
+          "hover:inset-ring-[color-mix(in_oklab,var(--color-input)_50%,var(--color-muted-foreground)_25%)]",
+          "focus-within:inset-ring-ring/70 focus-within:ring-3 focus-within:ring-ring/20",
+          "focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20",
+          "focus-within:hover:inset-ring-ring/70 focus:hover:inset-ring-ring/70",
+          "group-invalid:border-input group-invalid:inset-ring-destructive group-invalid:ring-3 group-invalid:ring-destructive/20",
+          "group-invalid:focus-within:inset-ring-destructive group-invalid:focus-within:ring-3 group-invalid:focus-within:ring-destructive/20",
+          "group-invalid:focus:inset-ring-destructive group-invalid:focus:ring-3 group-invalid:focus:ring-destructive/20",
+          "group-invalid:hover:inset-ring-destructive",
+          "group-invalid:focus-within:hover:inset-ring-destructive group-invalid:focus:hover:inset-ring-destructive",
+          "group-invalid:invalid:inset-ring-destructive group-invalid:focus-within:invalid:ring-destructive/20 group-invalid:focus:invalid:ring-destructive/20",
         ],
         destructive: [
-          "inset-ring-destructive ring-3 ring-destructive/20",
-          "focus-within:inset-ring-destructive",
-          "focus-within:ring-3 focus-within:ring-destructive/20",
+          "border-input inset-ring-destructive ring-3 ring-destructive/20",
+          "focus-within:inset-ring-destructive focus-within:ring-3 focus-within:ring-destructive/20",
+          "focus:inset-ring-destructive focus:ring-3 focus:ring-destructive/20",
+          "hover:inset-ring-destructive focus-within:hover:inset-ring-destructive focus:hover:inset-ring-destructive",
+          "invalid:inset-ring-destructive focus-within:invalid:ring-destructive/20 focus:invalid:ring-destructive/20",
         ],
         ghost: [
-          "border-none bg-transparent shadow-none",
-          "focus-within:inset-ring-0 focus-within:ring-0",
+          "border-none ring-0 inset-ring-0 outline-none shadow-none bg-transparent",
+          "hover:inset-ring-0 focus-within:inset-ring-0 focus-within:ring-0 focus:ring-0 focus:outline-none",
+          "focus:inset-ring-0 focus:ring-0 focus:outline-none",
+          "invalid:inset-ring-0 has-invalid:inset-ring-0 group-invalid:inset-ring-0",
+        ],
+        line: [
+          "border-0 border-b border-foreground/30 ring-0 inset-ring-0 outline-none shadow-none bg-transparent !rounded-none",
+          "hover:inset-ring-0 focus-within:inset-ring-0 focus-within:ring-0 focus:ring-0 focus:outline-none",
+          "focus:inset-ring-0 focus:ring-0 focus:outline-none",
+          "invalid:inset-ring-0 has-invalid:inset-ring-0 group-invalid:inset-ring-0",
+          "focus-within:border-foreground/70 focus:border-foreground/70",
         ],
       },
       size: {
@@ -70,10 +78,18 @@ const fieldVariants = cva(
         lg: "h-11 text-base md:text-base [&_svg:not([class*='size-'])]:size-5",
         xl: "h-13 text-base md:text-base [&_svg:not([class*='size-'])]:size-5.5",
       },
+      radius: {
+        none: "rounded-none",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-lg",
+        full: "rounded-full",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      radius: "md",
     },
   }
 );
@@ -83,7 +99,7 @@ function Label({ className, ...props }: LabelPrimitiveProps) {
     <LabelPrimitive
       data-slot="label"
       className={cn(
-        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        "flex items-center w-fit gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
         className
       )}
       {...props}
@@ -95,18 +111,14 @@ interface FieldProps {
   label?: string;
   placeholder?: string;
   description?: string;
-  error?:
-    | string
-    | boolean
-    | React.ReactNode
-    | ((validation: ValidationResult) => string);
+  error?: React.ReactNode | ((validation: ValidationResult) => string);
 }
 
 interface DescriptionProps extends TextProps {
   ref?: React.RefObject<HTMLElement>;
 }
 
-const Description = ({ ref, className, ...props }: DescriptionProps) => {
+function Description({ ref, className, ...props }: DescriptionProps) {
   return (
     <Text
       ref={ref}
@@ -118,7 +130,7 @@ const Description = ({ ref, className, ...props }: DescriptionProps) => {
       )}
     />
   );
-};
+}
 
 interface FieldErrorProps extends FieldErrorPrimitiveProps {
   ref?: React.RefObject<HTMLElement>;
@@ -126,14 +138,14 @@ interface FieldErrorProps extends FieldErrorPrimitiveProps {
   asDefault?: boolean;
 }
 
-const FieldError = ({
+function FieldError({
   className,
   ref,
   message,
   children,
   asDefault = false,
   ...props
-}: FieldErrorProps) => {
+}: FieldErrorProps) {
   if (asDefault) {
     return (
       <p
@@ -160,7 +172,7 @@ const FieldError = ({
       {message ?? children}
     </FieldErrorPrimitive>
   );
-};
+}
 
 interface FieldGroupProps
   extends GroupProps,
@@ -168,21 +180,22 @@ interface FieldGroupProps
   ref?: React.RefObject<HTMLDivElement>;
 }
 
-const FieldGroup = ({
+function FieldGroup({
   className,
   ref,
   variant,
   size,
+  radius,
   ...props
-}: FieldGroupProps) => {
+}: FieldGroupProps) {
   return (
     <Group
       {...props}
       ref={ref}
-      className={cn(fieldVariants({ variant: variant, size }), className)}
+      className={cn(fieldVariants({ variant, size, radius }), className)}
     />
   );
-};
+}
 
 type InputProps = InputPrimitiveProps &
   VariantProps<typeof fieldVariants> & {
@@ -192,8 +205,8 @@ type InputProps = InputPrimitiveProps &
     startContent?: string | React.ReactNode;
     endContent?: string | React.ReactNode;
     labelExtra?: string | React.ReactNode;
+    isDisabled?: boolean;
     isLoading?: boolean;
-    size?: VariantProps<typeof fieldVariants>["size"];
     classNames?: {
       container?: string;
       wrapper?: string;
@@ -217,6 +230,8 @@ function Input({
   classNames,
   variant,
   size,
+  radius,
+  isDisabled = false,
   isLoading = false,
   ...props
 }: InputProps) {
@@ -226,11 +241,20 @@ function Input({
   const inputType =
     props.type === "password" ? (visible ? "text" : "password") : props.type;
 
-  if (props.type === "number") return <NumberField />;
+  if (props.type === "number")
+    return (
+      <NumberField
+        {...(props as NumberFieldProps)}
+        label={label}
+        description={description}
+        error={error}
+        placeholder={props.placeholder}
+      />
+    );
 
   return (
     <div className={cn("grid gap-2", classNames?.container)}>
-      {(label || labelExtra) && (
+      {label || labelExtra ? (
         <div className="flex justify-between items-center">
           {label && (
             <Label
@@ -251,92 +275,101 @@ function Input({
             </div>
           )}
         </div>
-      )}
+      ) : null}
+      <FieldGroup
+        className={cn(
+          fieldVariants({ variant: variantClass, size, radius }),
+          props.className || classNames?.wrapper
+        )}
+      >
+        {startContent && typeof startContent === "string" ? (
+          <span
+            className={cn(
+              classNames?.startContent,
+              "me-2 text-muted-foreground"
+            )}
+          >
+            {startContent}
+          </span>
+        ) : startContent ? (
+          <div
+            className={cn(
+              "content me-2 flex items-center",
+              classNames?.startContent
+            )}
+          >
+            {startContent}
+          </div>
+        ) : null}
 
-      <div>
-        <FieldGroup
+        <InputPrimitive
+          {...props}
+          type={inputType}
+          disabled={isDisabled || isLoading}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${props.id}-error` : undefined}
           className={cn(
-            fieldVariants({ variant: variantClass, size }),
-            props.className || classNames?.wrapper
+            "ring-0 flex-1 min-w-0 border-none bg-transparent p-0 shadow-none outline-hidden focus:outline-hidden focus:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70",
+            classNames?.input
           )}
-        >
-          {startContent && typeof startContent === "string" ? (
+        />
+
+        {props.type === "password" && (
+          <div
+            className="content ms-2 flex cursor-pointer items-center"
+            onClick={() => setVisible(!visible)}
+          >
+            {visible ? <EyeOff /> : <Eye />}
+          </div>
+        )}
+
+        {isLoading ? (
+          <Loader />
+        ) : endContent ? (
+          typeof endContent === "string" ? (
             <span
               className={cn(
-                classNames?.startContent,
-                "me-2 text-muted-foreground"
+                classNames?.endContent,
+                "ms-2 text-muted-foreground"
               )}
             >
-              {startContent}
+              {endContent}
             </span>
-          ) : startContent ? (
+          ) : (
             <div
               className={cn(
-                "content me-2 flex items-center",
-                classNames?.startContent
+                "content ms-2 flex items-center",
+                classNames?.endContent
               )}
             >
-              {startContent}
+              {endContent}
             </div>
-          ) : null}
+          )
+        ) : null}
+      </FieldGroup>
 
-          <InputPrimitive
-            {...props}
-            type={inputType}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${props.id}-error` : undefined}
-            className={cn(
-              "ring-0 flex-1 border-none bg-transparent p-0 shadow-none outline-hidden focus:outline-hidden focus:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70",
-              classNames?.input
-            )}
-          />
-
-          {props.type === "password" && (
-            <div
-              className="content ms-2 flex cursor-pointer items-center"
-              onClick={() => setVisible(!visible)}
-            >
-              {visible ? <EyeOff /> : <Eye />}
-            </div>
-          )}
-
-          {isLoading ? (
-            <Loader />
-          ) : endContent ? (
-            typeof endContent === "string" ? (
-              <span
-                className={cn(
-                  classNames?.endContent,
-                  "ms-2 text-muted-foreground"
-                )}
-              >
-                {endContent}
-              </span>
-            ) : (
-              <div
-                className={cn(
-                  "content ms-2 flex items-center",
-                  classNames?.endContent
-                )}
-              >
-                {endContent}
-              </div>
-            )
-          ) : null}
-        </FieldGroup>
-
-        <Description className={cn("m-0 mt-1", classNames?.description)}>
+      {!error && description ? (
+        <Description className={cn("m-0 -mt-1", classNames?.description)}>
           {description}
         </Description>
-      </div>
-      <FieldError
-        id={`${props.id}-error`}
-        message={error}
-        className={cn("-mt-2", classNames?.error)}
-      />
+      ) : null}
+      {error ? (
+        <FieldError
+          asDefault
+          id={`${props.id}-error`}
+          message={error}
+          className={cn("-mt-2", classNames?.error)}
+        />
+      ) : null}
     </div>
   );
 }
 
-export type { FieldProps, InputProps, DescriptionProps, FieldErrorProps };
-export { Description, Label, FieldError, FieldGroup, Input };
+export type {
+  FieldProps,
+  FieldGroupProps,
+  InputProps,
+  DescriptionProps,
+  FieldErrorProps,
+};
+export { Description, Label, FieldError, FieldGroup, Input, fieldVariants };

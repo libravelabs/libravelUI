@@ -44,7 +44,7 @@ interface ModalContentProps
     DialogProps,
     "aria-label" | "aria-labelledby" | "role" | "children"
   > {
-  dialogSize?: keyof typeof sizes;
+  size?: keyof typeof sizes;
   showCloseButton?: boolean;
   blurred?: boolean;
   className?: ModalOverlayProps["className"];
@@ -58,7 +58,7 @@ function ModalContent({
   blurred = false,
   children,
   overlayProps,
-  dialogSize = "lg",
+  size = "lg",
   role = "dialog",
   showCloseButton = true,
   ...props
@@ -89,7 +89,7 @@ function ModalContent({
             "relative bg-popover text-popover-foreground",
             "shadow-lg ring ring-foreground/5 dark:ring-border",
             "rounded-t-2xl md:rounded-xl",
-            sizes[dialogSize],
+            sizes[size],
             isEntering && [
               "slide-in-from-bottom animate-in duration-300 ease-out",
               "md:fade-in md:zoom-in-95 md:slide-in-from-bottom-0",
@@ -143,6 +143,8 @@ const ModalTitle = DialogTitle;
 const ModalDescription = DialogDescription;
 const ModalFooter = DialogFooter;
 const ModalBody = DialogBody;
+
+export type { ModalContentProps };
 
 export {
   Modal,

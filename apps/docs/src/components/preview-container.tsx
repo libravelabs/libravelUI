@@ -31,7 +31,7 @@ export const PreviewContainer = ({
 
   return (
     <DirectionProvider dir={direction}>
-      <div className="grid w-full relative overflow-hidden">
+      <div className="grid w-full overflow-hidden">
         {!hideButtons && (
           <div className="ms-auto flex items-center gap-2">
             <Button variant="secondary" size={"icon"} onClick={handleDirection}>
@@ -52,17 +52,13 @@ export const PreviewContainer = ({
         )}
         <div
           key={key}
+          dir={direction}
           className={cn(
-            "min-h-56 rounded-xl bg-background flex items-center justify-center not-prose relative",
+            "min-h-56 rounded-xl bg-background flex items-center justify-center not-prose px-2 overflow-hidden",
             className
           )}
         >
-          <div
-            className="relative z-0 w-full h-full flex items-center justify-center px-2"
-            dir={direction}
-          >
-            {children}
-          </div>
+          {children}
         </div>
       </div>
     </DirectionProvider>

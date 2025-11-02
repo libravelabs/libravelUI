@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { TextField } from "@/components/ui/text-field";
-import { User, Lock, Mail } from "lucide-react";
+import { User, Lock } from "lucide-react";
 
 export default function BasicCard() {
   return (
@@ -37,7 +37,7 @@ export default function BasicCard() {
               type="password"
               label="Password"
               id="password"
-              placeholder="It's secret.."
+              placeholder="It's a secret.."
               startContent={<Lock />}
               labelExtra={
                 <a

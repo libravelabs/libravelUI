@@ -1,0 +1,50 @@
+---
+title: Form
+description: A form is a group of inputs that allows users to submit data to a server, with support for providing field validation errors.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/Form.html
+---
+
+## Basic
+
+<Playground comp="form/basic" />
+
+## Features
+
+The HTML `<form>` element can be used to build forms. React Aria's Form component extends HTML forms with support for providing server-side validation errors to the fields within it.
+
+- **Accessible** – Uses a native `<form>` element, with support for ARIA labelling to create a [form landmark](https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/form.html).
+- **Validation** – Support for native HTML constraint validation with customizable UI, custom validation functions, realtime validation, and server-side validation errors.
+  See the [Forms](https://react-spectrum.adobe.com/react-aria/forms.html) guide to learn more about React Aria's form components, including submitting data, and form validation techniques.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/form" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add form
+    ```
+  </Tab>
+</Tabs>
+
+## Example
+
+### Grid
+
+<Playground comp="form/grid" />

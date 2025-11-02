@@ -3,39 +3,28 @@
 import {
   TextField as TextFieldPrimitive,
   type TextFieldProps as TextFieldPrimitiveProps,
-  type ValidationResult,
 } from "react-aria-components";
 import { Input, type InputProps } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-type TextFieldProps = TextFieldPrimitiveProps &
-  InputProps & {
-    label?: string;
-    description?: string;
-    placeholder?: string;
-    error?: string | ((validation: ValidationResult) => string);
-    startContent?: InputProps["startContent"];
-    endContent?: InputProps["endContent"];
-    isLoading?: InputProps["isLoading"];
-    variant?: InputProps["variant"];
-    size?: InputProps["size"];
-  };
+type TextFieldProps = TextFieldPrimitiveProps & InputProps;
 
 function TextField({
-  label,
   placeholder,
-  description,
   error,
+  description,
   startContent,
   endContent,
-  className,
-  children,
+  label,
   labelExtra,
   classNames,
   variant,
   size,
+  isDisabled,
   isLoading,
-  ...rest
+  className,
+  children,
+  ...props
 }: TextFieldProps) {
   const inputProps: InputProps = {
     placeholder,
@@ -48,12 +37,18 @@ function TextField({
     classNames,
     variant,
     size,
+    isDisabled,
     isLoading,
   };
 
   const textFieldProps: TextFieldPrimitiveProps = {
-    ...rest,
-    "aria-label": rest["aria-label"] ?? label ?? "search-bar",
+    ...props,
+    "aria-label":
+      typeof props["aria-label"] === "string"
+        ? props["aria-label"]
+        : typeof label === "string"
+          ? label
+          : "text-field",
   };
 
   return (
@@ -68,7 +63,7 @@ function TextField({
           ) : children ? (
             children
           ) : (
-            <Input {...inputProps} type={rest.type} />
+            <Input {...inputProps} type={props.type} />
           )}
         </>
       )}

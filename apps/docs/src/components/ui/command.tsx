@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import {
@@ -28,7 +28,7 @@ interface CommandContextValue {
   isEmpty: boolean;
   setIsEmpty: (empty: boolean) => void;
 
-  items?: { id: string; label: string }[];
+  items?: { id: string; name: string }[];
   onAction?: (key: string) => void;
 }
 
@@ -279,6 +279,13 @@ function CommandDescription({
     />
   );
 }
+
+export type {
+  CommandProps,
+  CommandInputProps,
+  CommandItemProps,
+  CommandDescriptionProps,
+};
 
 export {
   Command,

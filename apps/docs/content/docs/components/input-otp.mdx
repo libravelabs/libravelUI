@@ -1,0 +1,83 @@
+---
+title: Input OTP
+description: Component for entering one-time passwords. Fully accessible, unstyled by default, and easy to customize.
+component: true
+doc: https://input-otp.rodz.dev/
+---
+
+## Basic
+
+<Playground comp="input-otp/basic" />
+
+## Features
+
+- Supports iOS + Android copy-paste-cut
+- Automatic OTP code retrieval from transport (e.g SMS)
+- Supports screen readers (a11y)
+- Supports all keybindings
+- Automatically optimizes for password managers
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/input-otp" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add input-otp
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+```
+
+```tsx
+<InputOTP maxLength={6}>
+  <InputOTPGroup>
+    <InputOTPSlot index={0} />
+    <InputOTPSlot index={1} />
+    <InputOTPSlot index={2} />
+  </InputOTPGroup>
+  <InputOTPSeparator />
+  <InputOTPGroup>
+    <InputOTPSlot index={3} />
+    <InputOTPSlot index={4} />
+    <InputOTPSlot index={5} />
+  </InputOTPGroup>
+</InputOTP>
+```
+
+## Example
+
+### Separator
+
+With separator for clearer digit entry and easier interaction.
+
+<Playground comp="input-otp/separated" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/input-otp" />
