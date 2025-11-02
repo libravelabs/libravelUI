@@ -1,0 +1,147 @@
+---
+title: Input
+description: A versatile input component for efficiently capturing user information in forms or interfaces.
+component: true
+---
+
+## Basic
+
+<Playground comp="input/basic" />
+
+## Features
+
+The `Input` component provides a highly flexible and accessible way to handle different input types, including text, password, and number fields. It supports additional UI enhancements such as loading indicators, start/end content, and dynamic visibility toggling for passwords.
+
+- **Flexible** – Supports multiple input types (`text`, `password`, `number`, `etc`.) and can render a specialized `NumberField` when `type="number"` is used. Allows adding custom content before (`startContent`) or after (`endContent`) the input.
+
+- **Accessible** – ARIA attributes like `aria-invalid` and `aria-describedby` are included for error handling, ensuring screen readers can convey input state correctly. Labels and descriptions are properly associated with the input.
+
+- **Password Visibility Toggle** – Automatically adds a show/hide toggle for password fields with eye icons for better user experience.
+
+- **Loading and Disabled States** – Handles `isLoading` and `isDisabled` states, visually indicating when an input is inactive or in progress.
+
+- **Error Handling** – Displays error messages below the input when provided, with proper IDs for screen reader accessibility.
+
+- **Customizable Styling** – Fully styleable via `classNames` for container, input, labels, and content areas. Supports variants and sizes for different UI needs.
+
+- **Composable Layout** – Labels, extra label content, descriptions, and errors are flexibly positioned using a grid layout, ensuring consistent spacing and alignment.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+    <RequiredBlock components={["number-field", "loader"]} />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/field" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add field
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Input } from "@/components/ui/field";
+```
+
+```tsx
+<Input
+  error=""
+  description=""
+  startContent={null}
+  endContent={null}
+  label=""
+  labelExtra={null}
+  classNames={{
+    container: "",
+    label: "",
+    labelExtra: "",
+    wrapper: "",
+    startContent: "",
+    endContent: "",
+    input: "",
+    description: "",
+    error: "",
+  }}
+  variant=""
+  size=""
+  isDisabled={false}
+  isLoading={false}
+  id=""
+  name=""
+  type=""
+  placeholder=""
+  className=""
+/>
+```
+
+## Examples
+
+### Variants
+
+Inputs can have multiple visual styles, or variants, to indicate different purposes or states, such as default, destructive, ghost, or line. Use variants to align with your design system and highlight specific actions or contexts.
+
+<Playground comp="input/variants" />
+
+### Controlled
+
+A controlled input is managed through state. Its value is determined and updated by external logic, allowing full control over user input and behavior.
+
+<Playground comp="input/controlled" />
+
+### Description
+
+You can provide a short description below the input to guide the user or explain what kind of data is expected.
+
+<Playground comp="input/description" />
+
+### Password
+
+When you add `type="password"`, the input automatically becomes a password field with a built-in hide/show toggle for visibility.
+
+<Playground comp="input/password" />
+
+### Start and End Content
+
+You can add custom content before or after the input, such as icons, buttons, or labels, to enhance usability and context.
+
+<Playground comp="input/start-end-content" />
+
+### Extra Label
+
+An extra label allows you to display additional information next to the main label, such as an optional tag, helper text, or a short note.
+
+<Playground comp="input/extra-label" />
+
+### Loading
+
+When the input is in a loading state, a spinner or progress indicator is displayed to inform the user that a process is ongoing.
+
+<Playground comp="input/loading" />
+
+### Error
+
+Displays an error message and visual indication (such as a red border) when the input value is invalid or fails validation.
+
+<Playground comp="input/error" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/field" />

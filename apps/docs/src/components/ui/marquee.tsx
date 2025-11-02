@@ -144,7 +144,7 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
         aria-label={ariaLabel || "Scrolling content"}
         aria-live="off"
         className={cn(
-          "group flex overflow-hidden max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-7xl",
+          "group flex overflow-hidden",
           vertical ? "flex-col" : "flex-row",
           className
         )}

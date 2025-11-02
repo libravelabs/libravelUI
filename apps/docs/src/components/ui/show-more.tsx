@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "./button";
+import { Button } from "@/components/uibutton";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

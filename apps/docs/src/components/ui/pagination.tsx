@@ -2,193 +2,258 @@
 
 import * as React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { motion, LayoutGroup } from "motion/react";
 
-const paginationVariants = {
-  container: cva("flex items-center justify-center", {
+const paginationContainer = cva("flex items-center justify-center", {
+  variants: {
+    spacing: {
+      default: "gap-1",
+      compact: "gap-0.5",
+    },
+  },
+  defaultVariants: {
+    spacing: "default",
+  },
+});
+
+const paginationItem = cva(
+  "group relative inline-flex items-center justify-center whitespace-nowrap text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+  {
     variants: {
-      spacing: {
-        default: "gap-1",
-        compact: "gap-0.5",
+      variant: {
+        default:
+          "text-foreground hover:bg-accent hover:text-accent-foreground data-[active=true]:text-primary-foreground focus-visible:ring-ring",
+        outline:
+          "text-muted-foreground/60 data-[active=true]:text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
+        ghost:
+          "text-muted-foreground/60 data-[active=true]:text-foreground data-[active=true]:scale-125 hover:text-foreground focus-visible:ring-ring",
+        secondary: "text-secondary-foreground hover:opacity-70",
+        link: "data-[active=true]:text-primary underline-offset-4 hover:underline",
+        underline: "text-foreground data-[active=true]:text-primary",
+      },
+      size: {
+        sm: "size-8 text-xs",
+        default: "size-9",
+        lg: "size-10",
+      },
+      radius: {
+        none: "rounded-none",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-lg",
+        full: "rounded-full",
       },
     },
     defaultVariants: {
-      spacing: "default",
+      variant: "default",
+      size: "default",
+      radius: "md",
     },
-  }),
-  item: cva(
-    "inline-flex items-center justify-center whitespace-nowrap text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
-    {
-      variants: {
-        variant: {
-          default:
-            "h-9 w-9 rounded-lg text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-          outline:
-            "h-9 w-9 rounded-lg border border-border text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-          ghost:
-            "h-9 w-9 rounded-lg text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-        },
-        size: {
-          sm: "h-8 w-8 text-xs",
-          default: "h-9 w-9",
-          lg: "h-10 w-10",
-        },
-        state: {
-          default: "",
-          active:
-            "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring",
-        },
-      },
-      defaultVariants: {
-        variant: "default",
-        size: "default",
-        state: "default",
-      },
-    }
-  ),
-  nav: cva(
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-lg px-3 text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring cursor-pointer",
-    {
-      variants: {
-        variant: {
-          default:
-            "rounded-lg text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-          outline:
-            "rounded-lg border border-border text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-          ghost:
-            "rounded-lg text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
-        },
-        size: {
-          sm: "h-8 text-xs px-2",
-          default: "h-9",
-          lg: "h-10 px-4",
-        },
-      },
-      defaultVariants: {
-        size: "default",
-      },
-    }
-  ),
-};
+  }
+);
 
-type PaginationContextProps = {
-  variant?: "default" | "outline" | "ghost";
-  size?: "sm" | "default" | "lg";
-  spacing?: "default" | "compact";
-};
+const paginationNav = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-3 text-foreground hover:text-accent-foreground focus-visible:ring-ring cursor-pointer",
+  {
+    variants: {
+      variant: {
+        default:
+          "text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
+        outline:
+          "border border-border text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
+        ghost:
+          "text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
+        secondary: "text-secondary-foreground hover:opacity-70",
+        link: "underline-offset-4 hover:underline",
+        underline: "text-foreground hover:text-primary",
+      },
+      size: {
+        sm: "h-8 text-xs px-2",
+        default: "h-9",
+        lg: "h-10 px-4",
+      },
+      radius: {
+        none: "rounded-none",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-lg",
+        full: "rounded-full",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+      radius: "md",
+    },
+  }
+);
 
-const PaginationContext = React.createContext<PaginationContextProps | null>(
+const activeVariants = cva("absolute inset-0 z-0 transition-none", {
+  variants: {
+    variant: {
+      default: "bg-primary group-hover:opacity-70",
+      destructive: "bg-destructive group-hover:opacity-70",
+      outline: "border-2 border-primary bg-background group-hover:opacity-70",
+      secondary: "bg-secondary group-hover:opacity-70",
+      ghost: "group-hover:bg-foreground/10",
+      link: "",
+      underline: "border-b-2 border-primary !rounded-none",
+    },
+    size: {
+      sm: "h-8",
+      default: "h-9",
+      lg: "h-10",
+    },
+    radius: {
+      none: "rounded-none",
+      sm: "rounded-sm",
+      md: "rounded-md",
+      lg: "rounded-lg",
+      full: "rounded-full",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+    radius: "md",
+  },
+});
+
+type PaginationVariantProps = VariantProps<typeof paginationContainer> &
+  VariantProps<typeof paginationNav> &
+  VariantProps<typeof paginationItem> & {
+    id?: string;
+  };
+
+const PaginationContext = React.createContext<PaginationVariantProps | null>(
   null
 );
 
-interface PaginationProps
-  extends React.HTMLAttributes<HTMLElement>,
-    PaginationContextProps {}
+function usePagination() {
+  const context = React.useContext(PaginationContext);
+  if (!context)
+    throw new Error("Pagination components must be used within <Pagination>");
+  const { id, variant, size, radius, spacing } = context;
+  return { id, variant, size, radius, spacing };
+}
 
-const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
-  ({ className, spacing, variant, size, ...props }, ref) => {
-    return (
-      <PaginationContext.Provider value={{ variant, size, spacing }}>
+type PaginationProps = React.HTMLAttributes<HTMLElement> &
+  PaginationVariantProps;
+
+function Pagination({
+  className,
+  spacing,
+  variant,
+  size,
+  radius,
+  ...props
+}: PaginationProps) {
+  const id = React.useId();
+
+  return (
+    <PaginationContext.Provider value={{ id, variant, size, radius, spacing }}>
+      <LayoutGroup id={id}>
         <nav
-          ref={ref}
           role="navigation"
           aria-label="pagination"
-          className={cn(paginationVariants.container({ spacing }), className)}
+          className={cn(paginationContainer({ spacing }), className)}
           {...props}
         />
-      </PaginationContext.Provider>
-    );
-  }
-);
+      </LayoutGroup>
+    </PaginationContext.Provider>
+  );
+}
 
 interface PaginationItemProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isActive?: boolean;
-  state?: "default" | "active";
 }
 
-const PaginationItem = React.forwardRef<HTMLButtonElement, PaginationItemProps>(
-  ({ className, isActive, state, ...props }, ref) => {
-    const ctx = React.useContext(PaginationContext);
-    return (
-      <button
-        ref={ref}
-        className={cn(
-          paginationVariants.item({
-            variant: ctx?.variant,
-            size: ctx?.size,
-            state: isActive ? "active" : state,
-          }),
-          className
-        )}
-        aria-current={isActive ? "page" : undefined}
-        {...props}
-      />
-    );
-  }
-);
+function PaginationItem({
+  className,
+  isActive,
+  children,
+  ...props
+}: PaginationItemProps) {
+  const { id, variant, size, radius } = usePagination();
+
+  return (
+    <button
+      data-active={isActive}
+      className={cn(
+        paginationItem({ variant, size, radius }),
+        "relative group",
+        className
+      )}
+      aria-current={isActive ? "page" : undefined}
+      {...props}
+    >
+      {isActive && (
+        <motion.div
+          layoutId={`${id}-pagination-active`}
+          className={cn(activeVariants({ variant, size, radius }))}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
+        />
+      )}
+      <span className="relative z-10">{children}</span>
+    </button>
+  );
+}
 
 type PaginationNavProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const PaginationPrevious = React.forwardRef<
-  HTMLButtonElement,
-  PaginationNavProps
->(({ className, children, ...props }, ref) => {
-  const ctx = React.useContext(PaginationContext);
+function PaginationPrevious({
+  className,
+  children,
+  ...props
+}: PaginationNavProps) {
+  const { variant, size, radius } = usePagination();
+
   return (
     <button
-      ref={ref}
+      className={cn(paginationNav({ variant, size, radius }), className)}
+      {...props}
+    >
+      <ChevronLeft className="size-4" />
+      {children ?? "Previous"}
+    </button>
+  );
+}
+
+function PaginationNext({ className, children, ...props }: PaginationNavProps) {
+  const { variant, size, radius } = usePagination();
+
+  return (
+    <button
+      className={cn(paginationNav({ variant, size, radius }), className)}
+      {...props}
+    >
+      {children ?? "Next"}
+      <ChevronRight className="size-4" />
+    </button>
+  );
+}
+
+type PaginationEllipsisProps = React.HTMLAttributes<HTMLSpanElement>;
+
+function PaginationEllipsis({ className, ...props }: PaginationEllipsisProps) {
+  return (
+    <span
       className={cn(
-        paginationVariants.nav({ variant: ctx?.variant, size: ctx?.size }),
+        "inline-flex size-9 items-center justify-center text-muted-foreground",
         className
       )}
       {...props}
     >
-      <ChevronLeft className="h-4 w-4" />
-      {children ?? "Previous"}
-    </button>
+      <MoreHorizontal className="size-4" />
+      <span className="sr-only">More pages</span>
+    </span>
   );
-});
+}
 
-const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNavProps>(
-  ({ className, children, ...props }, ref) => {
-    const ctx = React.useContext(PaginationContext);
-
-    return (
-      <button
-        ref={ref}
-        className={cn(
-          paginationVariants.nav({ variant: ctx?.variant, size: ctx?.size }),
-          className
-        )}
-        {...props}
-      >
-        {children ?? "Next"}
-        <ChevronRight className="h-4 w-4" />
-      </button>
-    );
-  }
-);
-
-type PaginationEllipsisProps = React.HTMLAttributes<HTMLSpanElement>;
-
-const PaginationEllipsis = React.forwardRef<
-  HTMLSpanElement,
-  PaginationEllipsisProps
->(({ className, ...props }, ref) => (
-  <span
-    ref={ref}
-    className={cn(
-      "inline-flex h-9 w-9 items-center justify-center text-muted-foreground",
-      className
-    )}
-    {...props}
-  >
-    <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More pages</span>
-  </span>
-));
+export type { PaginationVariantProps };
 
 export {
   Pagination,
@@ -196,12 +261,7 @@ export {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
-  paginationVariants,
-};
-
-export type {
-  PaginationProps,
-  PaginationItemProps,
-  PaginationNavProps,
-  PaginationEllipsisProps,
+  paginationContainer,
+  paginationItem,
+  paginationNav,
 };

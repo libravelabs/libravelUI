@@ -6,40 +6,61 @@ import {
   type ButtonProps,
   NumberField as NumberFieldPrimitive,
   type NumberFieldProps as NumberFieldPrimitiveProps,
-  type ValidationResult,
 } from "react-aria-components";
 import { Minus, Plus } from "lucide-react";
-import { Input } from "@/components/ui/field";
+import { Input, type InputProps } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-interface NumberFieldProps extends NumberFieldPrimitiveProps {
-  label?: string;
-  description?: string;
-  placeholder?: string;
-  error?: string | ((validation: ValidationResult) => string);
-  indicator?: StepperButtonProps["indicator"];
-}
+type NumberFieldProps = NumberFieldPrimitiveProps &
+  InputProps & {
+    indicator?: StepperButtonProps["indicator"];
+  };
 
 function NumberField({
-  label,
+  error,
   placeholder,
   description,
+  label,
+  labelExtra,
+  classNames = { wrapper: "px-0.5 mx-0", input: "text-center" },
+  variant,
+  size,
+  isDisabled,
+  isLoading,
   className,
-  error,
   indicator,
   ...props
 }: NumberFieldProps) {
+  const inputProps: InputProps = {
+    placeholder,
+    error,
+    description,
+    label,
+    labelExtra,
+    classNames,
+    variant,
+    size,
+    isDisabled,
+    isLoading,
+  };
+
+  const numberFieldProps: NumberFieldPrimitiveProps = {
+    ...props,
+    "aria-label":
+      typeof props["aria-label"] === "string"
+        ? props["aria-label"]
+        : typeof label === "string"
+          ? label
+          : "number-field",
+  };
+
   return (
     <NumberFieldPrimitive
-      {...props}
-      aria-label={props["aria-label"] ?? label ?? "number-field"}
+      {...numberFieldProps}
       className={cn(className, "group relative w-full")}
     >
       <Input
-        label={label}
-        placeholder={placeholder}
-        description={description}
-        error={error}
+        {...inputProps}
         startContent={
           <StepperButton
             indicator={indicator}
@@ -54,7 +75,6 @@ function NumberField({
             className="border-s border-border rounded-e-md"
           />
         }
-        classNames={{ wrapper: "px-0.5 mx-0", input: "text-center" }}
       />
     </NumberFieldPrimitive>
   );

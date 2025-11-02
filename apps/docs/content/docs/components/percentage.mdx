@@ -1,0 +1,70 @@
+---
+title: Percentage
+description: A percentage represents a quantity within a known range, or a fractional value.
+component: true
+doc:
+  title: Meter
+  url: https://react-spectrum.adobe.com/react-aria/Meter.html
+---
+
+## Basic
+
+<Playground comp="percentage/basic" />
+
+## Features
+
+The `<meter>` HTML element can be used to build a meter, however it is very difficult to style cross browser. Meter helps achieve accessible meters that can be styled as needed.
+
+- **Accessible** – Follows the [ARIA meter pattern](https://www.w3.org/WAI/ARIA/apg/patterns/meter/), with fallback to progressbar where unsupported. A nested label is automatically associated with the meter semantically.
+- **International** – The value is formatted as a percentage or custom format according to the user's locale.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="field" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/percentage" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add percentage
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Percentage } from "@/components/ui/percentage";
+```
+
+```tsx
+<Percentage label="Memory usage" value={87} />
+```
+
+## Examples
+
+### Format Options
+
+<Playground comp="percentage/format-options" />
+
+### Value Label
+
+<Playground comp="percentage/value-label" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/percentage" />

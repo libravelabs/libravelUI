@@ -1,0 +1,81 @@
+---
+title: Marquee
+description: A scrolling text display box that displays information from one or more text display boxes.
+component: true
+---
+
+## Basic
+
+<Playground comp="marquee/basic" />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+```css
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marqueeY {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/marquee" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add marquee
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Marquee, MarqueeContent, MarqueeItem } from "@/components/ui/marquee";
+```
+
+```tsx
+<Marquee speed="normal" direction="left" stopOnHover fade autoFill>
+  <MarqueeContent>
+    <MarqueeItem className="px-8">Fast Performance</MarqueeItem>
+    <MarqueeItem className="px-8">Beautiful Design</MarqueeItem>
+    <MarqueeItem className="px-8">Customizable</MarqueeItem>
+    <MarqueeItem className="px-8">Responsive Layout</MarqueeItem>
+    <MarqueeItem className="px-8">Dark Mode Ready</MarqueeItem>
+  </MarqueeContent>
+</Marquee>
+```
+
+## Example
+
+<Playground comp="marquee/news" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/marquee" />

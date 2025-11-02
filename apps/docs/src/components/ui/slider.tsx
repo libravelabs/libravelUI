@@ -17,8 +17,7 @@ import {
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { composeTailwindRenderProps } from "@/lib/render-props";
-import { Label } from "@/components/ui/label";
-import { Description } from "@/components/ui/field";
+import { Description, Label } from "@/components/ui/field";
 import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
 
 interface SliderProps extends SliderPrimitiveProps {

@@ -12,14 +12,27 @@
   {
     "displayName": "FieldError",
     "description": "",
-    "props": {}
+    "props": {
+      "message": {
+        "type": "ReactNode",
+        "required": false,
+        "description": "",
+        "defaultValue": null
+      },
+      "asDefault": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
+      }
+    }
   },
   {
     "displayName": "FieldGroup",
     "description": "",
     "props": {
       "variant": {
-        "type": "\"default\" | \"destructive\" | \"ghost\"",
+        "type": "\"default\" | \"destructive\" | \"ghost\" | \"line\"",
         "required": false,
         "description": "",
         "defaultValue": "default"
@@ -29,6 +42,12 @@
         "required": false,
         "description": "",
         "defaultValue": "default"
+      },
+      "radius": {
+        "type": "\"sm\" | \"lg\" | \"none\" | \"md\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "md"
       }
     }
   },
@@ -37,10 +56,16 @@
     "description": "",
     "props": {
       "variant": {
-        "type": "\"default\" | \"destructive\" | \"ghost\"",
+        "type": "\"default\" | \"destructive\" | \"ghost\" | \"line\"",
         "required": false,
         "description": "",
         "defaultValue": "default"
+      },
+      "radius": {
+        "type": "\"sm\" | \"lg\" | \"none\" | \"md\" | \"full\"",
+        "required": false,
+        "description": "",
+        "defaultValue": "md"
       },
       "error": {
         "type": "ReactNode",
@@ -77,6 +102,12 @@
         "required": false,
         "description": "",
         "defaultValue": null
+      },
+      "isDisabled": {
+        "type": "boolean",
+        "required": false,
+        "description": "",
+        "defaultValue": false
       },
       "isLoading": {
         "type": "boolean",

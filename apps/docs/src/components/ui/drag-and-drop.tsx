@@ -17,7 +17,7 @@ import {
   type DropZoneProps,
 } from "@/components/ui/drop-zone";
 import { motion, AnimatePresence } from "motion/react";
-import { ProgressBar } from "@/components/ui/progress-bar";
+import { ProgressBar } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
 interface FileState {
@@ -88,8 +88,8 @@ function DragAndDrop({
   const acceptedTypes = isAllTypes
     ? []
     : Array.isArray(acceptedFileType)
-    ? acceptedFileType
-    : [acceptedFileType];
+      ? acceptedFileType
+      : [acceptedFileType];
 
   const [internalFiles, setInternalFiles] = React.useState<FileState[]>([]);
   const [internalErrors, setInternalErrors] = React.useState<string[]>([]);
@@ -189,8 +189,8 @@ function DragAndDrop({
           isAllTypes
             ? "copy"
             : acceptedTypes.some((t) => types.has(t))
-            ? "copy"
-            : "cancel"
+              ? "copy"
+              : "cancel"
         }
         onDrop={async (e) => {
           const dropped = e.items.filter(isFileDropItem) as FileDropItem[];
@@ -232,8 +232,8 @@ function DragAndDrop({
                           ? "Drop files here"
                           : "Drop a file here"
                         : multiple
-                        ? label
-                        : label.replace(/files/i, "file")}
+                          ? label
+                          : label.replace(/files/i, "file")}
                     </Label>
                     {isDropTarget && (
                       <Label className="mx-auto mb-2">Release to upload</Label>

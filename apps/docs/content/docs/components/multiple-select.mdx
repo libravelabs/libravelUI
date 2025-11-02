@@ -12,6 +12,8 @@ component: true
 
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
   <Tab value="Manual">
+    <RequiredBlock components={["command", "popover", "tag-group", "field"]} />
+
     Install following dependencies:
 
     ```package-install
@@ -37,16 +39,20 @@ component: true
 ## Anatomy
 
 ```tsx
-[ANATOMY IMPORT HERE]
+import { MultipleSelect } from "@/components/ui/multiple-select";
 ```
 
 ```tsx
-[ANATOMY CODE]
+<MultipleSelect<(typeof genres)[number]>
+  items={genres}
+  value={selected}
+  onChange={setSelected}
+  label="Genres"
+  placeholder="Select genres"
+  inputPlaceholder="Search genres..."
+  className="min-w-64"
+/>
 ```
-
-## Examples
-
-{/* <Playground comp="" /> */}
 
 ## Props
 
