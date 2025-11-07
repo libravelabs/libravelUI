@@ -1,0 +1,112 @@
+---
+title: Toast
+description: A subtle, self-dismissing notification component designed to show quick status updates, alerts, or confirmation messages.
+component: true
+doc:
+  url: https://sonner.emilkowal.ski/
+  icon: Bell
+---
+
+The toast components are powered by the [Sonner](https://sonner.emilkowal.ski/) library, created by [Emil Kowalski](https://x.com/emilkowalski_) — huge thanks to him for developing such an excellent tool.
+
+## Basic
+
+<Playground comp="toast/basic" />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install sonner
+    ```
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/toast" />
+
+    Put the Toast somewhere in your app layout to make it visible to all your components or pages.
+
+    <CodeBlock lang="tsx" code={`import { Toast } from '@/components/ui/toast';
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+    return (
+      <>
+        <Toast />
+        {children}
+      </>
+    );
+}`} />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add toast
+    ```
+  </Tab>
+</Tabs>
+
+## Examples
+
+### Positions
+
+Display toast notifications in different screen locations, such as top-right or bottom-center, to fit various layout preferences and design needs.
+
+<Playground comp="toast/positions" />
+
+### Types
+
+Show different toast styles for various message types — like success, error, warning, or info — helping users quickly identify the nature of the notification.
+
+<Playground comp="toast/types" />
+
+### Actions
+
+Include interactive elements, such as buttons or links, within toasts to let users respond instantly — for example, undoing an action or viewing more details.
+
+<Playground comp="toast/actions" />
+
+### Expand
+
+Toast can be expanded to show more content.
+
+```tsx
+<Toast expand />
+```
+
+### Hide icon
+
+When this toast has status like `success`, `warning` etc, the icon is shown by default. But if you want to disable the icon for a specific toast, you can do it like this.
+
+```tsx
+toast.success(`Copied ${text} to clipboard`, {
+  classNames: {
+    toast: "[&:has([data-icon])_[data-content]]:ml-0",
+    icon: "hidden",
+  },
+});
+```
+
+You can turn it off directly from the component to remove it completely. However, this approach may appear unusual when handling toast promises or loading states.
+
+### Don't Close Automatically
+
+Sometimes, you may not want the toast to close automatically. For example, if you have a toast that waits for a user to click a button, you would not want it to close automatically when the button is clicked.
+
+You can do it like this.
+
+```tsx
+toast("Someone requested to delete this product", {
+  duration: Infinity,
+  cancel: {
+    label: "Cancel",
+    onClick: () => alert("Cancelled"),
+  },
+  action: {
+    label: "Delete",
+    onClick: () => alert("Deleted"),
+  },
+});
+```

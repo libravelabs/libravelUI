@@ -100,7 +100,6 @@ interface SelectionboxProps<T extends object>
   extends GridListProps<T>,
     VariantProps<typeof selectionboxStyles> {
   className?: string;
-  multiple?: boolean;
   disabled?: boolean;
 }
 
@@ -108,7 +107,6 @@ function Selectionbox<T extends object>({
   columns = 1,
   gap = 0,
   className,
-  multiple = false,
   disabled = false,
   ...props
 }: SelectionboxProps<T>) {
@@ -117,7 +115,6 @@ function Selectionbox<T extends object>({
       <GridList
         aria-label="Selection options"
         layout={columns === 1 ? "stack" : "grid"}
-        selectionMode={multiple ? "multiple" : "single"}
         disabledKeys={disabled ? ["*"] : undefined}
         className={cn(selectionboxStyles({ columns, gap }), className)}
         {...props}
@@ -156,7 +153,7 @@ function SelectionboxItem({
     <GridListItem
       textValue={
         props.textValue ??
-        (typeof children === "string" ? children : label ?? "")
+        (typeof children === "string" ? children : (label ?? ""))
       }
       data-slot="selectionbox-item"
       isDisabled={disabled || props.disabled}
@@ -229,7 +226,7 @@ function SelectionboxLabel({
       data-slot="label"
       ref={ref}
       className={cn(
-        "select-none text-base/6 text-foreground group-disabled:opacity-50 sm:text-sm/6",
+        "select-none text-foreground group-disabled:opacity-50 text-sm/6",
         "col-start-1 row-start-1",
         "group-has-data-[slot=icon]:col-start-2",
         className
@@ -253,7 +250,7 @@ function SelectionboxDescription({
       className={cn(
         "col-start-1 row-start-2",
         "group-has-data-[slot=icon]:col-start-2",
-        "text-base/6 text-muted-foreground sm:text-sm/6",
+        "text-muted-foreground text-sm/6",
         "group-disabled:opacity-50",
         className
       )}

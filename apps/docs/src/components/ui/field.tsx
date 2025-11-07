@@ -233,8 +233,9 @@ function Input({
   radius,
   isDisabled = false,
   isLoading = false,
+  as: Comp = InputPrimitive,
   ...props
-}: InputProps) {
+}: InputProps & { as?: React.ElementType }) {
   const [visible, setVisible] = React.useState(false);
 
   const variantClass = error ? "destructive" : variant || "default";
@@ -253,9 +254,9 @@ function Input({
     );
 
   return (
-    <div className={cn("grid gap-2", classNames?.container)}>
+    <div className={cn("relative my-2", classNames?.container)}>
       {label || labelExtra ? (
-        <div className="flex justify-between items-center">
+        <div className="absolute bottom-full start-0 mb-1 w-full flex justify-between items-center">
           {label && (
             <Label
               htmlFor={props.id || props.name}
@@ -302,7 +303,7 @@ function Input({
           </div>
         ) : null}
 
-        <InputPrimitive
+        <Comp
           {...props}
           type={inputType}
           disabled={isDisabled || isLoading}
@@ -349,17 +350,30 @@ function Input({
       </FieldGroup>
 
       {!error && description ? (
-        <Description className={cn("m-0 -mt-1", classNames?.description)}>
-          {description}
-        </Description>
+        <div className={cn("relative")}>
+          <Description
+            className={cn(
+              "absolute left-0 top-full mt-1 text-muted-foreground",
+              classNames?.description
+            )}
+          >
+            {description}
+          </Description>
+        </div>
       ) : null}
+
       {error ? (
-        <FieldError
-          asDefault
-          id={`${props.id}-error`}
-          message={error}
-          className={cn("-mt-2", classNames?.error)}
-        />
+        <div className={cn("relative")}>
+          <FieldError
+            asDefault
+            id={`${props.id}-error`}
+            message={error}
+            className={cn(
+              "absolute left-0 top-full mt-1 text-destructive",
+              classNames?.error
+            )}
+          />
+        </div>
       ) : null}
     </div>
   );

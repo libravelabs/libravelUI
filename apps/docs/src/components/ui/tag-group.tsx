@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import type {
   TagGroupProps as TagGroupPrimitiveProps,
   TagListProps,
-  TagProps as TagPrimitiveProps,
+  TagProps,
 } from "react-aria-components";
 import {
   Button,
@@ -46,8 +46,6 @@ function TagList<T extends object>({ className, ...props }: TagListProps<T>) {
   );
 }
 
-interface TagProps extends TagPrimitiveProps {}
-
 function Tag({ className, children, ...props }: TagProps) {
   const textValue = typeof children === "string" ? children : undefined;
 
@@ -62,9 +60,9 @@ function Tag({ className, children, ...props }: TagProps) {
           { isFocusVisible, isSelected, isDisabled, allowsRemoving }
         ) =>
           cn(
-            "inset-ring inset-ring-border inline-flex cursor-default items-center gap-x-1.5 rounded-full px-2 py-0.5 font-medium text-sm/5 outline-hidden sm:text-xs/5 forced-colors:outline",
+            "inset-ring inset-ring-border inline-flex cursor-default items-center gap-2 rounded-full px-2 py-0.5 font-medium text-sm/5 outline-hidden sm:text-xs/5 forced-colors:outline",
             isSelected &&
-              "inset-ring-primary bg-primary text-primary-foreground focus-visible:bg-primary/90",
+              "inset-ring-primary bg-primary/20 border-primary text-primary focus-visible:bg-primary/40",
             isFocusVisible &&
               "inset-ring inset-ring-current/10 bg-secondary text-secondary-foreground",
             isDisabled && "opacity-50",
@@ -79,12 +77,15 @@ function Tag({ className, children, ...props }: TagProps) {
           {allowsRemoving && (
             <Button
               slot="remove"
-              className="-mx-0.5 grid size-3.5 shrink-0 place-content-center rounded-full outline-hidden hover:opacity-70"
+              className={cn(
+                "-mx-0.5 grid size-3.5 shrink-0 place-content-center rounded-full outline-hidden hover:opacity-70 bg-muted",
+                isSelected && "bg-primary"
+              )}
             >
               <X
                 data-slot="close"
                 className={cn(
-                  "size-3",
+                  "size-3 text-muted-foreground",
                   isSelected && "text-primary-foreground"
                 )}
               />
@@ -96,5 +97,5 @@ function Tag({ className, children, ...props }: TagProps) {
   );
 }
 
-export type { TagGroupProps, TagProps, TagListProps };
+export type { TagGroupProps, TagListProps };
 export { Tag, TagList, TagGroup };

@@ -9,8 +9,7 @@ const toggleStyles = cva(
   {
     variants: {
       variant: {
-        default:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        default: "hover:bg-accent hover:text-accent-foreground",
         outline:
           "border bg-background hover:bg-accent hover:text-accent-foreground",
       },
@@ -31,7 +30,7 @@ const toggleStyles = cva(
         true: "opacity-40 cursor-not-allowed pointer-events-none forced-colors:text-[GrayText]",
       },
       isSelected: {
-        true: "bg-accent/50",
+        true: "bg-accent",
       },
       isIconOnly: {
         true: "",
@@ -68,12 +67,11 @@ const toggleStyles = cva(
   }
 );
 
-interface ToggleProps
-  extends ToggleButtonProps,
-    VariantProps<typeof toggleStyles> {
-  ref?: React.Ref<HTMLButtonElement>;
-  isIconOnly?: boolean;
-}
+type ToggleProps = ToggleButtonProps &
+  VariantProps<typeof toggleStyles> & {
+    ref?: React.Ref<HTMLButtonElement>;
+    isIconOnly?: boolean;
+  };
 
 function Toggle({
   className,

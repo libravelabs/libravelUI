@@ -78,8 +78,8 @@ function Slider({
         {thumb}
         <TooltipContent
           showArrow={false}
-          offset={orientation === "horizontal" ? 8 : -140}
-          crossOffset={orientation === "horizontal" ? -85 : 0}
+          offset={orientation === "horizontal" ? 8 : -100}
+          crossOffset={orientation === "horizontal" ? -55 : 0}
           className="min-w-6 px-1.5 py-1 text-xs"
           placement={orientation === "vertical" ? "right" : "top"}
         >

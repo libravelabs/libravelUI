@@ -75,10 +75,10 @@ function SearchBar({
                 <>
                   {!values.isEmpty && (
                     <Button
-                      className="ms-auto rounded p-1 hover:bg-muted hover:text-foreground cursor-pointer"
+                      className="ms-auto rounded hover:text-foreground cursor-pointer"
                       aria-label="Clear selected item"
                     >
-                      <X size={12} />
+                      <X className="size-3" />
                     </Button>
                   )}
                   {endContent}

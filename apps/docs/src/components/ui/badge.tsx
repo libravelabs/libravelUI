@@ -13,7 +13,10 @@ const badgeVariants = cva(
         default:
           "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
         success:
-          "border-transparent bg-emerald-500 text-emerald-100 [a&]:hover:bg-emerald-500/90",
+          "border-transparent bg-emerald-500 text-emerald-50 [a&]:hover:bg-emerald-500/90",
+        warning:
+          "border-transparent bg-amber-600 text-amber-50 [a&]:hover:bg-amber-600/90",
+        info: "border-transparent bg-blue-600 text-blue-50 [a&]:hover:bg-blue-600/90",
         secondary:
           "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         destructive:
@@ -46,4 +49,4 @@ function Badge({ className, variant, asChild = false, ...props }: BadgeProps) {
   );
 }
 
-export { Badge };
+export { Badge, badgeVariants };

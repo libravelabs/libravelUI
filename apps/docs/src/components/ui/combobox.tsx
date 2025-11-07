@@ -98,7 +98,10 @@ function ComboBoxInput({
   const { value, clear, error, triggerRef } = useComboBoxContext();
 
   return (
-    <div ref={triggerRef} className="flex items-center gap-2">
+    <div
+      ref={triggerRef as React.RefObject<HTMLDivElement>}
+      className="flex items-center gap-2"
+    >
       <Input
         {...props}
         placeholder={placeholder}

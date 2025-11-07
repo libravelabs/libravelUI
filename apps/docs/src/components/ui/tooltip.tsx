@@ -15,9 +15,16 @@ const tooltipVariants = cva(
   "group origin-[--trigger-anchor-point] rounded-xl border px-2.5 py-1.5 text-sm/6 will-change-transform dark:shadow-none *:[strong]:font-medium",
   {
     variants: {
-      inverse: {
-        true: "border-transparent bg-foreground text-background [.text-muted-foreground]:text-secondary *:[.text-muted-foreground]:text-secondary",
-        false: "bg-popover text-popover-foreground",
+      variant: {
+        default: "bg-popover text-popover-foreground",
+        inverse:
+          "border-transparent bg-foreground text-background [.text-muted-foreground]:text-secondary *:[.text-muted-foreground]:text-secondary",
+        destructive: "bg-destructive text-white hover:opacity-70",
+        success:
+          "border-transparent bg-emerald-500 text-emerald-50 [a&]:hover:bg-emerald-500/90",
+        warning:
+          "border-transparent bg-amber-600 text-amber-50 [a&]:hover:bg-amber-600/90",
+        info: "border-transparent bg-blue-600 text-blue-50 [a&]:hover:bg-blue-600/90",
       },
       isEntering: {
         true: "fade-in animate-in placement-left:slide-in-from-right-1 placement-right:slide-in-from-left-1 placement-top:slide-in-from-bottom-1 placement-bottom:slide-in-from-top-1",
@@ -27,19 +34,18 @@ const tooltipVariants = cva(
       },
     },
     defaultVariants: {
-      inverse: false,
+      variant: "default",
     },
   }
 );
 
-export interface TooltipContentProps
-  extends Omit<TooltipPrimitiveProps, "children">,
-    VariantProps<typeof tooltipVariants> {
-  showArrow?: boolean;
-  children?: React.ReactNode;
-}
+type TooltipContentProps = Omit<TooltipPrimitiveProps, "children"> &
+  VariantProps<typeof tooltipVariants> & {
+    showArrow?: boolean;
+    children?: React.ReactNode;
+  };
 
-export type TooltipProps = React.ComponentProps<typeof TooltipTriggerPrimitive>;
+type TooltipProps = React.ComponentProps<typeof TooltipTriggerPrimitive>;
 
 function Tooltip(props: TooltipProps) {
   return <TooltipTriggerPrimitive {...props} />;
@@ -55,7 +61,7 @@ function TooltipTrigger({
 function TooltipContent({
   offset = 10,
   showArrow = true,
-  inverse,
+  variant,
   children,
   className,
   ...props
@@ -65,7 +71,7 @@ function TooltipContent({
       {...props}
       offset={offset}
       className={composeRenderProps(className, (cls, renderProps) =>
-        cn(tooltipVariants({ ...renderProps, inverse }), cls)
+        cn(tooltipVariants({ ...renderProps, variant }), cls)
       )}
     >
       {showArrow && (
@@ -76,9 +82,14 @@ function TooltipContent({
             viewBox="0 0 12 12"
             className={cn(
               "group-placement-left:-rotate-90 block group-placement-bottom:rotate-180 group-placement-right:rotate-90 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]",
-              inverse
-                ? "fill-foreground stroke-transparent"
-                : "fill-popover stroke-border"
+              (!variant || variant === "default") &&
+                "fill-popover stroke-border",
+              variant === "inverse" && "fill-foreground stroke-transparent",
+              variant === "destructive" &&
+                "fill-destructive stroke-destructive",
+              variant === "success" && "fill-emerald-500 stroke-emerald-500",
+              variant === "warning" && "fill-amber-600 stroke-amber-600",
+              variant === "info" && "fill-blue-500 stroke-blue-500"
             )}
           >
             <path d="M0 0 L6 6 L12 0" />
@@ -90,4 +101,5 @@ function TooltipContent({
   );
 }
 
+export type { TooltipContentProps, TooltipProps };
 export { Tooltip, TooltipTrigger, TooltipContent };

@@ -1,0 +1,94 @@
+---
+title: Stepper
+description: A multi-step navigation component that guides users through a sequence of steps or actions.
+component: true
+---
+
+## Basic
+
+<Playground comp="stepper/basic" />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="loader" />
+    Install following dependencies:
+
+    ```package-install
+    npm install @radix-ui/react-slot react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/stepper" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add stepper
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Stepper } from "@/components/ui/stepper";
+
+import {
+  StepperRoot,
+  StepperItem,
+  StepperTrigger,
+  StepperIndicator,
+  StepperTitle,
+  StepperDescription,
+  StepperSeparator,
+  StepperContent,
+  StepperItems,
+} from "@/components/ui/stepper";
+```
+
+```tsx
+<Stepper steps={steps} activeStep={step} onStepChange={setStep} />
+
+/* Or */
+
+<StepperRoot>
+  <StepperItems>
+    <StepperItem>
+      <StepperTrigger>
+        <StepperIndicator />
+        <div>
+          <StepperTitle>{title}</StepperTitle>
+          <StepperDescription>{description}</StepperDescription>
+        </div>
+      </StepperTrigger>
+
+      <StepperSeparator />
+    </StepperItem>
+  </StepperItems>
+</StepperRoot>
+```
+
+## Examples
+
+### Vertical
+
+You can display the stepper vertically instead of horizontally. This layout is useful when you have limited horizontal space or want to create a more structured, top-to-bottom flow for multi-step processes.
+
+<Playground comp="stepper/vertical" />
+
+### Animated
+
+Add smooth animations between steps to create a more engaging and dynamic user experience. Transitions help users understand progress changes and make navigation between steps feel more natural.
+
+<Playground comp="stepper/animated" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/stepper" />

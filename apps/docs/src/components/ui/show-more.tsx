@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/uibutton";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,7 +36,7 @@ function splitTextByWords(text: string, maxLength: number) {
   return { visibleText, hiddenText };
 }
 
-export default function ShowMoreText({
+function ShowMoreText({
   text,
   maxLength = 100,
   className,
@@ -108,3 +108,5 @@ export default function ShowMoreText({
     </div>
   );
 }
+
+export { ShowMoreText, splitTextByWords, type ShowMoreTextProps };
