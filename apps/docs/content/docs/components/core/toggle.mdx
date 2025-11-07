@@ -1,0 +1,80 @@
+---
+title: Toggle
+description: A toggle button allows a user to toggle a selection on or off, for example switching between two states or modes.
+component: true
+doc:
+  title: ToggleButton
+  url: https://react-spectrum.adobe.com/react-aria/ToggleButton.html
+---
+
+## Basic
+
+<Playground comp="toggle/basic" />
+
+## Features
+
+Toggle buttons are similar to action buttons, but support an additional selection state that is toggled when a user presses the button. There is no built-in HTML element that represents a toggle button, so React Aria implements it using ARIA attributes.
+
+- **Styleable** – Hover, press, keyboard focus, and selection states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+- **Accessible** – Uses a native `<button>` element with the aria-pressed attribute, and supports the `Space` and `Enter` keys to toggle the selection state.
+- **Cross-browser** – Mouse, touch, keyboard, and focus interactions are normalized to ensure consistency across browsers and devices.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/toggle" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add toggle
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Toggle } from "@/components/ui/toggle";
+```
+
+```tsx
+<Toggle>{({ isSelected }) => <>{isSelected ? "Diselect" : "Select"}</>}</Toggle>
+```
+
+## Examples
+
+### Variants
+
+Offer different visual styles for toggle components, allowing designers to match the toggle’s appearance to the overall interface theme.
+
+<Playground comp="toggle/variants" />
+
+### Sizes
+
+Provide multiple toggle sizes to suit different layouts and touch targets, ensuring both usability and aesthetic flexibility.
+
+<Playground comp="toggle/sizes" />
+
+### Radius
+
+Adjust the corner rounding of toggles to create sharp, rounded, or fully pill-shaped styles, enhancing the component’s visual appeal.
+
+<Playground comp="toggle/radius" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/toggle" />

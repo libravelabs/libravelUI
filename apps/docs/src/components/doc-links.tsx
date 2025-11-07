@@ -8,8 +8,15 @@ import {
 } from "fumadocs-ui/components/ui/popover";
 import { ArrowUpRight, ExternalLinkIcon } from "lucide-react";
 import { cva } from "class-variance-authority";
+import * as icons from "lucide-react";
 
-type DocItem = string | { title?: string; url: string };
+export type DocItem =
+  | string
+  | {
+      title?: string;
+      url: string;
+      icon?: React.ReactNode | string;
+    };
 
 interface PageData {
   doc?: DocItem | DocItem[];
@@ -26,24 +33,33 @@ const optionVariants = cva(
   "text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-accent-foreground hover:bg-accent [&_svg]:size-4"
 );
 
+function renderIcon(icon?: React.ReactNode | string) {
+  if (!icon) return <ReactAriaIcon />;
+  if (typeof icon === "string" && icon in icons) {
+    const LucideIcon = (icons as Record<string, React.ElementType>)[icon];
+    return <LucideIcon className="size-4" />;
+  }
+  if (React.isValidElement(icon)) return icon;
+  return <ReactAriaIcon />;
+}
+
 export function DocLinks({ page }: DocLinksProps) {
   const { doc, title } = page.data;
-
   if (!doc) return null;
 
-  const docsArray: { title: string; url: string }[] = Array.isArray(doc)
-    ? doc.map((d) =>
-        typeof d === "string"
-          ? { title: "View Documentation", url: d }
-          : { title: d.title ?? "View Documentation", url: d.url }
-      )
-    : typeof doc === "string"
-    ? [{ title: "View Documentation", url: doc }]
-    : [{ title: doc.title ?? "View Documentation", url: doc.url }];
+  const docsArray = (Array.isArray(doc) ? doc : [doc]).map((d) => {
+    if (typeof d === "string") {
+      return { title: "View Documentation", url: d, icon: undefined };
+    }
+    return {
+      title: d.title ?? "View Documentation",
+      url: d.url,
+      icon: d.icon,
+    };
+  });
 
   if (docsArray.length === 1) {
     const singleDoc = docsArray[0];
-
     return (
       <Link
         href={singleDoc.url}
@@ -52,7 +68,7 @@ export function DocLinks({ page }: DocLinksProps) {
         className="w-fit"
       >
         <Button variant="outline" className="flex items-center gap-1">
-          <ReactAriaIcon />{" "}
+          {renderIcon(singleDoc.icon)}
           {singleDoc.title === "View Documentation" ? title : singleDoc.title}
           <ArrowUpRight size={12} />
         </Button>
@@ -68,7 +84,7 @@ export function DocLinks({ page }: DocLinksProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col overflow-auto p-1">
-        {docsArray.map(({ title: docTitle, url }, i) => (
+        {docsArray.map(({ title: docTitle, url, icon }, i) => (
           <a
             key={i}
             href={url}
@@ -76,6 +92,7 @@ export function DocLinks({ page }: DocLinksProps) {
             rel="noopener noreferrer"
             className={optionVariants()}
           >
+            {renderIcon(icon)}
             <span>{docTitle === "View Documentation" ? title : docTitle}</span>
             <ExternalLinkIcon className="text-muted-foreground size-3.5 ms-auto" />
           </a>

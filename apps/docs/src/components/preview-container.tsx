@@ -54,7 +54,7 @@ export const PreviewContainer = ({
           key={key}
           dir={direction}
           className={cn(
-            "min-h-56 rounded-xl bg-background flex items-center justify-center not-prose px-2 overflow-hidden",
+            "min-h-56 rounded-xl bg-background flex items-center justify-center not-prose p-2 md:p-8 overflow-hidden",
             className
           )}
         >

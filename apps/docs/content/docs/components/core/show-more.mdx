@@ -1,0 +1,64 @@
+---
+title: Show More
+description: Truncate long text with an animated Show More / Show Less toggle.
+component: true
+---
+
+## Basic
+
+<Playground comp="show-more/basic" />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="button" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/show-more" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add show-more
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { ShowMoreText } from "@/components/ui/show-more";
+```
+
+```tsx
+<ShowMoreText text="Lorem ipsum dolor sit amet." maxLength={100} />
+```
+
+## Examples
+
+### Custom Style and Label
+
+You can apply your own styles and labels, allowing each item to match your design preferences or branding.
+
+<Playground comp="show-more/custom-style-label" />
+
+### Serif Font
+
+You can use a serif font to give the text a more classic or elegant appearance, enhancing readability and style.
+
+<Playground comp="show-more/serif-font" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/show-more" />

@@ -178,7 +178,7 @@ function RangeCalendar<T extends DateValue>({
         </AnimatePresence>
       </div>
 
-      {error && <FieldError slot="error" message={error} />}
+      {error && <FieldError asDefault slot="error" message={error} />}
     </RangeCalendarPrimitive>
   );
 }

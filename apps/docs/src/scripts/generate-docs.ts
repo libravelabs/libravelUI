@@ -15,7 +15,7 @@ let outputBase = path.resolve(srcRoot, ".generated/types");
 if (userInput) {
   const resolved = path.resolve(srcRoot, userInput);
   if (!fs.existsSync(resolved)) {
-    console.error("Input path tidak ditemukan:", userInput);
+    console.error("Input path not found:", userInput);
     process.exit(1);
   }
   scanTarget = resolved;

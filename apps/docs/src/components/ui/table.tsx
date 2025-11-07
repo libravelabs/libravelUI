@@ -153,6 +153,7 @@ function TableColumn({
               )}
             >
               <ChevronDown
+                data-slot="icon"
                 className={
                   values.sortDirection === "ascending" ? "rotate-180" : ""
                 }

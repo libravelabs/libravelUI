@@ -7,7 +7,6 @@ import {
   TimeField as TimeFieldPrimitive,
   DateInput,
   DateSegment,
-  Label,
 } from "react-aria-components";
 import {
   Input,
@@ -70,8 +69,6 @@ function TimeField<T extends DateValue>({
       aria-label={props["aria-label"] ?? "date-field"}
       {...props}
     >
-      {label && <Label>{label}</Label>}
-
       <Input
         as={DateInput}
         error={typeof errorMessage === "string" ? errorMessage : undefined}

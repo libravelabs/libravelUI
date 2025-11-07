@@ -8,22 +8,8 @@ import {
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-type ORIENTATION = "horizontal" | "vertical";
-type RADIUS = "none" | "sm" | "md" | "lg" | "full";
-type SIZE = "sm" | "md" | "lg" | "xl";
-
-const ToggleCtx = React.createContext<{
-  orientation: ORIENTATION;
-  radius: RADIUS;
-  size: SIZE;
-}>({
-  orientation: "horizontal",
-  radius: "md",
-  size: "md",
-});
-
 const groupVariants = cva(
-  "inline-flex overflow-hidden border border-border bg-background w-fit flex-shrink-0 self-start",
+  "inline-flex overflow-hidden border border-border bg-background w-fit",
   {
     variants: {
       orientation: {
@@ -52,23 +38,21 @@ const groupVariants = cva(
   }
 );
 
-export interface ToggleGroupProps
-  extends Omit<ToggleButtonGroupProps, "isDisabled" | "selectionMode">,
-    VariantProps<typeof groupVariants> {
-  isDisabled?: boolean;
-}
+type GroupVariantProps = VariantProps<typeof groupVariants>;
+
+const ToggleCtx = React.createContext<GroupVariantProps>({
+  orientation: "horizontal",
+  size: "md",
+  radius: "md",
+});
+
+type ToggleGroupProps = ToggleButtonGroupProps &
+  GroupVariantProps & {
+    isDisabled?: boolean;
+  };
 
 const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
-  (
-    {
-      className,
-      orientation = "horizontal",
-      size = "md",
-      radius = "md",
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, orientation = "horizontal", size, radius, ...props }, ref) => {
     return (
       <ToggleCtx.Provider value={{ orientation, radius, size }}>
         <ToggleGroupPrimitive
@@ -86,7 +70,9 @@ const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
 );
 ToggleGroup.displayName = "ToggleGroup";
 
-const sizePad: Record<SIZE, string> = {
+type SizeKey = NonNullable<GroupVariantProps["size"]>;
+
+const sizePad: Record<SizeKey, string> = {
   sm: "px-2.5 py-1",
   md: "px-3 py-1.5",
   lg: "px-4 py-2",
@@ -109,22 +95,17 @@ const itemVariants = cva(
   }
 );
 
-export interface ToggleProps
-  extends Omit<
-    ToggleButtonProps,
-    "isDisabled" | "isSelected" | "defaultSelected"
-  > {}
-
-const ToggleItem = React.forwardRef<HTMLButtonElement, ToggleProps>(
+const ToggleItem = React.forwardRef<HTMLButtonElement, ToggleButtonProps>(
   ({ className, children, ...props }, ref) => {
     const { size } = React.useContext(ToggleCtx);
+    const pad = size ? sizePad[size] : sizePad.md;
 
     return (
       <ToggleButtonPrimitive
         ref={ref}
         className={({ isSelected, isDisabled }) =>
           cn(
-            sizePad[size],
+            pad,
             itemVariants({
               state: isSelected
                 ? "selected"
@@ -144,4 +125,5 @@ const ToggleItem = React.forwardRef<HTMLButtonElement, ToggleProps>(
 );
 ToggleItem.displayName = "ToggleItem";
 
+export type { ToggleGroupProps };
 export { ToggleItem, ToggleGroup };

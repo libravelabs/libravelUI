@@ -16,12 +16,15 @@ function SkeletonText({
   ...props
 }: { lines?: number } & React.ComponentProps<"div">) {
   return (
-    <div className="space-y-2">
+    <div className="grid gap-2 w-full">
       {Array.from({ length: lines }).map((_, i) => (
         <div
           key={i}
           {...props}
-          className={cn("h-4 bg-accent animate-pulse rounded-md", className)}
+          className={cn(
+            "h-4 bg-accent animate-pulse rounded-md w-full",
+            className
+          )}
         />
       ))}
     </div>

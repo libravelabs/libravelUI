@@ -3,14 +3,25 @@ import {
   type SwitchProps as SwitchPrimitiveProps,
 } from "react-aria-components";
 import { composeTailwindRenderProps } from "@/lib/render-props";
-import { Label } from "@/components/ui/field";
+import { Label, Description, type FieldProps } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 interface SwitchProps extends SwitchPrimitiveProps {
   ref?: React.RefObject<HTMLLabelElement>;
+  label?: FieldProps["label"];
+  description?: FieldProps["description"];
 }
 
-function Switch({ children, className, ref, ...props }: SwitchProps) {
+function Switch({
+  children,
+  className,
+  ref,
+  label,
+  description,
+  ...props
+}: SwitchProps) {
+  const hasChildren = !!children;
+
   return (
     <SwitchPrimitive
       data-slot="switch"
@@ -19,7 +30,7 @@ function Switch({ children, className, ref, ...props }: SwitchProps) {
       className={composeTailwindRenderProps(
         className,
         cn(
-          "group relative grid cursor-pointer grid-cols-[1fr_auto] gap-y-1 disabled:opacity-50",
+          "group relative grid cursor-pointer grid-cols-[1fr_auto] gap-1 disabled:opacity-50",
           "*:data-[slot=indicator]:col-start-2",
           "*:data-[slot=label]:col-start-1 *:data-[slot=label]:row-start-1",
           "*:data-[slot=indicator]:self-start",
@@ -58,12 +69,20 @@ function Switch({ children, className, ref, ...props }: SwitchProps) {
               )}
             />
           </span>
-          {typeof children === "function" ? (
-            children(values)
-          ) : typeof children === "string" ? (
-            <Label>{children}</Label>
+
+          {hasChildren ? (
+            typeof children === "function" ? (
+              children(values)
+            ) : typeof children === "string" ? (
+              <Label>{children}</Label>
+            ) : (
+              children
+            )
           ) : (
-            children
+            <>
+              {label && <Label>{label}</Label>}
+              {description && <Description>{description}</Description>}
+            </>
           )}
         </>
       )}

@@ -21,6 +21,7 @@ export const docs = defineDocs({
           zod.object({
             title: zod.string(),
             url: zod.string().url(),
+            icon: zod.custom<React.ReactNode>().optional(),
           }),
           zod.array(
             zod.union([
@@ -28,6 +29,7 @@ export const docs = defineDocs({
               zod.object({
                 title: zod.string(),
                 url: zod.string().url(),
+                icon: zod.custom<React.ReactNode>().optional(),
               }),
             ])
           ),

@@ -1,0 +1,88 @@
+---
+title: Radio Group
+description: A radio group allows a user to select a single item from a list of mutually exclusive options.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/RadioGroup.html
+---
+
+## Basic
+
+<Playground comp="radio-group/basic" />
+
+## Features
+
+Radio groups can be built in HTML with the `<fieldset>` and `<input>` elements, however these can be difficult to style. RadioGroup and Radio help achieve accessible radio groups that can be styled as needed.
+
+- **Accessible** – Radio groups are exposed to assistive technology via ARIA, and automatically associate a nested `<Label>`. Description and error message help text slots are supported as well.
+- **HTML form integration** – Each individual radio uses a visually hidden `<input>` element under the hood, which enables HTML form integration and autofill.
+- **Validation** – Support for native HTML constraint validation with customizable UI, custom validation functions, and server-side validation errors.
+- **Cross-browser** – Mouse, touch, keyboard, and focus interactions are normalized to ensure consistency across browsers and devices.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+  <RequiredBlock components="field" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/radio-group" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add radio-group
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { RadioGroup, Radio } from "@/components/ui/radio-group";
+```
+
+```tsx
+<RadioGroup
+  label="Select an Option"
+  description="Choose one of the available options below."
+>
+  <Radio
+    value="option-1"
+    label="Option 1"
+    description="This is the first available option."
+  />
+  <Radio
+    value="option-2"
+    label="Option 2"
+    description="This is the second available option."
+  />
+</RadioGroup>
+```
+
+## Examples
+
+### Controlled
+
+Handle the radio group’s state externally, giving developers complete control over selection behavior and integration with other form logic.
+
+<Playground comp="radio-group/controlled" />
+
+### Validated
+
+Display validation states for radio inputs, such as error or success feedback, to help users make correct selections and improve form accuracy.
+
+<Playground comp="radio-group/validated" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/radio-group" />

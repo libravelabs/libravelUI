@@ -22,10 +22,8 @@ const tabsVariants = cva("group relative flex w-full", {
     variant: {
       default: "bg-secondary gap-4",
       ghost: "bg-transparent",
-      outline: "bg-secondary border border-border",
+      outline: "bg-transparent border border-border",
       underline: "bg-secondary",
-      solid: "bg-background text-foreground shadow-sm gap-4",
-      muted: "bg-secondary text-secondary-foreground gap-4",
     },
     width: {
       sm: "max-w-sm",
@@ -56,7 +54,7 @@ const tabsVariants = cva("group relative flex w-full", {
     },
     orientation: {
       horizontal: "flex-col",
-      vertical: "flex-row",
+      vertical: "flex-row h-full",
     },
   },
   defaultVariants: {
@@ -68,7 +66,7 @@ const tabsVariants = cva("group relative flex w-full", {
   },
 });
 
-const tabListVariants = cva("flex shrink-0 px-1", {
+const tabListVariants = cva("flex shrink-0 w-fit px-1", {
   variants: {
     orientation: {
       horizontal: "flex-row items-center",
@@ -80,12 +78,11 @@ const tabListVariants = cva("flex shrink-0 px-1", {
       lg: "gap-2",
     },
     variant: {
-      default: "bg-transparent border border-border w-full",
-      ghost: "bg-transparent w-fit",
-      underline: "bg-transparent w-fit px-2",
-      solid: "bg-transparent w-full",
-      muted: "bg-transparent w-full",
-      outline: "",
+      default:
+        "bg-transparent border border-border data-[orientation=horizontal]:w-full",
+      ghost: "bg-transparent",
+      underline: "bg-transparent data-[orientation=horizontal]:px-2",
+      outline: "data-[orientation=horizontal]:w-full",
     },
     radius: {
       none: "",
@@ -106,7 +103,7 @@ const tabListVariants = cva("flex shrink-0 px-1", {
 });
 
 const tabTriggerVariants = cva(
-  "relative inline-flex items-center gap-1.5 whitespace-nowrap font-medium transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4.5",
+  "relative inline-flex items-center gap-1.5 whitespace-nowrap font-medium transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -116,10 +113,6 @@ const tabTriggerVariants = cva(
           "text-muted-foreground hover:text-foreground selected:text-foreground",
         underline:
           "text-muted-foreground hover:text-foreground selected:text-primary",
-        solid:
-          "text-muted-foreground hover:text-foreground selected:text-foreground",
-        muted:
-          "text-muted-foreground hover:text-foreground selected:text-foreground",
         outline: "",
       },
       size: {
@@ -151,15 +144,13 @@ const tabTriggerVariants = cva(
 );
 
 const tabContentVariants = cva(
-  "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 flex-1 h-full",
   {
     variants: {
       variant: {
         default: "bg-card text-foreground",
         ghost: "bg-transparent text-foreground",
         underline: "bg-card text-foreground",
-        solid: "bg-card text-foreground shadow-sm",
-        muted: "bg-muted text-muted-foreground",
         outline: "bg-card border border-border",
       },
       size: {
@@ -190,9 +181,7 @@ const tabContentVariants = cva(
   }
 );
 
-type TabsContextValue = VariantProps<typeof tabsVariants> & {
-  id: string;
-};
+type TabsContextValue = VariantProps<typeof tabsVariants> & { id: string };
 const TabsContext = React.createContext<TabsContextValue | null>(null);
 
 function useTabsContext() {
@@ -237,22 +226,38 @@ function Tabs({
   );
 }
 
-interface TabListProps<T extends object> extends TabListPrimitiveProps<T> {
+interface TabListProps<T extends object>
+  extends TabListPrimitiveProps<T>,
+    VariantProps<typeof tabListVariants> {
   ref?: React.RefObject<HTMLDivElement>;
 }
 
 function TabList<T extends object>({
   className,
   ref,
+  variant,
+  radius,
+  size,
+  orientation,
   ...props
 }: TabListProps<T>) {
-  const { variant, orientation, radius } = useTabsContext();
+  const ctx = useTabsContext();
+  const resolvedVariant = variant ?? ctx.variant;
+  const resolvedRadius = radius ?? ctx.radius;
+  const resolvedSize = size ?? ctx.size;
+  const resolvedOrientation = orientation ?? ctx.orientation;
 
   return (
     <TabListPrimitive
       aria-label={props["aria-label"] ?? "tabs"}
+      data-orientation={resolvedOrientation}
       className={cn(
-        tabListVariants({ orientation, variant, radius }),
+        tabListVariants({
+          orientation: resolvedOrientation,
+          variant: resolvedVariant,
+          radius: resolvedRadius,
+          size: resolvedSize,
+        }),
         className
       )}
       ref={ref}
@@ -261,17 +266,37 @@ function TabList<T extends object>({
   );
 }
 
-interface TabTriggerProps extends TabTriggerPrimitiveProps {
+interface TabTriggerProps
+  extends TabTriggerPrimitiveProps,
+    VariantProps<typeof tabTriggerVariants> {
   ref?: React.RefObject<HTMLButtonElement>;
 }
 
-function TabTrigger({ children, className, ref, ...props }: TabTriggerProps) {
-  const { variant, size, radius, orientation, id } = useTabsContext();
+function TabTrigger({
+  children,
+  className,
+  ref,
+  variant,
+  size,
+  radius,
+  orientation,
+  ...props
+}: TabTriggerProps) {
+  const ctx = useTabsContext();
+  const resolvedVariant = variant ?? ctx.variant;
+  const resolvedSize = size ?? ctx.size;
+  const resolvedRadius = radius ?? ctx.radius;
+  const resolvedOrientation = orientation ?? ctx.orientation;
 
   return (
     <TabTriggerPrimitive
       className={cn(
-        tabTriggerVariants({ variant, size, radius, orientation }),
+        tabTriggerVariants({
+          variant: resolvedVariant,
+          size: resolvedSize,
+          radius: resolvedRadius,
+          orientation: resolvedOrientation,
+        }),
         className
       )}
       ref={ref}
@@ -282,7 +307,7 @@ function TabTrigger({ children, className, ref, ...props }: TabTriggerProps) {
           {children}
           {isSelected && (
             <motion.div
-              layoutId={`tab-indicator-${id}`}
+              layoutId={`tab-indicator-${ctx.id}`}
               transition={{
                 type: "spring",
                 stiffness: 400,
@@ -291,10 +316,12 @@ function TabTrigger({ children, className, ref, ...props }: TabTriggerProps) {
               }}
               className={cn(
                 "absolute z-10",
-                getLowerRadiusClass(radius ? radius : ("md" as string)),
-                variant === "underline" && orientation === "vertical"
+                getLowerRadiusClass(resolvedRadius ?? "md"),
+                resolvedVariant === "underline" &&
+                  resolvedOrientation === "vertical"
                   ? "start-0 w-0.5 h-full bg-primary"
-                  : variant === "underline" && orientation === "horizontal"
+                  : resolvedVariant === "underline" &&
+                      resolvedOrientation === "horizontal"
                     ? "bottom-0 h-0.5 w-full bg-primary"
                     : "inset-y-1 left-0 right-0 bg-primary/20"
               )}
@@ -306,17 +333,39 @@ function TabTrigger({ children, className, ref, ...props }: TabTriggerProps) {
   );
 }
 
-interface TabContentProps extends TabContentPrimitiveProps {
+interface TabContentProps
+  extends TabContentPrimitiveProps,
+    VariantProps<typeof tabContentVariants> {
   ref?: React.RefObject<HTMLDivElement>;
 }
 
-function TabContent({ className, children, ref, ...props }: TabContentProps) {
-  const { variant, size, radius, orientation } = useTabsContext();
-  const isVertical = orientation === "vertical";
+function TabContent({
+  className,
+  children,
+  ref,
+  variant,
+  size,
+  radius,
+  orientation,
+  ...props
+}: TabContentProps) {
+  const ctx = useTabsContext();
+  const resolvedVariant = variant ?? ctx.variant;
+  const resolvedSize = size ?? ctx.size;
+  const resolvedRadius = radius ?? ctx.radius;
+  const resolvedOrientation = orientation ?? ctx.orientation;
+  const isVertical = resolvedOrientation === "vertical";
 
   return (
     <TabContentPrimitive
-      className={cn(tabContentVariants({ variant, size, radius }), className)}
+      className={cn(
+        tabContentVariants({
+          variant: resolvedVariant,
+          size: resolvedSize,
+          radius: resolvedRadius,
+        }),
+        className
+      )}
       ref={ref}
       {...props}
     >

@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             {children}
           </main>
         </RootProvider>
-        <Toast />
+        <Toast richColors />
       </body>
     </html>
   );
