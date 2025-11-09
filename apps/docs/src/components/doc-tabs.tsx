@@ -7,7 +7,7 @@ import {
   TabTrigger,
   TabContent,
   type TabsProps,
-} from "@/components/ui/tabs";
+} from "@/components/ui/core/tabs";
 import { cn } from "@/lib/utils";
 
 type DocTabItem = {

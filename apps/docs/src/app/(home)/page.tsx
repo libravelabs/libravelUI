@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { customMetaDataGenerator } from "@/lib/customMetaDataGenerator";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/core/button";
 import { ArrowRight } from "lucide-react";
 
 export const metadata = customMetaDataGenerator({

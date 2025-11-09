@@ -13,9 +13,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/core/popover";
 import { cva } from "class-variance-authority";
-import { Button } from "../ui/button";
+import { Button } from "../ui/core/button";
 import { toast } from "sonner";
 
 const cache = new Map<string, string>();

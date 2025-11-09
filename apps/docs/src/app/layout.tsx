@@ -1,7 +1,7 @@
 import "./global.css";
 import { RootProvider } from "fumadocs-ui/provider";
 import type { ReactNode } from "react";
-import { Toast } from "@/components/ui/toast";
+import { Toast } from "@/components/ui/core/toast";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

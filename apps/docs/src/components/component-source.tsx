@@ -3,7 +3,7 @@
 import { TStoJSCodeBlock } from "@/components/ts2js-code-block";
 import { fetchSource } from "@/lib/fetch-source";
 import React, { useEffect, useState } from "react";
-import { TabsProps } from "./ui/tabs";
+import { TabsProps } from "./ui/core/tabs";
 
 export function ComponentSource({
   comp,

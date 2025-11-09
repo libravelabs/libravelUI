@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { DirectionProvider } from "@radix-ui/react-direction";
-import { Button } from "./ui/button";
+import { Button } from "./ui/core/button";
 
 interface PreviewContainerProps {
   children: React.ReactNode;

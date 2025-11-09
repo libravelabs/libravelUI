@@ -5,7 +5,7 @@ import {
   Disclosure,
   DisclosureTrigger,
   DisclosureContent,
-} from "./ui/disclosure";
+} from "./ui/core/disclosure";
 
 export function ComponentProps({
   type,

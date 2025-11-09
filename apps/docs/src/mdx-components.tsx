@@ -12,6 +12,7 @@ import { CodeBlock } from "@/components/code-block";
 import { Info } from "@/components/info";
 import { Callout } from "fumadocs-ui/components/callout";
 import { RelatedComponents } from "@/components/related-components";
+import { PreviewBlock } from "@/components/preview-block";
 import * as icons from "lucide-react";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -31,6 +32,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Info,
     RelatedComponents,
     Callout,
+    PreviewBlock,
     ...components,
   };
 }

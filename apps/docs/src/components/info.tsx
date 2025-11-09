@@ -6,7 +6,7 @@ import {
   AlertTitle,
   AlertRoot,
   type AlertProps,
-} from "@/components/ui/alert";
+} from "@/components/ui/core/alert";
 
 export function Info({
   children,
