@@ -6,7 +6,7 @@ component: true
 
 ## Basic
 
-<Playground comp="motion/animated-dock/basic" />
+<Playground section="motion" comp="animated-dock/basic" />
 
 ## Installation
 
@@ -37,16 +37,38 @@ component: true
 ## Anatomy
 
 ```tsx
-[ANATOMY IMPORT HERE]
+import {
+  Dock,
+  DockIcon,
+  DockItem,
+  DockLabel,
+} from "@/components/ui/motion/animated-dock";
 ```
 
 ```tsx
-[ANATOMY CODE]
+<Dock className="items-end pb-3">
+  <DockItem className="aspect-square rounded-full">
+    <DockLabel>Item 1</DockLabel>
+    <DockIcon>
+      <span className="text-lg">1️⃣</span>
+    </DockIcon>
+  </DockItem>
+
+  <DockItem className="aspect-square rounded-full">
+    <DockLabel>Item 2</DockLabel>
+    <DockIcon>
+      <span className="text-lg">2️⃣</span>
+    </DockIcon>
+  </DockItem>
+
+  <DockItem className="aspect-square rounded-full">
+    <DockLabel>Item 3</DockLabel>
+    <DockIcon>
+      <span className="text-lg">3️⃣</span>
+    </DockIcon>
+  </DockItem>
+</Dock>
 ```
-
-## Examples
-
-<Playground comp="motion/animated-dock/" />
 
 ## Props
 

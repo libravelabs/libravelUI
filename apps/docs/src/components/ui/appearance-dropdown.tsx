@@ -5,17 +5,17 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/core/dropdown-menu";
 import { Monitor, Moon, Sun, type LucideIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { type HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { ButtonProps } from "@/components/ui/button";
+import { ButtonProps } from "@/components/ui/core/button";
 
 const themes: {
-  label: string;
-  value: string;
-  icon: LucideIcon;
+    value: "light" | "dark" | "system";
+    icon: LucideIcon;
+    label: string;
 }[] = [
   {
     label: "Light",

@@ -1,4 +1,4 @@
-import { Alert } from "@/components/ui/alert";
+import { Alert } from "@/components/ui/core/alert";
 import { Card } from "fumadocs-ui/components/card";
 import { AlertTriangle } from "lucide-react";
 import { notFound } from "next/navigation";

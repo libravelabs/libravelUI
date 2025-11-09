@@ -8,9 +8,9 @@ import {
   TableBody,
   TableRow,
   TableCell,
-} from "@/components/ui/table";
+} from "@/components/ui/core/table";
 import { cn } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/core/popover";
 import { InfoIcon, Minus, ChevronDown } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 

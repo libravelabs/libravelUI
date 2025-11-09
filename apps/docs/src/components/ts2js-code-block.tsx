@@ -3,10 +3,10 @@
 import * as React from "react";
 import { ts2js } from "@/lib/ts2js";
 import { DocTabs } from "./doc-tabs";
-import { TabsProps } from "./ui/tabs";
+import { TabsProps } from "./ui/core/tabs";
 import { cn } from "@/lib/utils";
 import { PreviewContainer } from "./preview-container";
-import { Loader } from "./ui/loader";
+import { Loader } from "./ui/core/loader";
 import { CodeBlock } from "./code-block";
 
 interface TStoJSCodeBlockProps {

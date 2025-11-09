@@ -5,24 +5,25 @@ import React, { useEffect, useState } from "react";
 import { DocTabs } from "@/components/doc-tabs";
 import { PreviewContainer } from "@/components/preview-container";
 import { fetchSource } from "@/lib/fetch-source";
-import { Loader } from "@/components/ui/loader";
+import { Loader } from "@/components/ui/core/loader";
 import { TStoJSCodeBlock } from "./ts2js-code-block";
 
 interface PlaygroundProps {
   comp: string;
+  section?: string;
 }
 
-export function Playground({ comp }: PlaygroundProps) {
+export function Playground({ comp, section = "core" }: PlaygroundProps) {
   const [source, setSource] = useState<string | null>(null);
   const [code, setCode] = useState<string | null>(null);
 
-  const Demo = dynamic(() => import(`@/components/docs/${comp}`), {
+  const Demo = dynamic(() => import(`@/components/docs/${section}/${comp}`), {
     ssr: false,
     loading: () => <Loader />,
   });
 
   useEffect(() => {
-    const fullPath = `components/docs/${comp}`;
+    const fullPath = `components/docs/${section}/${comp}`;
 
     fetchSource(fullPath).then((raw) => {
       if (!raw) return setSource(null);
@@ -39,7 +40,7 @@ export function Playground({ comp }: PlaygroundProps) {
 
       setCode(code);
     });
-  }, [comp]);
+  }, [section, comp]);
 
   if (!code) {
     return (

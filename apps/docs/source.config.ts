@@ -15,6 +15,7 @@ export const docs = defineDocs({
       new: zod.boolean().default(false),
       pro: zod.boolean().default(false),
       soon: zod.boolean().default(false),
+      enableToc: zod.boolean().default(true),
       doc: zod
         .union([
           zod.string().url(),

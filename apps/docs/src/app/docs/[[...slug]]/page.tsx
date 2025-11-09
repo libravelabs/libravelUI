@@ -28,6 +28,7 @@ export default async function Page(props: {
       full={page.data.full}
       tableOfContent={{
         style: "clerk",
+        enabled: page.data.enableToc,
       }}
       footer={{
         enabled: true,
