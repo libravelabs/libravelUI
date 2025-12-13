@@ -16,7 +16,7 @@ const accordionVariants = cva(
   "group w-full peer cursor-default disabled:cursor-not-allowed disabled:opacity-75",
   {
     variants: {
-      variant: {
+      tone: {
         default: "overflow-hidden",
         ghost: "",
         outline: "border border-border rounded-xl overflow-hidden",
@@ -32,7 +32,7 @@ const accordionVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       size: "md",
     },
   }
@@ -41,15 +41,14 @@ const accordionVariants = cva(
 const AccordionStyleContext = createContext<
   VariantProps<typeof accordionVariants>
 >({
-  variant: "default",
+  tone: "default",
   size: "sm",
 });
 
 const useAccordionStyle = () => useContext(AccordionStyleContext);
 
 interface AccordionProps
-  extends AccordionPrimitiveProps,
-    VariantProps<typeof accordionVariants> {
+  extends AccordionPrimitiveProps, VariantProps<typeof accordionVariants> {
   ref?: React.RefObject<HTMLDivElement>;
   multiple?: boolean;
 }
@@ -58,18 +57,18 @@ function Accordion({
   children,
   ref,
   className,
-  variant,
+  tone,
   size,
   multiple = false,
   ...props
 }: AccordionProps) {
   return (
-    <AccordionStyleContext.Provider value={{ variant, size }}>
+    <AccordionStyleContext.Provider value={{ tone, size }}>
       <AccordionPrimitive
-        data-variant={variant}
+        data-tone={tone}
         ref={ref}
         allowsMultipleExpanded={multiple}
-        className={cn(accordionVariants({ variant, size }), className)}
+        className={cn(accordionVariants({ tone, size }), className)}
         {...props}
       >
         {(values) => (
@@ -83,9 +82,9 @@ function Accordion({
 }
 
 function AccordionItem(props: DisclosureProps) {
-  const { variant, size } = useAccordionStyle();
+  const { tone, size } = useAccordionStyle();
 
-  return <Disclosure variant={variant} size={size} {...props} />;
+  return <Disclosure tone={tone} size={size} {...props} />;
 }
 
 const AccordionTrigger = DisclosureTrigger;

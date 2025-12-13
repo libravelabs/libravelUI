@@ -1,0 +1,59 @@
+---
+title: Shining Text
+description: Shining effect on text with customizable animation speed and glow spread.
+component: true
+gridLayout: true
+features:
+  - title: Shine effect
+    icon: Sparkles
+  - title: Custom speed
+    icon: Timer
+  - title: Glow control
+    icon: Sun
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="shining-text/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Shimmer Animation",
+        description: "Elegant light shimmer moving across text.",
+        icon: <Sparkles />,
+      },
+      {
+        title: "Adjustable Speed",
+        description: "Control the duration of the shine effect.",
+        icon: <Timer />,
+      },
+      {
+        title: "Glow Intensity",
+        description: "Customize the spread and color of the glow.",
+        icon: <Sun />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="shining-text" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { ShiningText } from "@/components/ui/motion/shining-text";
+
+<ShiningText>Shining Text</ShiningText>
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="shining-text/basic" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/shining-text.tsx" />
+</DocCard>

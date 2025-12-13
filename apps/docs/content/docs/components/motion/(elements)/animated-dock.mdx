@@ -1,0 +1,82 @@
+---
+title: Animated Dock
+description: An interactive, Apple-style dock with smooth motion physics and dynamic icon scaling. Responsive, intuitive, and built for precision.
+component: true
+gridLayout: true
+features:
+  - title: Magnetic hover interaction
+    icon: Play
+  - title: Smooth scaling physics
+    icon: Zap
+  - title: Precise cursor-based magnification
+    icon: Eye
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="animated-dock/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Cursor-aware magnification",
+        description:
+          "Each icon scales relative to your cursor position for a natural dock effect.",
+        icon: <Move />,
+      },
+      {
+        title: "Spring-based motion",
+        description:
+          "Smooth scaling powered by motion physics for premium UI feel.",
+        icon: <Activity />,
+      },
+      {
+        title: "Dynamic labels",
+        description:
+          "Optional hover labels that gracefully appear above each icon.",
+        icon: <Sliders />,
+      },
+      {
+        title: "Compositional structure",
+        description:
+          "Dock, DockItem, DockIcon, and DockLabel can be used flexibly.",
+        icon: <ToggleLeft />,
+      },
+      {
+        title: "Auto-spacing & alignment",
+        description:
+          "Built-in geometry for consistent spacing and fluid motion alignment.",
+        icon: <ArrowLeftRight />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="animated-dock" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy
+    code={`
+import {
+  Dock,
+  DockItem,
+  DockIcon,
+  DockLabel,
+} from "@/components/ui/motion/animated-dock";
+
+<Dock>
+  <DockItem>
+    <DockLabel>Item 1</DockLabel>
+    <DockIcon>1</DockIcon>
+  </DockItem>
+</Dock>
+`}
+  />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/animated-dock.tsx" />
+</DocCard>

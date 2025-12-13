@@ -22,8 +22,7 @@ import { PopoverContent, PopoverTrigger } from "@/components/ui/core/popover";
 import { RangeCalendar } from "@/components/ui/core/range-calendar";
 
 interface DateRangePickerProps<T extends DateValue>
-  extends DateRangePickerPrimitiveProps<T>,
-    Omit<FieldProps, "placeholder"> {
+  extends DateRangePickerPrimitiveProps<T>, Omit<FieldProps, "placeholder"> {
   visibleDuration?: DateDuration;
   pageBehavior?: "visible" | "single";
   placement?: PopoverProps["placement"];
@@ -55,7 +54,7 @@ function DateRangePicker<T extends DateValue>({
         </span>
         <DateInput slot="end" />
         <PopoverTrigger
-          plain
+          tone="unstyled"
           className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
         >
           <CalendarIcon className="ms-auto text-muted-foreground" />

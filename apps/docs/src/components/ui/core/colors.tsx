@@ -28,12 +28,7 @@ import {
 } from "react-aria-components";
 import { cn } from "@/lib/utils";
 import { parseColor, type Color } from "@react-stately/color";
-import {
-  Input,
-  Description,
-  Label,
-  type InputProps,
-} from "@/components/ui/core/field";
+import { Description, Label } from "@/components/ui/core/field";
 import {
   Popover,
   PopoverContent,
@@ -41,27 +36,9 @@ import {
 } from "@/components/ui/core/popover";
 import { Button, type ButtonProps } from "@/components/ui/core/button";
 import { Pipette } from "lucide-react";
+import { ColorArea } from "./color-area";
 
 const defaultColor = parseColor("rgb(140, 92, 255)");
-
-function ColorArea({ className, ...props }: ColorAreaProps) {
-  return (
-    <ColorAreaPrimitive
-      {...props}
-      data-slot="color-box"
-      className={cn(
-        "size-56 shrink-0 rounded-md bg-muted forced-colors:bg-[GrayText]",
-        className
-      )}
-      style={({ defaultStyle, isDisabled }) => ({
-        ...defaultStyle,
-        background: isDisabled ? undefined : defaultStyle.background,
-      })}
-    >
-      <ColorThumb />
-    </ColorAreaPrimitive>
-  );
-}
 
 function ColorThumb({ className, ...props }: ColorThumbProps) {
   return (
@@ -242,72 +219,6 @@ function ColorWheel(props: ColorWheelProps) {
   );
 }
 
-type ColorFieldProps = ColorFieldPrimitiveProps &
-  InputProps & {
-    preview?: boolean;
-    pickMode?: boolean;
-  };
-
-function ColorInput({
-  classNames,
-  startContent,
-  value: controlledValue,
-  defaultValue,
-  onChange,
-  pickMode = false,
-  preview = true,
-  ...props
-}: ColorFieldProps) {
-  const [uncontrolledValue, setUncontrolledValue] =
-    React.useState<Color | null>(() => {
-      if (controlledValue) return parseColor(controlledValue);
-      if (defaultValue) return parseColor(defaultValue);
-      return null;
-    });
-
-  const isControlled = controlledValue !== undefined;
-  const value = isControlled ? controlledValue : uncontrolledValue;
-
-  const handleChange = (color: Color) => {
-    if (!isControlled) {
-      setUncontrolledValue(color);
-    }
-    onChange?.(color);
-  };
-
-  return (
-    <ColorField
-      {...props}
-      value={value ?? undefined}
-      onChange={handleChange}
-      aria-label={props["aria-label"] ?? "Color field"}
-    >
-      <Input
-        className={cn("px-1.5", classNames?.input)}
-        startContent={startContent}
-        endContent={
-          <>
-            {pickMode && (
-              <ColorPicker
-                className="[&_button]:size-6 [&_button]:inset-ring-0 [&_button]:focus:inset-ring-0 [&_button]:focus:ring-0 [&_button] [&_button]:data-[state=open]:inset-ring-0 [&_button]:data-[state=open]:ring-0"
-                onChange={handleChange}
-                defaultValue={value}
-                eyeDropper
-              />
-            )}
-            {preview && !pickMode && (
-              <ColorSwatch
-                className="size-6 rounded-lg inset-ring-1 inset-ring-foreground/10"
-                color={value ? value.toString("hex") : "#66000000"}
-              />
-            )}
-          </>
-        }
-      />
-    </ColorField>
-  );
-}
-
 interface ColorPickerProps extends ColorPickerPrimitiveProps {
   label?: string;
   className?: string;
@@ -316,14 +227,14 @@ interface ColorPickerProps extends ColorPickerPrimitiveProps {
   isDisabled?: boolean;
   description?: string;
   eyeDropper?: boolean;
-  variant?: ButtonProps["variant"];
+  tone?: ButtonProps["tone"];
 }
 
 function ColorPicker({
   withArrow = false,
   label,
   isDisabled,
-  variant = "outline",
+  tone = "outline",
   children,
   description,
   eyeDropper,
@@ -337,7 +248,7 @@ function ColorPicker({
       <ColorPickerPrimitive {...props}>
         <Popover>
           <PopoverTrigger
-            variant={variant}
+            tone={tone}
             isDisabled={isDisabled}
             size={label ? "default" : "icon"}
             className={cn(
@@ -398,9 +309,9 @@ function EyeDropper() {
 
   return (
     <Button
-      variant="outline"
+      tone="outline"
       aria-label="Eye dropper"
-      size="icon"
+      iconOnly
       onPress={() => {
         const eyeDropper = window.EyeDropper ? new window.EyeDropper() : null;
         eyeDropper
@@ -422,7 +333,6 @@ export {
   ColorSwatchPicker,
   ColorSwatchPickerItem,
   ColorWheel,
-  ColorInput,
   ColorPicker,
   EyeDropper,
 };

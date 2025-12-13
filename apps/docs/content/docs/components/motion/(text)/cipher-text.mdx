@@ -1,0 +1,63 @@
+---
+title: Cipher Text
+description: A text animation that simulates a decoding or decryption effect.
+component: true
+gridLayout: true
+features:
+  - title: Decryption effect
+    icon: Code
+  - title: Configurable speed
+    icon: Zap
+  - title: Interactive triggers
+    icon: MousePointer2
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="cipher-text/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Matrix Effect",
+        description: "Simulates text decoding with random characters.",
+        icon: <Code />,
+      },
+      {
+        title: "Custom Timing",
+        description: "Adjust speed and duration of the reveal.",
+        icon: <Clock />,
+      },
+      {
+        title: "Interactive",
+        description: "Trigger animation on hover or view.",
+        icon: <MousePointer2 />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="cipher-text" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { CipherText } from "@/components/ui/motion/cipher-text";
+
+<CipherText>Secret Message</CipherText>
+`} />
+</DocCard>
+
+<DocCard span={6} title="Custom Config and Characters">
+  <Example name="cipher-text/custom-config" />
+</DocCard>
+
+<DocCard span={6} title="With Trigger">
+  <Example name="cipher-text/trigger" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/cipher-text.tsx" />
+</DocCard>

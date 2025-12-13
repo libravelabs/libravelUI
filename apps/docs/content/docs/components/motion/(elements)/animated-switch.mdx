@@ -1,0 +1,101 @@
+---
+title: Animated Switch
+description: A precise switch, engineered with motion physics. Beauty in every
+  pixel. Seamless by default. Use the live controls below to explore
+  controlled/uncontrolled modes, stress tests, and why extra
+  className that alters sizing will break the switch's internal
+  geometry.
+component: true
+gridLayout: true
+features:
+  - title: Built-in spring motion
+    icon: Play
+  - title: Fine-tuned physics (stiffness:500)
+    icon: Zap
+  - title: Pixel-perfect handle movement
+    icon: Eye
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="animated-switch/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Controlled & uncontrolled modes",
+        description:
+          "Supports both controlled and uncontrolled state management approaches.",
+        icon: <Sliders />,
+      },
+      {
+        title: "Real-time `onValueChange` callbacks",
+        description: "Emits value updates instantly through callback events.",
+        icon: <Activity />,
+      },
+      {
+        title: "Custom `onIcon` & `offIcon`",
+        description: "Allows custom icons for both active and inactive states.",
+        icon: <ToggleLeft />,
+      },
+      {
+        title: "Motion layout + spring (stiffness: 500, damping: 35)",
+        description:
+          "Smooth physical motion powered by a configurable spring animation.",
+        icon: <Move />,
+      },
+      {
+        title: "Smooth precise translation from left: 4px to left: 44px",
+        description:
+          "Provides a precise and fluid knob translation across the track.",
+        icon: <ArrowLeftRight />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="animated-switch" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+<Anatomy code={`
+import { AnimatedSwitch } from "@/components/ui/motion/animated-switch";
+
+<AnimatedSwitch />
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="animated-switch/controlled" />
+</DocCard>
+
+<DocCard span={6} title="Custom Icon">
+  <Example name="animated-switch/custom-icon" />
+</DocCard>
+
+<DocCard span={12} tone="destructive" title="Broken — example of dangerous className" description="This demonstrates what happens if you apply sizing/padding classes that alter the switch's internal geometry. **Do not do this in production.**">
+<div className="flex items-center gap-2 not-prose">
+  <div className="p-6 rounded-lg bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(0,0,0,0.04)_100%)] border border-border/40">
+    <AnimatedSwitch
+      className="w-28 h-8 p-2"
+    />
+  </div>
+
+  <div className="flex flex-col gap-0">
+    <div className="text-xs text-muted-foreground">Result</div>
+    <div className="text-sm font-medium">
+      Offset handle Clipping Unnatural motion
+    </div>
+    <div className="text-xs text-muted-foreground">
+      The handle expects exact container geometry (4px → 44px).
+      Changing width/height/padding displaces it.
+    </div>
+  </div>
+</div>
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/animated-switch.tsx" />
+</DocCard>

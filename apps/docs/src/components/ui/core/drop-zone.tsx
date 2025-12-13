@@ -12,7 +12,7 @@ const dropZoneVariants = cva(
   "relative flex flex-col items-center justify-center gap-2 text-sm cursor-pointer *:cursor-pointer rounded-xl border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 group data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground",
   {
     variants: {
-      variant: {
+      tone: {
         default:
           "border border-solid border-border bg-card shadow-sm hover:shadow-md hover:border-primary/30",
         dashed:
@@ -25,7 +25,7 @@ const dropZoneVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "dashed",
+      tone: "dashed",
     },
   }
 );
@@ -53,7 +53,8 @@ const dropZoneSizes = cva("w-full", {
 });
 
 interface DropZoneProps
-  extends DragAndDropPrimitiveProps,
+  extends
+    DragAndDropPrimitiveProps,
     VariantProps<typeof dropZoneVariants>,
     VariantProps<typeof dropZoneSizes> {
   label?: string;
@@ -62,7 +63,7 @@ interface DropZoneProps
 
 function DropZone({
   className,
-  variant,
+  tone,
   size,
   label,
   description,
@@ -74,7 +75,7 @@ function DropZone({
       <DropAndDropPrimitive
         className={composeRenderProps(className, (className, renderProps) =>
           cn(
-            dropZoneVariants({ variant, ...renderProps }),
+            dropZoneVariants({ tone, ...renderProps }),
             dropZoneSizes({ size }),
             className
           )

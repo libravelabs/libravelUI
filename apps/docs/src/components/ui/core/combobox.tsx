@@ -23,12 +23,8 @@ import {
   type PopoverContentProps,
 } from "@/components/ui/core/popover";
 import { Separator } from "@/components/ui/core/separator";
-import {
-  Label,
-  FieldProps,
-  Input,
-  InputProps,
-} from "@/components/ui/core/field";
+import { Label, FieldProps } from "@/components/ui/core/field";
+import { Input, InputProps } from "@/components/ui/core/input";
 
 interface ComboBoxContextType {
   value: Key;
@@ -131,7 +127,7 @@ function ComboBoxInput({
               </span>
             )}
 
-            <PopoverTrigger plain>
+            <PopoverTrigger tone="unstyled">
               <ChevronsUpDown
                 data-slot="chevron"
                 className="-me-1 shrink-0 text-muted-foreground group-open/select:text-foreground group-disabled/select:opacity-50 sm:me-0 size-4"

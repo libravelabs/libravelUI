@@ -1,13 +1,10 @@
 ---
-title: Components
-description:
-component: false
+title: Playground
+description: A live environment to test and experiment with LibravelUI components.
 enableToc: false
-icon: Boxes
-root: true
 ---
 
-## Basic Components
+## Core
 
 <PreviewBlock
   comp={[
@@ -64,7 +61,6 @@ root: true
     "slider",
     "stepper",
     "switch",
-    { name: "table", className: "scale-[0.45]" },
     "tabs",
     "tag-group",
     "text-area",
@@ -80,12 +76,22 @@ root: true
   file="basic"
 />
 
-## Original Components
-
-### Motion
+## Motion
 
 <PreviewBlock
-  comp={["animated-dock", "comparator"]}
+  comp={[
+    "animated-dock",
+    "animated-text",
+    "cipher-text",
+    "comparator",
+    "hover-glow",
+    "morphing-text",
+    "morphing-card",
+    "rolling-text",
+    "shining-text",
+    "tilting-card",
+    "typewriting-text",
+  ]}
   path="@/components/docs/motion"
   section="motion"
   file="basic"

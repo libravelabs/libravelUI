@@ -1,7 +1,0 @@
-[
-  {
-    "displayName": "baseOptions",
-    "description": "Shared layout configurations\n\nyou can customise layouts individually from:\nHome Layout: app/(home)/layout.tsx\nDocs Layout: app/docs/layout.tsx",
-    "props": {}
-  }
-]

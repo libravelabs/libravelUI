@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { createContext, useContext } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@/lib/slot";
 import { cn } from "@/lib/utils";
 import {
   AnimatePresence,
@@ -171,8 +171,7 @@ function StepperItem({
   );
 }
 
-interface StepperTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface StepperTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
@@ -222,8 +221,10 @@ function StepperTrigger({
   );
 }
 
-interface StepperIndicatorProps
-  extends Omit<HTMLMotionProps<"span">, "onDrag"> {
+interface StepperIndicatorProps extends Omit<
+  HTMLMotionProps<"span">,
+  "onDrag"
+> {
   asChild?: boolean;
 }
 

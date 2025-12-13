@@ -1,0 +1,67 @@
+---
+title: Animated Text
+description: A versatile text animation component for character, word, or line effects.
+component: true
+gridLayout: true
+features:
+  - title: Granular control
+    icon: Type
+  - title: Custom variants
+    icon: Sparkles
+  - title: Preset animations
+    icon: List
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="animated-text/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Granular Animation",
+        description: "Animate by character, word, or line.",
+        icon: <Type />,
+      },
+      {
+        title: "Custom Variants",
+        description: "Define your own Framer Motion variants.",
+        icon: <Sparkles />,
+      },
+      {
+        title: "Preset Effects",
+        description: "Use built-in presets for quick results.",
+        icon: <List />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="animated-text" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { AnimatedText } from "@/components/ui/motion/animated-text";
+
+<AnimatedText text="Hello World" />
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="animated-text/preset" />
+</DocCard>
+
+<DocCard span={6} title="Per Word">
+  <Example name="animated-text/per-word" />
+</DocCard>
+
+<DocCard span={12} title="Per Line">
+  <Example name="animated-text/per-line" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/animated-text.tsx" />
+</DocCard>

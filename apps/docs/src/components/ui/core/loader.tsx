@@ -112,12 +112,13 @@ const LOADERS = {
 const DEFAULT_SPINNER = "spin";
 
 interface LoaderProps
-  extends Omit<
+  extends
+    Omit<
       React.ComponentPropsWithoutRef<"svg">,
       "display" | "opacity" | "color"
     >,
     LoaderVariantProps {
-  variant?: keyof typeof LOADERS;
+  type?: keyof typeof LOADERS;
   percentage?: number;
   isInfinite?: boolean;
   formatOptions?: Intl.NumberFormatOptions;
@@ -127,14 +128,13 @@ interface LoaderProps
 function Loader({ isInfinite = true, ref, ...props }: LoaderProps) {
   const {
     className,
-    variant = DEFAULT_SPINNER,
+    type = DEFAULT_SPINNER,
     color,
     size,
     ...spinnerProps
   } = props;
 
-  const LoaderPrimitive =
-    LOADERS[variant in LOADERS ? variant : DEFAULT_SPINNER];
+  const LoaderPrimitive = LOADERS[type in LOADERS ? type : DEFAULT_SPINNER];
 
   return (
     <ProgressBar
@@ -148,8 +148,8 @@ function Loader({ isInfinite = true, ref, ...props }: LoaderProps) {
         ref={ref}
         {...spinnerProps}
         className={cn(loaderStyles({ color, size }), [
-          variant === "ring" && "animate-spin",
-          variant === "spin" && "stroke-current",
+          type === "ring" && "animate-spin",
+          type === "spin" && "stroke-current",
           className,
         ])}
       />

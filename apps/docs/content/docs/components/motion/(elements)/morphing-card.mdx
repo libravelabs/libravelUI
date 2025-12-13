@@ -1,0 +1,88 @@
+---
+title: Morphing Card
+description: An interactive morphing card that smoothly transitions between preview and detailed views.
+component: true
+gridLayout: true
+features:
+  - title: Shared element transition
+    icon: ArrowRightLeft
+  - title: Fluid expansion
+    icon: Maximize2
+  - title: Scrollable content
+    icon: Scroll
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="morphing-card/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Seamless Transitions",
+        description: "Morphs smoothly from trigger to full content view.",
+        icon: <ArrowRightLeft />,
+      },
+      {
+        title: "Layout Preservation",
+        description: "Maintains context while expanding to show details.",
+        icon: <Maximize2 />,
+      },
+      {
+        title: "Intuitive Dismissal",
+        description: "Close via button or clicking outside.",
+        icon: <X />,
+      },
+      {
+        title: "Rich Content",
+        description: "Supports images, text, and complex layouts.",
+        icon: <Image />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="morphing-card" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import {
+  MorphingCard,
+  MorphingCardTrigger,
+  MorphingCardContainer,
+  MorphingCardContent,
+  MorphingCardTitle,
+  MorphingCardSubtitle,
+  MorphingCardDescription,
+  MorphingCardImage,
+  MorphingCardClose,
+} from "@/components/ui/motion/morphing-card";
+
+<MorphingCard>
+  <MorphingCardTrigger>
+    <MorphingCardImage src="..." />
+    <MorphingCardTitle>Title</MorphingCardTitle>
+  </MorphingCardTrigger>
+
+  <MorphingCardContainer>
+    <MorphingCardContent>
+      <MorphingCardImage src="..." />
+      <MorphingCardTitle>Title</MorphingCardTitle>
+      <MorphingCardDescription>...</MorphingCardDescription>
+      <MorphingCardClose />
+    </MorphingCardContent>
+  </MorphingCardContainer>
+</MorphingCard>
+`} />
+</DocCard>
+
+<DocCard span={12} title="Testing Playground">
+  <Example name="morphing-card/basic-2" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/morphing-card.tsx" />
+</DocCard>

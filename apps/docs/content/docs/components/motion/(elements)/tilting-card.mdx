@@ -1,0 +1,63 @@
+---
+title: Tilting Card
+description: A smooth, physics-driven 3D tilt effect that brings components to life with dynamic motion.
+component: true
+gridLayout: true
+features:
+  - title: 3D Tilt
+    icon: Box
+  - title: Physics-driven
+    icon: Activity
+  - title: Adjustable depth
+    icon: Layers
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="tilting-card/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "3D Motion",
+        description: "Realistic 3D tilt effect based on cursor position.",
+        icon: <Box />,
+      },
+      {
+        title: "Spring Physics",
+        description: "Smooth, organic movement with configurable stiffness.",
+        icon: <Activity />,
+      },
+      {
+        title: "Depth Control",
+        description: "Adjustable tilt intensity and perspective.",
+        icon: <Layers />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="tilting-card" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { TiltingCard } from "@/components/ui/motion/tilting-card";
+
+<TiltingCard>
+  <div className="p-6 bg-card rounded-xl border">
+    Content
+  </div>
+</TiltingCard>
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="tilting-card/disclosure" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/tilting-card.tsx" />
+</DocCard>

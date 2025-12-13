@@ -17,8 +17,9 @@ import {
 } from "@/components/ui/core/field";
 import { cn } from "@/lib/utils";
 
-interface DateFieldProps<T extends DateValue>
-  extends DateFieldPrimitiveProps<T> {
+interface DateFieldProps<
+  T extends DateValue,
+> extends DateFieldPrimitiveProps<T> {
   label?: string;
   description?: string;
   error?: string | ((validation: ValidationResult) => string);

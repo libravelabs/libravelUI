@@ -5,7 +5,7 @@ import {
   SearchField as SearchBarPrimitive,
   type SearchFieldProps as SearchBarPrimitiveProps,
 } from "react-aria-components";
-import { Input, type InputProps } from "@/components/ui/core/field";
+import { Input, type InputProps } from "@/components/ui/core/input";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/ui/core/loader";
 import { Search, X } from "lucide-react";
@@ -70,7 +70,7 @@ function SearchBar({
           ) : (
             <Input
               {...inputProps}
-              startContent={isLoading ? <Loader variant="spin" /> : <Search />}
+              startContent={isLoading ? <Loader type="spin" /> : <Search />}
               endContent={
                 <>
                   {!values.isEmpty && (

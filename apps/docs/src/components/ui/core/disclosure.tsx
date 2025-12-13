@@ -22,7 +22,7 @@ import { type ButtonProps } from "@/components/ui/core/button";
 const DisclosureStyleContext = createContext<
   VariantProps<typeof disclosureVariants>
 >({
-  variant: "default",
+  tone: "default",
   size: "sm",
 });
 
@@ -30,20 +30,20 @@ const useDisclosureStyle = () => useContext(DisclosureStyleContext);
 
 const disclosureVariants = cva("w-full", {
   variants: {
-    variant: {
+    tone: {
       default: "border-b border-border",
       ghost: "",
       outline: [
         "border rounded-xl",
-        "group-data-[variant=outline]:border-b group-data-[variant=outline]:border-border group-data-[variant=outline]:rounded-none",
+        "group-data-[tone=outline]:border-b group-data-[tone=outline]:border-border group-data-[tone=outline]:rounded-none",
       ],
       solid: [
         "border bg-background shadow-sm rounded-xl",
-        "group-data-[variant=solid]:border-b group-data-[variant=solid]:border-border group-data-[variant=solid]:rounded-none",
+        "group-data-[tone=solid]:border-b group-data-[tone=solid]:border-border group-data-[tone=solid]:rounded-none",
       ],
       muted: [
         "border border-border bg-muted/50 rounded-xl",
-        "group-data-[variant=muted]:border-b group-data-[variant=muted]:border-border group-data-[variant=muted]:rounded-none",
+        "group-data-[tone=muted]:border-b group-data-[tone=muted]:border-border group-data-[tone=muted]:rounded-none",
       ],
       separated: "border-t last:border-b",
     },
@@ -56,7 +56,7 @@ const disclosureVariants = cva("w-full", {
     },
   },
   defaultVariants: {
-    variant: "default",
+    tone: "default",
     size: "sm",
   },
 });
@@ -100,17 +100,17 @@ type DisclosureProps = React.ComponentProps<typeof DisclosurePrimitive> &
   };
 
 function Disclosure({
-  variant,
+  tone,
   size,
   className,
   transition,
   ...props
 }: DisclosureProps) {
   return (
-    <DisclosureStyleContext.Provider value={{ variant, size }}>
+    <DisclosureStyleContext.Provider value={{ tone, size }}>
       <MotionConfig transition={transition}>
         <DisclosurePrimitive
-          className={cn(disclosureVariants({ variant, size }), className)}
+          className={cn(disclosureVariants({ tone, size }), className)}
           {...props}
         />
       </MotionConfig>

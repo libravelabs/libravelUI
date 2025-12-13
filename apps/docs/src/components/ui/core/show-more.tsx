@@ -88,7 +88,7 @@ function ShowMoreText({
       {text.length > visibleText.length && (
         <Button
           onClick={handleToggle}
-          variant="link"
+          tone="link"
           className={cn(
             "!px-0 !py-0 mt-1 flex items-center gap-1",
             classNames?.toggle

@@ -36,8 +36,10 @@ import {
 } from "@/components/ui/core/select";
 import { AnimatePresence, motion } from "motion/react";
 
-interface CalendarProps<T extends DateValue>
-  extends Omit<CalendarPrimitiveProps<T>, "visibleDuration"> {
+interface CalendarProps<T extends DateValue> extends Omit<
+  CalendarPrimitiveProps<T>,
+  "visibleDuration"
+> {
   errorMessage?: string;
   className?: string;
   selectMode?: boolean;
@@ -175,8 +177,8 @@ function CalendarHeader({
       )}
     >
       <Button
-        size="icon"
-        variant="ghost"
+        iconOnly
+        tone="ghost"
         slot="previous"
         onClick={() => navigate("left")}
         className="me-1"
@@ -210,8 +212,8 @@ function CalendarHeader({
       )}
 
       <Button
-        size="icon"
-        variant="ghost"
+        iconOnly
+        tone="ghost"
         slot="next"
         onClick={() => navigate("right")}
         className="ms-1"

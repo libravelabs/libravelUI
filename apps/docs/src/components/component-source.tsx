@@ -1,17 +1,19 @@
 "use client";
 
 import { TStoJSCodeBlock } from "@/components/ts2js-code-block";
-import { fetchSource } from "@/lib/fetch-source";
+import { fetchSource, type SourceResponse } from "@/lib/fetch-source";
 import React, { useEffect, useState } from "react";
 import { TabsProps } from "./ui/core/tabs";
 
 export function ComponentSource({
   comp,
-  variant = "underline",
+  tone = "underline",
+  width,
   isReact = true,
 }: {
   comp: string;
-  variant?: TabsProps["variant"];
+  tone?: TabsProps["tone"];
+  width?: TabsProps["width"];
   isReact?: boolean;
 }) {
   const [code, setCode] = useState<string>("");
@@ -19,12 +21,23 @@ export function ComponentSource({
 
   useEffect(() => {
     const controller = new AbortController();
+
     const loadSource = async () => {
       setLoading(true);
+
       try {
         const fullPath = `${comp}`;
-        const raw = await fetchSource(fullPath);
-        setCode(raw?.trim() || "");
+        const res: SourceResponse | null = await fetchSource(fullPath);
+
+        if (!res || !res.files?.length) {
+          setCode("");
+          return;
+        }
+
+        const expected = `${comp}.tsx`;
+        const main = res.files.find((f) => f.name === expected) ?? res.files[0];
+
+        setCode(main.code || main.content);
       } catch (error) {
         console.error("Failed to fetch component source:", error);
         setCode("");
@@ -35,18 +48,17 @@ export function ComponentSource({
 
     loadSource();
 
-    return () => {
-      controller.abort();
-    };
+    return () => controller.abort();
   }, [comp]);
 
   return (
     <TStoJSCodeBlock
       isReact={isReact}
       code={code}
-      title={`${comp}`}
-      variant={variant}
+      title={comp}
+      tone={tone}
       loading={loading}
+      width={width}
     />
   );
 }

@@ -4,8 +4,9 @@ import {
   frontmatterSchema,
   metaSchema,
 } from "fumadocs-mdx/config";
-import { remarkTypeScriptToJavaScript } from "fumadocs-docgen/remark-ts2js";
 import { z as zod } from "zod";
+import { type LucideIcon } from "lucide-react";
+import { remarkDocCode } from "./src/lib/remark-doc-code";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
 // see https://fumadocs.dev/docs/mdx/collections#define-docs
@@ -15,7 +16,8 @@ export const docs = defineDocs({
       new: zod.boolean().default(false),
       pro: zod.boolean().default(false),
       soon: zod.boolean().default(false),
-      enableToc: zod.boolean().default(true),
+      gridLayout: zod.boolean().default(true),
+      enableToc: zod.boolean().optional(),
       doc: zod
         .union([
           zod.string().url(),
@@ -36,6 +38,14 @@ export const docs = defineDocs({
           ),
         ])
         .optional(),
+      features: zod
+        .array(
+          zod.object({
+            title: zod.string(),
+            icon: zod.custom<LucideIcon>().optional(),
+          })
+        )
+        .optional(),
     }),
   },
   meta: {
@@ -45,6 +55,6 @@ export const docs = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
-    remarkPlugins: [remarkTypeScriptToJavaScript],
+    remarkPlugins: [remarkDocCode],
   },
 });

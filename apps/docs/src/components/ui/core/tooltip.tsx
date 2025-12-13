@@ -15,7 +15,7 @@ const tooltipVariants = cva(
   "group origin-[--trigger-anchor-point] rounded-xl border px-2.5 py-1.5 text-sm/6 will-change-transform dark:shadow-none *:[strong]:font-medium",
   {
     variants: {
-      variant: {
+      tone: {
         default: "bg-popover text-popover-foreground",
         inverse:
           "border-transparent bg-foreground text-background [.text-muted-foreground]:text-secondary *:[.text-muted-foreground]:text-secondary",
@@ -34,7 +34,7 @@ const tooltipVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
     },
   }
 );
@@ -52,16 +52,16 @@ function Tooltip(props: TooltipProps) {
 }
 
 function TooltipTrigger({
-  variant = "ghost",
+  tone = "unstyled",
   ...props
 }: React.ComponentProps<typeof Button>) {
-  return <Button variant={variant} {...props} />;
+  return <Button tone={tone} {...props} />;
 }
 
 function TooltipContent({
   offset = 10,
   showArrow = true,
-  variant,
+  tone,
   children,
   className,
   ...props
@@ -71,7 +71,7 @@ function TooltipContent({
       {...props}
       offset={offset}
       className={composeRenderProps(className, (cls, renderProps) =>
-        cn(tooltipVariants({ ...renderProps, variant }), cls)
+        cn(tooltipVariants({ ...renderProps, tone }), cls)
       )}
     >
       {showArrow && (
@@ -82,14 +82,12 @@ function TooltipContent({
             viewBox="0 0 12 12"
             className={cn(
               "group-placement-left:-rotate-90 block group-placement-bottom:rotate-180 group-placement-right:rotate-90 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]",
-              (!variant || variant === "default") &&
-                "fill-popover stroke-border",
-              variant === "inverse" && "fill-foreground stroke-transparent",
-              variant === "destructive" &&
-                "fill-destructive stroke-destructive",
-              variant === "success" && "fill-emerald-500 stroke-emerald-500",
-              variant === "warning" && "fill-amber-600 stroke-amber-600",
-              variant === "info" && "fill-blue-500 stroke-blue-500"
+              (!tone || tone === "default") && "fill-popover stroke-border",
+              tone === "inverse" && "fill-foreground stroke-transparent",
+              tone === "destructive" && "fill-destructive stroke-destructive",
+              tone === "success" && "fill-emerald-500 stroke-emerald-500",
+              tone === "warning" && "fill-amber-600 stroke-amber-600",
+              tone === "info" && "fill-blue-500 stroke-blue-500"
             )}
           >
             <path d="M0 0 L6 6 L12 0" />

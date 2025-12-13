@@ -1,0 +1,59 @@
+---
+title: Particles
+description: An interactive particle system component for building lively, animated visual effects.
+component: true
+gridLayout: true
+features:
+  - title: WebGL Powered
+    icon: Cpu
+  - title: Interactive
+    icon: MousePointer2
+  - title: High Performance
+    icon: Zap
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="particles/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "WebGL Rendering",
+        description: "Powered by OGL for high-performance graphics.",
+        icon: <Cpu />,
+      },
+      {
+        title: "Mouse Interaction",
+        description: "Particles react to cursor movement.",
+        icon: <MousePointer2 />,
+      },
+      {
+        title: "Customizable",
+        description: "Adjust particle count, color, and behavior.",
+        icon: <Sliders />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="particles" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { Particles } from "@/components/ui/motion/particles";
+
+<Particles />
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="particles/basic" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/particles.tsx" />
+</DocCard>

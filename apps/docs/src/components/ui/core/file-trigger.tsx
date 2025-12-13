@@ -8,8 +8,7 @@ import { cn } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 
 interface FileTriggerProps
-  extends FileTriggerPrimitiveProps,
-    VariantProps<typeof buttonVariants> {
+  extends FileTriggerPrimitiveProps, VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   className?: string;
   defaultCamera?: "user" | "environment";
@@ -18,7 +17,7 @@ interface FileTriggerProps
 }
 
 function FileTrigger({
-  variant = "outline",
+  tone = "outline",
   size = "default",
   radius = "md",
   isLoading = false,
@@ -34,7 +33,7 @@ function FileTrigger({
     <FileTriggerPrimitive {...props} allowsMultiple={allowsMultiple}>
       <Button
         type="button"
-        variant={variant}
+        tone={tone}
         size={size}
         radius={radius}
         isLoading={isLoading}

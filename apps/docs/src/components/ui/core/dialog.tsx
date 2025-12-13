@@ -37,26 +37,17 @@ function Dialog({ children, ...props }: DialogPrimitiveProps) {
   return <DialogPrimitive {...props}>{children}</DialogPrimitive>;
 }
 
-interface DialogTriggerProps extends ButtonProps {
-  plain?: boolean;
-}
+type DialogTriggerProps = ButtonProps;
 
 function DialogTrigger({
   children,
-  variant,
+  tone,
   size,
   ref,
-  plain = false,
   ...props
 }: DialogTriggerProps) {
-  return plain ? (
-    <ButtonPrimitive
-      className={cn("cursor-pointer ring-0 outline-hidden", props.className)}
-    >
-      {children}
-    </ButtonPrimitive>
-  ) : (
-    <Button ref={ref} size={size} variant={variant} {...props}>
+  return (
+    <Button ref={ref} size={size} tone={tone} {...props}>
       {children ? children : <Menu />}
     </Button>
   );
@@ -93,8 +84,9 @@ function DialogModal({ size = "lg", children }: DialogModalProps) {
   );
 }
 
-interface DialogContentProps
-  extends React.ComponentProps<typeof DialogContentPrimitive> {
+interface DialogContentProps extends React.ComponentProps<
+  typeof DialogContentPrimitive
+> {
   size?: keyof typeof sizes;
   isBlurred?: boolean;
   isDismissable?: boolean;
@@ -297,18 +289,12 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
 function DialogClose({
   children,
   className,
-  variant = "outline",
+  tone = "outline",
   ref,
   ...props
 }: ButtonProps) {
   return (
-    <Button
-      slot="close"
-      className={className}
-      ref={ref}
-      variant={variant}
-      {...props}
-    >
+    <Button slot="close" className={className} ref={ref} tone={tone} {...props}>
       {children ? children : "Close"}
     </Button>
   );
@@ -322,7 +308,7 @@ interface DialogCloseIconProps extends Omit<ButtonProps, "children"> {
 function DialogCloseIcon({ className, ...props }: DialogCloseIconProps) {
   return props.isDismissable ? (
     <Button
-      variant="ghost"
+      tone="ghost"
       aria-label="Close"
       slot="close"
       className={cn(

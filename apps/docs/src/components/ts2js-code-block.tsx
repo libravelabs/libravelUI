@@ -13,7 +13,9 @@ interface TStoJSCodeBlockProps {
   code: string;
   title?: string;
   isReact?: boolean;
-  variant?: TabsProps["variant"];
+  tone?: TabsProps["tone"];
+  width?: TabsProps["width"];
+  orientation?: TabsProps["orientation"];
   loading?: boolean;
   showJS?: boolean;
 }
@@ -22,30 +24,33 @@ export function TStoJSCodeBlock({
   code,
   title,
   isReact = false,
-  variant = "ghost",
+  tone = "ghost",
+  width,
   loading = false,
   showJS = true,
+  orientation,
 }: TStoJSCodeBlockProps) {
-  if (loading) {
-    return (
-      <PreviewContainer hideButtons>
-        <Loader />
-      </PreviewContainer>
-    );
-  }
-
   const tsFileName = title ? `${title}${isReact ? ".tsx" : ".ts"}` : "";
   const jsFileName = title ? `${title}${isReact ? ".jsx" : ".js"}` : "";
 
   const tsLang = isReact ? "react" : "typescript";
   const jsLang = isReact ? "react" : "javascript";
 
-  let jsCode = "";
-  try {
-    jsCode = ts2js(code);
-  } catch (error) {
-    console.warn("[TStoJSCodeBlock] Failed to transpile TS → JS:", error);
-  }
+  const [jsCode, setJsCode] = React.useState("");
+
+  React.useEffect(() => {
+    if (!showJS) return;
+
+    const transform = async () => {
+      try {
+        const result = await ts2js(code);
+        setJsCode(result);
+      } catch (error) {
+        console.warn("[TStoJSCodeBlock] Failed to transpile TS → JS:", error);
+      }
+    };
+    transform();
+  }, [code, showJS]);
 
   const tabs = [
     {
@@ -81,11 +86,21 @@ export function TStoJSCodeBlock({
       : []),
   ];
 
+  if (loading) {
+    return (
+      <PreviewContainer hideButtons>
+        <Loader />
+      </PreviewContainer>
+    );
+  }
+
   return (
     <DocTabs
-      variant={variant}
+      orientation={orientation}
+      tone={tone}
+      width={width}
       classNames={{
-        content: cn(variant === "underline" && "p-0"),
+        content: cn("bg-transparent", tone === "underline" && "p-0"),
       }}
       items={tabs.map(({ label, value, lang, content, fileName }) => ({
         label,
@@ -98,7 +113,7 @@ export function TStoJSCodeBlock({
               title={fileName}
               classNames={{
                 codeblock: cn(
-                  variant === "underline" && "shadow-none border-none"
+                  tone === "underline" && "shadow-none border-none"
                 ),
               }}
             />

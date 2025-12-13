@@ -12,7 +12,7 @@ component: true
 
 The `Input` component provides a highly flexible and accessible way to handle different input types, including text, password, and number fields. It supports additional UI enhancements such as loading indicators, start/end content, and dynamic visibility toggling for passwords.
 
-- **Flexible** – Supports multiple input types (`text`, `password`, `number`, `etc`.) and can render a specialized `NumberField` when `type="number"` is used. Allows adding custom content before (`startContent`) or after (`endContent`) the input.
+- **Flexible** – Supports multiple input types (`text`, `password`, `number`, `etc`). Allows adding custom content before (`startContent`) or after (`endContent`) the input.
 
 - **Accessible** – ARIA attributes like `aria-invalid` and `aria-describedby` are included for error handling, ensuring screen readers can convey input state correctly. Labels and descriptions are properly associated with the input.
 
@@ -31,7 +31,7 @@ The `Input` component provides a highly flexible and accessible way to handle di
 <Tabs items={["Manual", "CLI"]} defaultIndex={1}>
   <Tab value="Manual">
 
-    <RequiredBlock components={["number-field", "loader"]} />
+    <RequiredBlock components={["loader"]} />
 
     Install following dependencies:
 
@@ -45,12 +45,12 @@ The `Input` component provides a highly flexible and accessible way to handle di
 
     Copy and paste the following code into your project.
 
-    <ComponentSource comp="components/ui/core/field" />
+    <ComponentSource comp="components/ui/core/input" />
 
   </Tab>
   <Tab value="CLI">
     ```package-install
-    npx libravelui@latest add field
+    npx libravelui@latest add input
     ```
   </Tab>
 </Tabs>
@@ -58,7 +58,7 @@ The `Input` component provides a highly flexible and accessible way to handle di
 ## Anatomy
 
 ```tsx
-import { Input } from "@/components/ui/core/field";
+import { Input } from "@/components/ui/core/input";
 ```
 
 ```tsx
@@ -80,7 +80,7 @@ import { Input } from "@/components/ui/core/field";
     description: "",
     error: "",
   }}
-  variant=""
+  tone=""
   size=""
   isDisabled={false}
   isLoading={false}
@@ -98,7 +98,7 @@ import { Input } from "@/components/ui/core/field";
 
 Inputs can have multiple visual styles, or variants, to indicate different purposes or states, such as default, destructive, ghost, or line. Use variants to align with your design system and highlight specific actions or contexts.
 
-<Playground comp="input/variants" />
+<Playground comp="input/variants" demo="input/variants.demo" />
 
 ### Controlled
 
@@ -106,11 +106,11 @@ A controlled input is managed through state. Its value is determined and updated
 
 <Playground comp="input/controlled" />
 
-### Description
+### Label Description
 
-You can provide a short description below the input to guide the user or explain what kind of data is expected.
+You can provide a label and short description below the input to guide the user or explain what kind of data is expected.
 
-<Playground comp="input/description" />
+<Playground comp="input/label-and-description" />
 
 ### Password
 
@@ -123,12 +123,6 @@ When you add `type="password"`, the input automatically becomes a password field
 You can add custom content before or after the input, such as icons, buttons, or labels, to enhance usability and context.
 
 <Playground comp="input/start-end-content" />
-
-### Extra Label
-
-An extra label allows you to display additional information next to the main label, such as an optional tag, helper text, or a short note.
-
-<Playground comp="input/extra-label" />
 
 ### Loading
 
@@ -144,4 +138,4 @@ Displays an error message and visual indication (such as a red border) when the 
 
 ## Props
 
-<AutoTypeTable comp="@/components/ui/core/field" />
+<AutoTypeTable comp="@/components/ui/core/input" />

@@ -1,0 +1,79 @@
+---
+title: Animated Tooltip
+description: A smooth, motion-powered tooltip that brings your UI to life with subtle, elegant animations.
+component: true
+gridLayout: true
+features:
+  - title: Smooth spring animations
+    icon: Sparkles
+  - title: 4-way positioning
+    icon: Compass
+  - title: Customizable delays
+    icon: Clock
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="animated-tooltip/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Smart Positioning",
+        description:
+          "Automatically adjusts to top, bottom, left, or right placements.",
+        icon: <Compass />,
+      },
+      {
+        title: "Controlled State",
+        description: "Full control over open/close state via props.",
+        icon: <Sliders />,
+      },
+      {
+        title: "Custom Delays",
+        description: "Configure open and close delays for perfect timing.",
+        icon: <Clock />,
+      },
+      {
+        title: "Optional Arrow",
+        description: "Toggle the directional arrow for different styles.",
+        icon: <ArrowUp />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="animated-tooltip" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { AnimatedTooltip } from "@/components/ui/motion/animated-tooltip";
+
+<AnimatedTooltip content="Tooltip content">
+  <Button>Hover me</Button>
+</AnimatedTooltip>
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="animated-tooltip/controlled" />
+</DocCard>
+
+<DocCard span={6} title="Positions">
+  <Example name="animated-tooltip/positions" />
+</DocCard>
+
+<DocCard span={6} title="Custom Delay">
+  <Example name="animated-tooltip/delay" />
+</DocCard>
+
+<DocCard span={6} title="With Arrow">
+  <Example name="animated-tooltip/arrow" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/animated-tooltip.tsx" />
+</DocCard>

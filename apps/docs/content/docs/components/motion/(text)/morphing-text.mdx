@@ -1,0 +1,59 @@
+---
+title: Morphing Text
+description: Creates smooth transitions between words by morphing their shared letters.
+component: true
+gridLayout: true
+features:
+  - title: Letter morphing
+    icon: Type
+  - title: Fluid transitions
+    icon: RefreshCcw
+  - title: Shared characters
+    icon: GitMerge
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="morphing-text/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Character Morphing",
+        description: "Intelligently morphs shared characters between words.",
+        icon: <Type />,
+      },
+      {
+        title: "Fluid Motion",
+        description: "Seamlessly transitions text content.",
+        icon: <RefreshCcw />,
+      },
+      {
+        title: "Layout Stable",
+        description: "Maintains layout integrity during animation.",
+        icon: <LayoutTemplate />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="morphing-text" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { MorphingText } from "@/components/ui/motion/morphing-text";
+
+<MorphingText texts={["Hello", "World"]} />
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="morphing-text/with-badge" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/morphing-text.tsx" />
+</DocCard>

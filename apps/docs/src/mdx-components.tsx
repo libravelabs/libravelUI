@@ -13,12 +13,15 @@ import { Info } from "@/components/info";
 import { Callout } from "fumadocs-ui/components/callout";
 import { RelatedComponents } from "@/components/related-components";
 import { PreviewBlock } from "@/components/preview-block";
+import { DocCard } from "@/components/examples/layout/doc-card";
 import * as icons from "lucide-react";
+import * as primitives from "@/components/examples/layout/primitives";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
     ...(icons as unknown as MDXComponents),
+    ...primitives,
     Tab,
     Tabs,
     AutoTypeTable: AutoTypeTable,
@@ -33,6 +36,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     RelatedComponents,
     Callout,
     PreviewBlock,
+    DocCard,
     ...components,
   };
 }

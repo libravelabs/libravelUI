@@ -11,7 +11,7 @@ import {
 import {
   Input,
   type InputProps as InputPrimitiveProps,
-} from "@/components/ui/core/field";
+} from "@/components/ui/core/input";
 import { cn } from "@/lib/utils";
 
 type InputProps = Pick<
@@ -29,8 +29,7 @@ type InputProps = Pick<
 >;
 
 interface TimeFieldProps<T extends DateValue>
-  extends TimeFieldPrimitiveProps<T>,
-    InputProps {
+  extends TimeFieldPrimitiveProps<T>, InputProps {
   errorMessage?: string | ((validation: ValidationResult) => string);
 }
 

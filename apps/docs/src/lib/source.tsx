@@ -4,6 +4,7 @@ import { docs } from "@/.source";
 import { icons } from "lucide-react";
 import { createElement } from "react";
 import { Badge } from "@/components/ui/core/badge";
+import { ReactAriaIcon } from "@/components/doc-links";
 
 // See https://fumadocs.vercel.app/docs/headless/source-api for more info
 export const source = loader({
@@ -19,27 +20,21 @@ export const source = loader({
         node.name = (
           <>
             {node.name}
-            <Badge size="sm" variant="secondary">
-              New
-            </Badge>
+            <Badge tone="secondary">New</Badge>
           </>
         );
       else if (data.pro)
         node.name = (
           <>
             {node.name}
-            <Badge size="sm" variant="secondary">
-              Pro
-            </Badge>
+            <Badge tone="secondary">Pro</Badge>
           </>
         );
       else if (data.soon)
         node.name = (
           <>
             {node.name}
-            <Badge size="sm" variant="secondary">
-              Soon
-            </Badge>
+            <Badge tone="secondary">Soon</Badge>
           </>
         );
 
@@ -47,7 +42,16 @@ export const source = loader({
     },
   },
   icon(icon) {
-    if (icon && icon in icons)
-      return createElement(icons[icon as keyof typeof icons]);
+    return icon ? (iconMap[icon as keyof typeof iconMap] ?? null) : null;
   },
 });
+
+const iconMap: Record<string, React.ReactNode> = {
+  Aria: <ReactAriaIcon />,
+  ...Object.fromEntries(
+    Object.keys(icons).map((key) => [
+      key,
+      createElement(icons[key as keyof typeof icons]),
+    ])
+  ),
+};

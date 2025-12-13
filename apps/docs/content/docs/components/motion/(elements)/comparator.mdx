@@ -1,0 +1,86 @@
+---
+title: Comparator
+description: Interactively compare two elements with a draggable slider to reveal differences.
+component: true
+gridLayout: true
+features:
+  - title: Draggable slider
+    icon: MoveHorizontal
+  - title: Works with any element
+    icon: Layers
+  - title: Customizable physics
+    icon: Settings
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="comparator/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Any Element Support",
+        description:
+          "Compare images, text, code blocks, or any React component.",
+        icon: <Layers />,
+      },
+      {
+        title: "Hover Interaction",
+        description: "Optional hover mode for desktop-friendly comparison.",
+        icon: <MousePointer2 />,
+      },
+      {
+        title: "Spring Physics",
+        description:
+          "Smooth, natural motion with configurable spring settings.",
+        icon: <Activity />,
+      },
+      {
+        title: "Custom Slider",
+        description: "Fully customizable handle and separator line.",
+        icon: <Sliders />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="comparator" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { Comparator, ComparatorPane, ComparatorSlider } from "@/components/ui/motion/comparator";
+
+<Comparator>
+  <ComparatorPane position="left">
+    <BeforeComponent />
+  </ComparatorPane>
+  <ComparatorPane position="right">
+    <AfterComponent />
+  </ComparatorPane>
+  <ComparatorSlider />
+</Comparator>
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="comparator/spring-options" />
+</DocCard>
+
+<DocCard span={6} title="Non-Image Content">
+  <Example name="comparator/not-image" />
+</DocCard>
+
+<DocCard span={6} title="Hover Mode">
+  <Example name="comparator/enable-hover" />
+</DocCard>
+
+<DocCard span={6} title="Custom Slider">
+  <Example name="comparator/custom-slider" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/comparator.tsx" />
+</DocCard>

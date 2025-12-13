@@ -22,7 +22,7 @@ const paginationItem = cva(
   "group relative inline-flex items-center justify-center whitespace-nowrap text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
   {
     variants: {
-      variant: {
+      tone: {
         default:
           "text-foreground hover:bg-accent hover:text-accent-foreground data-[active=true]:text-primary-foreground focus-visible:ring-ring",
         outline:
@@ -47,7 +47,7 @@ const paginationItem = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       size: "default",
       radius: "md",
     },
@@ -58,7 +58,7 @@ const paginationNav = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-3 text-foreground hover:text-accent-foreground focus-visible:ring-ring cursor-pointer",
   {
     variants: {
-      variant: {
+      tone: {
         default:
           "text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring",
         outline:
@@ -83,7 +83,7 @@ const paginationNav = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       size: "default",
       radius: "md",
     },
@@ -92,7 +92,7 @@ const paginationNav = cva(
 
 const activeVariants = cva("absolute inset-0 z-0 transition-none", {
   variants: {
-    variant: {
+    tone: {
       default: "bg-primary group-hover:opacity-70",
       destructive: "bg-destructive group-hover:opacity-70",
       outline: "border-2 border-primary bg-background group-hover:opacity-70",
@@ -115,7 +115,7 @@ const activeVariants = cva("absolute inset-0 z-0 transition-none", {
     },
   },
   defaultVariants: {
-    variant: "default",
+    tone: "default",
     size: "default",
     radius: "md",
   },
@@ -135,8 +135,8 @@ function usePagination() {
   const context = React.useContext(PaginationContext);
   if (!context)
     throw new Error("Pagination components must be used within <Pagination>");
-  const { id, variant, size, radius, spacing } = context;
-  return { id, variant, size, radius, spacing };
+  const { id, tone, size, radius, spacing } = context;
+  return { id, tone, size, radius, spacing };
 }
 
 type PaginationProps = React.HTMLAttributes<HTMLElement> &
@@ -145,7 +145,7 @@ type PaginationProps = React.HTMLAttributes<HTMLElement> &
 function Pagination({
   className,
   spacing,
-  variant,
+  tone,
   size,
   radius,
   ...props
@@ -153,7 +153,7 @@ function Pagination({
   const id = React.useId();
 
   return (
-    <PaginationContext.Provider value={{ id, variant, size, radius, spacing }}>
+    <PaginationContext.Provider value={{ id, tone, size, radius, spacing }}>
       <LayoutGroup id={id}>
         <nav
           role="navigation"
@@ -166,8 +166,7 @@ function Pagination({
   );
 }
 
-interface PaginationItemProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface PaginationItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isActive?: boolean;
 }
 
@@ -177,23 +176,23 @@ function PaginationItem({
   children,
   ...props
 }: PaginationItemProps) {
-  const { id, variant, size, radius } = usePagination();
+  const { id, tone, size, radius } = usePagination();
 
   return (
     <button
       data-active={isActive}
       className={cn(
-        paginationItem({ variant, size, radius }),
+        paginationItem({ tone, size, radius }),
         "relative group",
         className
       )}
       aria-current={isActive ? "page" : undefined}
       {...props}
     >
-      {isActive && (
+      {tone !== "ghost" && isActive && (
         <motion.div
           layoutId={`${id}-pagination-active`}
-          className={cn(activeVariants({ variant, size, radius }))}
+          className={cn(activeVariants({ tone, size, radius }))}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
         />
       )}
@@ -209,11 +208,11 @@ function PaginationPrevious({
   children,
   ...props
 }: PaginationNavProps) {
-  const { variant, size, radius } = usePagination();
+  const { tone, size, radius } = usePagination();
 
   return (
     <button
-      className={cn(paginationNav({ variant, size, radius }), className)}
+      className={cn(paginationNav({ tone, size, radius }), className)}
       {...props}
     >
       <ChevronLeft className="size-4" />
@@ -223,11 +222,11 @@ function PaginationPrevious({
 }
 
 function PaginationNext({ className, children, ...props }: PaginationNavProps) {
-  const { variant, size, radius } = usePagination();
+  const { tone, size, radius } = usePagination();
 
   return (
     <button
-      className={cn(paginationNav({ variant, size, radius }), className)}
+      className={cn(paginationNav({ tone, size, radius }), className)}
       {...props}
     >
       {children ?? "Next"}
