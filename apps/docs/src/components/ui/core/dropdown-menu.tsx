@@ -33,8 +33,7 @@ function DropdownMenuPortal({
 }
 
 interface DropdownMenuContentProps<T>
-  extends MenuProps<T>,
-    Pick<PopoverContentProps, "placement"> {
+  extends MenuProps<T>, Pick<PopoverContentProps, "placement"> {
   className?: string;
   popover?: PopoverContentProps;
   withArrow?: PopoverContentProps["withArrow"];
@@ -51,7 +50,7 @@ function DropdownMenuContent<T extends object>({
       <Menu
         data-slot="dropdown-menu-content"
         className={cn(
-          "bg-popover text-popover-foreground z-50 min-w-64 max-h-[35rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
+          "grid gap-1 bg-popover text-popover-foreground z-50 min-w-64 max-h-140 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
           className
         )}
         {...props}
@@ -83,14 +82,14 @@ function DropdownMenuGroup({
 
 interface DropdownMenuItemProps extends React.ComponentProps<typeof MenuItem> {
   inset?: boolean;
-  variant?: "default" | "destructive";
+  tone?: "default" | "destructive";
   href?: string;
 }
 
 function DropdownMenuItem({
   className,
   inset,
-  variant = "default",
+  tone = "default",
   children,
   ...props
 }: DropdownMenuItemProps) {
@@ -108,7 +107,7 @@ function DropdownMenuItem({
           "hover:ps-3 transition-all ease-linear",
           isDisabled && "pointer-events-none opacity-50",
           isSelected && "[&_svg:not([data-slot='indicator'])]:hidden",
-          variant === "destructive"
+          tone === "destructive"
             ? "text-destructive [&_svg]:!text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive"
             : "focus:bg-accent focus:text-accent-foreground",
           inset && "ps-8 hover:ps-9",

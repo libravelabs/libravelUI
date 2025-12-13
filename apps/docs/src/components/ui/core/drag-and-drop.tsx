@@ -24,8 +24,8 @@ interface FileState {
   id: string;
   file: File;
   preview: string;
-  progress: number;
-  status: "uploading" | "completed" | "error";
+  progress?: number;
+  status?: "uploading" | "completed" | "error";
 }
 
 interface DragAndDropProps extends DropZoneProps {
@@ -33,8 +33,7 @@ interface DragAndDropProps extends DropZoneProps {
   label?: string;
   description?: string;
   badge?: string;
-  acceptedFileType?: AcceptedFileType | AcceptedFileType[];
-  isLoading?: boolean;
+  acceptedFileType?: string | string[];
   hidePreview?: boolean;
   files?: FileState[];
   errors?: string[];
@@ -62,7 +61,6 @@ function DragAndDrop({
   badge,
   icon = <UploadCloud size={48} className="mb-4" />,
   acceptedFileType,
-  isLoading,
   hidePreview = false,
   maxSize = Infinity,
   onError,
@@ -82,14 +80,10 @@ function DragAndDrop({
   multiple = false,
   ...props
 }: DragAndDropProps) {
-  const isAllTypes =
-    !acceptedFileType ||
-    (Array.isArray(acceptedFileType) && acceptedFileType.length === 0);
-  const acceptedTypes = isAllTypes
-    ? []
-    : Array.isArray(acceptedFileType)
+  const accept =
+    typeof acceptedFileType === "string"
       ? acceptedFileType
-      : [acceptedFileType];
+      : acceptedFileType?.join(",");
 
   const [internalFiles, setInternalFiles] = React.useState<FileState[]>([]);
   const [internalErrors, setInternalErrors] = React.useState<string[]>([]);
@@ -98,86 +92,50 @@ function DragAndDrop({
   const errors =
     controlledErrors ?? (disableErrorMessage ? [] : internalErrors);
 
-  const setFiles = (newFiles: FileState[]) => {
-    onFilesChange?.(newFiles);
-    if (!controlledFiles) setInternalFiles(newFiles);
+  const setFiles = (next: FileState[]) => {
+    onFilesChange?.(next);
+    if (!controlledFiles) setInternalFiles(next);
   };
 
-  const updateFiles = (updater: (prev: FileState[]) => FileState[]) => {
-    if (controlledFiles) {
-      const updated = updater(controlledFiles);
-      onFilesChange?.(updated);
-    } else {
-      setInternalFiles((prev) => {
-        const updated = updater(prev);
-        onFilesChange?.(updated);
-        return updated;
-      });
+  const setErrors = (next: string[]) => {
+    onErrorsChange?.(next);
+    if (!controlledErrors && !disableErrorMessage) {
+      setInternalErrors(next);
     }
   };
 
-  const setErrors = (newErrors: string[]) => {
-    onErrorsChange?.(newErrors);
-    if (!controlledErrors && !disableErrorMessage) setInternalErrors(newErrors);
-  };
-
-  const handleFiles = async (selected: File[]) => {
-    const newErrors: string[] = [];
+  const handleFiles = (selected: File[]) => {
+    const nextErrors: string[] = [];
     const validFiles: File[] = [];
 
     for (const f of selected) {
-      if (!isAllTypes && !acceptedTypes.includes(f.type as MimeType)) {
-        newErrors.push(`Unsupported file format: ${f.name}`);
-        continue;
-      }
       if (f.size > maxSize * 1024 * 1024) {
-        newErrors.push(`File "${f.name}" exceeds ${maxSize} MB.`);
+        nextErrors.push(`File "${f.name}" exceeds ${maxSize} MB.`);
         continue;
       }
       validFiles.push(f);
     }
 
-    if (newErrors.length > 0) {
-      setErrors(newErrors);
-      newErrors.forEach((err) => onError?.(err));
+    if (nextErrors.length > 0) {
+      setErrors(nextErrors);
+      nextErrors.forEach((err) => onError?.(err));
     } else {
       setErrors([]);
     }
 
     if (validFiles.length === 0) return;
 
-    const newFileStates = validFiles.map((file) => {
-      const fs: FileState = {
-        id: `${Date.now()}-${Math.random()}`,
+    const next = validFiles.map((file) => {
+      const state: FileState = {
+        id: crypto.randomUUID(),
         file,
         preview: URL.createObjectURL(file),
-        progress: 0,
-        status: "uploading",
       };
-      onFileAdd?.(fs);
-      return fs;
+      onFileAdd?.(state);
+      return state;
     });
 
-    setFiles(multiple ? [...files, ...newFileStates] : newFileStates);
-
-    newFileStates.forEach((fileState) => {
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += Math.random() * 20;
-        updateFiles((prev) =>
-          prev.map((f) =>
-            f.id === fileState.id
-              ? {
-                  ...f,
-                  progress: Math.min(progress, 100),
-                  status: progress >= 100 ? "completed" : "uploading",
-                }
-              : f
-          )
-        );
-        if (progress >= 100) clearInterval(interval);
-      }, 300);
-    });
+    setFiles(multiple ? [...files, ...next] : next);
   };
 
   return (
@@ -185,29 +143,24 @@ function DragAndDrop({
       <DropZone
         {...props}
         isDisabled={isDisabled}
-        getDropOperation={(types) =>
-          isAllTypes
-            ? "copy"
-            : acceptedTypes.some((t) => types.has(t))
-              ? "copy"
-              : "cancel"
-        }
         onDrop={async (e) => {
           const dropped = e.items.filter(isFileDropItem) as FileDropItem[];
-          const selectedFiles = await Promise.all(
-            dropped.map((f) => f.getFile())
-          );
-          handleFiles(multiple ? selectedFiles : selectedFiles.slice(0, 1));
+          const selected = await Promise.all(dropped.map((f) => f.getFile()));
+          handleFiles(multiple ? selected : selected.slice(0, 1));
         }}
         className="p-0"
       >
         {({ isDropTarget }) => (
           <FileTrigger
             allowsMultiple={multiple}
-            {...(!isAllTypes && { acceptedFileTypes: acceptedTypes })}
+            acceptedFileTypes={
+              typeof acceptedFileType === "string"
+                ? acceptedFileType.split(",")
+                : acceptedFileType
+            }
             onSelect={(e) => {
-              const selected = e ? Array.from(e) : [];
-              handleFiles(multiple ? selected : selected.slice(0, 1));
+              const files = e ? Array.from(e) : [];
+              handleFiles(multiple ? files : files.slice(0, 1));
             }}
           >
             <ButtonPrimitive
@@ -221,8 +174,6 @@ function DragAndDrop({
               {(values) =>
                 typeof children === "function" ? (
                   children(values)
-                ) : children ? (
-                  children
                 ) : (
                   <div className="grid items-center justify-center">
                     <div className="mx-auto">{icon}</div>
@@ -242,7 +193,7 @@ function DragAndDrop({
                       {description}
                     </Description>
                     {badge && (
-                      <Badge variant="outline" className="mx-auto mt-2">
+                      <Badge tone="outline" className="mx-auto mt-2">
                         {badge}
                       </Badge>
                     )}
@@ -273,7 +224,7 @@ function DragAndDrop({
                   setErrors([]);
                   onClear?.();
                 }}
-                variant="link"
+                tone="link"
               >
                 <Trash2 className="size-3" />
                 Clear all
@@ -283,8 +234,6 @@ function DragAndDrop({
 
           <FilesPreview
             files={multiple ? files : files.slice(0, 1)}
-            isLoading={isLoading}
-            size={size}
             onRemove={(f) => {
               setFiles(files.filter((ff) => ff.file !== f.file));
               onFileRemove?.(f);
@@ -298,12 +247,10 @@ function DragAndDrop({
 
 interface FilesPreviewProps {
   files: FileState[];
-  isLoading?: boolean;
   onRemove?: (file: FileState) => void;
-  size?: DropZoneProps["size"];
 }
 
-function FilesPreview({ files, size, onRemove }: FilesPreviewProps) {
+function FilesPreview({ files, onRemove }: FilesPreviewProps) {
   const getFileType = (file: File) => {
     if (file.type.startsWith("image/")) return "image";
     if (file.type.startsWith("video/")) return "video";
@@ -314,10 +261,14 @@ function FilesPreview({ files, size, onRemove }: FilesPreviewProps) {
   };
 
   return (
-    <div className="w-full space-y-4 max-h-[28rem] overflow-y-auto">
+    <div className="w-full space-y-4 max-h-112 overflow-y-auto">
       <AnimatePresence>
         {files.map((f) => {
           const type = getFileType(f.file);
+
+          const hasProgress =
+            f.status === "uploading" && typeof f.progress === "number";
+
           return (
             <motion.div
               key={f.id}
@@ -402,10 +353,10 @@ function FilesPreview({ files, size, onRemove }: FilesPreviewProps) {
                     </svg>
                   </motion.div>
                 )}
-                <div className="absolute inset-0 bottom-0 bg-gradient-to-t from-muted via-muted/30 to-transparent" />
+                <div className="absolute inset-0 bottom-0 bg-linear-to-t from-muted via-muted/30 to-transparent" />
 
                 <div className="absolute bottom-2 start-2 text-muted-foreground">
-                  {f.status === "uploading" ? (
+                  {hasProgress ? (
                     <ProgressBar value={f.progress} />
                   ) : (
                     <>
@@ -421,20 +372,20 @@ function FilesPreview({ files, size, onRemove }: FilesPreviewProps) {
 
                 <div className="absolute bottom-2 end-2">
                   {f.status === "uploading" && (
-                    <Badge variant="default">Uploading…</Badge>
+                    <Badge tone="default">Uploading…</Badge>
                   )}
                   {f.status === "completed" && (
-                    <Badge variant="success">Uploaded</Badge>
+                    <Badge tone="success">Uploaded</Badge>
                   )}
                   {f.status === "error" && (
-                    <Badge variant="destructive">Error</Badge>
+                    <Badge tone="destructive">Error</Badge>
                   )}
                 </div>
 
                 <Button
                   onClick={() => onRemove?.(f)}
-                  size="icon"
-                  variant="secondary"
+                  iconOnly
+                  tone="secondary"
                   className="absolute top-2 start-2 size-6"
                 >
                   <X size={18} />
@@ -448,63 +399,5 @@ function FilesPreview({ files, size, onRemove }: FilesPreviewProps) {
   );
 }
 
-type MimeType =
-  | "image/png"
-  | "image/jpeg"
-  | "image/jpg"
-  | "image/gif"
-  | "image/webp"
-  | "image/svg+xml"
-  | "image/bmp"
-  | "image/tiff"
-  | "image/x-icon"
-  | "video/mp4"
-  | "video/webm"
-  | "video/ogg"
-  | "video/quicktime"
-  | "video/x-msvideo"
-  | "video/x-ms-wmv"
-  | "audio/mpeg"
-  | "audio/ogg"
-  | "audio/wav"
-  | "audio/webm"
-  | "audio/aac"
-  | "audio/flac"
-  | "audio/mp4"
-  | "application/pdf"
-  | "application/msword"
-  | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  | "application/vnd.ms-excel"
-  | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  | "application/vnd.ms-powerpoint"
-  | "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-  | "application/rtf"
-  | "text/plain"
-  | "text/csv"
-  | "application/json"
-  | "application/xml"
-  | "text/html"
-  | "application/zip"
-  | "application/x-7z-compressed"
-  | "application/x-rar-compressed"
-  | "application/x-tar"
-  | "application/gzip"
-  | "application/javascript"
-  | "application/typescript"
-  | "text/javascript"
-  | "text/css"
-  | "text/markdown"
-  | "application/x-sh"
-  | "application/x-python-code"
-  | "application/java-archive";
-
-type AcceptedFileType = MimeType;
-
 export { DragAndDrop };
-export type {
-  FileState,
-  MimeType,
-  AcceptedFileType,
-  FilesPreviewProps,
-  DragAndDropProps,
-};
+export type { FileState, FilesPreviewProps, DragAndDropProps };

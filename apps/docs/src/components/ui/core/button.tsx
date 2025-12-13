@@ -16,28 +16,22 @@ const buttonVariants = cva(
   ],
   {
     variants: {
-      variant: {
+      tone: {
         default: "bg-primary text-primary-foreground hover:opacity-70",
         destructive: "bg-destructive text-white hover:opacity-70",
-        outline: [
-          "border bg-background hover:opacity-70",
-          "inset-ring inset-ring-input focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20",
-        ],
+        outline: "border bg-transparent hover:opacity-70",
         secondary: "bg-secondary text-secondary-foreground hover:opacity-70",
         ghost: "hover:bg-foreground/10",
         link: "text-primary underline-offset-4 hover:underline",
+        unstyled: "",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        xs: "h-6 gap-0.5 px-2 has-[>svg]:px-1.5",
-        sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 px-6 has-[>svg]:px-4",
-        "icon-xs": "size-5",
-        "icon-sm": "size-6",
-        icon: "size-9",
-        "icon-lg": "size-12",
-        "icon-xl": "size-14",
-        "icon-2xl": "size-16",
+        xs: "h-6 text-xs px-2",
+        sm: "h-8 text-sm px-3",
+        default: "h-9 text-sm px-4",
+        lg: "h-10 text-base px-5",
+        xl: "h-12 text-lg px-6",
+        "2xl": "h-14 text-xl px-7",
       },
       radius: {
         none: "rounded-none",
@@ -46,11 +40,16 @@ const buttonVariants = cva(
         lg: "rounded-lg",
         full: "rounded-full",
       },
+      iconOnly: {
+        true: "p-0 [&_svg:not([class*='size-'])]:size-[1em] aspect-square",
+        false: "",
+      },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       size: "default",
       radius: "md",
+      iconOnly: false,
     },
   }
 );
@@ -58,27 +57,25 @@ const buttonVariants = cva(
 type ButtonProps = ButtonPrimitiveProps &
   VariantProps<typeof buttonVariants> & {
     ref?: React.Ref<HTMLButtonElement>;
-    className?: string;
     isLoading?: boolean;
     loader?: React.ReactNode;
     children?: React.ReactNode;
-    plain?: boolean;
   };
 
 function Button({
   className,
-  variant,
+  tone,
   size,
   radius,
+  iconOnly,
   isLoading = false,
-  plain = false,
   loader,
   children,
   ...props
 }: ButtonProps) {
-  if (plain) {
+  if (tone === "unstyled") {
     return (
-      <ButtonPrimitive>
+      <ButtonPrimitive {...props}>
         {(values) =>
           typeof children === "function" ? children(values) : children
         }
@@ -91,22 +88,25 @@ function Button({
       {...props}
       isDisabled={props.isDisabled || isLoading}
       className={composeRenderProps(className, (className) =>
-        cn(buttonVariants({ variant, size, radius, className }), className)
+        cn(buttonVariants({ tone, size, radius, iconOnly, className }))
       )}
     >
-      {(values) => {
-        if (isLoading) {
-          return size && size.includes("icon") ? (
+      {(values) =>
+        isLoading ? (
+          iconOnly ? (
             (loader ?? <Loader className="text-inherit" />)
           ) : (
             <>
               {loader ?? <Loader className="text-inherit" />}
               {children}
             </>
-          );
-        }
-        return typeof children === "function" ? children(values) : children;
-      }}
+          )
+        ) : typeof children === "function" ? (
+          children(values)
+        ) : (
+          children
+        )
+      }
     </ButtonPrimitive>
   );
 }

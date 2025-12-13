@@ -1,18 +1,28 @@
-import * as ts from "typescript";
+import { transform } from "sucrase";
+import * as prettier from "prettier/standalone";
+import * as parserBabel from "prettier/plugins/babel";
+import parserEstree from "prettier/plugins/estree";
 
-export function ts2js(tsCode: string): string {
-  const result = ts.transpileModule(tsCode, {
-    compilerOptions: {
-      target: ts.ScriptTarget.ES2015,
-      module: ts.ModuleKind.ESNext,
-      jsx: ts.JsxEmit.Preserve,
-      removeComments: false,
-      strict: true,
-      esModuleInterop: true,
-    },
-    fileName: "file.tsx",
-    reportDiagnostics: true,
-  });
+export async function ts2js(code: string): Promise<string> {
+  try {
+    const transpiled = transform(code, {
+      transforms: ["typescript", "jsx"],
+      jsxRuntime: "preserve",
+      disableESTransforms: true,
+    }).code;
 
-  return result.outputText.trim();
+    const formatted = await prettier.format(transpiled, {
+      parser: "babel",
+      plugins: [parserBabel, parserEstree],
+      printWidth: 80,
+      tabWidth: 2,
+      semi: true,
+      singleQuote: false,
+    });
+
+    return formatted.trim();
+  } catch (e) {
+    console.error("TS2JS Error:", e);
+    return code;
+  }
 }

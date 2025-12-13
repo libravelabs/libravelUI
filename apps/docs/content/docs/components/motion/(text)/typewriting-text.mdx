@@ -1,0 +1,63 @@
+---
+title: Typewriting Text
+description: An animated typing effect component for displaying text with a smooth, typewriter-like motion.
+component: true
+gridLayout: true
+features:
+  - title: Typing effect
+    icon: Keyboard
+  - title: Loop support
+    icon: Repeat
+  - title: Speed control
+    icon: Gauge
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="typewriting-text/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Typewriter Animation",
+        description: "Simulates character-by-character typing.",
+        icon: <Keyboard />,
+      },
+      {
+        title: "Continuous Loop",
+        description: "Option to repeat the typing sequence.",
+        icon: <Repeat />,
+      },
+      {
+        title: "Variable Speed",
+        description: "Adjust typing and deleting speeds.",
+        icon: <Gauge />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="typewriting-text" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { TypewritingText } from "@/components/ui/motion/typewriting-text";
+
+<TypewritingText texts={["Hello World", "Welcome"]} />
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="typewriting-text/speed" />
+</DocCard>
+
+<DocCard span={6} title="Looped">
+  <Example name="typewriting-text/looped" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/typewriting-text.tsx" />
+</DocCard>

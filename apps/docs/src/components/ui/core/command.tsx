@@ -190,14 +190,14 @@ function CommandGroup<T extends object>({
 }
 
 interface CommandItemProps extends MenuItemProps {
-  variant?: "default" | "destructive";
+  tone?: "default" | "destructive";
 }
 
 function CommandItem({
   className,
   children,
   textValue,
-  variant = "default",
+  tone = "default",
   ...props
 }: CommandItemProps) {
   const tv = textValue ?? (typeof children === "string" ? children : undefined);
@@ -211,7 +211,7 @@ function CommandItem({
         "hover:bg-accent hover:text-accent-foreground hover:ps-3 transition-all ease-linear",
         props.isDisabled &&
           "opacity-50 pointer-events-none cursor-not-allowed hover:bg-transparent focus:outline-none",
-        variant === "destructive"
+        tone === "destructive"
           ? "text-destructive [&_svg]:!text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive"
           : "focus:bg-accent focus:text-accent-foreground",
         className

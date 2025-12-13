@@ -21,6 +21,9 @@ type DocTabsProps = TabsProps & {
   defaultValue?: string;
   className?: string;
   classNames?: {
+    wrapper?: string | string[];
+    tabList?: string | string[];
+    trigger?: string | string[];
     content?: string | string[];
   };
 };
@@ -29,7 +32,8 @@ export function DocTabs({
   items,
   defaultValue,
   className,
-  variant = "underline",
+  tone = "underline",
+  width = "full",
   classNames,
   ...props
 }: DocTabsProps) {
@@ -41,14 +45,18 @@ export function DocTabs({
     <Tabs
       selectedKey={selectedKey}
       onSelectionChange={(key) => setSelectedKey(String(key))}
-      className={className}
-      width="full"
-      variant={variant}
+      className={cn(className, classNames?.wrapper)}
+      width={width}
+      tone={tone}
       {...props}
     >
-      <TabList>
+      <TabList className={cn("!w-fit", classNames?.tabList)}>
         {items.map((item) => (
-          <TabTrigger key={item.value} id={item.value}>
+          <TabTrigger
+            key={item.value}
+            id={item.value}
+            className={cn(classNames?.trigger)}
+          >
             {item.label}
           </TabTrigger>
         ))}

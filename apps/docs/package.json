@@ -3,19 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
-    "dev": "next dev --turbo",
-    "start": "next start",
-    "postinstall": "fumadocs-mdx",
-    "lint": "eslint",
-    "docgen": "bunx tsx src/scripts/generate-docs.ts"
+    "build": "bun run build:registry && bun run next build",
+    "dev": "bun run next dev --turbo",
+    "dev:all": "bun run build:registry && bun run next dev --turbo",
+    "start": "bun run next start",
+    "postinstall": "bunx fumadocs-mdx",
+    "lint": "bun run eslint",
+    "build:registry": "bunx tsx src/scripts/build-registry.ts"
   },
   "dependencies": {
     "@next/third-parties": "^15.5.3",
-    "@radix-ui/react-direction": "^1.1.1",
-    "@radix-ui/react-slot": "^1.2.3",
     "babel-plugin-macros": "^3.1.0",
-    "fs": "^0.0.1-security",
     "fumadocs-core": "15.7.13",
     "fumadocs-docgen": "^3.0.0",
     "fumadocs-mdx": "11.10.1",
@@ -25,7 +23,8 @@
     "lucide-react": "^0.544.0",
     "motion": "^12.23.18",
     "next": "15.5.3",
-    "oxc-transform": "^0.91.0",
+    "ogl": "^1.0.11",
+    "oxc-transform": "^0.99.0",
     "react": "^19.1.1",
     "react-aria-components": "^1.12.2",
     "react-docgen-typescript": "^2.4.0",
@@ -34,8 +33,10 @@
     "react-markdown": "^10.1.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.7",
+    "sucrase": "^3.35.1",
     "tailwindcss-react-aria-components": "^2.0.1",
-    "tw-animate-css": "^1.3.8"
+    "tw-animate-css": "^1.3.8",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -47,7 +48,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.3",
     "tailwindcss": "^4.1.13",
     "tsx": "^4.20.6",
     "typescript": "^5.9.2"

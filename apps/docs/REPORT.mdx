@@ -1,0 +1,180 @@
+# Code Review: LibravelUI (Apps/Docs)
+
+## 🧩 Konteks & Pemahaman Proyek
+
+**Jenis Project:**
+Ini adalah **Documentation Site** yang dibangun di atas Next.js 15 (App Router), menggunakan `fumadocs` sebagai framework dokumentasi. Di dalamnya terdapat **UI Library** (`src/components/ui`) yang sedang dikembangkan, yang tampaknya berbasis `react-aria-components` dan styled dengan Tailwind CSS.
+
+**Status Codebase:**
+
+- **Core UI:** Berada di `src/components/ui/core`. Ini adalah kandidat library yang sebenarnya.
+- **Docs/Examples:** Berada di `src/components/docs/core`. Ini adalah _consumer_ dari UI library untuk keperluan demo.
+- **AI/Experimental:** Ada jejak komponen AI (`src/components/ai`) dan beberapa utilitas yang terlihat seperti hasil generate.
+
+Secara umum, ini bukan sekadar "kulit" UI, tapi mencoba membangun headless UI wrapper (via React Aria) dengan styling sendiri. Ambisinya bagus, tapi eksekusinya masih campur aduk antara "library grade" dan "app grade".
+
+---
+
+## ✅ Hal yang Udah Bagus
+
+1.  **Fondasi Headless yang Kuat:**
+    Penggunaan `react-aria-components` adalah keputusan tepat. Daripada bikin logic aksesibilitas (a11y) dari nol (yang sering salah kalau AI yang bikin), kamu me-leverage library yang sudah battle-tested.
+    - _Bukti:_ `src/components/ui/core/colors.tsx` menggunakan `ColorAreaPrimitive`, `ColorSliderPrimitive`, dll.
+
+2.  **Styling Architecture (CVA):**
+    Penggunaan `class-variance-authority` (CVA) untuk varian komponen sudah standar industri. Ini memudahkan maintenance varian style.
+    - _Bukti:_ `src/components/ui/core/button.tsx` mendefinisikan `buttonVariants` dengan rapi.
+
+3.  **Pemisahan Registry/Docs:**
+    Struktur `src/components/docs/core` yang terpisah dari `src/components/ui/core` adalah pola yang bagus. `docs` berisi contoh penggunaan, sedangkan `ui` adalah source of truth. Ini mencegah kode demo "mengotori" library asli.
+
+---
+
+## ⚠️ Masalah Penting (Dengan Bukti Kode)
+
+### 1. Variant Explosion (Bloat)
+
+**File:** `src/components/ui/core/button.tsx`
+
+**Masalah:**
+Terlalu banyak varian ukuran yang spesifik dan aneh (`icon-xs`, `icon-sm`, ..., `icon-2xl`). Ini _over-engineered_. Biasanya `size="icon"` sudah cukup, dan ukurannya mengikuti `size` utama atau dikontrol via class utility.
+
+**Dampak:**
+Bundle size bengkak, maintenance sulit (kalau mau ubah padding, harus ubah di 10 tempat), dan membingungkan user (kapan pakai `icon-sm` vs `sm`?).
+
+**Cuplikan:**
+
+```tsx
+size: {
+  // ...
+  "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
+  "icon-sm": "size-8 [&_svg:not([class*='size-'])]:size-3.5",
+  "icon": "size-9 [&_svg:not([class*='size-'])]:size-4",
+  "icon-lg": "size-10 [&_svg:not([class*='size-'])]:size-5",
+  // ... dan seterusnya sampai icon-2xl
+},
+```
+
+**Saran Konkret:**
+Hapus varian `icon-*`. Gunakan satu `size="icon"` yang ukurannya adaptif atau default ke standar. Jika butuh ukuran custom, biarkan user menimpa dengan `className`.
+
+### 2. Fragile Utility Logic
+
+**File:** `src/lib/utils.ts`
+
+**Masalah:**
+Fungsi `getLowerRadiusClass` bekerja dengan cara memanipulasi string class name secara hardcoded. Ini sangat rapuh. Jika Tailwind config berubah atau user pakai custom radius, fungsi ini hancur.
+
+**Dampak:**
+Bug visual yang sulit di-debug. Logic "magic" seperti ini berbahaya di production.
+
+**Cuplikan:**
+
+```ts
+function getLowerRadiusClass(current: string): string {
+  const radiusScale = ["none", "sm", "md", "lg", "xl", "2xl", "3xl"];
+  // ... logic mencari index dan return string hardcoded
+  return `rounded-${lowerKey}`;
+}
+```
+
+**Saran Konkret:**
+Hapus fungsi ini. Gunakan CSS variables untuk radius (misal: `var(--radius)`) dan `calc()` di CSS jika perlu radius yang lebih kecil (misal: `calc(var(--radius) - 2px)`), atau biarkan user mengatur radius nested secara eksplisit.
+
+### 3. Monolithic Components
+
+**File:** `src/components/ui/core/colors.tsx`
+
+**Masalah:**
+Satu file berisi 9 komponen export (`ColorArea`, `ColorThumb`, `ColorSlider`, dll) dengan total 430+ baris.
+
+**Dampak:**
+Sulit dibaca (DX buruk). Tree-shaking mungkin tidak optimal jika bundler tidak pintar memilah export. Melanggar prinsip _Single Responsibility_.
+
+**Saran Konkret:**
+Pecah menjadi file terpisah di folder `src/components/ui/core/colors/`:
+
+- `color-picker.tsx`
+- `color-area.tsx`
+- `color-slider.tsx`
+  dll. Lalu export via `index.ts` jika perlu.
+
+---
+
+## 🧠 Pola “AI-ish” yang Perlu Dirapikan
+
+### 1. "Confused Abstraction" di Stepper
+
+**File:** `src/components/ui/core/stepper.tsx`
+
+**Analisis:**
+Komponen ini mencoba melakukan dua hal sekaligus:
+
+1.  Menerima props `steps` (array data) dan me-render otomatis.
+2.  Menyediakan komponen composable (`StepperRoot`, `StepperItem`) untuk fleksibilitas.
+
+Ini pola khas AI yang mencoba "menyenangkan semua orang". Hasilnya adalah kode yang kompleks dan membingungkan. Logic `StepperSeparator` dengan `calc()` dan absolute positioning yang rumit juga indikasi AI mencoba meniru visual tanpa memahami layout CSS modern (flex/grid gap).
+
+**Saran:**
+Pilih satu pendekatan utama. Untuk library modern, **Composable** (`Root` > `Item` > `Trigger`) jauh lebih baik dan fleksibel daripada Data-Driven (`steps={[]}`). Hapus prop `steps` di `Stepper` utama dan paksa penggunaan composable pattern.
+
+### 2. Over-Guarding di Utils
+
+**File:** `src/components/ai/page-actions.tsx`
+
+**Analisis:**
+Logic `useMemo` untuk membuat URL LLM (`Open in Scira AI`, `ChatGPT`, dll) agak verbose dan mencampuradukkan logic view (SVG icons) dengan logic data.
+
+**Saran:**
+Pindahkan logic pembentukan URL ke helper function murni di luar komponen. Pisahkan SVG ke file icon terpisah atau gunakan library icon. Jangan hardcode SVG path panjang di tengah logic komponen.
+
+---
+
+## 🧱 Arsitektur & Struktur Folder
+
+**Yang Membingungkan:**
+
+- `src/components/docs` vs `src/components/ui`. Penamaan `docs` agak ambigu. Apakah ini komponen _untuk_ docs (seperti layout, sidebar) atau _contoh_ komponen UI?
+  - Ternyata isinya _contoh/registry_.
+  - **Saran:** Rename `src/components/docs` menjadi `src/registry` atau `src/examples`. Ini standar di shadcn/ui dan library lain. Jelas bedanya: `ui` = library, `registry` = contoh pakai.
+
+**Yang Sudah Oke:**
+
+- `src/lib` untuk utilitas.
+- `src/app` struktur Next.js standar.
+
+---
+
+## ⚡ Performance & DX
+
+**DX (Developer Experience):**
+
+- **Isu:** Import path yang dalam. `import { ... } from "@/components/ui/core/popover"` agak panjang.
+- **Saran:** Pertimbangkan barrel file (`index.ts`) di `src/components/ui/core` sehingga bisa import `from "@/components/ui/core"`, ATAU biarkan seperti ini agar tree-shaking aman (preferensi modern cenderung explicit path, jadi ini _acceptable_).
+
+**Performance:**
+
+- Belum ada isu performance kritikal yang terlihat dari statis analisis. Penggunaan `React.useMemo` di `page-actions.tsx` sudah tepat untuk menghindari kalkulasi URL ulang saat render.
+
+---
+
+## 🚧 Prioritas Perbaikan (Roadmap Bertahap)
+
+1.  **🔥 P1: Refactor `Button` & `Utils`**
+    - Bersihkan varian `icon-*` di `Button`.
+    - Hapus `getLowerRadiusClass` dan ganti strategi radius.
+    - Ini fondasi, kalau kotor, semua komponen lain yang pakai button akan ikut kotor.
+
+2.  **⚠️ P2: Pecah Monolith `colors.tsx`**
+    - Split file ini agar lebih waras untuk di-maintain.
+
+3.  **🧹 P3: Rename & Reorganize `src/components/docs`**
+    - Pindahkan ke `src/registry` atau `src/examples` untuk kejelasan mental model.
+
+4.  **🎨 P4: Refactor `Stepper`**
+    - Sederhanakan menjadi pattern composable murni. Hapus logic "magic layout" yang rapuh.
+
+---
+
+**Kesimpulan:**
+Project ini punya potensi bagus karena basisnya (`react-aria`) kuat. Tapi, "lem" yang menyatukannya (varian, utilitas, struktur komponen) terasa seperti hasil iterasi AI yang belum dipoles oleh senior engineer. Bersihkan "sampah" varian dan sederhanakan logika komponen untuk membuatnya _maintainable_.

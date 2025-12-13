@@ -14,16 +14,16 @@ import type {
 } from "react-aria-components";
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn, getLowerRadiusClass } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
 const tabsVariants = cva("group relative flex w-full", {
   variants: {
-    variant: {
-      default: "bg-secondary gap-4",
-      ghost: "bg-transparent",
-      outline: "bg-transparent border border-border",
-      underline: "bg-secondary",
+    tone: {
+      default: "bg-transparent gap-4",
+      ghost: "bg-transparent gap-4",
+      outline: "bg-transparent gap-4",
+      underline: "bg-transparent gap-3",
     },
     width: {
       "2xs": "max-w-2xs",
@@ -41,18 +41,18 @@ const tabsVariants = cva("group relative flex w-full", {
       full: "max-w-full",
     },
     size: {
-      sm: "p-0.5",
-      default: "p-1",
-      lg: "p-1.5",
+      sm: "p-0",
+      default: "p-0",
+      lg: "p-0",
     },
     radius: {
       none: "",
-      sm: "rounded-sm",
-      md: "rounded-md",
+      sm: "rounded-lg",
+      md: "rounded-lg",
       lg: "rounded-lg",
-      xl: "rounded-xl",
-      "2xl": "rounded-2xl",
-      "3xl": "rounded-3xl",
+      xl: "rounded-lg",
+      "2xl": "rounded-lg",
+      "3xl": "rounded-lg",
     },
     orientation: {
       horizontal: "flex-col",
@@ -60,7 +60,7 @@ const tabsVariants = cva("group relative flex w-full", {
     },
   },
   defaultVariants: {
-    variant: "default",
+    tone: "default",
     size: "default",
     width: "xl",
     orientation: "horizontal",
@@ -68,76 +68,78 @@ const tabsVariants = cva("group relative flex w-full", {
   },
 });
 
-const tabListVariants = cva("flex shrink-0 w-fit px-1", {
+const tabListVariants = cva("flex shrink-0 w-fit", {
   variants: {
     orientation: {
       horizontal: "flex-row items-center",
       vertical: "flex-col items-stretch",
     },
     size: {
-      sm: "gap-1",
-      default: "gap-1.5",
-      lg: "gap-2",
+      sm: "gap-1 p-1",
+      default: "gap-1.5 p-1",
+      lg: "gap-2 p-1",
     },
-    variant: {
+    tone: {
       default:
-        "bg-transparent border border-border data-[orientation=horizontal]:w-full",
-      ghost: "bg-transparent",
-      underline: "bg-transparent data-[orientation=horizontal]:px-2",
-      outline: "data-[orientation=horizontal]:w-full",
+        "bg-card backdrop-blur-xl border border-border/40 data-[orientation=horizontal]:w-full shadow-sm",
+      ghost: "bg-transparent data-[orientation=horizontal]:w-full",
+      underline: "bg-transparent data-[orientation=horizontal]:w-full",
+      outline:
+        "data-[orientation=horizontal]:w-full bg-transparent backdrop-blur-md border",
     },
     radius: {
       none: "",
-      sm: "rounded-sm",
-      md: "rounded-md",
+      sm: "rounded-lg",
+      md: "rounded-lg",
       lg: "rounded-lg",
-      xl: "rounded-xl",
-      "2xl": "rounded-2xl",
-      "3xl": "rounded-3xl",
+      xl: "rounded-lg",
+      "2xl": "rounded-lg",
+      "3xl": "rounded-lg",
     },
   },
   defaultVariants: {
     orientation: "horizontal",
     size: "default",
-    variant: "default",
+    tone: "default",
     radius: "md",
   },
 });
 
 const tabTriggerVariants = cva(
-  "relative inline-flex items-center gap-1.5 whitespace-nowrap font-medium transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4",
+  "relative inline-flex items-center gap-1.5 whitespace-nowrap font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
-      variant: {
+      tone: {
         default:
           "text-muted-foreground hover:text-foreground selected:text-foreground",
         ghost:
           "text-muted-foreground hover:text-foreground selected:text-foreground",
         underline:
-          "text-muted-foreground hover:text-foreground selected:text-primary",
-        outline: "",
+          "text-muted-foreground/80 hover:text-foreground selected:text-primary selected:font-semibold",
+        outline:
+          "text-muted-foreground hover:text-foreground selected:text-foreground",
       },
       size: {
-        sm: "text-xs px-2.5 py-1",
-        default: "text-sm px-3 py-1.5",
-        lg: "text-base px-4 py-2",
+        sm: "text-xs px-3 py-1.5 h-7",
+        default: "text-sm px-4 py-2 h-9",
+        lg: "text-base px-5 py-2.5 h-11",
       },
       radius: {
-        none: "rounded-none",
-        sm: "rounded-sm",
-        md: "rounded-md",
-        lg: "rounded-lg",
-        xl: "rounded-xl",
-        "2xl": "rounded-2xl",
-        "3xl": "rounded-3xl",
+        none: "[--tab-radius:0px] rounded-none",
+        sm: "[--tab-radius:var(--radius-sm)] rounded-sm",
+        md: "[--tab-radius:var(--radius-md)] rounded-md",
+        lg: "[--tab-radius:var(--radius-lg)] rounded-lg",
+        xl: "[--tab-radius:var(--radius-xl)] rounded-xl",
+        "2xl": "[--tab-radius:var(--radius-xl)] rounded-2xl",
+        "3xl": "[--tab-radius:var(--radius-xl)] rounded-3xl",
       },
       orientation: {
         horizontal: "flex-1 justify-center",
-        vertical: "w-full justify-start ps-4 text-start",
+        vertical: "w-full justify-start ps-3 text-start",
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       size: "default",
       radius: "md",
       orientation: "horizontal",
@@ -146,28 +148,29 @@ const tabTriggerVariants = cva(
 );
 
 const tabContentVariants = cva(
-  "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 flex-1 h-full",
+  "relative w-full outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0 flex-1 h-full",
   {
     variants: {
-      variant: {
-        default: "bg-card text-foreground",
+      tone: {
+        default: "bg-card border text-foreground shadow-sm",
         ghost: "bg-transparent text-foreground",
-        underline: "bg-card text-foreground",
-        outline: "bg-card border border-border",
+        underline: "border text-foreground shadow-sm",
+        outline:
+          "bg-transparent backdrop-blur-md text-foreground border shadow-sm",
       },
       size: {
-        sm: "p-1 text-sm",
-        default: "p-2 text-base",
-        lg: "p-3 text-base",
+        sm: "p-4 text-sm",
+        default: "p-5 text-base",
+        lg: "p-6 text-base",
       },
       radius: {
         none: "",
-        sm: "rounded-sm",
-        md: "rounded-md",
+        sm: "rounded-lg",
+        md: "rounded-lg",
         lg: "rounded-lg",
-        xl: "rounded-xl",
-        "2xl": "rounded-2xl",
-        "3xl": "rounded-3xl",
+        xl: "rounded-lg",
+        "2xl": "rounded-lg",
+        "3xl": "rounded-lg",
       },
       orientation: {
         horizontal: "",
@@ -175,7 +178,7 @@ const tabContentVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       size: "default",
       radius: "lg",
       orientation: "horizontal",
@@ -200,7 +203,7 @@ type TabsProps = TabsPrimitiveProps &
 function Tabs({
   className,
   ref,
-  variant,
+  tone,
   size,
   orientation = "horizontal",
   radius,
@@ -211,15 +214,15 @@ function Tabs({
 
   return (
     <TabsContext.Provider
-      value={{ id, variant, size, orientation, radius, width }}
+      value={{ id, tone, size, orientation, radius, width }}
     >
       <TabsPrimitive
         className={cn(
-          tabsVariants({ variant, size, orientation, width, radius }),
+          tabsVariants({ tone, size, orientation, width, radius }),
           orientation === "vertical" ? "items-start" : "items-stretch",
           className
         )}
-        data-variant={variant}
+        data-tone={tone}
         orientation={orientation}
         ref={ref}
         {...props}
@@ -229,22 +232,21 @@ function Tabs({
 }
 
 interface TabListProps<T extends object>
-  extends TabListPrimitiveProps<T>,
-    VariantProps<typeof tabListVariants> {
+  extends TabListPrimitiveProps<T>, VariantProps<typeof tabListVariants> {
   ref?: React.RefObject<HTMLDivElement>;
 }
 
 function TabList<T extends object>({
   className,
   ref,
-  variant,
+  tone,
   radius,
   size,
   orientation,
   ...props
 }: TabListProps<T>) {
   const ctx = useTabsContext();
-  const resolvedVariant = variant ?? ctx.variant;
+  const resolvedTone = tone ?? ctx.tone;
   const resolvedRadius = radius ?? ctx.radius;
   const resolvedSize = size ?? ctx.size;
   const resolvedOrientation = orientation ?? ctx.orientation;
@@ -256,7 +258,7 @@ function TabList<T extends object>({
       className={cn(
         tabListVariants({
           orientation: resolvedOrientation,
-          variant: resolvedVariant,
+          tone: resolvedTone,
           radius: resolvedRadius,
           size: resolvedSize,
         }),
@@ -269,8 +271,7 @@ function TabList<T extends object>({
 }
 
 interface TabTriggerProps
-  extends TabTriggerPrimitiveProps,
-    VariantProps<typeof tabTriggerVariants> {
+  extends TabTriggerPrimitiveProps, VariantProps<typeof tabTriggerVariants> {
   ref?: React.RefObject<HTMLButtonElement>;
 }
 
@@ -278,14 +279,14 @@ function TabTrigger({
   children,
   className,
   ref,
-  variant,
+  tone,
   size,
   radius,
   orientation,
   ...props
 }: TabTriggerProps) {
   const ctx = useTabsContext();
-  const resolvedVariant = variant ?? ctx.variant;
+  const resolvedTone = tone ?? ctx.tone;
   const resolvedSize = size ?? ctx.size;
   const resolvedRadius = radius ?? ctx.radius;
   const resolvedOrientation = orientation ?? ctx.orientation;
@@ -294,7 +295,7 @@ function TabTrigger({
     <TabTriggerPrimitive
       className={cn(
         tabTriggerVariants({
-          variant: resolvedVariant,
+          tone: resolvedTone,
           size: resolvedSize,
           radius: resolvedRadius,
           orientation: resolvedOrientation,
@@ -312,20 +313,19 @@ function TabTrigger({
               layoutId={`tab-indicator-${ctx.id}`}
               transition={{
                 type: "spring",
-                stiffness: 400,
+                stiffness: 500,
                 damping: 30,
-                mass: 0.3,
+                mass: 0.4,
               }}
               className={cn(
-                "absolute z-10",
-                getLowerRadiusClass(resolvedRadius ?? "md"),
-                resolvedVariant === "underline" &&
+                "absolute rounded-[calc(var(--tab-radius)_-_2px)]",
+                resolvedTone === "underline" &&
                   resolvedOrientation === "vertical"
-                  ? "start-0 w-0.5 h-full bg-primary"
-                  : resolvedVariant === "underline" &&
+                  ? "start-0 top-1 bottom-1 w-0.5 bg-primary"
+                  : resolvedTone === "underline" &&
                       resolvedOrientation === "horizontal"
-                    ? "bottom-0 h-0.5 w-full bg-primary"
-                    : "inset-y-1 left-0 right-0 bg-primary/20"
+                    ? "bottom-0 left-1 right-1 h-0.5 bg-primary"
+                    : "inset-0 bg-primary/10 border border-primary/20"
               )}
             />
           )}
@@ -336,8 +336,7 @@ function TabTrigger({
 }
 
 interface TabContentProps
-  extends TabContentPrimitiveProps,
-    VariantProps<typeof tabContentVariants> {
+  extends TabContentPrimitiveProps, VariantProps<typeof tabContentVariants> {
   ref?: React.RefObject<HTMLDivElement>;
 }
 
@@ -345,14 +344,14 @@ function TabContent({
   className,
   children,
   ref,
-  variant,
+  tone,
   size,
   radius,
   orientation,
   ...props
 }: TabContentProps) {
   const ctx = useTabsContext();
-  const resolvedVariant = variant ?? ctx.variant;
+  const resolvedTone = tone ?? ctx.tone;
   const resolvedSize = size ?? ctx.size;
   const resolvedRadius = radius ?? ctx.radius;
   const resolvedOrientation = orientation ?? ctx.orientation;
@@ -362,7 +361,7 @@ function TabContent({
     <TabContentPrimitive
       className={cn(
         tabContentVariants({
-          variant: resolvedVariant,
+          tone: resolvedTone,
           size: resolvedSize,
           radius: resolvedRadius,
         }),
@@ -376,7 +375,7 @@ function TabContent({
           initial={{
             opacity: 0,
             filter: "blur(4px)",
-            ...(isVertical ? { x: -12 } : { y: -12 }),
+            ...(isVertical ? { x: -8 } : { y: -8 }),
           }}
           animate={{
             filter: "blur(0px)",
@@ -387,12 +386,13 @@ function TabContent({
           exit={{
             opacity: 0,
             filter: "blur(4px)",
-            ...(isVertical ? { x: -12 } : { y: -12 }),
+            ...(isVertical ? { x: -8 } : { y: -8 }),
           }}
           transition={{
             type: "spring",
             stiffness: 500,
             damping: 30,
+            mass: 0.5,
           }}
         >
           {typeof children === "function" ? children(values) : children}

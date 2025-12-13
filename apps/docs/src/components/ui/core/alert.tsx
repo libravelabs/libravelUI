@@ -12,7 +12,7 @@ const alertVariants = cva(
   "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='translate-'])]:translate-y-0.5 [&_svg:not([class*='text-'])]:text-current",
   {
     variants: {
-      variant: {
+      tone: {
         default: "border-border bg-background text-foreground",
         destructive:
           "border-destructive bg-destructive/10 text-destructive [&_svg:not([class*='text-'])]:text-destructive",
@@ -24,14 +24,14 @@ const alertVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
     },
   }
 );
 
 function AlertRoot({
   className,
-  variant,
+  tone,
   ...props
 }: MotionProps &
   VariantProps<typeof alertVariants> & {
@@ -45,7 +45,7 @@ function AlertRoot({
       transition={{ duration: 0.15, ease: "easeOut" }}
       data-slot="alert"
       role="alert"
-      className={cn(alertVariants({ variant }), className)}
+      className={cn(alertVariants({ tone }), className)}
       {...props}
     />
   );
@@ -92,7 +92,7 @@ interface AlertProps extends VariantProps<typeof alertVariants> {
 }
 
 function Alert({
-  variant,
+  tone,
   title,
   message,
   children,
@@ -114,7 +114,7 @@ function Alert({
     <AnimatePresence>
       {open && (
         <AlertRoot
-          variant={variant}
+          tone={tone}
           className={cn("flex w-full items-start gap-2", className)}
         >
           {icon && <div className="shrink-0">{icon}</div>}
@@ -129,8 +129,9 @@ function Alert({
           {canClosed && (
             <Button
               onClick={() => setOpen(false)}
-              size="icon-xs"
-              variant="ghost"
+              iconOnly
+              size="xs"
+              tone="ghost"
               className="m-auto"
               aria-label="Close alert"
             >

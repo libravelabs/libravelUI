@@ -1,0 +1,46 @@
+---
+title: Color Field
+description: A color field allows users to adjust the hue of an HSL or HSB color value on a circular track.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/ColorField.html
+---
+
+## Basic
+
+<Playground comp="color-field/basic" />
+
+## Installation
+
+<Installation
+  section="core"
+  name="color-field"
+  packages={[
+    "react-aria-components",
+    "tw-animate-css",
+    "tailwindcss-react-aria-components",
+    "class-variance-authority",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge",
+    "motion",
+    "@react-stately/color",
+  ]}
+/>
+
+### Anatomy
+
+```tsx
+import { ColorField } from "@/components/ui/core/color-field";
+import { Label, Input } from "@/components/ui/core/field";
+```
+
+```tsx
+<ColorField>
+  <Label>Color</Label>
+  <Input placeholder="#155DFC" />
+</ColorField>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/color-field" />

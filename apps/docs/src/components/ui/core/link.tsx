@@ -11,7 +11,7 @@ const linkVariants = cva(
   "disabled:cursor-default disabled:opacity-60 forced-colors:disabled:text-muted-foreground w-fit cursor-pointer transition-all duration-300",
   {
     variants: {
-      variant: {
+      tone: {
         default: "text-current hover:text-foreground",
         primary: "text-primary hover:text-primary/80",
         secondary: "text-muted-foreground hover:text-foreground",
@@ -23,7 +23,7 @@ const linkVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       isDisabled: false,
     },
   }
@@ -34,7 +34,7 @@ type LinkProps = LinkPrimitiveProps &
     ref?: React.RefObject<HTMLAnchorElement>;
   };
 
-function Link({ className, ref, variant, ...props }: LinkProps) {
+function Link({ className, ref, tone, ...props }: LinkProps) {
   return (
     <LinkPrimitive
       ref={ref}
@@ -42,7 +42,7 @@ function Link({ className, ref, variant, ...props }: LinkProps) {
       className={composeRenderProps(className, (className, renderProps) =>
         linkVariants({
           ...renderProps,
-          variant,
+          tone,
           className,
         })
       )}

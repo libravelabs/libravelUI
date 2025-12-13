@@ -1,0 +1,59 @@
+---
+title: Rolling Text
+description: Animated rolling text with customizable intervals and transitions.
+component: true
+gridLayout: true
+features:
+  - title: Rolling effect
+    icon: RotateCw
+  - title: Custom intervals
+    icon: Timer
+  - title: Event callbacks
+    icon: Activity
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="rolling-text/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Vertical Roll",
+        description: "Smoothly rolls text items vertically.",
+        icon: <RotateCw />,
+      },
+      {
+        title: "Timed Intervals",
+        description: "Set precise duration for each item display.",
+        icon: <Timer />,
+      },
+      {
+        title: "State Tracking",
+        description: "Callbacks for index changes and animation state.",
+        icon: <Activity />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="rolling-text" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { RollingText } from "@/components/ui/motion/rolling-text";
+
+<RollingText texts={["First", "Second", "Third"]} />
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="rolling-text/on-index-change" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/rolling-text.tsx" />
+</DocCard>

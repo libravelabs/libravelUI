@@ -21,12 +21,12 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 
-const DOCK_HEIGHT = 128;
+const AnimatedDOCK_HEIGHT = 128;
 const DEFAULT_MAGNIFICATION = 80;
 const DEFAULT_DISTANCE = 150;
 const DEFAULT_PANEL_HEIGHT = 64;
 
-export type DockProps = {
+type AnimatedDockProps = {
   children: React.ReactNode;
   className?: string;
   distance?: number;
@@ -35,61 +35,69 @@ export type DockProps = {
   spring?: SpringOptions;
 };
 
-export type DockItemProps = {
+type AnimatedDockItemProps = {
   className?: string;
   children: React.ReactNode;
   onClick?: () => void;
 };
 
-export type DockLabelProps = {
+type AnimatedDockLabelProps = {
   className?: string;
   children: React.ReactNode;
 };
 
-export type DockIconProps = {
+type AnimatedDockIconProps = {
   className?: string;
   children: React.ReactNode;
 };
 
-export type DocContextType = {
+type AnimatedDockContextType = {
   mouseX: MotionValue;
   spring: SpringOptions;
   magnification: number;
   distance: number;
 };
 
-export type DockProviderProps = {
+type AnimatedDockProviderProps = {
   children: React.ReactNode;
-  value: DocContextType;
+  value: AnimatedDockContextType;
 };
 
-const DockContext = createContext<DocContextType | undefined>(undefined);
+const AnimatedDockContext = createContext<AnimatedDockContextType | undefined>(
+  undefined
+);
 
-function DockProvider({ children, value }: DockProviderProps) {
-  return <DockContext.Provider value={value}>{children}</DockContext.Provider>;
+function AnimatedDockProvider({ children, value }: AnimatedDockProviderProps) {
+  return (
+    <AnimatedDockContext.Provider value={value}>
+      {children}
+    </AnimatedDockContext.Provider>
+  );
 }
 
-function useDock() {
-  const context = useContext(DockContext);
+function useAnimatedDock() {
+  const context = useContext(AnimatedDockContext);
   if (!context) {
-    throw new Error("useDock must be used within an DockProvider");
+    throw new Error(
+      "useAnimatedDock must be used within an AnimatedDockProvider"
+    );
   }
   return context;
 }
 
-function Dock({
+function AnimatedDock({
   children,
   className,
   spring = { mass: 0.1, stiffness: 150, damping: 12 },
   magnification = DEFAULT_MAGNIFICATION,
   distance = DEFAULT_DISTANCE,
   panelHeight = DEFAULT_PANEL_HEIGHT,
-}: DockProps) {
+}: AnimatedDockProps) {
   const mouseX = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
 
   const maxHeight = useMemo(() => {
-    return Math.max(DOCK_HEIGHT, magnification + magnification / 2 + 4);
+    return Math.max(AnimatedDOCK_HEIGHT, magnification + magnification / 2 + 4);
   }, [magnification]);
 
   const heightRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
@@ -113,25 +121,31 @@ function Dock({
           mouseX.set(Infinity);
         }}
         className={cn(
-          "mx-auto flex w-fit gap-4 rounded-2xl bg-secondary px-4",
+          "mx-auto flex w-fit gap-4 rounded-xl bg-muted px-4",
           className
         )}
         style={{ height: panelHeight }}
         role="toolbar"
-        aria-label="Application dock"
+        aria-label="Application Animateddock"
       >
-        <DockProvider value={{ mouseX, spring, distance, magnification }}>
+        <AnimatedDockProvider
+          value={{ mouseX, spring, distance, magnification }}
+        >
           {children}
-        </DockProvider>
+        </AnimatedDockProvider>
       </motion.div>
     </motion.div>
   );
 }
 
-function DockItem({ children, className, onClick }: DockItemProps) {
+function AnimatedDockItem({
+  children,
+  className,
+  onClick,
+}: AnimatedDockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const { distance, magnification, mouseX, spring } = useDock();
+  const { distance, magnification, mouseX, spring } = useAnimatedDock();
 
   const isHovered = useMotionValue(0);
 
@@ -172,7 +186,11 @@ function DockItem({ children, className, onClick }: DockItemProps) {
   );
 }
 
-function DockLabel({ children, className, ...rest }: DockLabelProps) {
+function AnimatedDockLabel({
+  children,
+  className,
+  ...rest
+}: AnimatedDockLabelProps) {
   const restProps = rest as Record<string, unknown>;
   const isHovered = restProps["isHovered"] as MotionValue<number>;
   const [isVisible, setIsVisible] = useState(false);
@@ -194,7 +212,7 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
           exit={{ opacity: 0, y: 0 }}
           transition={{ duration: 0.2 }}
           className={cn(
-            "absolute -top-6 left-1/2 w-fit whitespace-pre rounded-md border bg-popover text-popover-foreground px-2 py-0.5 text-xs",
+            "absolute -top-6 left-1/2 w-fit whitespace-pre rounded-md border bg-primary text-primary-foreground px-2 py-0.5 text-xs",
             className
           )}
           role="tooltip"
@@ -207,7 +225,11 @@ function DockLabel({ children, className, ...rest }: DockLabelProps) {
   );
 }
 
-function DockIcon({ children, className, ...rest }: DockIconProps) {
+function AnimatedDockIcon({
+  children,
+  className,
+  ...rest
+}: AnimatedDockIconProps) {
   const restProps = rest as Record<string, unknown>;
   const width = restProps["width"] as MotionValue<number>;
 
@@ -223,4 +245,12 @@ function DockIcon({ children, className, ...rest }: DockIconProps) {
   );
 }
 
-export { Dock, DockIcon, DockItem, DockLabel };
+export type {
+  AnimatedDockProps,
+  AnimatedDockItemProps,
+  AnimatedDockLabelProps,
+  AnimatedDockIconProps,
+  AnimatedDockContextType,
+  AnimatedDockProviderProps,
+};
+export { AnimatedDock, AnimatedDockIcon, AnimatedDockItem, AnimatedDockLabel };

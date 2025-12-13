@@ -1,73 +1,64 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, { useEffect, useState } from "react";
 import { DocTabs } from "@/components/doc-tabs";
 import { PreviewContainer } from "@/components/preview-container";
-import { fetchSource } from "@/lib/fetch-source";
 import { Loader } from "@/components/ui/core/loader";
-import { TStoJSCodeBlock } from "./ts2js-code-block";
+import { ComponentSource } from "@/components/component-source";
+
+import { PlaygroundProvider } from "@/components/playground-context";
+
+import { useMemo } from "react";
 
 interface PlaygroundProps {
   comp: string;
+  demo?: string;
   section?: string;
 }
 
-export function Playground({ comp, section = "core" }: PlaygroundProps) {
-  const [source, setSource] = useState<string | null>(null);
-  const [code, setCode] = useState<string | null>(null);
-
-  const Demo = dynamic(() => import(`@/components/docs/${section}/${comp}`), {
-    ssr: false,
-    loading: () => <Loader />,
-  });
-
-  useEffect(() => {
-    const fullPath = `components/docs/${section}/${comp}`;
-
-    fetchSource(fullPath).then((raw) => {
-      if (!raw) return setSource(null);
-      setSource(raw);
-
-      let code = raw.trim();
-      code = code.replace(/^["']use client["'];?\s*\n+/m, "");
-      code = code.replace(/export\s+default\s+[a-zA-Z0-9_$]+;?$/gm, "");
-      code = code.replace(
-        /export\s+default\s+function\s+([a-zA-Z0-9_$]+)?\s*\(/,
-        "export function Component("
-      );
-      code = code.replace(/export\s+default\s+[a-zA-Z0-9_$]+/g, "");
-
-      setCode(code);
-    });
-  }, [section, comp]);
-
-  if (!code) {
-    return (
-      <PreviewContainer hideButtons>
-        <p className="text-muted-foreground text-sm">Loading source code...</p>
-      </PreviewContainer>
-    );
-  }
+export function Playground({ comp, demo, section = "core" }: PlaygroundProps) {
+  const Demo = useMemo(
+    () =>
+      dynamic(
+        () => import(`@/components/examples/${section}/${demo || comp}`),
+        {
+          ssr: false,
+          loading: () => <Loader />,
+        }
+      ),
+    [section, demo, comp]
+  );
 
   return (
-    <DocTabs
-      items={[
-        {
-          label: "Preview",
-          value: "preview",
-          content: (
-            <PreviewContainer>
-              <Demo />
-            </PreviewContainer>
-          ),
-        },
-        {
-          label: "Code",
-          value: "code",
-          content: <TStoJSCodeBlock code={code} isReact title={comp} />,
-        },
-      ]}
-    />
+    <PlaygroundProvider>
+      <DocTabs
+        classNames={{
+          wrapper: "bg-muted p-1 gap-0",
+          tabList: "p-0 px-2",
+          content: "p-0",
+        }}
+        items={[
+          {
+            label: "Preview",
+            value: "preview",
+            content: (
+              <PreviewContainer hideButtons={!comp}>
+                {comp ? <Demo /> : <Loader />}
+              </PreviewContainer>
+            ),
+          },
+          {
+            label: "Code",
+            value: "code",
+            content: (
+              <ComponentSource
+                comp={`components/examples/${section}/${comp}`}
+                tone="ghost"
+              />
+            ),
+          },
+        ]}
+      />
+    </PlaygroundProvider>
   );
 }

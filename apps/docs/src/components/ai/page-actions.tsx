@@ -54,7 +54,7 @@ export function CopyButton({
 
   return (
     <Button
-      variant="secondary"
+      tone="secondary"
       size="sm"
       isLoading={isLoading}
       onClick={onCopyClick}
@@ -212,7 +212,7 @@ export function LLMOptions({
 
   return (
     <Popover>
-      <PopoverTrigger variant="secondary" size="sm" className="gap-2">
+      <PopoverTrigger tone="secondary" size="sm" className="gap-2">
         Open
         <ChevronDown className="size-3.5 text-fd-muted-foreground" />
       </PopoverTrigger>

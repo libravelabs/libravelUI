@@ -1,0 +1,49 @@
+---
+title: Color Slider
+description: A color slider is a slider that represents a color value.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/ColorSlider.html
+---
+
+## Basic
+
+<Playground comp="color-slider/basic" />
+
+## Installation
+
+<Installation
+  section="core"
+  name="color-slider"
+  requiredBlock={
+    <RequiredBlock components={["color-thumb", "slider", "field"]} />
+  }
+  packages={[
+    "react-aria-components",
+    "tw-animate-css",
+    "tailwindcss-react-aria-components",
+    "class-variance-authority",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge",
+    "motion",
+    "@react-stately/color",
+  ]}
+/>
+
+### Anatomy
+
+```tsx
+import { ColorSlider } from "@/components/ui/core/color-slider";
+```
+
+```tsx
+<ColorSlider
+  label="Fill color"
+  channel="alpha"
+  defaultValue="hsl(0, 100%, 50%)"
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/color-slider" />

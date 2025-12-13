@@ -9,6 +9,7 @@ import {
 import { ArrowUpRight, ExternalLinkIcon } from "lucide-react";
 import { cva } from "class-variance-authority";
 import * as icons from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export type DocItem =
   | string
@@ -67,7 +68,7 @@ export function DocLinks({ page }: DocLinksProps) {
         rel="noreferrer"
         className="w-fit"
       >
-        <Button variant="outline" className="flex items-center gap-1">
+        <Button tone="outline" className="flex items-center gap-1">
           {renderIcon(singleDoc.icon)}
           {singleDoc.title === "View Documentation" ? title : singleDoc.title}
           <ArrowUpRight size={12} />
@@ -79,7 +80,7 @@ export function DocLinks({ page }: DocLinksProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-fit">
+        <Button tone="outline" className="w-fit">
           <ReactAriaIcon /> {page.data.title} Docs <ArrowUpRight size={14} />
         </Button>
       </PopoverTrigger>
@@ -102,14 +103,14 @@ export function DocLinks({ page }: DocLinksProps) {
   );
 }
 
-export function ReactAriaIcon() {
+export function ReactAriaIcon({ className }: React.ComponentProps<"svg">) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 21"
       data-slot="icon"
-      className="size-5"
+      className={cn("size-5", className)}
       aria-hidden="true"
     >
       <path

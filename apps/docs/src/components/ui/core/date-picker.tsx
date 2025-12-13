@@ -15,57 +15,80 @@ import {
   FieldError,
   FieldGroup,
   type FieldProps,
+  fieldStyles,
   Label,
 } from "@/components/ui/core/field";
-import { PopoverContent, PopoverTrigger } from "@/components/ui/core/popover";
+import {
+  PopoverContent,
+  PopoverContentProps,
+  PopoverTrigger,
+} from "@/components/ui/core/popover";
 import { CalendarIcon } from "lucide-react";
+import { inputVariants } from "./input";
 
 interface DatePickerProps<T extends DateValue>
-  extends DatePickerPrimitiveProps<T>,
+  extends
+    DatePickerPrimitiveProps<T>,
     Pick<PopoverProps, "placement">,
     Omit<FieldProps, "placeholder"> {
   range?: boolean;
   visibleDuration?: DateDuration;
   pageBehavior?: "visible" | "single";
+  popover?: PopoverContentProps;
 }
 
 function DatePicker<T extends DateValue>({
-  label,
   className,
-  description,
-  error,
   placement,
+  children,
+  popover,
   ...props
 }: DatePickerProps<T>) {
   return (
     <DatePickerPrimitive
       aria-label={props["aria-label"] ?? "date-picker"}
-      className={cn("group grid gap-2", className)}
+      className={cn(fieldStyles(), className)}
       {...props}
     >
-      {label && <Label>{label}</Label>}
-      <FieldGroup className="inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 group-open:inset-ring-ring/70 group-open:ring-3 group-open:ring-ring/20">
-        <DateInput className="w-full" />
-        <PopoverTrigger
-          plain
-          className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
-        >
-          <CalendarIcon className="text-muted-foreground" />
-        </PopoverTrigger>
-      </FieldGroup>
-      {!error && description && <Description>{description}</Description>}
-      {error && <FieldError className="-mt-1">{error}</FieldError>}
-
-      <PopoverContent
-        withArrow={false}
-        placement={placement}
-        className="p-2 flex min-w-auto max-w-none w-auto snap-x justify-center"
-        {...props}
-      >
-        <Calendar className="border-0" />
-      </PopoverContent>
+      {(values) => (
+        <>
+          {typeof children === "function" ? children(values) : children}
+          <DatePickerOverlay {...popover} />
+        </>
+      )}
     </DatePickerPrimitive>
   );
 }
+
+function DatePickerOverlay({
+  placement = "bottom",
+  ...props
+}: PopoverContentProps) {
+  return (
+    <PopoverContent
+      withArrow={false}
+      placement={placement}
+      className="p-2 flex min-w-auto max-w-none w-auto snap-x justify-center"
+      {...props}
+    >
+      <Calendar className="border-0" />
+    </PopoverContent>
+  );
+}
+
+function DatePickerTrigger({ ...props }: PopoverContentProps) {
+  return (
+    <div className={cn(inputVariants(), "flex items-center gap-2")}>
+      <DateInput className="w-full" />
+      <PopoverTrigger
+        tone="unstyled"
+        className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
+      >
+        <CalendarIcon className="text-muted-foreground" />
+      </PopoverTrigger>
+    </div>
+  );
+}
+
 export type { DatePickerProps };
-export { DatePicker };
+export { DatePicker, DatePickerTrigger };

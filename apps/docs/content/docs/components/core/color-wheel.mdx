@@ -1,0 +1,43 @@
+---
+title: Color Wheel
+description: A color wheel allows users to adjust the hue of an HSL or HSB color value on a circular track.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/ColorWheel.html
+---
+
+## Basic
+
+<Playground comp="color-wheel/basic" />
+
+## Installation
+
+<Installation
+  section="core"
+  name="color-wheel"
+  requiredBlock="color-thumb"
+  packages={[
+    "react-aria-components",
+    "tw-animate-css",
+    "tailwindcss-react-aria-components",
+    "class-variance-authority",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge",
+    "motion",
+    "@react-stately/color",
+  ]}
+/>
+
+### Anatomy
+
+```tsx
+import { ColorWheel } from "@/components/ui/core/color-wheel";
+```
+
+```tsx
+<ColorWheel />
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/color-wheel" />

@@ -14,22 +14,29 @@ const avatarVariants = cva(
         lg: "size-12",
         xl: "size-16",
         "2xl": "size-20",
+        "3xl": "size-24",
+        "4xl": "size-26",
+        "5xl": "size-32",
+        "6xl": "size-36",
+        "7xl": "size-40",
+        "8xl": "size-44",
+        "9xl": "size-48",
+        "10xl": "size-52",
       },
-      variant: {
+      shape: {
         circle: "rounded-full *:rounded-full",
         square: "rounded-(--avatar-radius) *:rounded-(--avatar-radius)",
       },
     },
     defaultVariants: {
       size: "md",
-      variant: "circle",
+      shape: "circle",
     },
   }
 );
 
 interface AvatarProps
-  extends React.ComponentProps<"span">,
-    VariantProps<typeof avatarVariants> {
+  extends React.ComponentProps<"span">, VariantProps<typeof avatarVariants> {
   src?: string | null;
   initials?: string;
   alt?: string;
@@ -40,7 +47,7 @@ function Avatar({
   initials,
   alt = "",
   className,
-  variant,
+  shape,
   size,
   ...props
 }: AvatarProps) {
@@ -48,7 +55,7 @@ function Avatar({
     <span
       data-slot="avatar"
       {...props}
-      className={cn(avatarVariants({ size, variant }), className)}
+      className={cn(avatarVariants({ size, shape }), className)}
     >
       {initials && (
         <svg

@@ -20,8 +20,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/core/button";
 import { AnimatePresence, motion } from "motion/react";
 
-interface RangeCalendarProps<T extends DateValue>
-  extends RangeCalendarPrimitiveProps<T> {
+interface RangeCalendarProps<
+  T extends DateValue,
+> extends RangeCalendarPrimitiveProps<T> {
   error?: string;
   className?: string;
   label?: string;
@@ -205,8 +206,8 @@ function RangeCalendarHeader({
       )}
     >
       <Button
-        size="icon"
-        variant="ghost"
+        iconOnly
+        tone="ghost"
         slot="previous"
         onClick={() => navigate("left")}
         className="me-1"
@@ -232,8 +233,8 @@ function RangeCalendarHeader({
       </motion.div>
 
       <Button
-        size="icon"
-        variant="ghost"
+        iconOnly
+        tone="ghost"
         slot="next"
         onClick={() => navigate("right")}
         className="ms-1"

@@ -1,46 +1,69 @@
 import { NextResponse } from "next/server";
-import path from "node:path";
-import { readFile, stat } from "node:fs/promises";
-import { extname } from "node:path";
+import fs from "fs";
+import path from "path";
+import { fetchComponentSource, SourceResponse } from "@/lib/source-fetcher";
+import { cleanCode } from "@/lib/code-utils";
+
+const REGISTRY_PATH = path.join(process.cwd(), "public/registry.json");
 
 export async function GET(
   request: Request,
   context: { params: Promise<{ slug: string[] }> }
 ) {
   const params = await context.params;
-  const slug = params.slug.join("/");
-  const basePath = path.join(process.cwd(), "src");
+  const slug = params.slug;
+  const componentName = slug[slug.length - 1];
 
-  let filePath = path.join(basePath, slug);
-
-  if (!extname(filePath)) {
-    const tsxPath = `${filePath}.tsx`;
-    const tsPath = `${filePath}.ts`;
-
+  if (process.env.NODE_ENV === "development") {
     try {
-      await stat(tsxPath);
-      filePath = tsxPath;
-    } catch {
-      try {
-        await stat(tsPath);
-        filePath = tsPath;
-      } catch {
-        return NextResponse.json({ error: "File not found" }, { status: 404 });
+      const source = await fetchComponentSource(slug);
+      if (source.files.length > 0) {
+        source.files = source.files.map((file) => ({
+          ...file,
+          code: cleanCode(file.content),
+        }));
+        return NextResponse.json(source);
       }
+    } catch (e) {
+      console.warn(
+        "Dev mode source fetch failed, falling back to registry:",
+        e
+      );
     }
   }
 
-  if (!filePath.startsWith(basePath)) {
-    return NextResponse.json({ error: "Invalid path" }, { status: 400 });
-  }
-
   try {
-    const content = await readFile(filePath, "utf8");
-    return NextResponse.json({
-      files: [{ name: path.basename(filePath), content }],
-    });
+    if (!fs.existsSync(REGISTRY_PATH)) {
+      return NextResponse.json(
+        { error: "Registry not found. Run 'npm run build:registry'" },
+        { status: 404 }
+      );
+    }
+
+    const registry = JSON.parse(
+      fs.readFileSync(REGISTRY_PATH, "utf8")
+    ) as Record<string, SourceResponse>;
+
+    let component = registry[componentName];
+
+    if (!component) {
+      const fullSlug = slug.join("/");
+      component = registry[fullSlug];
+    }
+
+    if (!component) {
+      return NextResponse.json(
+        { error: "Component not found in registry" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(component);
   } catch (err) {
-    console.error("Error reading file:", err);
-    return NextResponse.json({ error: "File read error" }, { status: 500 });
+    console.error("Error fetching source:", err);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

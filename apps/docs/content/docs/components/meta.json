@@ -1,0 +1,7 @@
+{
+  "title": "Components",
+  "description": "Explore libravelUI components — from core elements to advanced motion utilities.",
+  "icon": "Boxes",
+  "root": true,
+  "pages": ["---Examples---", "index", "---UI---", "..."]
+}

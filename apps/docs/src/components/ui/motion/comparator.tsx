@@ -1,4 +1,5 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import { useState, createContext, useContext } from "react";
 import {
@@ -138,7 +139,7 @@ function ComparatorSlider({ className, children }: ComparatorSliderProps) {
     <motion.div
       className={cn(
         "absolute top-0 bottom-0 w-0.5 cursor-ew-resize [&>*]:[-webkit-user-drag:none] [&>*]:(user‑drag:none)",
-        !children && "bg-foreground",
+        !children && "bg-white",
         className
       )}
       style={{ left }}
@@ -146,8 +147,8 @@ function ComparatorSlider({ className, children }: ComparatorSliderProps) {
       {children ? (
         children
       ) : (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 flex items-center justify-center bg-foreground shadow-md">
-          <Code className="size-4 text-background" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-1 flex items-center justify-center bg-white shadow-md">
+          <Code className="size-4 text-black" />
         </div>
       )}
     </motion.div>

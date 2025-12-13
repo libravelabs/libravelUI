@@ -8,16 +8,23 @@ const toggleStyles = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] cursor-pointer",
   {
     variants: {
-      variant: {
+      tone: {
         default: "hover:bg-accent hover:text-accent-foreground",
         outline:
-          "border bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        link: "text-primary underline-offset-4 hover:underline",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
       },
       size: {
-        sm: "px-2.5 py-1 text-xs [&_svg:not([class*='size-'])]:size-4",
-        md: "px-3 py-1.5 text-sm [&_svg:not([class*='size-'])]:size-4.5",
-        lg: "px-4 py-2 text-base [&_svg:not([class*='size-'])]:size-5",
-        xl: "px-5 py-2.5 text-lg [&_svg:not([class*='size-'])]:size-5.5",
+        xs: "h-6 gap-0.5 px-2",
+        sm: "h-8 gap-1.5 px-3",
+        default: "h-9 px-4",
+        lg: "h-10 px-6",
+        xl: "h-12 px-7",
+        "2xl": "h-14 px-8",
       },
       radius: {
         none: "rounded-none",
@@ -26,43 +33,34 @@ const toggleStyles = cva(
         lg: "rounded-lg",
         full: "rounded-full",
       },
-      isDisabled: {
-        true: "opacity-40 cursor-not-allowed pointer-events-none forced-colors:text-[GrayText]",
+      iconOnly: {
+        true: "p-0 [&_svg:not([class*='size-'])]:size-[1em] aspect-square",
+        false: "",
       },
       isSelected: {
-        true: "bg-accent",
-      },
-      isIconOnly: {
         true: "",
         false: "",
       },
     },
     compoundVariants: [
       {
-        isIconOnly: true,
-        size: "sm",
-        class: "size-8 p-0 [&_svg:not([class*='size-'])]:size-4",
+        tone: "default",
+        isSelected: true,
+        class: "bg-accent text-accent-foreground",
       },
       {
-        isIconOnly: true,
-        size: "md",
-        class: "size-10 p-0 [&_svg:not([class*='size-'])]:size-4.5",
+        tone: "outline",
+        isSelected: true,
+        class: "bg-accent text-accent-foreground",
       },
-      {
-        isIconOnly: true,
-        size: "lg",
-        class: "size-12 p-0 [&_svg:not([class*='size-'])]:size-5",
-      },
-      {
-        isIconOnly: true,
-        size: "xl",
-        class: "size-14 p-0 [&_svg:not([class*='size-'])]:size-5.5",
-      },
+      { tone: "secondary", isSelected: true, class: "bg-secondary/80" },
+      { tone: "destructive", isSelected: true, class: "bg-destructive/90" },
     ],
     defaultVariants: {
-      variant: "default",
-      size: "md",
+      tone: "default",
+      size: "default",
       radius: "md",
+      iconOnly: false,
     },
   }
 );
@@ -70,37 +68,36 @@ const toggleStyles = cva(
 type ToggleProps = ToggleButtonProps &
   VariantProps<typeof toggleStyles> & {
     ref?: React.Ref<HTMLButtonElement>;
-    isIconOnly?: boolean;
   };
 
 function Toggle({
   className,
   size,
-  variant,
+  tone,
   radius,
+  iconOnly,
   ref,
-  isIconOnly,
   ...props
 }: ToggleProps) {
   return (
     <ToggleButton
+      {...props}
       ref={ref}
       className={composeRenderProps(className, (className, renderProps) =>
         cn(
           toggleStyles({
             ...renderProps,
             size,
-            variant,
+            tone,
             radius,
-            isIconOnly,
+            iconOnly,
             className,
           })
         )
       )}
-      {...props}
     />
   );
 }
 
-export type { ToggleProps };
 export { Toggle };
+export type { ToggleProps };

@@ -1,0 +1,67 @@
+---
+title: Hover Glow
+description: A dynamic Hover Glow component that smoothly follows the cursor, creating a responsive lighting effect.
+component: true
+gridLayout: true
+features:
+  - title: Cursor tracking
+    icon: MousePointer2
+  - title: Responsive lighting
+    icon: Zap
+  - title: Grid support
+    icon: LayoutGrid
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="hover-glow/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Cursor Following",
+        description: "Light source smoothly tracks mouse movement.",
+        icon: <MousePointer2 />,
+      },
+      {
+        title: "Card Integration",
+        description: "Perfect for highlighting interactive cards.",
+        icon: <CreditCard />,
+      },
+      {
+        title: "Grid Compatible",
+        description: "Works seamlessly within grid layouts.",
+        icon: <LayoutGrid />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="hover-glow" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { HoverGlow } from "@/components/ui/motion/hover-glow";
+
+<HoverGlow>
+  <div className="p-4 bg-card rounded-lg">
+    Card Content
+  </div>
+</HoverGlow>
+`} />
+</DocCard>
+
+<DocCard span={6} title="Testing Playground">
+  <Example name="hover-glow/cards" />
+</DocCard>
+
+<DocCard span={6} title="Grid Layout">
+  <Example name="hover-glow/grid" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/hover-glow.tsx" />
+</DocCard>

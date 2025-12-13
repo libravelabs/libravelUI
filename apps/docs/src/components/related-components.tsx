@@ -5,17 +5,19 @@ import { cn } from "@/lib/utils";
 
 interface RelatedComponentsProps extends React.ComponentProps<"div"> {
   components: string | string[];
+  section?: string;
 }
 
 export async function RelatedComponents({
   components,
+  section = "core",
   className,
 }: RelatedComponentsProps) {
   const slugs = Array.isArray(components) ? components : [components];
 
   const pages = slugs
     .map((slug) => {
-      const page = source.getPage(["components", slug]);
+      const page = source.getPage(["components", section, slug]);
       if (!page) {
         console.warn(`[RelatedComponents] Page not found for slug: ${slug}`);
         return null;

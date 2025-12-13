@@ -10,15 +10,12 @@ import {
 
 export function Info({
   children,
-  variant,
+  tone,
   title,
   icon = <InfoIcon />,
 }: AlertProps) {
   return (
-    <AlertRoot
-      variant={variant ?? "info"}
-      className="flex flex-col gap-4 w-full"
-    >
+    <AlertRoot tone={tone ?? "info"} className="flex flex-col gap-4 w-full">
       <div className="flex gap-2 [&_svg:not([class*='size-'])]:size-4">
         <div className="shrink-0">{icon}</div>
         <div>

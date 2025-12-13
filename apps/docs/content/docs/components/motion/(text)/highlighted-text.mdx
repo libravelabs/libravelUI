@@ -1,0 +1,59 @@
+---
+title: Highlighted Text
+description: A customizable text highlight component for drawing attention to key content.
+component: true
+gridLayout: true
+features:
+  - title: Dynamic highlighting
+    icon: PenTool
+  - title: Customizable styles
+    icon: Palette
+  - title: Smooth animation
+    icon: Zap
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="highlighted-text/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Animated Highlight",
+        description: "Smoothly draws attention to text segments.",
+        icon: <PenTool />,
+      },
+      {
+        title: "Custom Colors",
+        description: "Easily style the highlight color and shape.",
+        icon: <Palette />,
+      },
+      {
+        title: "Responsive",
+        description: "Adapts to text size and layout changes.",
+        icon: <Maximize2 />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="highlighted-text" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { HighlightedText } from "@/components/ui/motion/highlighted-text";
+
+<HighlightedText>Important Text</HighlightedText>
+`} />
+</DocCard>
+
+<DocCard span={12} title="Testing Playground">
+  <Example name="highlighted-text/basic-2" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/highlighted-text.tsx" />
+</DocCard>

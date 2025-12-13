@@ -1,0 +1,32 @@
+"use client";
+
+import { Button } from "@/components/ui/core/button";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+export default function LoadingButton() {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleClick = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      toast.success("Content removed!", { position: "top-center" });
+    }, 2500);
+  };
+
+  return (
+    <Button tone="destructive" onPress={handleClick} isLoading={loading}>
+      {loading ? (
+        "Loading..."
+      ) : (
+        <>
+          <Trash2 />
+          Remove
+        </>
+      )}
+    </Button>
+  );
+}
