@@ -16,4 +16,4 @@ function ColorField({ className, ...props }: ColorFieldProps) {
   );
 }
 
-export { ColorField };
+export { ColorField, type ColorFieldProps };

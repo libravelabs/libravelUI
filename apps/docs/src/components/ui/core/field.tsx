@@ -16,7 +16,7 @@ import {
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const fieldStyles = cva(["grid gap-1 w-full"]);
+const fieldStyles = cva(["group grid gap-1 w-full"]);
 
 function Label({ className, ...props }: LabelPrimitiveProps) {
   return (

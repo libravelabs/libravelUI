@@ -106,7 +106,7 @@ A controlled input is managed through state. Its value is determined and updated
 
 <Playground comp="input/controlled" />
 
-### Label Description
+### Label and Description
 
 You can provide a label and short description below the input to guide the user or explain what kind of data is expected.
 
@@ -120,9 +120,72 @@ When you add `type="password"`, the input automatically becomes a password field
 
 ### Start and End Content
 
-You can add custom content before or after the input, such as icons, buttons, or labels, to enhance usability and context.
+Inputs support decorative or interactive elements positioned before or after the input field.
+You can provide these elements either:
+
+1. Directly on the `Input` component using the `startContent` and `endContent` props.
+
+2. Through the `InputGroup` wrapper, which allows arbitrary elements to be placed alongside the input using natural layout flow.
 
 <Playground comp="input/start-end-content" />
+
+<Callout title="Full-size Elements">
+Use `data-fullsize-ele` to mark elements that should be **full-height and attached to the input edge**.
+
+Effects:
+
+- Matches input height
+- Adjusts input padding automatically
+- Keeps background, border, and focus ring continuous
+
+This is used internally by the password visibility toggle.
+
+---
+
+<h4>With `Input`</h4>
+
+Use inside `startContent` or `endContent`.
+
+```tsx
+<Input
+  startContent={<span data-fullsize-ele>https://</span>}
+  endContent={
+    <div data-fullsize-ele>
+      <Globe />
+    </div>
+  }
+/>
+```
+
+`Input` owns the layout and styling.
+
+---
+
+<h4>With `InputGroup`</h4>
+
+Use for custom composition.
+
+```tsx
+<InputGroup tone="default" size="default">
+  <span data-fullsize-ele>https://</span>
+  <Input />
+  <div data-fullsize-ele>
+    <Globe />
+  </div>
+</InputGroup>
+```
+
+`InputGroup` owns the layout. The inner `Input` is style-neutral.
+
+---
+
+<h4>Rules</h4>
+
+- `data-fullsize-ele` is **not decorative** — only for edge-attached, full-height elements
+- When using `InputGroup`, apply variants (`tone`, `size`, `radius`) to `InputGroup`, **not** to `Input`
+- Without `InputGroup`, apply variants directly to `Input`
+
+</Callout>
 
 ### Loading
 

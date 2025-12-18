@@ -27,4 +27,4 @@ function ColorArea({ className, ...props }: ColorAreaProps) {
   );
 }
 
-export { ColorArea };
+export { ColorArea, type ColorAreaProps };

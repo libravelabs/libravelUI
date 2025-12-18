@@ -41,13 +41,11 @@ type DialogTriggerProps = ButtonProps;
 
 function DialogTrigger({
   children,
-  tone,
-  size,
   ref,
   ...props
 }: DialogTriggerProps) {
   return (
-    <Button ref={ref} size={size} tone={tone} {...props}>
+    <Button ref={ref} {...props}>
       {children ? children : <Menu />}
     </Button>
   );

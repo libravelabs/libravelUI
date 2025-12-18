@@ -3,16 +3,16 @@
 import { Input, type InputProps } from "@/components/ui/core/input";
 
 export default function VariantsInput({
-  variant = "default",
+  tone = "default",
   size = "default",
   radius = "md",
 }: InputProps) {
   return (
     <Input
-      variant={variant}
+      tone={tone}
       size={size}
       radius={radius}
-      placeholder={`This is ${variant} ${size} ${radius} input`}
+      placeholder={`This is ${tone} ${size} ${radius} input`}
     />
   );
 }
