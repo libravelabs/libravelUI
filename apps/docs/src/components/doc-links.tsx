@@ -110,7 +110,7 @@ export function ReactAriaIcon({ className }: React.ComponentProps<"svg">) {
       fill="none"
       viewBox="0 0 24 21"
       data-slot="icon"
-      className={cn("size-5", className)}
+      className={cn(className)}
       aria-hidden="true"
     >
       <path

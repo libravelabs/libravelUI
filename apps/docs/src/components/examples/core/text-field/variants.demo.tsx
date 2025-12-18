@@ -20,7 +20,7 @@ const radii: NonNullable<InputProps["radius"]>[] = [
   "full",
 ];
 
-export default function VariantsInputDemo() {
+export default function VariantsTextFieldDemo() {
   const [tone, setTone] = useState<InputProps["tone"]>("default");
   const [size, setSize] = useState<InputProps["size"]>("default");
   const [radius, setRadius] = useState<InputProps["radius"]>("md");

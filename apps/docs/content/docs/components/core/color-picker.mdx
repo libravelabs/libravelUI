@@ -1,0 +1,104 @@
+---
+title: Color Picker
+description: A ColorPicker synchronizes a color value between multiple React Aria color components. It simplifies building color pickers with customizable layouts via composition.
+component: true
+doc: https://react-spectrum.adobe.com/react-aria/ColorPicker.html
+---
+
+## Basic
+
+<Playground comp="color-picker/basic" />
+
+## Installation
+
+<Installation
+  section="core"
+  name="color-picker"
+  requiredBlock={
+    <RequiredBlock
+      components={[
+        "button",
+        "popover",
+        "color-swatch",
+        "color-area",
+        "color-slider",
+        "color-field",
+        "input",
+      ]}
+    />
+  }
+  packages={[
+    "react-aria-components",
+    "tw-animate-css",
+    "tailwindcss-react-aria-components",
+    "class-variance-authority",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge",
+    "motion",
+    "@react-stately/color",
+  ]}
+/>
+
+### Anatomy
+
+```tsx
+import { ColorPicker } from "@/components/ui/core/color-picker";
+
+import { parseColor } from "@react-stately/color";
+import { useState } from "react";
+import { Button } from "@/components/ui/core/button";
+import { ColorArea } from "@/components/ui/core/color-area";
+import { ColorField } from "@/components/ui/core/color-field";
+import { ColorSlider } from "@/components/ui/core/color-slider";
+import { ColorSwatch } from "@/components/ui/core/color-swatch";
+import { ColorThumb } from "@/components/ui/core/color-thumb";
+import { Input } from "@/components/ui/core/input";
+import {
+  Popover,
+  PopoverBody,
+  PopoverContent,
+} from "@/components/ui/core/popover";
+```
+
+```tsx
+<ColorPicker eyeDropper label="Pick a color" />;
+
+/* or */
+
+<ColorPicker value={color} onChange={setColor}>
+  <Popover>
+    <Button tone="outline" data-slot="control">
+      <ColorSwatch className="size-5" />
+      Select color
+    </Button>
+    <PopoverContent>
+      <PopoverBody className="grid gap-2 overflow-x-hidden">
+        <ColorArea
+          colorSpace="rgb"
+          xChannel="red"
+          yChannel="green"
+          xName="red"
+          yName="green"
+        />
+        <ColorSlider colorSpace="hsb" channel="hue">
+          <ColorThumb />
+        </ColorSlider>
+        <ColorField aria-label="Color">
+          <Input />
+        </ColorField>
+      </PopoverBody>
+    </PopoverContent>
+  </Popover>
+</ColorPicker>;
+```
+
+### Custom Build
+
+Build a color picker using custom building blocks. This allows you to fully control the layout, styling, and behavior instead of relying on the default preset.
+
+<Playground comp="color-picker/custom-build" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/color-picker" />

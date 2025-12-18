@@ -39,12 +39,23 @@ doc: https://react-spectrum.adobe.com/react-aria/TextField.html#textarea-1
 ## Anatomy
 
 ```tsx
+import { Label } from "@/components/ui/core/field";
 import { Textarea } from "@/components/ui/core/text-area";
+import { TextField } from "@/components/ui/core/text-field";
 ```
 
 ```tsx
-<Textarea />
+<TextField className="w-72">
+  <Label>Synopsis</Label>
+  <Textarea />
+</TextField>
 ```
+
+### With Form
+
+This example demonstrates how to integrate the textarea component within a form context, showcasing form validation, error handling, and submission behavior seamlessly.
+
+<Playground comp="text-area/with-form" />
 
 ## Props
 

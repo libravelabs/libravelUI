@@ -1,16 +1,21 @@
 "use client";
 
+import { Input, type InputProps } from "@/components/ui/core/input";
 import { TextField } from "@/components/ui/core/text-field";
 
-export default function VariantsTextField() {
+export default function VariantsTextField({
+  tone = "default",
+  size = "default",
+  radius = "md",
+}: InputProps) {
   return (
-    <section className="w-full max-w-72 space-y-4">
-      <TextField placeholder="Default input variant" variant="default" />
-      <TextField
-        placeholder="Destructive input variant"
-        variant="destructive"
+    <TextField className="w-72">
+      <Input
+        tone={tone}
+        size={size}
+        radius={radius}
+        placeholder={`This is ${tone} ${size} ${radius} text field`}
       />
-      <TextField placeholder="Ghost input variant" variant="ghost" />
-    </section>
+    </TextField>
   );
 }

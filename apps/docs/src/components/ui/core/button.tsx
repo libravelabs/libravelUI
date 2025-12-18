@@ -4,7 +4,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import {
   Button as ButtonPrimitive,
   type ButtonProps as ButtonPrimitiveProps,
-  composeRenderProps,
 } from "react-aria-components";
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/ui/core/loader";
@@ -87,8 +86,9 @@ function Button({
     <ButtonPrimitive
       {...props}
       isDisabled={props.isDisabled || isLoading}
-      className={composeRenderProps(className, (className) =>
-        cn(buttonVariants({ tone, size, radius, iconOnly, className }))
+      className={cn(
+        buttonVariants({ tone, size, radius, iconOnly }),
+        className
       )}
     >
       {(values) =>

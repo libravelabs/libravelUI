@@ -13,7 +13,7 @@ function ColorSwatch({ className, ...props }: ColorSwatchProps) {
       data-slot="color-swatch"
       aria-label={props["aria-label"] ?? "Color swatch"}
       className={cn(
-        "inset-ring-1 inset-ring-foreground/20 size-[calc(var(--color-swatch-size)+--spacing(1))] shrink-0 [--color-swatch-size:--spacing(9)] sm:size-(--color-swatch-size) rounded-lg",
+        "inset-ring-1 inset-ring-foreground/20 size-[calc(var(--color-swatch-size)+--spacing(1))] shrink-0 [--color-swatch-size:--spacing()] rounded-lg",
         className
       )}
       {...props}
@@ -21,4 +21,4 @@ function ColorSwatch({ className, ...props }: ColorSwatchProps) {
   );
 }
 
-export { ColorSwatch };
+export { ColorSwatch, type ColorSwatchProps };

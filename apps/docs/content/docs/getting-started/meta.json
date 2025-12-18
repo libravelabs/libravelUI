@@ -1,7 +1,4 @@
 {
-  "title": "Getting Started",
-  "description": "Learn how to install, configure, and use libravelUI in your React project.",
-  "icon": "BookOpen",
-  "root": true,
-  "pages": ["---Getting Started---", "..."]
+  "defaultOpen": true,
+  "pages": ["index"]
 }

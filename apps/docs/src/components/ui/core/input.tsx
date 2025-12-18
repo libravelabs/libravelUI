@@ -1,6 +1,11 @@
 import React, { useState, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Group, Input as InputPrimitive } from "react-aria-components";
+import {
+  Group,
+  Input as InputPrimitive,
+  type GroupProps,
+  type InputProps as InputPrimitiveProps,
+} from "react-aria-components";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import { Loader } from "@/components/ui/core/loader";
@@ -16,16 +21,23 @@ const inputVariants = cva(
     "[&>.content]:text-muted-foreground",
     "group-disabled:[&_svg]:opacity-50",
     "transition-all ease-in-out",
+
+    "has-[>_:first-child[data-fullsize-ele]]:ps-0 has-[>_:last-child[data-fullsize-ele]]:pe-0 has-[>_:first-child[data-fullsize-ele]]:has-[>_:last-child[data-fullsize-ele]]:px-0",
+
+    "[&_button[data-fullsize-ele]:not([class*='cursor-'])]:cursor-pointer [&_[data-fullsize-ele]:not([class*='bg-'])]:bg-secondary",
   ],
   {
     variants: {
-      variant: {
+      tone: {
         default: [
-          "border-input bg-transparent",
-          "focus-within:border-ring focus-within:ring-4 focus-within:ring-ring/10",
-          "focus:border-ring focus:ring-4 focus:ring-ring/10",
-          "data-[invalid]:border-destructive data-[invalid]:focus-within:ring-destructive/10",
-          "data-[invalid]:focus:border-destructive data-[invalid]:focus:ring-4 data-[invalid]:focus:ring-destructive/10",
+          "border-input bg-background",
+          "focus-within:border-ring/70 focus-within:ring-4 focus-within:ring-ring/10",
+          "focus:border-ring/70 focus:ring-4 focus:ring-ring/10",
+          "group-invalid:border-destructive",
+          "group-invalid:focus-within:border-destructive",
+          "group-invalid:focus-within:ring-destructive/10",
+          "group-invalid:focus:border-destructive",
+          "group-invalid:focus:ring-destructive/10",
         ],
 
         destructive: [
@@ -34,22 +46,30 @@ const inputVariants = cva(
           "focus:border-destructive focus:ring-4 focus:ring-destructive/10",
         ],
 
-        ghost: "border-transparent",
+        ghost: [
+          "px-0 border-transparent bg-transparent",
+          "group-invalid:border-destructive",
+          "group-invalid:focus-within:border-destructive",
+          "group-invalid:focus-within:ring-destructive/10",
+          "group-invalid:focus:border-destructive",
+          "group-invalid:focus:ring-destructive/10",
+        ],
 
         line: [
-          "border-x-0 border-t-0 border-b rounded-none px-0",
+          "border-x-0 border-t-0 border-b rounded-none",
           "focus-within:border-b-ring",
           "focus:border-b-ring",
-          "data-[invalid]:border-b-destructive",
-          "data-[invalid]:focus:border-b-destructive",
+          "group-invalid:border-b-destructive",
+          "group-invalid:focus-within:border-b-destructive",
+          "group-invalid:focus:border-b-destructive",
         ],
       },
       size: {
-        sm: "h-7 text-sm [&_svg:not([class='size-'])]:size-4 [&_[data-password-btn]]:p-2",
+        sm: "h-7 text-sm [&_svg:not([class='size-'])]:size-4 [&_[data-fullsize-ele]]:p-2",
         default:
-          "h-9 text-base text-sm [&_svg:not([class*='size-'])]:size-4.5 [&_[data-password-btn]]:p-2.5",
-        lg: "h-11 text-base text-base [&_svg:not([class*='size-'])]:size-5 [&_[data-password-btn]]:p-3",
-        xl: "h-13 text-base text-base [&_svg:not([class*='size-'])]:size-5.5 [&_[data-password-btn]]:p-3.5",
+          "h-9 text-base text-sm [&_svg:not([class*='size-'])]:size-4.5 [&_[data-fullsize-ele]]:p-2.5",
+        lg: "h-11 text-base text-base [&_svg:not([class*='size-'])]:size-5 [&_[data-fullsize-ele]]:p-3",
+        xl: "h-13 text-base text-base [&_svg:not([class*='size-'])]:size-5.5 [&_[data-fullsize-ele]]:p-3.5",
       },
       radius: {
         none: "rounded-none",
@@ -60,7 +80,7 @@ const inputVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      tone: "default",
       size: "default",
       radius: "md",
     },
@@ -69,45 +89,96 @@ const inputVariants = cva(
 
 const inputGroupVariants = cva(
   [
-    "relative flex items-center w-full min-w-0",
+    "group relative overflow-hidden flex items-center w-full min-w-0",
     "px-3 py-1 border bg-transparent",
-    "border-input bg-transparent",
-    "focus-within:border-ring focus-within:ring-4 focus-within:ring-ring/10",
-    "data-[invalid]:border-destructive data-[invalid]:focus-within:ring-destructive/10",
+    "text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground",
     "transition-[color,box-shadow] outline-none",
-
+    "disabled:pointer-events-none disabled:opacity-80",
     "[&>:not([data-input])]:flex [&>:not([data-input])]:items-center [&>:not([data-input])]:shrink-0 [&>:not([data-input])]:text-muted-foreground",
     "[&>:not([data-input])>svg]:translate-y-[-0.05em]",
 
     "[&>[data-input]]:flex-1 [&>[data-input]]:min-w-0 [&>[data-input]]:bg-transparent [&>[data-input]]:outline-none [&>[data-input]]:border-0 [&>[data-input]]:ring-0 [&>[data-input]]:focus:ring-0 [&>[data-input]]:px-0 [&>[data-input]]:shadow-none",
-    "[&>[data-input]]:text-foreground [&>[data-input]]:placeholder:text-muted-foreground",
 
-    "[&>:not([data-input])_button]:flex [&>:not([data-input])_button]:items-center [&>:not([data-input])_button]:justify-center",
+    "has-[>[data-textarea]]:items-stretch",
+    "has-[>[data-textarea]]:h-auto",
+    "has-[>[data-textarea]]:px-0",
+    "has-[>[data-textarea]]:py-0",
+    "[&>[data-textarea]]:block",
+    "[&>[data-textarea]]:self-stretch",
+    "[&>[data-textarea]]:mt-0",
+    "[&>[data-textarea]]:mb-0",
+
+    "has-[>_:first-child[data-fullsize-ele]]:ps-0 has-[>_:last-child[data-fullsize-ele]]:pe-0 has-[>_:first-child[data-fullsize-ele]]:has-[>_:last-child[data-fullsize-ele]]:px-0",
+
+    "[&>[data-input]]:text-foreground [&>[data-input]]:placeholder:text-muted-foreground",
+    "[&_button[data-fullsize-ele]:not([class*='cursor-'])]:cursor-pointer [&_[data-fullsize-ele]:not([class*='bg-'])]:bg-secondary",
   ],
   {
     variants: {
+      tone: {
+        default: [
+          "border-input bg-background",
+          "focus-within:border-ring/70 focus-within:ring-4 focus-within:ring-ring/10",
+          "focus:border-ring/70 focus:ring-4 focus:ring-ring/10",
+          "group-invalid:border-destructive",
+          "group-invalid:focus-within:border-destructive",
+          "group-invalid:focus-within:ring-destructive/10",
+          "group-invalid:focus:border-destructive",
+          "group-invalid:focus:ring-destructive/10",
+        ],
+
+        destructive: [
+          "border-destructive/50 bg-destructive/5",
+          "focus-within:border-destructive focus-within:ring-4 focus-within:ring-destructive/10",
+          "focus:border-destructive focus:ring-4 focus:ring-destructive/10",
+        ],
+
+        ghost: [
+          "px-0 border-transparent bg-transparent",
+          "group-invalid:border-destructive",
+          "group-invalid:focus-within:border-destructive",
+          "group-invalid:focus-within:ring-destructive/10",
+          "group-invalid:focus:border-destructive",
+          "group-invalid:focus:ring-destructive/10",
+        ],
+
+        line: [
+          "border-x-0 border-t-0 border-b rounded-none",
+          "focus-within:border-b-ring",
+          "focus:border-b-ring",
+          "group-invalid:border-b-destructive",
+          "group-invalid:focus-within:border-b-destructive",
+          "group-invalid:focus:border-b-destructive",
+        ],
+      },
+
       size: {
         sm: [
           "h-7 text-sm gap-1.5",
           "[&_svg:not([class*='size-'])]:size-4",
           "[&>:not([data-input])_button]:h-6 [&>:not([data-input])_button]:min-h-6 [&>:not([data-input])_button]:px-2",
+          "[&_[data-fullsize-ele]]:p-2",
         ],
         default: [
           "h-9 text-base text-sm gap-2",
           "[&_svg:not([class*='size-'])]:size-4.5",
           "[&>:not([data-input])_button]:h-7 [&>:not([data-input])_button]:min-h-7 [&>:not([data-input])_button]:px-2.5",
+          "[&_[data-fullsize-ele]]:p-2.5",
         ],
         lg: [
           "h-11 text-base gap-2.5",
           "[&_svg:not([class*='size-'])]:size-5",
           "[&>:not([data-input])_button]:h-9 [&>:not([data-input])_button]:min-h-9 [&>:not([data-input])_button]:px-3",
+          "[&_[data-fullsize-ele]]:p-3",
         ],
         xl: [
           "h-13 text-base gap-3",
           "[&_svg:not([class*='size-'])]:size-5.5",
           "[&>:not([data-input])_button]:h-10 [&>:not([data-input])_button]:min-h-10 [&>:not([data-input])_button]:px-3.5",
+          "[&_[data-fullsize-ele]]:p-3.5",
         ],
       },
+
       radius: {
         none: "rounded-none",
         sm: "rounded-sm",
@@ -117,37 +188,32 @@ const inputGroupVariants = cva(
       },
     },
     defaultVariants: {
+      tone: "default",
       size: "default",
       radius: "md",
     },
   }
 );
 
-export type CVAVariantProps = VariantProps<typeof inputVariants>;
-
-type InputPrimitiveProps = React.ComponentPropsWithoutRef<
-  typeof InputPrimitive
->;
-
-interface InputProps
-  extends Omit<InputPrimitiveProps, "size">, CVAVariantProps {
-  startContent?: React.ReactNode;
-  endContent?: React.ReactNode;
-  isDisabled?: boolean;
-  isLoading?: boolean;
-  classNames?: {
-    wrapper?: string;
-    input?: string;
-    startContent?: string;
-    endContent?: string;
+type InputProps = InputPrimitiveProps &
+  VariantProps<typeof inputVariants> & {
+    startContent?: React.ReactNode;
+    endContent?: React.ReactNode;
+    isDisabled?: boolean;
+    isLoading?: boolean;
+    classNames?: {
+      wrapper?: string;
+      input?: string;
+      startContent?: string;
+      endContent?: string;
+    };
+    as?: React.ElementType;
   };
-  as?: React.ElementType;
-}
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      variant,
+      tone,
       size,
       radius,
       startContent,
@@ -181,8 +247,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <>
         {endContent}
         <div
-          data-password-btn
-          className="content flex cursor-pointer items-center bg-secondary"
+          data-fullsize-ele
+          className="content flex items-center bg-secondary/50"
           onClick={() => setShowPassword(!showPassword)}
           role="button"
           tabIndex={0}
@@ -210,7 +276,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <div
         data-input
         className={cn(
-          inputVariants({ variant, size, radius }),
+          inputVariants({ tone, size, radius }),
           gapClass,
           isPassword && "px-0 ps-3",
           classNames?.wrapper,
@@ -220,7 +286,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {startContent && (
           <div
             className={cn(
-              "flex items-center text-muted-foreground pointer-events-none shrink-0",
+              "flex items-center text-muted-foreground shrink-0",
               size === "sm" && "[&_svg:not([class*='size-'])]:size-4",
               size === "default" && "[&_svg:not([class*='size-'])]:size-4.5",
               size === "lg" && "[&_svg:not([class*='size-'])]:size-5",
@@ -263,12 +329,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = "Input";
 
-interface InputGroupProps {
-  children: React.ReactNode;
-  className?: string;
-  size?: "sm" | "default" | "lg" | "xl";
-  radius?: "none" | "sm" | "md" | "lg" | "full";
-}
+type InputGroupProps = GroupProps & VariantProps<typeof inputGroupVariants>;
 
 const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
   ({ children, className, size = "default", radius = "md" }, ref) => {

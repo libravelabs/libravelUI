@@ -7,14 +7,17 @@ import {
 import { inputVariants, type InputProps } from "@/components/ui/core/input";
 import { cn } from "@/lib/utils";
 
-type TextareaProps = TextAreaPrimitiveProps & InputProps;
+type TextareaProps = TextAreaPrimitiveProps &
+  Pick<InputProps, "tone" | "radius">;
 
-function Textarea({ className, variant, radius, ...props }: TextareaProps) {
+function Textarea({ className, tone, radius, ...props }: TextareaProps) {
   return (
     <TextArea
+      data-textarea
       className={cn(
-        inputVariants({ variant, radius }),
-        "field-sizing-content max-h-96 min-h-16 overflow-y-auto border border-input px-2.5 py-2 text-base placeholder-muted-foreground shadow-xs outline-hidden transition duration-200 sm:text-sm/6",
+        "resize-y",
+        inputVariants({ tone, radius }),
+        "max-h-96 min-h-16 overflow-y-auto text-base outline-hidden sm:text-sm/6",
         className
       )}
       {...props}
