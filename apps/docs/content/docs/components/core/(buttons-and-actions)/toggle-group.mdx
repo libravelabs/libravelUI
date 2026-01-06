@@ -1,0 +1,83 @@
+---
+title: Toggle Group
+description: A toggle button group allows a user to toggle multiple options, with single or multiple selection.
+component: true
+doc: ToggleButtonGroup
+---
+
+## Example
+
+<Playground comp="toggle-group/basic" demo="toggle-group/basic.demo" />
+
+## Features
+
+There is no built in element for toggle button groups in HTML. ToggleButtonGroup helps achieve accessible toggle button groups that can be styled as needed.
+
+- **Accessible** – Represented as an ARIA [radiogroup](https://www.w3.org/WAI/ARIA/apg/patterns/radio/) when using single selection, or a [toolbar](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) when using multiple selection.
+- **Keyboard navigation** – Users can navigate between buttons with the arrow keys. Selection can be toggled using the `Enter` or `Space` keys.
+- **Styleable** – Hover, press, keyboard focus, and selection states are provided for easy styling.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/toggle-group" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add toggle-group
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { ToggleGroup, ToggleItem } from "@/components/ui/core/toggle-group";
+```
+
+```tsx
+<ToggleGroup>
+  <ToggleItem id="1d">1d</ToggleItem>
+  <ToggleItem id="3d">3d</ToggleItem>
+  <ToggleItem id="7d">7d</ToggleItem>
+  <ToggleItem id="2w">2w</ToggleItem>
+</ToggleGroup>
+```
+
+## Examples
+
+### Vertical
+
+Arrange toggle buttons in a vertical layout to save horizontal space and create a clear, stacked structure for grouped options.
+
+<Playground comp="toggle-group/vertical" />
+
+### Sizes
+
+Support multiple toggle group sizes to fit different design contexts and improve accessibility across devices.
+
+<Playground comp="toggle-group/sizes" />
+
+### Controlled
+
+Manage the toggle group’s state externally, allowing full control over which toggles are active and enabling dynamic interactions.
+
+<Playground comp="toggle-group/controlled" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/toggle-group" />

@@ -1,0 +1,76 @@
+---
+title: Breadcrumbs
+description: Breadcrumbs are a navigation tool that displays a sequence of links representing the hierarchical path to the current page or resource within an application. This allows clear visibility of the page's position in the overall structure.
+component: true
+doc: Breadcrumbs
+---
+
+## Basic
+
+<Playground comp="breadcrumbs/basic" />
+
+## Features
+
+Breadcrumbs provide a list of links to parent pages of the current page in hierarchical order. Breadcrumbs helps implement these in an accessible way.
+
+- **Flexible** – Support for HTML navigation links, JavaScript handled links, and client side routing.
+- **Accessible** – Implemented as an ordered list of links. The last link is automatically marked as the current page using aria-current.
+- **Styleable** – Hover, press, and keyboard focus states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/breadcrumbs" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add breadcrumbs
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Breadcrumb, BreadcrumbItem } from "@/components/ui/core/breadcrumbs";
+```
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/movies">Movies</BreadcrumbItem>
+  <BreadcrumbItem href="/movies/tt0407887">The Departed</BreadcrumbItem>
+</Breadcrumb>
+```
+
+## Examples
+
+### With Icon
+
+Breadcrumbs with icons for each item, providing visual context and enhancing navigation clarity.
+
+<Playground comp="breadcrumbs/with-icon" />
+
+### Custom Separator
+
+Breadcrumbs using a custom separator to replace the default arrow, allowing for more personalized styling.
+
+<Playground comp="breadcrumbs/custom-separator" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/breadcrumbs" />

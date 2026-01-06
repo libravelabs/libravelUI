@@ -19,7 +19,7 @@ export default function BasicDock() {
     <Dock>
       <Button tone="outline">Open Dock</Button>
 
-      <DockContent side="right" shouldScaleBackground>
+      <DockContent side="right">
         {({ close }) => (
           <>
             <DockHeader>

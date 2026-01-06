@@ -50,7 +50,7 @@ export function DocTabs({
       tone={tone}
       {...props}
     >
-      <TabList className={cn("!w-fit", classNames?.tabList)}>
+      <TabList className={cn("w-fit!", classNames?.tabList)}>
         {items.map((item) => (
           <TabTrigger
             key={item.value}

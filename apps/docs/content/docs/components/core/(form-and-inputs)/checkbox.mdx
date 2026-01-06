@@ -1,0 +1,108 @@
+---
+title: Checkbox
+description: A checkbox allows a user to select multiple items from a list of individual items, or to mark one individual item as selected.
+component: true
+doc: Checkbox
+---
+
+<Info title="Grouping Multiple Checkboxes">
+  If you're looking for how to group multiple checkboxes together under a shared
+  label or manage them as a single form field, see: [Checkbox
+  Group](/docs/components/checkbox-group)
+</Info>
+
+## Basic
+
+<Playground comp="checkbox/basic" />
+
+## Features
+
+Checkboxes can be built with the `<input>` HTML element, but this can be difficult to style. Checkbox helps achieve accessible checkboxes that can be styled as needed.
+
+- `Styleable` – Hover, press, keyboard focus, selection, and indeterminate states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+- `Accessible` – Uses a visually hidden `<input>` element under the hood, which also enables HTML form integration and autofill. A label element is built-in to ensure the checkbox is usable with assistive technologies.
+- `Cross-browser` – Mouse, touch, keyboard, and focus interactions are normalized to ensure consistency across browsers and devices.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components="field" />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/checkbox" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add checkbox
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Checkbox } from "@/components/ui/core/checkbox";
+```
+
+```tsx
+<Checkbox value="value-1" label="Label goes here" />
+
+<Checkbox defaultSelected label="Label goes here" />
+
+<Checkbox
+  label="Label goes here"
+  description="Description goes here"
+/>
+
+<Checkbox>Children belongs here</Checkbox>
+```
+
+## Examples
+
+### Sizes
+
+Demonstrates different checkbox sizes to accommodate various UI needs. Use smaller sizes for compact interfaces and larger sizes for improved accessibility or visual emphasis.
+
+<Playground comp="checkbox/sizes" />
+
+### With Description
+
+This example demonstrates how to use checkboxes with accompanying descriptions. Descriptions provide additional context or guidance about the checkbox’s purpose, helping users better understand what they are selecting. Each checkbox includes a label and a brief explanation underneath it.
+
+<Playground comp="checkbox/with-desc" />
+
+### Custom Children
+
+Allows full customization of the checkbox content using a render function or custom JSX. Useful when the default label and description structure is not sufficient for specific UI needs.
+
+<Playground comp="checkbox/custom-child" />
+
+### Controlled
+
+Demonstrates how to control the checkbox state using React state. This pattern is useful when the checkbox needs to respond to or affect external logic or UI.
+
+<Playground comp="checkbox/controlled" />
+
+### With Error state
+
+Demonstrates how to display an error message below the checkbox. Useful for form validation feedback when the checkbox input is required or contains invalid data.
+
+<Playground comp="checkbox/with-error" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/checkbox" />

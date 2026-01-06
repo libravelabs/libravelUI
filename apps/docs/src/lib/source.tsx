@@ -1,10 +1,10 @@
-import React from "react";
 import { loader } from "fumadocs-core/source";
 import { docs } from "@/.source";
-import { icons } from "lucide-react";
-import { createElement } from "react";
 import { Badge } from "@/components/ui/core/badge";
-import { ReactAriaIcon } from "@/components/doc-links";
+import { IconRegistry } from "@/lib/icon-registry";
+import * as CustomIcons from "@/icons";
+
+const iconRegistry = new IconRegistry(Object.values(CustomIcons));
 
 // See https://fumadocs.vercel.app/docs/headless/source-api for more info
 export const source = loader({
@@ -42,16 +42,6 @@ export const source = loader({
     },
   },
   icon(icon) {
-    return icon ? (iconMap[icon as keyof typeof iconMap] ?? null) : null;
+    return iconRegistry.resolve(icon);
   },
 });
-
-const iconMap: Record<string, React.ReactNode> = {
-  Aria: <ReactAriaIcon />,
-  ...Object.fromEntries(
-    Object.keys(icons).map((key) => [
-      key,
-      createElement(icons[key as keyof typeof icons]),
-    ])
-  ),
-};

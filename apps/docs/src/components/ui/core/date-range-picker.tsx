@@ -1,78 +1,103 @@
 "use client";
 
-import type { DateDuration } from "@internationalized/date";
 import {
   DateRangePicker as DateRangePickerPrimitive,
-  PopoverProps,
   type DateRangePickerProps as DateRangePickerPrimitiveProps,
   type DateValue,
-  type ValidationResult,
 } from "react-aria-components";
 import { cn } from "@/lib/utils";
-import { DateInput } from "@/components/ui/core/date-field";
 import {
-  Description,
-  FieldError,
-  FieldGroup,
-  Label,
-  type FieldProps,
-} from "@/components/ui/core/field";
+  RangeCalendar,
+  type RangeCalendarProps,
+} from "@/components/ui/core/range-calendar";
+import { DateInput } from "@/components/ui/core/date-field";
+import { type FieldProps, fieldStyles } from "@/components/ui/core/field";
+import {
+  PopoverContent,
+  PopoverTrigger,
+  type PopoverContentProps,
+} from "@/components/ui/core/popover";
 import { CalendarIcon } from "lucide-react";
-import { PopoverContent, PopoverTrigger } from "@/components/ui/core/popover";
-import { RangeCalendar } from "@/components/ui/core/range-calendar";
+import { InputGroup } from "@/components/ui/core/input";
+
+interface DateRangePickerOverlayProps<T extends DateValue> extends Omit<
+  PopoverContentProps,
+  "children"
+> {
+  calendar?: RangeCalendarProps<T>;
+}
 
 interface DateRangePickerProps<T extends DateValue>
   extends DateRangePickerPrimitiveProps<T>, Omit<FieldProps, "placeholder"> {
-  visibleDuration?: DateDuration;
   pageBehavior?: "visible" | "single";
-  placement?: PopoverProps["placement"];
+  popover?: DateRangePickerOverlayProps<T>;
 }
 
 function DateRangePicker<T extends DateValue>({
-  label,
   className,
-  description,
-  error,
-  placement = "bottom",
-  visibleDuration = { months: 1 },
+  children,
+  popover,
   ...props
 }: DateRangePickerProps<T>) {
   return (
     <DateRangePickerPrimitive
-      aria-label={props["aria-label"] ?? "range-date-picker"}
-      className={cn(className, "group flex flex-col gap-y-1")}
+      aria-label={props["aria-label"] ?? "date-range-picker"}
+      className={cn(fieldStyles(), "min-w-64 w-fit", className)}
       {...props}
     >
-      {label && <Label>{label}</Label>}
-      <FieldGroup className="inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 group-open:inset-ring-ring/70 group-open:ring-3 group-open:ring-ring/20">
-        <DateInput slot="start" />
-        <span
-          aria-hidden="true"
-          className="-mx-2 text-foreground group-disabled:text-muted-foreground forced-colors:text-muted-foreground forced-colors:group-disabled:text-muted-foreground"
-        >
-          –
-        </span>
-        <DateInput slot="end" />
-        <PopoverTrigger
-          tone="unstyled"
-          className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
-        >
-          <CalendarIcon className="ms-auto text-muted-foreground" />
-        </PopoverTrigger>
-      </FieldGroup>
-      {description && <Description>{description}</Description>}
-      {error && <FieldError>{error}</FieldError>}
-      <PopoverContent
-        withArrow={false}
-        placement={placement}
-        className="p-2 flex min-w-auto max-w-none w-auto snap-x justify-center"
-        {...props}
-      >
-        <RangeCalendar visibleDuration={visibleDuration} className="border-0" />
-      </PopoverContent>
+      {(values) => (
+        <>
+          {typeof children === "function" ? children(values) : children}
+          <DateRangePickerOverlay<T> {...popover} />
+        </>
+      )}
     </DateRangePickerPrimitive>
   );
 }
 
-export type { DateRangePickerProps };
-export { DateRangePicker };
+function DateRangePickerOverlay<T extends DateValue>({
+  placement = "bottom",
+  calendar,
+  ...props
+}: DateRangePickerOverlayProps<T>) {
+  return (
+    <PopoverContent
+      placement={placement}
+      className={cn(
+        "flex min-w-auto max-w-none snap-x justify-center",
+        calendar?.visibleDuration?.months === 1 ? "max-w-xs" : "max-w-none"
+      )}
+      {...props}
+    >
+      <RangeCalendar className="border-0 p-0" {...calendar} />
+    </PopoverContent>
+  );
+}
+
+function DateRangePickerTrigger() {
+  return (
+    <InputGroup
+      className="*:data-input:flex-none [&>span]:shrink-0
+        *:data-fullsize-ele:ms-auto"
+    >
+      <DateInput slot="start" className="w-auto" />
+      <span
+        aria-hidden
+        className="-mx-2 text-foreground group-disabled:text-muted-foreground"
+      >
+        –
+      </span>
+      <DateInput slot="end" className="w-auto" />
+      <PopoverTrigger
+        data-fullsize-ele
+        tone="unstyled"
+        className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
+      >
+        <CalendarIcon className="text-muted-foreground" />
+      </PopoverTrigger>
+    </InputGroup>
+  );
+}
+
+export type { DateRangePickerProps, DateRangePickerOverlayProps };
+export { DateRangePicker, DateRangePickerTrigger };

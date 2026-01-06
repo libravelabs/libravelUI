@@ -15,7 +15,7 @@ const linkVariants = cva(
         default: "text-current hover:text-foreground",
         primary: "text-primary hover:text-primary/80",
         secondary: "text-muted-foreground hover:text-foreground",
-        underline: "text-current hover:underline",
+        underline: "text-current underline hover:no-underline",
       },
       isDisabled: {
         true: "cursor-not-allowed opacity-50",

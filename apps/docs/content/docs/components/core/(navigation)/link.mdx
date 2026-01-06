@@ -1,0 +1,81 @@
+---
+title: Link
+description: A link lets users navigate to other pages or resources within a website or app, helping them find related content quickly and easily.
+component: true
+doc: Link
+---
+
+<Info>
+  Using the `Link` component is optional but recommended for better
+  accessibility and consistent navigation behavior. You can use the navigation
+  component provided by your routing framework instead.
+</Info>
+
+## Basic
+
+<Playground comp="link/basic" />
+
+## Features
+
+Links can be created in HTML with the `<a>` element with an href attribute. However, if the link does not have an href, and is handled client side with JavaScript instead, it will not be exposed to assistive technology properly. Link helps achieve accessible links with either native HTML elements or custom element types.
+
+- **Flexible** – Support for HTML navigation links, JavaScript handled links, and client side routing. Disabled links are also supported.
+- **Accessible** – Implemented as a custom ARIA link when handled via JavaScript, and otherwise as a native HTML link.
+- **Styleable** – Hover, press, and keyboard focus states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/link" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add link
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Link } from "@/components/ui/core/link";
+```
+
+```tsx
+<Link href="#" tone="default">Default Link</Link>
+<Link href="#" tone="primary">Primary Link</Link>
+<Link href="#" tone="secondary">Secondary Link</Link>
+<Link href="#" tone="underline">Underline Link</Link>
+```
+
+## Examples
+
+### Tones
+
+Links shown in different styles to represent various types of actions or importance. Each tone provides a distinct visual cue to guide user interaction.
+
+<Playground comp="link/tones" />
+
+### Disabled
+
+Disabled links prevent user interaction, indicating that the link is currently unavailable or inactive. They provide clear visual feedback to users that the action cannot be performed.
+
+<Playground comp="link/disabled" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/link" />

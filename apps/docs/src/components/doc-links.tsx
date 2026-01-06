@@ -9,13 +9,13 @@ import {
 import { ArrowUpRight, ExternalLinkIcon } from "lucide-react";
 import { cva } from "class-variance-authority";
 import * as icons from "lucide-react";
-import { cn } from "@/lib/utils";
+import { getDocUrl } from "@/lib/doc-url";
+import { ReactAriaIcon } from "@/icons/react-aria";
 
 export type DocItem =
   | string
   | {
-      title?: string;
-      url: string;
+      doc: string;
       icon?: React.ReactNode | string;
     };
 
@@ -35,7 +35,6 @@ const optionVariants = cva(
 );
 
 function renderIcon(icon?: React.ReactNode | string) {
-  if (!icon) return <ReactAriaIcon />;
   if (typeof icon === "string" && icon in icons) {
     const LucideIcon = (icons as Record<string, React.ElementType>)[icon];
     return <LucideIcon className="size-4" />;
@@ -50,27 +49,32 @@ export function DocLinks({ page }: DocLinksProps) {
 
   const docsArray = (Array.isArray(doc) ? doc : [doc]).map((d) => {
     if (typeof d === "string") {
-      return { title: "View Documentation", url: d, icon: undefined };
+      return {
+        label: d,
+        url: getDocUrl(d),
+        icon: undefined,
+      };
     }
+
     return {
-      title: d.title ?? "View Documentation",
-      url: d.url,
+      label: d.doc,
+      url: getDocUrl(d.doc),
       icon: d.icon,
     };
   });
 
   if (docsArray.length === 1) {
-    const singleDoc = docsArray[0];
+    const single = docsArray[0];
     return (
       <Link
-        href={singleDoc.url}
+        href={single.url}
         target="_blank"
         rel="noreferrer"
         className="w-fit"
       >
         <Button tone="outline" className="flex items-center gap-1">
-          {renderIcon(singleDoc.icon)}
-          {singleDoc.title === "View Documentation" ? title : singleDoc.title}
+          {renderIcon(single.icon)}
+          {single.label}
           <ArrowUpRight size={12} />
         </Button>
       </Link>
@@ -81,42 +85,24 @@ export function DocLinks({ page }: DocLinksProps) {
     <Popover>
       <PopoverTrigger asChild>
         <Button tone="outline" className="w-fit">
-          <ReactAriaIcon /> {page.data.title} Docs <ArrowUpRight size={14} />
+          <ReactAriaIcon /> {title} Docs <ArrowUpRight size={14} />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col overflow-auto p-1">
-        {docsArray.map(({ title: docTitle, url, icon }, i) => (
+        {docsArray.map((item, i) => (
           <a
             key={i}
-            href={url}
+            href={item.url}
             target="_blank"
             rel="noopener noreferrer"
             className={optionVariants()}
           >
-            {renderIcon(icon)}
-            <span>{docTitle === "View Documentation" ? title : docTitle}</span>
-            <ExternalLinkIcon className="text-muted-foreground size-3.5 ms-auto" />
+            {renderIcon(item.icon)}
+            <span>{item.label}</span>
+            <ExternalLinkIcon className="ms-auto size-3.5 text-muted-foreground" />
           </a>
         ))}
       </PopoverContent>
     </Popover>
-  );
-}
-
-export function ReactAriaIcon({ className }: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 21"
-      data-slot="icon"
-      className={cn(className)}
-      aria-hidden="true"
-    >
-      <path
-        fill="currentColor"
-        d="M14.667 1.733H22v17.333zm-5.267 0H2v17.334zm2.6 6.4 4.733 10.933h-3.066l-1.4-3.467H8.8z"
-      ></path>
-    </svg>
   );
 }

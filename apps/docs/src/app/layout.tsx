@@ -49,10 +49,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         >
           <TexturedBackground>
             <ThemeInitializer />
-            <main
-              data-dock
-              className="flex flex-col min-h-screen scroll-smooth"
-            >
+            <main className="flex flex-col min-h-screen scroll-smooth">
               {children}
             </main>
             <FloatingNav />

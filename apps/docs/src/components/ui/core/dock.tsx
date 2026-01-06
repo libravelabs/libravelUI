@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, use } from "react";
+import { use } from "react";
 import type {
   DialogProps,
   DialogTriggerProps,
@@ -25,29 +25,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/core/dialog";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  AnimationPlaybackControls,
-  animate,
-} from "motion/react";
+import { AnimatePresence, motion, useMotionValue, animate } from "motion/react";
 
 type Sides = "top" | "bottom" | "left" | "right";
-
-const generateCompoundVariants = (sides: Array<Sides>) => {
-  return sides.map((side) => ({
-    side,
-    isFloat: true,
-    class: cn(
-      "rounded-lg ring-1",
-      side === "top" && "top-2 inset-x-2 border-b-0",
-      side === "bottom" && "bottom-2 inset-x-2 border-t-0",
-      side === "left" && "left-2 inset-y-2 border-r-0",
-      side === "right" && "right-2 inset-y-2 border-l-0"
-    ),
-  }));
-};
 
 const dockContentStyles = cva(
   "fixed z-50 grid gap-4 border-muted-foreground/20 bg-popover text-popover-foreground shadow-lg dark:border-border",
@@ -56,21 +36,36 @@ const dockContentStyles = cva(
       side: {
         top: "inset-x-0 top-0 border-b",
         bottom: "inset-x-0 bottom-0 border-t",
-        left: "inset-y-0 left-0 h-auto w-3/4 overflow-y-auto border-r sm:max-w-sm",
-        right:
-          "inset-y-0 right-0 h-auto w-3/4 overflow-y-auto border-l sm:max-w-sm",
+        left: "inset-y-0 left-0 h-full w-[280px] overflow-hidden border-r",
+        right: "inset-y-0 right-0 h-full w-[280px] overflow-hidden border-l",
       },
       isFloat: {
         false: "border-border rounded-none",
         true: "ring-foreground/5 dark:ring-border rounded-lg",
       },
     },
-    compoundVariants: generateCompoundVariants([
-      "top",
-      "bottom",
-      "left",
-      "right",
-    ]),
+    compoundVariants: [
+      {
+        side: "top",
+        isFloat: true,
+        class: "rounded-lg ring-1 top-2 inset-x-2 border-b-0",
+      },
+      {
+        side: "bottom",
+        isFloat: true,
+        class: "rounded-lg ring-1 bottom-2 inset-x-2 border-t-0",
+      },
+      {
+        side: "left",
+        isFloat: true,
+        class: "rounded-lg ring-1 left-2 inset-y-2 border-r-0",
+      },
+      {
+        side: "right",
+        isFloat: true,
+        class: "rounded-lg ring-1 right-2 inset-y-2 border-l-0",
+      },
+    ],
   }
 );
 
@@ -80,14 +75,19 @@ function Dock(props: DockProps) {
 }
 
 interface DockContentProps
-  extends Omit<ModalOverlayProps, "children">,
+  extends
+    Omit<ModalOverlayProps, "children">,
     Pick<DialogProps, "aria-label" | "role" | "aria-labelledby" | "children"> {
   closeButton?: boolean;
   isBlurred?: boolean;
   isFloat?: boolean;
   side?: Sides;
   notch?: boolean;
-  shouldScaleBackground?: boolean;
+  classNames?: {
+    overlay?: string | string[];
+    wrapper?: string | string[];
+    content?: string | string[];
+  };
 }
 
 const DockOverlay = motion.create(ModalOverlay);
@@ -95,6 +95,7 @@ const DockRoot = motion.create(Modal);
 
 function DockContent({
   className,
+  classNames,
   isBlurred = false,
   isDismissable: isDismissableInternal,
   side = "right",
@@ -102,7 +103,6 @@ function DockContent({
   closeButton = true,
   isFloat = false,
   notch = true,
-  shouldScaleBackground = false,
   children,
   ...props
 }: DockContentProps) {
@@ -117,41 +117,6 @@ function DockContent({
     side === "left" || side === "right" ? w : h
   );
 
-  useEffect(() => {
-    if (!shouldScaleBackground) return;
-
-    const element = document.querySelector("[data-dock]") as HTMLElement | null;
-    if (!element) {
-      console.warn(
-        "Dock: 'shouldScaleBackground' is true but no element with [data-dock] was found. Add data-dock attribute to the layout wrapper."
-      );
-      return;
-    }
-
-    let controls: AnimationPlaybackControls | undefined;
-
-    if (element) {
-      if (isOpen) {
-        controls = animate(
-          element,
-          { scale: 0.99 },
-          { duration: 0.3, ease: "easeInOut" }
-        );
-      } else {
-        controls = animate(
-          element,
-          { scale: 1 },
-          { duration: 0.3, ease: "easeInOut" }
-        );
-      }
-
-      return () => {
-        controls?.stop();
-        element.style.removeProperty("transform");
-      };
-    }
-  }, [isOpen, shouldScaleBackground]);
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -163,12 +128,16 @@ function DockContent({
           exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
           className={cn(
             "fixed inset-0 z-50 h-(--visual-viewport-height,100vh) w-screen overflow-hidden",
-            isBlurred && "backdrop-blur-sm backdrop-filter"
+            isBlurred && "backdrop-blur-sm backdrop-filter",
+            classNames?.overlay
           )}
           {...props}
         >
           <DockRoot
-            className={cn(dockContentStyles({ side, isFloat }), className)}
+            className={cn(
+              dockContentStyles({ side, isFloat }),
+              className || classNames?.wrapper
+            )}
             initial={{
               x: side === "left" ? "-100%" : side === "right" ? "100%" : 0,
               y: side === "top" ? "-100%" : side === "bottom" ? "100%" : 0,
@@ -214,7 +183,8 @@ function DockContent({
               role={role}
               className={cn(
                 "bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
-                !isFloat && "rounded-none"
+                !isFloat && "rounded-none",
+                classNames?.content
               )}
             >
               {(values) => (

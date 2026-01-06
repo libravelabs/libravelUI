@@ -261,7 +261,7 @@ function SelectMonth({ state }: SelectMonthProps) {
       <SelectContent>
         {months.map((month) => (
           <SelectItem key={month.key} id={month.key} textValue={month.label}>
-            <SelectLabel>{month.label}</SelectLabel>
+            <SelectLabel className="truncate">{month.label}</SelectLabel>
           </SelectItem>
         ))}
       </SelectContent>

@@ -3,9 +3,13 @@
 import { useState } from "react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { Button } from "@/components/ui/core/button";
-import { DateRangePicker } from "@/components/ui/core/date-range-picker";
+import {
+  DateRangePicker,
+  DateRangePickerTrigger,
+} from "@/components/ui/core/date-range-picker";
 import { Form } from "@/components/ui/core/form";
 import { toast } from "sonner";
+import { FieldError, Label } from "@/components/ui/core/field";
 
 export default function ValidatedDateRangePicker() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +27,6 @@ export default function ValidatedDateRangePicker() {
       }}
     >
       <DateRangePicker
-        label="Pause Notifications Between"
         isRequired
         validate={(range) =>
           range?.end.compare(range.start) > 30
@@ -32,7 +35,11 @@ export default function ValidatedDateRangePicker() {
         }
         minValue={today(getLocalTimeZone())}
         className="mb-4"
-      />
+      >
+        <Label>Pause Notifications Between</Label>
+        <DateRangePickerTrigger />
+        <FieldError />
+      </DateRangePicker>
 
       <Button type="submit" isLoading={isLoading}>
         {isLoading ? "Saving..." : "Pause Notifications"}

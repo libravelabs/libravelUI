@@ -346,4 +346,11 @@ const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
 
 InputGroup.displayName = "InputGroup";
 
-export { Input, InputGroup, inputVariants, type InputProps };
+export {
+  Input,
+  InputGroup,
+  inputVariants,
+  inputGroupVariants,
+  type InputProps,
+  type InputGroupProps,
+};

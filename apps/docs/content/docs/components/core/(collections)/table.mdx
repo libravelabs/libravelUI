@@ -1,0 +1,130 @@
+---
+title: Table
+description: A table displays data in rows and columns and enables a user to navigate its contents via directional navigation keys, and optionally supports row selection and sorting.
+component: true
+doc: Table
+---
+
+## Basic
+
+<Playground comp="table/basic" />
+
+## Features
+
+A table can be built using the `<table>`, `<tr>`, `<td>`, and other table specific HTML elements, but is very limited in functionality especially when it comes to user interactions. HTML tables are meant for static content, rather than tables with rich interactions like focusable elements within cells, keyboard navigation, row selection, sorting, etc. Table helps achieve accessible and interactive table components that can be styled as needed.
+
+- **Row selection** – Single or multiple selection, with optional checkboxes, disabled rows, and both toggle and replace selection behaviors.
+- **Columns** – Support for column sorting and [row header](https://www.w3.org/TR/wai-aria-1.1/#rowheader) columns. Columns may optionally allow user resizing via mouse, touch, and keyboard interactions.
+- **Interactive children** – Table cells may include interactive elements such as buttons, menus, etc.
+- **Actions** – Rows and cells support optional actions such as navigation via click, tap, double click, or Enter key.
+- **Async loading** – Support for loading and sorting items asynchronously.
+- **Keyboard navigation** – Table rows, cells, and focusable children can be navigated using the arrow keys, along with page up/down, home/end, etc. Typeahead, auto scrolling, and selection modifier keys are supported as well.
+- **Drag and drop** – Tables support drag and drop to reorder, insert, or update rows via mouse, touch, keyboard, and screen reader interactions.
+- **Virtualized scrolling** – Use [Virtualizer](https://react-spectrum.adobe.com/react-aria/Virtualizer.html) to improve performance of large tables by rendering only the visible rows.
+- **Touch friendly** – Selection and actions adapt their behavior depending on the device. For example, selection is activated via long press on touch when row actions are present.
+- **Accessible** – Follows the [ARIA grid pattern](https://www.w3.org/WAI/ARIA/apg/patterns/grid/), with additional selection announcements via an ARIA live region. Extensively tested across many devices and [assistive technologies](https://react-spectrum.adobe.com/react-aria/accessibility.html#testing) to ensure announcements and behaviors are consistent.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="checkbox" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Add `composeTailwindRenderProps` helper using `cn` and `composeRenderProps` from react-aria-components for conditional class rendering.
+
+    <ComponentSource comp="lib/render-props" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/table" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add table
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/core/table";
+```
+
+```tsx
+<Table aria-label="Movies">
+  <TableHeader>
+    <TableColumn className="w-0">#</TableColumn>
+    <TableColumn>Title</TableColumn>
+    <TableColumn>Director</TableColumn>
+    <TableColumn>Genre</TableColumn>
+    <TableColumn>Year</TableColumn>
+    <TableColumn>Rating</TableColumn>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>1</TableCell>
+      <TableCell>Inception</TableCell>
+      <TableCell>Christopher Nolan</TableCell>
+      <TableCell>Sci-Fi</TableCell>
+      <TableCell>2010</TableCell>
+      <TableCell>8.8</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>2</TableCell>
+      <TableCell>Pulp Fiction</TableCell>
+      <TableCell>Quentin Tarantino</TableCell>
+      <TableCell>Crime</TableCell>
+      <TableCell>1994</TableCell>
+      <TableCell>8.9</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+## Examples
+
+### Bulk Action
+
+Enable users to perform actions on multiple rows simultaneously, such as deleting, updating, or exporting selected items. This feature improves efficiency when managing large data sets.
+
+<Playground comp="table/bulk-action" />
+
+### Drag and Drop
+
+Allow users to reorder table rows using drag-and-drop interactions. This is especially useful for prioritizing items or customizing the order of displayed data.
+
+<Playground comp="table/dnd" />
+
+### With SearchBar
+
+Add a search bar to let users quickly filter and find specific rows within the table. This enhances usability and helps users navigate large collections of data with ease.
+
+<Playground comp="table/searched" />
+
+### Sorting
+
+Enable sorting functionality on table columns so users can organize data in ascending or descending order. This helps users analyze and compare information more effectively.
+
+<Playground comp="table/sorting" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/table" />

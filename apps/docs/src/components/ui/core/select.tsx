@@ -176,7 +176,7 @@ function SelectContent<T extends object>({
     <PopoverContent
       {...popover}
       className={cn(
-        "bg-popover text-popover-foreground z-50 w-[calc(var(--trigger-width)-2rem)] max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
+        "bg-popover text-popover-foreground z-50 w-(--trigger-width) max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
         className
       )}
     >

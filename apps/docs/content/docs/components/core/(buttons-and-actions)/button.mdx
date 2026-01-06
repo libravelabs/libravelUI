@@ -1,0 +1,63 @@
+---
+title: Button
+description: A button lets users perform an action or trigger an event using mouse, touch, or keyboard input. It's a key interactive element in most user interfaces.
+component: true
+doc: Button
+---
+
+## Example
+
+<Playground comp="button/basic" demo="button/basic.demo" />
+
+## Features
+
+- **Styleable** – Hover, press, and keyboard focus states are provided for easy styling. These states only apply when interacting with an appropriate input device, unlike CSS pseudo classes.
+- **Accessible** – Uses a native `<button>` element under the hood, with support for the Space and Enter keys.
+- **Cross-browser** – Mouse, touch, keyboard, and focus interactions are normalized to ensure consistency across browsers and devices.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+<RequiredBlock components="loader" />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/button" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add button
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Button } from "@/components/ui/core/button";
+```
+
+```tsx
+<Button tone="default">Default</Button>
+<Button tone="secondary">Secondary</Button>
+<Button tone="outline">Outline</Button>
+<Button tone="ghost">Ghost</Button>
+<Button tone="link">Link</Button>
+<Button tone="destructive">Destructive</Button>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/button" />

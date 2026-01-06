@@ -1,0 +1,88 @@
+---
+title: Date Field
+description: An input field designed specifically for entering and choosing dates, with support for multiple date formats and built-in validation.
+component: true
+doc: DateField
+---
+
+## Basic
+
+<Playground comp="date-field/basic" />
+
+## Features
+
+A date field can be built using `<input type="date">`, but this is very limited in functionality, lacking in internationalization capabilities, inconsistent between browsers, and difficult to style. DateField helps achieve accessible and international date and time fields that can be styled as needed.
+
+- `Dates and times` – Support for dates and times with configurable granularity.
+- `International` – Support for 13 calendar systems used around the world, including Gregorian, Buddhist, Islamic, Persian, and more. Locale-specific formatting, number systems, hour cycles, and right-to-left support are available as well.
+- `Time zone aware` – Dates and times can optionally include a time zone. All modifications follow time zone rules such as daylight saving time.
+- `Accessible` – Each date and time unit is displayed as an individually focusable and editable segment, which allows users an easy way to edit dates using the keyboard, in any date format and locale.
+- `Touch friendly` – Date segments are editable using an easy to use numeric keypad, and all interactions are accessible using touch-based screen readers.
+- `Validation` – Integrates with HTML forms, supporting required, minimum and maximum values, custom validation functions, realtime validation, and server-side validation errors.
+- `Customizable` – As with all of React Aria, the DOM structure and styling of all elements can be fully customized.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components="field" />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/date-field" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add date-field
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { DateField, DateInput } from "@/components/ui/core/date-field";
+import { Description, Label } from "@/components/ui/core/field";
+```
+
+```tsx
+<DateField>
+  <Label>Your Birthday</Label>
+  <DateInput />
+  <Description>Enter your birthday</Description>
+</DateField>
+```
+
+## Examples
+
+### Date Time
+
+<Playground comp="date-field/date-time" />
+
+### Start and End Content
+
+<Playground comp="date-field/start-end-content" />
+
+### With Validation
+
+<Playground comp="date-field/validated" />
+
+### Readonly and Disabled
+
+<Playground comp="date-field/readonly-disabled" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/date-field" />

@@ -1,31 +1,34 @@
 "use client";
 
-import { Switch } from "@/components/ui/core/switch";
-import { ToggleGroup, ToggleItem } from "@/components/ui/core/toggle-group";
+import {
+  ToggleGroup,
+  ToggleGroupProps,
+  ToggleItem,
+} from "@/components/ui/core/toggle-group";
 import { Bold, Italic, Underline } from "lucide-react";
-import { useState } from "react";
 
-export default function BasicToggleGroup() {
-  const [multiple, setMultiple] = useState<boolean>(false);
-
+export default function BasicToggleGroup({
+  selectionMode = "multiple",
+  orientation = "horizontal",
+  size = "md",
+  isDisabled = false,
+}: ToggleGroupProps) {
   return (
-    <div className="grid gap-4">
-      <Switch
-        label={multiple ? "Multiple selection" : "Single selection"}
-        isSelected={multiple}
-        onChange={setMultiple}
-      />
-      <ToggleGroup selectionMode={multiple ? "multiple" : "single"}>
-        <ToggleItem id="bold">
-          <Bold />
-        </ToggleItem>
-        <ToggleItem id="italic">
-          <Italic />
-        </ToggleItem>
-        <ToggleItem id="underline">
-          <Underline />
-        </ToggleItem>
-      </ToggleGroup>
-    </div>
+    <ToggleGroup
+      size={size}
+      selectionMode={selectionMode}
+      orientation={orientation}
+      isDisabled={isDisabled}
+    >
+      <ToggleItem id="bold">
+        <Bold />
+      </ToggleItem>
+      <ToggleItem id="italic">
+        <Italic />
+      </ToggleItem>
+      <ToggleItem id="underline">
+        <Underline />
+      </ToggleItem>
+    </ToggleGroup>
   );
 }

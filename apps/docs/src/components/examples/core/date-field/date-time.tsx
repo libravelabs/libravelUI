@@ -6,7 +6,8 @@ import {
   now,
   parseZonedDateTime,
 } from "@internationalized/date";
-import { DateField } from "@/components/ui/core/date-field";
+import { DateField, DateInput } from "@/components/ui/core/date-field";
+import { Label } from "@/components/ui/core/field";
 
 export default function DateTimeField() {
   const today = parseZonedDateTime(now(getLocalTimeZone()).toString());
@@ -18,7 +19,9 @@ export default function DateTimeField() {
       value={value}
       onChange={(newValue) => setValue(newValue!)}
       hourCycle={24}
-      label="Event date"
-    />
+    >
+      <Label>Event date</Label>
+      <DateInput />
+    </DateField>
   );
 }
