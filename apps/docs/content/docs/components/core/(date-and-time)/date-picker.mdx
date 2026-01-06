@@ -1,0 +1,78 @@
+---
+title: Date Picker
+description: A compound component built on top of a date field and calendar popover, providing accessible date selection through typing or visual interaction.
+component: true
+doc: DatePicker
+---
+
+## Basic
+
+<Playground comp="date-picker/basic" />
+
+## Features
+
+A date picker can be built using `<input type="date">`, but this is very limited in functionality, lacking in internationalization capabilities, inconsistent between browsers, and difficult to style. DatePicker helps achieve accessible and international date and time pickers that can be styled as needed.
+
+- `Dates and times` – Support for dates and times with configurable granularity.
+- `International` – Support for 13 calendar systems used around the world, including Gregorian, Buddhist, Islamic, Persian, and more. Locale-specific formatting, number systems, hour cycles, and right-to-left support are available as well.
+- `Time zone aware` – Dates and times can optionally include a time zone. All modifications follow time zone rules such as daylight saving time.
+- `Accessible` – Each date and time unit is displayed as an individually focusable and editable segment, which allows users an easy way to edit dates using the keyboard, in any date format and locale. Users can also open a calendar popover to select dates in a standard month grid. Localized screen reader messages are included to announce when the selection and visible date range change.
+- `Touch friendly` – Date segments are editable using an easy to use numeric keypad, and all interactions are accessible using touch-based screen readers.
+- `Validation` – Integrates with HTML forms, supporting required, minimum and maximum values, unavailable dates, custom validation functions, realtime validation, and server-side validation errors.
+- `Customizable` – As with all of React Aria, the DOM structure and styling of all elements can be fully customized.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components={["calendar", "date-field", "field", "popover"]} />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/date-picker" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add date-picker
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  DatePicker,
+  DatePickerTrigger,
+} from "@/components/ui/core/date-picker";
+```
+
+```tsx
+<DatePicker>
+  <DatePickerTrigger />
+</DatePicker>
+```
+
+## Example
+
+### Date Time Picker
+
+A simple and accessible way to select an exact date and time.
+
+<Playground comp="date-picker/date-time" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/date-picker" />

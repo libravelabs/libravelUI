@@ -1,0 +1,113 @@
+---
+title: Select
+description: A select component presents a dropdown list of predefined choices, enabling users to choose a single option from the list.
+component: true
+doc: Select
+---
+
+## Basic
+
+<Playground comp="select/basic" />
+
+## Features
+
+A select can be built using the `<select>` and `<option>` HTML elements, but this is not possible to style consistently cross browser, especially the options. Select helps achieve accessible select components that can be styled as needed without compromising on high quality interactions.
+
+- `Flexible` – Support for controlled and uncontrolled state, async loading, disabled items, validation, sections, complex items, and more.
+- `Keyboard navigation` – Select can be opened and navigated using the arrow keys, along with page up/down, home/end, etc. Auto scrolling, and typeahead both in the listbox and on the button, are supported as well.
+- `Accessible` – Follows the ARIA listbox pattern, with support for items and sections, and slots for label and description elements within each item for improved screen reader announcement.
+- `HTML form integration` – A visually hidden `<select>` element is included to enable HTML form integration and autofill.
+- `Validation` – Support for native HTML constraint validation with customizable UI, custom validation functions, and server-side validation errors.
+- `Styleable` – Items include builtin states for styling, such as hover, press, focus, selected, and disabled.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components={["field", "popover", "separator", "command"]} />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/select" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add select
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  SelectRoot,
+  SelectTrigger,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectHeader,
+} from "@/components/ui/core/select";
+```
+
+```tsx
+<SelectRoot label="Label goes here" multiple={false}>
+  <SelectTrigger placeholder="Placeholder goes here" hideClear={false} />
+
+  <SelectContent>
+    <SelectHeader separator>Header text goes here</SelectHeader>
+
+    <SelectGroup title="Group title here">
+      <SelectItem key="item-1" textValue="Searchable label">
+        Visible label 1
+      </SelectItem>
+      <SelectItem key="item-2" textValue="Searchable label">
+        Visible label 2
+      </SelectItem>
+    </SelectGroup>
+
+    <SelectSeparator />
+
+    <SelectGroup>
+      <SelectLabel inset>Label inside group</SelectLabel>
+
+      <SelectItem key="item-3" textValue="Searchable label">
+        Visible label 3
+      </SelectItem>
+      <SelectItem key="item-4">Visible label 4</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</SelectRoot>
+```
+
+## Examples
+
+### Searchable
+
+Allows users to filter the available options by typing into an input field. Ideal for large datasets or when quick access is important. Use `textValue` on each item to ensure accurate search behavior, especially if the display value includes custom JSX or non-text content.
+
+<Playground comp="select/searchable" />
+
+### Grouped
+
+Organizes options into visually separated groups using `SelectGroup`. Useful for categorizing items (e.g. by genre, region, or type) and improving navigability in dropdowns with many items. Combine with `SelectSeparator`, `SelectHeader`, and `SelectLabel` for additional structure and clarity.
+
+<Playground comp="select/grouped" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/select" />

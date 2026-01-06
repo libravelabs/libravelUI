@@ -1,0 +1,62 @@
+---
+title: Textarea
+description: A multiline input area designed for entering extended text, such as messages, descriptions, or comments.
+component: true
+doc: TextField#textarea
+---
+
+## Basic
+
+<Playground comp="text-area/basic" />
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="field" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/text-area" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add text-area
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { Label } from "@/components/ui/core/field";
+import { Textarea } from "@/components/ui/core/text-area";
+import { TextField } from "@/components/ui/core/text-field";
+```
+
+```tsx
+<TextField className="w-72">
+  <Label>Synopsis</Label>
+  <Textarea />
+</TextField>
+```
+
+### With Form
+
+This example demonstrates how to integrate the textarea component within a form context, showcasing form validation, error handling, and submission behavior seamlessly.
+
+<Playground comp="text-area/with-form" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/text-area" />

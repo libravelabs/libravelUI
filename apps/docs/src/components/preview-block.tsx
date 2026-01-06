@@ -104,7 +104,7 @@ function PreviewItem({
       </div>
 
       <Link
-        href={`/examples/components/${section}/${name}`}
+        href={`/docs/components/${section}/${name}`}
         className="w-full p-2 border-t font-mono text-sm text-center truncate hover:bg-accent transition-colors ease-linear"
       >
         {name

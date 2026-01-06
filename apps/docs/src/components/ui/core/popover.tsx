@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/core/dialog";
 
 type PopoverProps = DialogTriggerProps;
+
 function Popover(props: PopoverProps) {
   return <DialogTriggerPrimitive {...props} />;
 }

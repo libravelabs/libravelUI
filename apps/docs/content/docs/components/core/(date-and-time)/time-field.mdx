@@ -1,0 +1,70 @@
+---
+title: Time Field
+description: A time field allows users to enter and edit time values using a keyboard. Each part of a time value is displayed in an individually editable segment.
+component: true
+doc: TimeField
+---
+
+## Basic
+
+<Playground comp="time-field/basic" />
+
+## Features
+
+A time field can be built using `<input type="time">`, but this is very limited in functionality, lacking in internationalization capabilities, inconsistent between browsers, and difficult to style. TimeField helps achieve accessible and international time fields that can be styled as needed.
+
+- **International** – Support for locale-specific formatting, number systems, hour cycles, and right-to-left layout.
+- **Time zone aware** – Times can optionally include a time zone. All modifications follow time zone rules such as daylight saving time.
+- **Accessible** – Each time unit is displayed as an individually focusable and editable segment, which allows users an easy way to edit times using the keyboard, in any format and locale.
+- **Touch friendly** – Time segments are editable using an easy to use numeric keypad, and all interactions are accessible using touch-based screen readers.
+- **Validation** – Integrates with HTML forms, supporting required, minimum and maximum values, custom validation functions, realtime validation, and server-side validation errors.
+- **Customizable** – As with all of React Aria, the DOM structure and styling of all elements can be fully customized.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="field" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/time-field" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add time-field
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { TimeField } from "@/components/ui/core/time-field";
+```
+
+```tsx
+<TimeField />
+```
+
+## Example
+
+### Hour Cycle
+
+Let users choose between 12-hour and 24-hour time formats, providing flexibility for different regional preferences and use cases.
+
+<Playground comp="time-field/hour-cycle" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/time-field" />

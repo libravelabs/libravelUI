@@ -1,0 +1,99 @@
+---
+title: Dialog
+description: A dialog is a component used to capture user input, present important information, confirm critical actions, or prompt users to make decisions — all without requiring them to leave the current screen or context.
+component: true
+doc: Dialog
+---
+
+## Basic
+
+<Playground comp="dialog/basic" />
+
+## Features
+
+The HTML `<dialog>` element can be used to build dialogs. However, it is not yet widely supported across browsers, and building fully accessible custom dialogs from scratch is very difficult and error prone. `Dialog` helps achieve accessible dialogs that can be styled as needed.
+
+- Flexible – Dialogs can be used within a Modal or Popover to create many types of overlay elements.
+- Accessible – Exposed to assistive technology as a dialog or alertdialog with ARIA. The dialog is automatically labeled by a nested `<Heading>` element. Content outside the dialog is hidden from assistive technologies while it is open.
+- Focus management – Focus is moved into the dialog on mount, and restored to the trigger element on unmount. While open, focus is contained within the dialog, preventing the user from tabbing outside.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components="button" />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/dialog" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add dialog
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  DialogCloseIcon,
+  DialogClose,
+  DialogContent,
+} from "@/components/ui/core/dialog";
+```
+
+```tsx
+<Dialog>
+  <DialogTrigger tone="secondary">Open Dialog</DialogTrigger>
+
+  <DialogContent isBlurred>
+    {({ close }) => (
+      <>
+        <DialogCloseIcon isDismissable />
+
+        <DialogHeader
+          title="Dialog Title"
+          description="Dialog description goes here."
+        />
+
+        <DialogBody>Dialog body goes here</DialogBody>
+
+        <DialogFooter>
+          <DialogClose>Close</DialogClose>
+        </DialogFooter>
+      </>
+    )}
+  </DialogContent>
+</Dialog>
+```
+
+## Example
+
+### Sizes
+
+The dialog component supports multiple size options to fit various content needs. Choose from predefined sizes to ensure the dialog aligns well with your layout, whether you're displaying a simple message or a complex form.
+
+<Playground comp="dialog/sizes" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/dialog" />

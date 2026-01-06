@@ -1,0 +1,109 @@
+---
+title: Checkbox Group
+description: A checkbox group lets users select one or more options from a related list. It's useful when multiple selections are allowed and helps organize choices under a common label.
+component: true
+doc: CheckboxGroup
+---
+
+<Info title="Standalone Checkbox Component">
+  If you're looking for a single checkbox component that can be used
+  independently, including support for labels, descriptions, and validation,
+  see: [Checkbox](/docs/components/checkbox)
+</Info>
+
+## Basic
+
+<Playground comp="checkbox-group/basic" />
+
+## Features
+
+Checkbox groups can be built in HTML with the `<fieldset>` and `<input>` elements, however these can be difficult to style. CheckboxGroup helps achieve accessible checkbox groups that can be styled as needed.
+
+- `Accessible` – Checkbox groups are exposed to assistive technology via ARIA, and automatically associate a nested `<Label>`. Description and error message help text slots are supported as well.
+- `HTML form integration` – Each individual checkbox uses a visually hidden `<input>` element under the hood, which enables HTML form integration and autofill.
+- `Validation` – Support for native HTML constraint validation with customizable UI, custom validation functions, and server-side validation errors.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components="field" />
+Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/checkbox-group" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add checkbox-group
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { CheckboxGroup } from "@/components/ui/core/checkbox-group";
+import { Checkbox } from "@/components/ui/core/checkbox";
+```
+
+```tsx
+<CheckboxGroup label="Group Label" description="Group description goes here.">
+  <Checkbox
+    value="checkbox-value-1"
+    label="Label goes here"
+    description="Description goes here."
+  />
+  <Checkbox
+    value="checkbox-value-2"
+    label="Label goes here"
+    description="Description goes here."
+  />
+  <Checkbox
+    value="checkbox-value-3"
+    label="Label goes here"
+    description="Description goes here."
+  />
+</CheckboxGroup>
+```
+
+## Examples
+
+### Validate
+
+Validates a checkbox group by ensuring the user selects at least one option before submitting. Validation prevents empty submissions and guides users to complete required fields.
+
+<Playground comp="checkbox-group/validate" />
+
+### Indeterminate
+
+This example demonstrates a checkbox group where the parent checkbox shows an indeterminate state (a dash) to indicate that only some of its child checkboxes are selected. The indeterminate state helps users understand that the selection is partial, not fully checked or unchecked.
+
+<Playground comp="checkbox-group/indeterminate" />
+
+### Controlled
+
+A checkbox group managed with React state. Users select options freely, and on submit, a toast shows their selections. Ideal for apps needing full control and validation of inputs.
+
+<Playground comp="checkbox-group/controlled" />
+
+### Disabled
+
+Checkboxes shown in a disabled state prevent user interaction, indicating options that are unavailable or not applicable. Disabled checkboxes provide visual feedback that the choices cannot be changed.
+
+<Playground comp="checkbox-group/disabled" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/checkbox-group" />

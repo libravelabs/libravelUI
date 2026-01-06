@@ -1,0 +1,76 @@
+---
+title: Accordion
+description: An Accordion is a grouping of related disclosures. It supports both single and multiple expanded items.
+component: true
+doc: DisclosureGroup
+---
+
+## Basic
+
+<Playground comp="accordion/basic" />
+
+## Features
+
+Disclosure groups can be built by combining multiple disclosures built in HTML with the `<details>` and `<summary>` HTML elements, but this can be difficult to style, especially when adding adjacent interactive elements, like buttons, to the disclosure's heading. DisclosureGroup helps achieve accessible disclosures implemented with the correct ARIA pattern while making custom styling easy.
+
+- **Accessible** - Disclosure group is exposed to assistive technology via ARIA. Uses hidden="until-found" in supported browsers, enabling find-in-page search support and improved search engine visibility for collapsed content.
+- **Styleable** - Disclosures include builtin states for styling such as keyboard focus, disabled, and expanded states.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components="disclosure" />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/accordion" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add accordion
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/core/accordion";
+```
+
+```tsx
+<Accordion>
+  <AccordionItem>
+    <AccordionTrigger>Trigger goes</AccordionTrigger>
+    <AccordionContent>The content goes here</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+## Example
+
+### Tones
+
+The Accordion component offers visual tones like `default`, `ghost`, `outline`, `solid`, `muted`, and `separated` for different use cases.
+
+<Playground comp="accordion/tones" demo="accordion/tones.demo" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/accordion" />

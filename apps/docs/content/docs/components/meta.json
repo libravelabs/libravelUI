@@ -2,13 +2,5 @@
   "title": "Components",
   "description": "Explore libravelUI components — from core elements to advanced motion utilities.",
   "root": true,
-  "defaultOpen": true,
-  "pages": [
-    "---Examples---",
-    "index",
-    "---Core---",
-    "...core",
-    "---Motion---",
-    "...motion"
-  ]
+  "defaultOpen": true
 }

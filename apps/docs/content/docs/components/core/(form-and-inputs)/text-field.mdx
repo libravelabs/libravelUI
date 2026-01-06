@@ -1,0 +1,86 @@
+---
+title: Text Field
+description: A text field allows users to input plain text, commonly used for names, emails, search queries, and other short-form data.
+component: true
+doc: TextField
+---
+
+## Basic
+
+<Playground comp="text-field/basic" />
+
+## Features
+
+Text fields can be built with `<input>` or `<textarea>` and `<label>` elements, but you must manually ensure that they are semantically connected via ids for accessibility. TextField helps automate this, and handle other accessibility features while allowing for custom styling.
+
+- `Accessible` – Uses a native `<input>` element. Label, description, and error message elements are automatically associated with the field.
+- `Validation` – Support for native HTML constraint validation with customizable UI, custom validation functions, realtime validation, and server-side validation errors.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock components="field" />
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/text-field" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add text-field
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { TextField } from "@/components/ui/core/text-field";
+```
+
+```tsx
+<TextField
+  label="label belongs here"
+  description="You can add description here"
+  error="You can add error message here"
+  startContent={"..."}
+  endContent={"..."}
+/>
+```
+
+## Examples
+
+### Variants
+
+Controls the visual style of the input. Use variants to reflect the input’s purpose or status.
+
+<Playground comp="text-field/variants.demo" />
+
+### Start and End Content
+
+This example shows how to add customizable elements at the start and end of the input field, such as icons or buttons, to enhance user interaction and improve UI clarity.
+
+<Playground comp="text-field/start-end-content" />
+
+### With Form
+
+This example demonstrates how to integrate the text field component within a form context, showcasing form validation, error handling, and submission behavior seamlessly.
+
+<Playground comp="text-field/with-form" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/text-field" />

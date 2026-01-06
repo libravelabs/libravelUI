@@ -1,0 +1,99 @@
+---
+title: Date Range Picker
+description: A date range picker combines two DateFields and a RangeCalendar popover to allow users to enter or select a date and time range.
+component: true
+doc: DateRangePicker
+---
+
+## Basic
+
+<Playground comp="date-range-picker/basic" />
+
+## Features
+
+A date range picker can be built using two separate `<input type="date">` elements, but this is very limited in functionality, lacking in internationalization capabilities, inconsistent between browsers, and difficult to style. DateRangePicker helps achieve accessible and international date and time range pickers that can be styled as needed.
+
+- **Dates and times** – Support for dates and times with configurable granularity.
+  International – Support for 13 calendar systems used around the world, including Gregorian, Buddhist, Islamic, Persian, and more. Locale-specific formatting, number systems, hour cycles, and right-to-left support are available as well.
+- **Time zone aware** – Dates and times can optionally include a time zone. All modifications follow time zone rules such as daylight saving time.
+- **Accessible** – Each date and time unit is displayed as an individually focusable and editable segment, which allows users an easy way to edit dates using the keyboard, in any date format and locale. Users can also open a calendar popover to select date ranges in a standard month grid. Localized screen reader messages are included to announce when the selection and visible date range change.
+- **Touch friendly** – Date segments are editable using an easy to use numeric keypad, date ranges can be selected by dragging over dates in the calendar using a touch screen, and all interactions are accessible using touch-based screen readers.
+- **Validation** – Integrates with HTML forms, supporting required, minimum and maximum values, unavailable dates, custom validation functions, realtime validation, and server-side validation errors.
+- **Customizable** – As with all of React Aria, the DOM structure and styling of all elements can be fully customized.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+
+<RequiredBlock
+  components={["date-field", "field", "popover", "range-calendar"]}
+/>
+
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion @internationalized/date
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/date-range-picker" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add date-range-picker
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import {
+  DateRangePicker,
+  DateRangePickerTrigger,
+} from "@/components/ui/core/date-range-picker";
+```
+
+```tsx
+<DateRangePicker>
+  <DateRangePickerTrigger />
+</DateRangePicker>
+```
+
+## Examples
+
+### Visible Duration
+
+The `visibleDuration` prop lets you define how long the date range should be displayed. You can pass an object that specifies:
+
+- `years`: How many years to include before or after.
+- `months`: How many months to show in the range.
+- `weeks`: Number of weeks to cover.
+- `days`: Number of days to span.
+
+For more details, check the `react-aria-component` documentation on [visible durations](https://react-spectrum.adobe.com/react-aria/RangeCalendar.html#multi-month).
+
+<Playground comp="date-range-picker/visible-duration" />
+
+### With Validation
+
+Date range picker with validation to ensure correct and complete user input.
+
+<Playground comp="date-range-picker/validated" />
+
+### ReadOnly and Disabled
+
+Date range picker configured to be read-only or disabled, preventing user edits.
+
+<Playground comp="date-range-picker/readonly-disabled" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/date-range-picker" />

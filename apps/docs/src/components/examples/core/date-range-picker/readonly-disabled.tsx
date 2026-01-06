@@ -1,6 +1,10 @@
 "use client";
 
-import { DateRangePicker } from "@/components/ui/core/date-range-picker";
+import {
+  DateRangePicker,
+  DateRangePickerTrigger,
+} from "@/components/ui/core/date-range-picker";
+import { Label } from "@/components/ui/core/field";
 import { getLocalTimeZone, today } from "@internationalized/date";
 
 export default function ReadOnlyRequiredDateRangePicker() {
@@ -8,13 +12,25 @@ export default function ReadOnlyRequiredDateRangePicker() {
     <div className="grid gap-8">
       <DateRangePicker
         isReadOnly
-        label="ReadOnly Date Range Picker"
         defaultValue={{
           start: today(getLocalTimeZone()),
           end: today(getLocalTimeZone()).add({ weeks: 2 }),
         }}
-      />
-      <DateRangePicker isDisabled label="Disabled Date Range Picker" />
+      >
+        <Label>ReadOnly Date Range Picker</Label>
+        <DateRangePickerTrigger />
+      </DateRangePicker>
+
+      <DateRangePicker
+        isDisabled
+        defaultValue={{
+          start: today(getLocalTimeZone()),
+          end: today(getLocalTimeZone()).add({ weeks: 2 }),
+        }}
+      >
+        <Label>Disabled Date Range Picker</Label>
+        <DateRangePickerTrigger />
+      </DateRangePicker>
     </div>
   );
 }

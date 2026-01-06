@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, ButtonProps } from "@/components/ui/core/button";
 import { motion, AnimatePresence } from "motion/react";
-import { Link } from "../core/link";
+import { Link, LinkProps } from "@/components/ui/core/link";
 
 function Sidebar({ children, className }: React.ComponentProps<"aside">) {
   return (
@@ -68,6 +68,8 @@ interface SidebarItemProps extends ButtonProps {
   icon?: React.ReactNode;
   isActive?: boolean;
   href?: string;
+  button?: ButtonProps;
+  link?: LinkProps;
 }
 
 function SidebarItem({
@@ -77,19 +79,23 @@ function SidebarItem({
   size = "sm",
   tone = "ghost",
   href,
+  button,
+  link,
+  className,
   ...props
 }: SidebarItemProps) {
   if (href) {
     return (
-      <Link href={href} className="w-full">
+      <Link href={href} className="w-full" {...link}>
         <Button
           size={size}
           tone={tone}
           className={cn(
             "w-full justify-start [&_*:not(.truncate)]:truncate",
-            isActive ? "bg-foreground/10" : "hover:bg-foreground/5"
+            isActive ? "bg-foreground/10" : "hover:bg-foreground/5",
+            button?.className
           )}
-          {...props}
+          {...button}
         >
           {icon && icon}
           {children}
@@ -104,7 +110,8 @@ function SidebarItem({
       tone={tone}
       className={cn(
         "w-full justify-start [&_*:not(.truncate)]:truncate",
-        isActive ? "bg-foreground/10" : "hover:bg-foreground/5"
+        isActive ? "bg-foreground/10" : "hover:bg-foreground/5",
+        className
       )}
       {...props}
     >
@@ -121,6 +128,10 @@ interface SidebarGroupProps extends ButtonProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   stickyHeader?: boolean;
+  classNames?: {
+    stickyHeader?: string;
+    trigger?: string;
+  };
 }
 
 function SidebarGroup({
@@ -133,6 +144,7 @@ function SidebarGroup({
   className,
   size = "sm",
   stickyHeader = false,
+  classNames,
   ...props
 }: SidebarGroupProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
@@ -148,8 +160,19 @@ function SidebarGroup({
 
   return (
     <div className={cn("grid gap-1 w-full", className)}>
-      <div className={cn(stickyHeader && "sticky top-0 bg-sidebar")}>
-        <SidebarItem onClick={handleToggle} icon={icon} size={size} {...props}>
+      <div
+        className={cn(
+          stickyHeader &&
+            cn("sticky top-0 bg-sidebar", classNames?.stickyHeader)
+        )}
+      >
+        <SidebarItem
+          onClick={handleToggle}
+          icon={icon}
+          size={size}
+          className={cn(classNames?.trigger)}
+          {...props}
+        >
           <h3 className="font-medium">{label}</h3>
           <ChevronDown
             className={cn(

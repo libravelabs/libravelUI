@@ -1,45 +1,39 @@
 "use client";
 
-import type { DateDuration } from "@internationalized/date";
 import {
   DatePicker as DatePickerPrimitive,
   type DatePickerProps as DatePickerPrimitiveProps,
   type DateValue,
-  type PopoverProps,
 } from "react-aria-components";
 import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/core/calendar";
+import { Calendar, type CalendarProps } from "@/components/ui/core/calendar";
 import { DateInput } from "@/components/ui/core/date-field";
-import {
-  Description,
-  FieldError,
-  FieldGroup,
-  type FieldProps,
-  fieldStyles,
-  Label,
-} from "@/components/ui/core/field";
+import { type FieldProps, fieldStyles } from "@/components/ui/core/field";
 import {
   PopoverContent,
-  PopoverContentProps,
   PopoverTrigger,
+  type PopoverContentProps,
 } from "@/components/ui/core/popover";
 import { CalendarIcon } from "lucide-react";
-import { inputVariants } from "./input";
+import { InputGroup } from "@/components/ui/core/input";
+
+interface DatePickerOverlayProps<T extends DateValue> extends Omit<
+  PopoverContentProps,
+  "children"
+> {
+  range?: boolean;
+  calendar?: CalendarProps<T>;
+}
 
 interface DatePickerProps<T extends DateValue>
-  extends
-    DatePickerPrimitiveProps<T>,
-    Pick<PopoverProps, "placement">,
-    Omit<FieldProps, "placeholder"> {
+  extends DatePickerPrimitiveProps<T>, Omit<FieldProps, "placeholder"> {
   range?: boolean;
-  visibleDuration?: DateDuration;
   pageBehavior?: "visible" | "single";
-  popover?: PopoverContentProps;
+  popover?: DatePickerOverlayProps<T>;
 }
 
 function DatePicker<T extends DateValue>({
   className,
-  placement,
   children,
   popover,
   ...props
@@ -53,42 +47,43 @@ function DatePicker<T extends DateValue>({
       {(values) => (
         <>
           {typeof children === "function" ? children(values) : children}
-          <DatePickerOverlay {...popover} />
+          <DatePickerOverlay<T> {...popover} />
         </>
       )}
     </DatePickerPrimitive>
   );
 }
 
-function DatePickerOverlay({
+function DatePickerOverlay<T extends DateValue>({
   placement = "bottom",
+  calendar,
   ...props
-}: PopoverContentProps) {
+}: DatePickerOverlayProps<T>) {
   return (
     <PopoverContent
-      withArrow={false}
       placement={placement}
-      className="p-2 flex min-w-auto max-w-none w-auto snap-x justify-center"
+      className={cn("flex min-w-auto max-w-none snap-x justify-center")}
       {...props}
     >
-      <Calendar className="border-0" />
+      <Calendar {...calendar} className="border-0 p-0" />
     </PopoverContent>
   );
 }
 
-function DatePickerTrigger({ ...props }: PopoverContentProps) {
+function DatePickerTrigger() {
   return (
-    <div className={cn(inputVariants(), "flex items-center gap-2")}>
+    <InputGroup>
       <DateInput className="w-full" />
       <PopoverTrigger
+        data-fullsize-ele
         tone="unstyled"
         className="group-disabled:opacity-20 group-disabled:cursor-not-allowed"
       >
         <CalendarIcon className="text-muted-foreground" />
       </PopoverTrigger>
-    </div>
+    </InputGroup>
   );
 }
 
-export type { DatePickerProps };
+export type { DatePickerProps, DatePickerOverlayProps };
 export { DatePicker, DatePickerTrigger };

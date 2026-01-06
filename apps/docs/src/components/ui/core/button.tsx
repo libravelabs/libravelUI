@@ -8,7 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Loader } from "@/components/ui/core/loader";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none cursor-pointer",
     "focus:outline-0 focus-visible:outline focus-visible:outline-offset-2 focus-visible:ring-2 focus-visible:ring-offset-3 focus-visible:ring-offset-background",
@@ -52,6 +52,53 @@ const buttonVariants = cva(
     },
   }
 );
+
+const buttonGroupVariants = cva(
+  [
+    "flex w-fit items-stretch",
+    "has-[>[data-slot=button-group]]:gap-2",
+    "[&>*]:focus-visible:relative",
+    "[&>*]:focus-visible:z-10",
+    "has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md",
+    "[&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit",
+    "[&>input]:flex-1",
+  ],
+  {
+    variants: {
+      orientation: {
+        horizontal: [
+          "[&>*:not(:first-child)]:rounded-s-none",
+          "[&>*:not(:first-child)]:border-l-0",
+          "[&>*:not(:last-child)]:rounded-e-none",
+        ],
+        vertical: [
+          "flex-col",
+          "[&>*:not(:first-child)]:rounded-t-none",
+          "[&>*:not(:first-child)]:border-t-0",
+          "[&>*:not(:last-child)]:rounded-b-none",
+        ],
+      },
+    },
+    defaultVariants: {
+      orientation: "horizontal",
+    },
+  }
+);
+
+type ButtonGroupProps = React.ComponentProps<"div"> &
+  VariantProps<typeof buttonGroupVariants>;
+
+function ButtonGroup({ className, orientation, ...props }: ButtonGroupProps) {
+  return (
+    <div
+      role="group"
+      data-slot="button-group"
+      data-orientation={orientation}
+      className={buttonGroupVariants({ orientation, className })}
+      {...props}
+    />
+  );
+}
 
 type ButtonProps = ButtonPrimitiveProps &
   VariantProps<typeof buttonVariants> & {
@@ -111,5 +158,5 @@ function Button({
   );
 }
 
-export { Button, buttonVariants };
-export type { ButtonProps };
+export { Button, ButtonGroup };
+export type { ButtonProps, ButtonGroupProps };

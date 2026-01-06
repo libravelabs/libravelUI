@@ -1,7 +1,14 @@
 "use client";
 
-import { DateRangePicker } from "@/components/ui/core/date-range-picker";
+import {
+  DateRangePicker,
+  DateRangePickerTrigger,
+} from "@/components/ui/core/date-range-picker";
 
 export default function BasicDateRangePicker() {
-  return <DateRangePicker />;
+  return (
+    <DateRangePicker>
+      <DateRangePickerTrigger />
+    </DateRangePicker>
+  );
 }

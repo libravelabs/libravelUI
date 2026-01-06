@@ -20,18 +20,18 @@ export const docs = defineDocs({
       enableToc: zod.boolean().optional(),
       doc: zod
         .union([
-          zod.string().url(),
+          zod.string(),
           zod.object({
             title: zod.string(),
-            url: zod.string().url(),
+            url: zod.string(),
             icon: zod.custom<React.ReactNode>().optional(),
           }),
           zod.array(
             zod.union([
-              zod.string().url(),
+              zod.string(),
               zod.object({
                 title: zod.string(),
-                url: zod.string().url(),
+                url: zod.string(),
                 icon: zod.custom<React.ReactNode>().optional(),
               }),
             ])
@@ -49,7 +49,9 @@ export const docs = defineDocs({
     }),
   },
   meta: {
-    schema: metaSchema,
+    schema: metaSchema.extend({
+      headerTitle: zod.string().optional(),
+    }),
   },
 });
 

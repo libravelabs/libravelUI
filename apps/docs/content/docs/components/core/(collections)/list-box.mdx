@@ -1,0 +1,75 @@
+---
+title: List Box
+description: A listbox displays a list of options and allows a user to select one or more of them.
+component: true
+doc: ListBox
+---
+
+## Basic
+
+<Playground comp="list-box/basic" />
+
+## Features
+
+A listbox can be built using the `<select>` and `<option>` HTML elements, but this is not possible to style consistently cross browser. ListBox helps you build accessible listbox components that can be styled as needed.
+
+- **Item selection** – Single or multiple selection, disabled rows, and both toggle and replace selection behaviors.
+- **Keyboard navigation** – List items can be navigated using the arrow keys, along with page up/down, home/end, etc. Typeahead, auto scrolling, and selection modifier keys are supported as well.
+- **Layout options** – Items can be arranged in a vertical or horizontal stack, or as a two-dimensional grid.
+- **Drag and drop** – ListBox supports drag and drop to reorder, insert, or update items via mouse, touch, keyboard, and screen reader interactions.
+- **Virtualized scrolling** – Use [Virtualizer](https://react-spectrum.adobe.com/react-aria/Virtualizer.html) to improve performance of large lists by rendering only the visible items.
+- **Touch friendly** – Selection behavior adapts depending on the device. For example, selection occurs on mouse down but on touch up, which is consistent with native conventions.
+- **Accessible** – Follows the [ARIA listbox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/list-box/), with support for items and sections, and slots for label and description elements within each item for improved screen reader announcement.
+- **Styleable** – Items include builtin states for styling, such as hover, press, focus, selected, and disabled.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/list-box" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add list-box
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { ListBox, ListBoxItem } from "@/components/ui/core/list-box";
+```
+
+```tsx
+<ListBox className="max-w-2xs" items={items} selectionMode="single">
+  {(item) => <ListBoxItem id={item.id}>{item.label}</ListBoxItem>}
+</ListBox>
+```
+
+## Examples
+
+### Multiple
+
+Allows users to choose more than one option from a list, making it easy to manage selections that require flexibility or comparison between items.
+
+<Playground comp="list-box/multiple" />
+
+### Drag and Drop
+
+Enables users to rearrange list items by simply dragging them, providing a smooth and intuitive way to customize the order and organization.
+
+<Playground comp="list-box/drag-and-drop" />

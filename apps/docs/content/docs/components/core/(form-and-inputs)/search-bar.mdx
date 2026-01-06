@@ -1,0 +1,73 @@
+---
+title: Search Bar
+description: A search bar component that lets users enter keywords to quickly find and filter content. It’s designed to be accessible, responsive, and easy to integrate into any interface.
+component: true
+doc: SearchField
+---
+
+## Basic
+
+<Playground comp="search-bar/basic" />
+
+## Features
+
+Search fields can be built with `<input type="search">`, but these can be hard to style consistently cross browser. SearchField helps achieve accessible search fields that can be styled as needed.
+
+- **Clearable** – A custom clear button can be shown to allow the input to be easily reset.
+- **Accessible** – Uses a native `<input type="search">` element, with support for the `Enter` and `Escape` keys to submit and clear the field, respectively. Label, description, and error message elements are automatically associated with the field.
+- **Validation** – Support for native HTML constraint validation with customizable UI, custom validation functions, realtime validation, and server-side validation errors.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    <RequiredBlock components={["field", "loader"]} />
+    Install following dependencies:
+
+    ```package-install
+    npm install react-aria-components tw-animate-css tailwindcss-react-aria-components class-variance-authority lucide-react clsx tailwind-merge motion
+    ```
+
+    Add `cn` helper using `clsx` and `twMerge` for conditional class merging in Tailwind components.
+
+    <ComponentSource comp="lib/utils" isReact={false} />
+
+    Copy and paste the following code into your project.
+
+    <ComponentSource comp="components/ui/core/search-bar" />
+
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add search-bar
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { SearchBar } from "@/components/ui/core/search-bar";
+```
+
+```tsx
+<SearchBar />
+```
+
+## Examples
+
+### With Form
+
+You can use this variation to integrate a search bar into a form layout, supporting input handling, submission, and accessible interactions within structured content.
+
+<Playground comp="search-bar/with-form" />
+
+### Items
+
+You can use this variation to search through items using the `Autocomplete` component, which filters and displays matching results in a menu as text is entered.
+
+<Playground comp="search-bar/items" />
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/search-bar" />

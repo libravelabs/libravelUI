@@ -1,5 +1,5 @@
 {
   "icon": "Blend",
-  "pages": ["---Text---", "...(text)", "---Elements---", "...(elements)"],
-  "defaultOpen": true
+  "defaultOpen": true,
+  "pages": ["---Text---", "...(text)", "---Elements---", "...(elements)"]
 }
