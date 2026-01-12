@@ -95,7 +95,7 @@ const activeVariants = cva("absolute inset-0 z-0 transition-none", {
     tone: {
       default: "bg-primary group-hover:opacity-70",
       destructive: "bg-destructive group-hover:opacity-70",
-      outline: "border-2 border-primary bg-background group-hover:opacity-70",
+      outline: "border-2 border-primary bg-transparent group-hover:opacity-70",
       secondary: "bg-secondary group-hover:opacity-70",
       ghost: "group-hover:bg-foreground/10",
       link: "",

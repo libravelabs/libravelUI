@@ -100,7 +100,7 @@ export function TStoJSCodeBlock({
       tone={tone}
       width={width}
       classNames={{
-        content: cn("bg-transparent", tone === "underline" && "p-0"),
+        content: cn("bg-transparent p-0"),
       }}
       items={tabs.map(({ label, value, lang, content, fileName }) => ({
         label,

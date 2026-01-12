@@ -3,7 +3,6 @@ import { type PaginationVariantProps } from "@/components/ui/core/pagination";
 import { RadioGroup, Radio } from "@/components/ui/core/radio-group";
 import { Heading } from "@/components/ui/core/heading";
 import PaginationTones from "./tones";
-import { useDynamicCode } from "@/components/playground-context";
 
 export default function PaginationTonesDemo() {
   const [tone, setTone] = useState<PaginationVariantProps["tone"]>("default");
@@ -11,8 +10,6 @@ export default function PaginationTonesDemo() {
   const [radius, setRadius] = useState<PaginationVariantProps["radius"]>("md");
   const [spacing, setSpacing] =
     useState<PaginationVariantProps["spacing"]>("default");
-
-  useDynamicCode({ tone, size, radius, spacing });
 
   const tones: NonNullable<PaginationVariantProps["tone"]>[] = [
     "default",

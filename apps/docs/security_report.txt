@@ -1,0 +1,64 @@
+# Laporan Analisis Keamanan Sistem Playground (Demo Files)
+
+**Ringkasan**
+- Ditemukan **9** file `*.demo.tsx` dalam proyek.
+- Tidak ada penggunaan `dangerouslySetInnerHTML`, `eval`, atau manipulasi DOM mentah yang dapat menimbulkan XSS.
+- Semua nilai yang di‑render berasal dari state React yang di‑set melalui kontrol UI internal, sehingga secara default aman karena React melakukan escaping otomatis.
+- Namun, ada potensi risiko **injeksi** jika nilai kontrol dapat di‑ubah melalui query‑string atau API eksternal tanpa validasi.
+
+## Daftar File yang Dianalisis
+1. `src/components/examples/core/button/basic.demo.tsx`
+2. `src/components/examples/core/toggle-group/basic.demo.tsx`
+3. `src/components/examples/core/input/variants.demo.tsx`
+4. `src/components/examples/core/tabs/variants.demo.tsx`
+5. `src/components/examples/core/pagination/tones.demo.tsx`
+6. `src/components/examples/core/drop-zone/tones.demo.tsx`
+7. `src/components/examples/core/disclosure/tones.demo.tsx`
+8. `src/components/examples/core/accordion/tones.demo.tsx`
+9. `src/components/examples/core/text-field/variants.demo.tsx`
+
+## Temuan Keamanan per File
+### 1. `basic.demo.tsx` (Button)
+- **Potensi XSS**: Tidak ada. Semua nilai (`tone`, `size`, dll.) berasal dari enum yang didefinisikan di dalam file.
+- **Catatan**: `onPress` memanggil `toast.info` – aman.
+
+### 2. `basic.demo.tsx` (Toggle‑Group)
+- **Potensi XSS**: Tidak ada. Ikon di‑import dari `lucide-react` dan dirender sebagai komponen React.
+- **Catatan**: Properti `selectionMode`, `orientation`, dll. hanya enum.
+
+### 3. `variants.demo.tsx` (Input)
+- **Potensi XSS**: Tidak ada. Nilai kontrol (`tone`, `size`, `radius`) hanya string literal.
+- **Catatan**: Menggunakan `useState` dan `RadioGroup`; tidak ada manipulasi HTML mentah.
+
+### 4‑9. File lain (Tabs, Pagination, Drop‑Zone, Disclosure, Accordion, Text‑Field)
+- Semua mengikuti pola yang sama: **enum/array literal** untuk kontrol, **React component** untuk rendering, **tanpa** penggunaan `dangerouslySetInnerHTML` atau fungsi eval.
+- Tidak ada interaksi dengan API eksternal atau data yang berasal dari pengguna luar.
+
+## Risiko Umum yang Ditemukan
+1. **Kontrol via URL / Query‑String**
+   - Jika playground memungkinkan meng‑override nilai kontrol lewat query‑string, nilai tersebut harus **divalidasi** sebelum dipakai dalam state.
+2. **Dependensi Pihak Ketiga**
+   - Library seperti `lucide-react` dan `sonner` harus selalu **di‑update** untuk menghindari kerentanan yang diketahui.
+3. **CSP (Content Security Policy)**
+   - Pastikan server docs mengirim header CSP yang melarang inline script dan hanya mengizinkan sumber terpercaya.
+
+## Rekomendasi Perbaikan
+1. **Validasi Input dari URL**
+   - Jika ada mekanisme yang membaca nilai kontrol dari `window.location.search`, gunakan whitelist enum dan fallback ke nilai default.
+2. **Hindari `dangerouslySetInnerHTML`**
+   - Walaupun tidak ada saat ini, pastikan tim tidak menambahnya tanpa sanitasi.
+3. **Audit Dependensi Secara Berkala**
+   - Jalankan `npm audit` dan perbarui paket yang memiliki CVE.
+4. **Tambahkan CSP Header**
+   - Contoh: `Content‑Security‑Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';` untuk melindungi dari serangan XSS.
+5. **Static Code Analysis**
+   - Integrasikan alat seperti **ESLint security plugin** atau **SonarJS** dalam CI untuk mendeteksi pola berbahaya di masa depan.
+6. **Penambahan Unit Test Keamanan**
+   - Buat tes yang memastikan tidak ada properti `dangerouslySetInnerHTML` atau penggunaan fungsi `eval` dalam semua file `*.demo.tsx`.
+
+## Kesimpulan
+- **Tidak ada celah keamanan kritis** pada file demo yang dianalisis.
+- Risiko utama berasal dari **potensi input eksternal** (misalnya query‑string) dan **dependensi pihak ketiga**.
+- Dengan menerapkan rekomendasi di atas, keamanan playground akan semakin kuat dan tahan terhadap serangan XSS atau injeksi.
+
+*Laporan ini disusun dalam Bahasa Indonesia sesuai permintaan.*

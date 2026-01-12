@@ -3,7 +3,6 @@ import { type InputProps } from "@/components/ui/core/input";
 import { RadioGroup, Radio } from "@/components/ui/core/radio-group";
 import { Heading } from "@/components/ui/core/heading";
 import VariantsInput from "./variants";
-import { useDynamicCode } from "@/components/playground-context";
 
 const tones: NonNullable<InputProps["tone"]>[] = [
   "default",
@@ -24,12 +23,6 @@ export default function VariantsInputDemo() {
   const [tone, setTone] = useState<InputProps["tone"]>("default");
   const [size, setSize] = useState<InputProps["size"]>("default");
   const [radius, setRadius] = useState<InputProps["radius"]>("md");
-
-  useDynamicCode({
-    tone,
-    size,
-    radius,
-  });
 
   return (
     <div className="space-y-4">

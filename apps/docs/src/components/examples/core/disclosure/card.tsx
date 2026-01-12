@@ -6,7 +6,6 @@ import {
   DisclosureContent,
   DisclosureTrigger,
 } from "@/components/ui/core/disclosure";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export default function DisclosureCard() {
@@ -18,15 +17,13 @@ export default function DisclosureCard() {
       onMouseLeave={() => setIsOpen(false)}
       className="relative h-[400px] w-[267px] overflow-hidden rounded-xl"
     >
-      <Image
-        src="https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg"
+      <img
+        src="https://image.tmdb.org/t/p/w342/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg"
         alt="the-boys"
         className={cn(
           "pointer-events-none h-auto w-full select-none duration-700 ease-in-out",
           isOpen && "blur-[3px] scale-110"
         )}
-        width={267}
-        height={400}
       />
       <Disclosure
         onExpandedChange={setIsOpen}
