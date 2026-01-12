@@ -4,7 +4,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { TypeTable } from "@/components/type-table";
 import { AutoTypeTable } from "@/components/auto-type-table";
 import { RequiredBlock } from "@/components/required-block";
-import { Playground } from "@/components/playground";
+import { Playground } from "@/components/app/playground";
 import { DocTabs } from "@/components/doc-tabs";
 import { ComponentSource } from "@/components/component-source";
 import { TStoJSCodeBlock } from "@/components/ts2js-code-block";

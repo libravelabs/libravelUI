@@ -12,6 +12,8 @@ export const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none cursor-pointer",
     "focus:outline-0 focus-visible:outline focus-visible:outline-offset-2 focus-visible:ring-2 focus-visible:ring-offset-3 focus-visible:ring-offset-background",
+
+    "pending:opacity-50 pending:pointer-events-none",
   ],
   {
     variants: {
@@ -103,7 +105,6 @@ function ButtonGroup({ className, orientation, ...props }: ButtonGroupProps) {
 type ButtonProps = ButtonPrimitiveProps &
   VariantProps<typeof buttonVariants> & {
     ref?: React.Ref<HTMLButtonElement>;
-    isLoading?: boolean;
     loader?: React.ReactNode;
     children?: React.ReactNode;
   };
@@ -114,7 +115,6 @@ function Button({
   size,
   radius,
   iconOnly,
-  isLoading = false,
   loader,
   children,
   ...props
@@ -132,14 +132,14 @@ function Button({
   return (
     <ButtonPrimitive
       {...props}
-      isDisabled={props.isDisabled || isLoading}
+      isDisabled={props.isDisabled}
       className={cn(
         buttonVariants({ tone, size, radius, iconOnly }),
         className
       )}
     >
       {(values) =>
-        isLoading ? (
+        values.isPending ? (
           iconOnly ? (
             (loader ?? <Loader className="text-inherit" />)
           ) : (

@@ -3,7 +3,6 @@ import { type TabsProps } from "@/components/ui/core/tabs";
 import { Heading } from "@/components/ui/core/heading";
 import { RadioGroup, Radio } from "@/components/ui/core/radio-group";
 import TabsVariants from "./variants";
-import { useDynamicCode } from "@/components/playground-context";
 
 export default function TabsVariantsDemo() {
   const [tone, setTone] = useState<TabsProps["tone"]>("default");
@@ -12,8 +11,6 @@ export default function TabsVariantsDemo() {
   const [width, setWidth] = useState<TabsProps["width"]>("xl");
   const [orientation, setOrientation] =
     useState<TabsProps["orientation"]>("horizontal");
-
-  useDynamicCode({ tone, size, radius, width, orientation });
 
   const tones: NonNullable<TabsProps["tone"]>[] = [
     "default",

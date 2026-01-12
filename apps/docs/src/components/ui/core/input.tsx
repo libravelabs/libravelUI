@@ -30,7 +30,7 @@ const inputVariants = cva(
     variants: {
       tone: {
         default: [
-          "border-input bg-background",
+          "border-2 border-input bg-transparent",
           "focus-within:border-ring/70 focus-within:ring-4 focus-within:ring-ring/10",
           "focus:border-ring/70 focus:ring-4 focus:ring-ring/10",
           "group-invalid:border-destructive",
@@ -117,7 +117,7 @@ const inputGroupVariants = cva(
     variants: {
       tone: {
         default: [
-          "border-input bg-background",
+          "border-2 border-input bg-transparent",
           "focus-within:border-ring/70 focus-within:ring-4 focus-within:ring-ring/10",
           "focus:border-ring/70 focus:ring-4 focus:ring-ring/10",
           "group-invalid:border-destructive",

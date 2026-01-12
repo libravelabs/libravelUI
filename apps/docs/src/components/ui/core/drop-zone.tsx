@@ -14,9 +14,9 @@ const dropZoneVariants = cva(
     variants: {
       tone: {
         default:
-          "border border-solid border-border bg-card shadow-sm hover:shadow-md hover:border-primary/30",
+          "border border-solid border-border bg-transparent shadow-sm hover:shadow-md hover:border-primary/30",
         dashed:
-          "border-2 border-dashed border-border bg-background hover:border-primary/50 hover:bg-primary/10",
+          "border-2 border-dashed border-border bg-transparent hover:border-primary/50 hover:bg-primary/10",
         ghost: "border-transparent hover:bg-accent/10",
       },
       isDropTarget: {

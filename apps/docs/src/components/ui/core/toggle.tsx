@@ -15,8 +15,7 @@ const toggleStyles = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         link: "text-primary underline-offset-4 hover:underline",
-        destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        destructive: "shadow-sm hover:bg-destructive/40",
       },
       size: {
         xs: "h-6 gap-0.5 px-2",
@@ -54,7 +53,7 @@ const toggleStyles = cva(
         class: "bg-accent text-accent-foreground",
       },
       { tone: "secondary", isSelected: true, class: "bg-secondary/80" },
-      { tone: "destructive", isSelected: true, class: "bg-destructive/90" },
+      { tone: "destructive", isSelected: true, class: "bg-destructive/40" },
     ],
     defaultVariants: {
       tone: "default",

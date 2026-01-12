@@ -76,7 +76,13 @@ export async function fetchComponentSource(
 ): Promise<SourceResponse> {
   const componentPath = path.join(SRC_ROOT, slug.join("/"));
 
-  let entryFile = componentPath;
+  // Security check: Prevent directory traversal
+  const resolvedPath = path.resolve(componentPath);
+  if (!resolvedPath.startsWith(SRC_ROOT)) {
+    return { files: [], error: "Invalid path: Access denied" };
+  }
+
+  let entryFile = resolvedPath;
   let found = false;
 
   try {

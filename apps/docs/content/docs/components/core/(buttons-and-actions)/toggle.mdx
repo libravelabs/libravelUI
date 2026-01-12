@@ -2,14 +2,12 @@
 title: Toggle
 description: A toggle button allows a user to toggle a selection on or off, for example switching between two states or modes.
 component: true
-doc:
-  title: ToggleButton
-  url: ToggleButton
+doc: ToggleButton
 ---
 
 ## Basic
 
-<Playground comp="toggle/basic" />
+<Playground comp="toggle/basic.demo" />
 
 ## Features
 
@@ -54,26 +52,6 @@ import { Toggle } from "@/components/ui/core/toggle";
 ```tsx
 <Toggle>{({ isSelected }) => <>{isSelected ? "Diselect" : "Select"}</>}</Toggle>
 ```
-
-## Examples
-
-### Tones
-
-Offer different visual styles for toggle components, allowing designers to match the toggle’s appearance to the overall interface theme.
-
-<Playground comp="toggle/tones" />
-
-### Sizes
-
-Provide multiple toggle sizes to suit different layouts and touch targets, ensuring both usability and aesthetic flexibility.
-
-<Playground comp="toggle/sizes" />
-
-### Radius
-
-Adjust the corner rounding of toggles to create sharp, rounded, or fully pill-shaped styles, enhancing the component’s visual appeal.
-
-<Playground comp="toggle/radius" />
 
 ## Props
 

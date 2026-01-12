@@ -3,13 +3,10 @@ import { type AccordionProps } from "@/components/ui/core/accordion";
 import { RadioGroup, Radio } from "@/components/ui/core/radio-group";
 import { Heading } from "@/components/ui/core/heading";
 import AccordionTones from "./tones";
-import { useDynamicCode } from "@/components/playground-context";
 
 export default function AccordionTonesDemo() {
   const [tone, setTone] = useState<AccordionProps["tone"]>("default");
   const [size, setSize] = useState<AccordionProps["size"]>("sm");
-
-  useDynamicCode({ tone, size });
 
   const tones: NonNullable<AccordionProps["tone"]>[] = [
     "default",

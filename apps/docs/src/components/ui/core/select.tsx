@@ -92,14 +92,12 @@ function SelectRoot({
 }
 
 interface SelectTriggerProps extends ButtonProps {
-  label?: string;
   placeholder?: string;
   hideClear?: boolean;
 }
 
 function SelectTrigger({
   className,
-  label,
   placeholder,
   hideClear = false,
   ...props
@@ -111,8 +109,6 @@ function SelectTrigger({
 
   return (
     <div className="grid gap-2 w-full">
-      {label && <Label>{label}</Label>}
-
       <Button
         {...props}
         data-state={isOpen}
@@ -327,8 +323,8 @@ function Select({
       multiple={multiple}
       className={cn(classNames?.root || className)}
     >
+      {label && <Label className="capitalize mb-2">{label}</Label>}
       <SelectTrigger
-        label={label}
         placeholder={placeholder}
         hideClear={hideClear}
         className={cn(classNames?.trigger)}
