@@ -5,7 +5,7 @@ const headingVariants = cva(
   "font-sans text-foreground font-semibold tracking-light",
   {
     variants: {
-      size: {
+      level: {
         1: "text-xl/8 sm:text-2xl/8",
         2: "text-lg/6 sm:text-xl/8",
         3: "text-base/6 sm:text-lg/6",
@@ -15,20 +15,21 @@ const headingVariants = cva(
       },
     },
     defaultVariants: {
-      size: 1,
+      level: 1,
     },
   }
 );
 
 interface HeadingProps
-  extends React.ComponentProps<"h1" | "h2" | "h3" | "h4" | "h5" | "h6">,
+  extends
+    React.ComponentProps<"h1" | "h2" | "h3" | "h4" | "h5" | "h6">,
     VariantProps<typeof headingVariants> {}
 
-const Heading = ({ className, size = 1, ...props }: HeadingProps) => {
-  const Comp = `h${size}` as keyof React.JSX.IntrinsicElements;
+const Heading = ({ className, level = 1, ...props }: HeadingProps) => {
+  const Comp = `h${level}` as keyof React.JSX.IntrinsicElements;
 
   return (
-    <Comp className={cn(headingVariants({ size }), className)} {...props} />
+    <Comp className={cn(headingVariants({ level }), className)} {...props} />
   );
 };
 

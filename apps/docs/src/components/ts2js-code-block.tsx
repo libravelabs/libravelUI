@@ -5,7 +5,6 @@ import { ts2js } from "@/lib/ts2js";
 import { DocTabs } from "./doc-tabs";
 import { TabsProps } from "./ui/core/tabs";
 import { cn } from "@/lib/utils";
-import { PreviewContainer } from "./preview-container";
 import { Loader } from "./ui/core/loader";
 import { CodeBlock } from "./code-block";
 
@@ -87,11 +86,7 @@ export function TStoJSCodeBlock({
   ];
 
   if (loading) {
-    return (
-      <PreviewContainer hideButtons>
-        <Loader />
-      </PreviewContainer>
-    );
+    return <Loader />;
   }
 
   return (

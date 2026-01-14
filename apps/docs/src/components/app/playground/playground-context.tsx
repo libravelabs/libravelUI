@@ -1,12 +1,17 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import type { ControlsMap, PlaygroundValue } from "./types";
+import type { ControlsMap } from "./types";
 
 interface PlaygroundContextType {
-  values: Record<string, PlaygroundValue>;
-  setValue: (key: string, value: PlaygroundValue) => void;
+  values: Record<string, any>;
+  setValue: (key: string, value: any) => void;
   controls: ControlsMap;
+  refresh: { key: number; rotation: number };
+  handleRefresh: () => void;
+  direction: "ltr" | "rtl";
+  setDirection: (direction: "ltr" | "rtl") => void;
+  handleDirection: () => void;
 }
 
 const PlaygroundContext = createContext<PlaygroundContextType | undefined>(
@@ -30,22 +35,54 @@ export function PlaygroundProvider({
   children,
   controls = {},
 }: PlaygroundProviderProps) {
-  const [values, setValues] = useState<Record<string, PlaygroundValue>>({});
+  const [values, setValues] = useState<Record<string, any>>({});
+  const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
+  const [refresh, setRefresh] = useState<{ key: number; rotation: number }>({
+    key: 0,
+    rotation: 0,
+  });
 
   useEffect(() => {
-    const defaults: Record<string, PlaygroundValue> = {};
+    const defaults: Record<string, any> = {};
     Object.entries(controls).forEach(([key, schema]) => {
       defaults[key] = schema.defaultValue;
     });
     setValues(defaults);
   }, [controls]);
 
-  const setValue = (key: string, value: PlaygroundValue) => {
+  const setValue = (key: string, value: any) => {
     setValues((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleRefresh = () => {
+    setRefresh((prev) => ({
+      key: prev.key + 1,
+      rotation: prev.rotation + 360,
+    }));
+
+    const defaults: Record<string, any> = {};
+    Object.entries(controls).forEach(([key, schema]) => {
+      defaults[key] = schema.defaultValue;
+    });
+    setValues(defaults);
+  };
+
+  const handleDirection = () =>
+    setDirection((prev) => (prev === "ltr" ? "rtl" : "ltr"));
+
   return (
-    <PlaygroundContext.Provider value={{ values, setValue, controls }}>
+    <PlaygroundContext.Provider
+      value={{
+        values,
+        setValue,
+        controls,
+        refresh,
+        handleRefresh,
+        direction,
+        setDirection,
+        handleDirection,
+      }}
+    >
       {children}
     </PlaygroundContext.Provider>
   );
