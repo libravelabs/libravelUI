@@ -4,9 +4,9 @@ description: An image element used to represent a user or entity, typically disp
 component: true
 ---
 
-## Basic
+## Example
 
-<Playground comp="avatar/basic" />
+<Playground comp="avatar/basic.demo" />
 
 ## Installation
 
@@ -45,25 +45,13 @@ import { Avatar } from "@/components/ui/core/avatar";
 <Avatar src="avatar-src" alt="avatar-alt" />
 ```
 
-## Examples
+## Another Example
 
-### Fallback
+### Initials
 
 Displays an avatar using user initials when no profile image is available. This ensures consistent styling and fallback behavior while still giving a personalized touch with capitalized initials.
 
-<Playground comp="avatar/initial" />
-
-### Shapes
-
-Showcases different avatar shapes: **circle** and **square**. The shape can be controlled via the `shape` prop, allowing you to match the avatar’s appearance with your app’s design language.
-
-<Playground comp="avatar/shape" />
-
-### Sizes
-
-Demonstrates the avatar in various sizes, from **extra small (xs)** to **extra large (xl)**. The `size` prop offers flexibility for using the avatar in different UI contexts—such as user lists, comments, or main profile views.
-
-<Playground comp="avatar/sizes" />
+<Playground comp="avatar/initials.demo" />
 
 ### Avatar Group
 

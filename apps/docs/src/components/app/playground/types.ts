@@ -3,6 +3,7 @@ export type ControlType =
   | "toggle-group"
   | "boolean"
   | "text"
+  | "textarea"
   | "number";
 
 export type PlaygroundValue = string | number | boolean;

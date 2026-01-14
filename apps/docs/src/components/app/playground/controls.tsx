@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/core/field";
 import { NumberField } from "@/components/ui/core/number-field";
 import { ToggleGroup, ToggleItem } from "@/components/ui/core/toggle-group";
 import { TextField } from "@/components/ui/core/text-field";
+import { Textarea } from "@/components/ui/core/text-area";
 
 export function Controls() {
   const { controls, values, setValue } = usePlayground();
@@ -41,7 +42,7 @@ export function Controls() {
         if (schema.type === "toggle-group" && schema.options) {
           return (
             <div key={key} className="flex flex-col gap-2">
-              <Label>{schema.label || key}</Label>
+              <Label className="capitalize">{schema.label || key}</Label>
               <ToggleGroup
                 disallowEmptySelection
                 selectionMode="single"
@@ -81,8 +82,22 @@ export function Controls() {
                 value={(values[key] as string) || ""}
                 onChange={(value) => setValue(key, value)}
               >
-                <Label>{schema.label || key}</Label>
+                <Label className="capitalize">{schema.label || key}</Label>
                 <Input placeholder={schema.placeholder} />
+              </TextField>
+            </div>
+          );
+        }
+
+        if (schema.type === "textarea") {
+          return (
+            <div key={key}>
+              <TextField
+                value={(values[key] as string) || ""}
+                onChange={(value) => setValue(key, value)}
+              >
+                <Label className="capitalize">{schema.label || key}</Label>
+                <Textarea placeholder={schema.placeholder} />
               </TextField>
             </div>
           );
@@ -100,7 +115,7 @@ export function Controls() {
                 minValue={schema.min}
                 maxValue={schema.max}
               >
-                <Label>{schema.label || key}</Label>
+                <Label className="capitalize">{schema.label || key}</Label>
                 <Input placeholder={schema.placeholder} />
               </NumberField>
             </div>

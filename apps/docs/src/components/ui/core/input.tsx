@@ -302,7 +302,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           type={type}
           disabled={isDisabled || isLoading}
           className={cn(
-            "flex-1 min-w-0 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed px-0",
+            "flex-1 min-w-0 bg-transparent outline-none placeholder:text-muted-foreground disabled:pointer-events-none px-0",
             classNames?.input
           )}
           {...props}

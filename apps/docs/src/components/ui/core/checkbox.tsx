@@ -7,11 +7,7 @@ import {
 } from "react-aria-components";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import {
-  Description,
-  Label,
-  type FieldProps,
-} from "@/components/ui/core/field";
+import { Description, Label } from "@/components/ui/core/field";
 import { Check, Minus } from "lucide-react";
 
 const checkboxVariants = cva("group block w-fit disabled:opacity-50");
@@ -72,7 +68,6 @@ type CheckboxProps = CheckboxPrimitiveProps &
   VariantProps<typeof checkboxIndicator> & {
     label?: string;
     description?: string;
-    error?: FieldProps["error"];
   };
 
 function Checkbox({
@@ -81,7 +76,6 @@ function Checkbox({
   description,
   label,
   size,
-  error,
   ...props
 }: CheckboxProps) {
   return (
@@ -140,7 +134,7 @@ function Checkbox({
                       isSelected,
                       isIndeterminate,
                       isFocusVisible,
-                      isInvalid: !!error || isInvalid,
+                      isInvalid,
                       isDisabled,
                       isReadOnly,
                     })
@@ -154,11 +148,6 @@ function Checkbox({
           }
         )}
       </CheckboxPrimitive>
-      {error && typeof error !== "function" && (
-        <p className="text-sm text-destructive group-disabled:opacity-50">
-          {error}
-        </p>
-      )}
     </>
   );
 }

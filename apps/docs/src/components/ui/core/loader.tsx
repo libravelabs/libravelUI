@@ -157,4 +157,4 @@ function Loader({ isInfinite = true, ref, ...props }: LoaderProps) {
   );
 }
 
-export { Loader };
+export { Loader, type LoaderProps };
