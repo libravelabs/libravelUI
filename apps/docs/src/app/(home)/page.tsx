@@ -1,12 +1,23 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/core/button";
-import { ArrowRight } from "lucide-react";
-import { meta } from "@/lib/metadata/index";
-
-export const metadata = meta.home();
+import {
+  HeroSection,
+  ComponentsOverviewSection,
+  PlaygroundSection,
+  SystemPrinciplesSection,
+  ExamplesSection,
+  CTASection,
+} from "./sections";
+import { Playground } from "@/components/app/playground";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-1 flex-col justify-center items-center text-center gap-4"></main>
+    <main className="flex flex-col min-h-screen overflow-x-hidden">
+      <HeroSection />
+      <ComponentsOverviewSection />
+      <Playground comp="button/basic.demo" />
+      <PlaygroundSection />
+      <SystemPrinciplesSection />
+      <ExamplesSection />
+      <CTASection />
+    </main>
   );
 }
