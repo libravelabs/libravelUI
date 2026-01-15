@@ -1,12 +1,12 @@
 export const defaultMeta = {
   siteName: process.env.NEXT_PUBLIC_APP_NAME,
-  title: "Craft an amazing website with just copy/paste",
+  title: "Build interfaces with precision components",
   description:
-    "Modern, responsive, customizable UI components. Copy, adapt, and personalize them.",
+    "The comprehensive React component library for mission-critical applications. Type-safe, accessible, and composable.",
   canonicalUrl: process.env.NEXT_PUBLIC_APP_URL,
   ogType: "website",
   keywords: [
-    "web components",
+    "react component library",
     "web design",
     "UI components",
     "responsive design",

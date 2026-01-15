@@ -6,6 +6,7 @@ import { nature } from "./nature";
 import { monolith } from "./monolith";
 import { softmold } from "./softmold";
 import { vercel } from "./vercel";
+import { orbital } from "./orbital";
 import type { ThemeDefinition } from "@/types/theme";
 
 export const themes: Record<string, ThemeDefinition> = {
@@ -17,6 +18,7 @@ export const themes: Record<string, ThemeDefinition> = {
   monolith,
   softmold,
   vercel,
+  orbital,
 } as const;
 
 export type ThemeName = keyof typeof themes;
