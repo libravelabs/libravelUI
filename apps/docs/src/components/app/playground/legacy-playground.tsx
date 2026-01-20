@@ -10,6 +10,8 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "@/components/app/resizable";
+import { useComponentSource } from "@/hooks/use-component-source";
+import { CodeBlock } from "@/components/code-block";
 
 interface LegacyPlaygroundProps {
   comp: string;
@@ -20,6 +22,10 @@ export function LegacyPlayground({
   comp,
   section = "core",
 }: LegacyPlaygroundProps) {
+  const { code, loading } = useComponentSource(
+    `components/examples/${section}/${comp}`
+  );
+
   const PreviewComponent = useMemo(
     () =>
       dynamic(() => import(`@/components/examples/${section}/${comp}`), {
@@ -48,9 +54,11 @@ export function LegacyPlayground({
       </ResizablePanelGroup>
 
       <div className="overflow-auto p-4 text-sm">
-        <ComponentSource
-          title={comp}
-          comp={`components/examples/${section}/${comp}`}
+        <CodeBlock
+          lang="tsx"
+          code={code}
+          className="bg-transparent border-none shadow-none rounded-none"
+          codeblock={{ allowCopy: false }}
         />
       </div>
     </div>

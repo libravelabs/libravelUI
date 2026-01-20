@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const COMPONENTS_OVERVIEW_CONTENT = {
   header: {
-    badge: "// COMPONENT INDEX",
+    badge: "◼ COMPONENT INDEX",
     title: "Inventory",
   },
   cta: {
@@ -48,12 +48,12 @@ export function ComponentsOverviewSection() {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
-            <h2 className="text-sm font-mono text-primary mb-2 tracking-widest uppercase">
+            <div className="mb-2 flex items-center gap-2 text-xs font-mono tracking-[0.2em] text-primary">
               {COMPONENTS_OVERVIEW_CONTENT.header.badge}
-            </h2>
-            <h3 className="text-3xl font-semibold text-foreground tracking-tight">
+            </div>
+            <h2 className="text-3xl font-medium tracking-tight text-foreground md:text-5xl">
               {COMPONENTS_OVERVIEW_CONTENT.header.title}
-            </h3>
+            </h2>
           </div>
           <Link href={COMPONENTS_OVERVIEW_CONTENT.cta.href}>
             <Button tone="ghost" className="text-muted-foreground group">
@@ -69,7 +69,7 @@ export function ComponentsOverviewSection() {
           {COMPONENTS_OVERVIEW_CONTENT.categories.map((category) => (
             <div
               key={category.title}
-              className="group relative p-8 bg-card hover:bg-muted transition-colors duration-300"
+              className="group relative flex flex-col h-full p-8 bg-card hover:bg-muted transition-colors duration-300"
             >
               <div className="flex justify-between items-start mb-6">
                 <h4 className="text-lg font-medium text-card-foreground">
@@ -84,7 +84,7 @@ export function ComponentsOverviewSection() {
                 {category.description}
               </p>
 
-              <div className="space-y-2">
+              <div className="space-y-2 flex-1">
                 {category.items.map((item) => (
                   <div
                     key={item}

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useState, useRef } from "react";
 import { motion, LayoutGroup } from "framer-motion";
 import { cn } from "@/lib/utils";

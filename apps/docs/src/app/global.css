@@ -67,3 +67,10 @@
 .bg-dots {
   @apply bg-[radial-gradient(color-mix(in_oklab,var(--muted)_10%,var(--muted-foreground)_15%)_1px,transparent_1px)] bg-size-[16px_16px];
 }
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, #80808008 1px, transparent 1px),
+    linear-gradient(to bottom, #80808008 1px, transparent 1px);
+  background-size: 24px 24px;
+}

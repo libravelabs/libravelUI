@@ -1,3 +1,4 @@
+import { ShowcaseSection } from "@/app/(home)/sections/showcase-section";
 import {
   HeroSection,
   ComponentsOverviewSection,
@@ -6,14 +7,13 @@ import {
   ExamplesSection,
   CTASection,
 } from "./sections";
-import { Playground } from "@/components/app/playground";
 
 export default function HomePage() {
   return (
     <main className="flex flex-col min-h-screen overflow-x-hidden">
       <HeroSection />
+      <ShowcaseSection />
       <ComponentsOverviewSection />
-      <Playground comp="button/basic.demo" />
       <PlaygroundSection />
       <SystemPrinciplesSection />
       <ExamplesSection />

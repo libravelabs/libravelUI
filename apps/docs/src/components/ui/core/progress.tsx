@@ -40,7 +40,7 @@ function ProgressBar({
           </div>
           <div
             className={cn(
-              "-outline-offset-1 relative mt-1 h-2 min-w-64 overflow-hidden rounded-full bg-secondary outline-1 outline-transparent"
+              "-outline-offset-1 relative mt-1 h-2 w-full overflow-hidden rounded-full bg-secondary outline-1 outline-transparent"
             )}
           >
             {!isIndeterminate ? (
@@ -145,7 +145,7 @@ function ProgressSpinner({
                   strokeDasharray="100 200"
                   strokeDashoffset={70}
                   strokeLinecap="round"
-                  className="origin-center stroke-primary animate-[spin_1s_cubic-bezier(0.4,_0,_0.2,_1)_infinite]"
+                  className="origin-center stroke-primary animate-[spin_1s_cubic-bezier(0.4,0,0.2,1)_infinite]"
                 />
               )}
             </svg>

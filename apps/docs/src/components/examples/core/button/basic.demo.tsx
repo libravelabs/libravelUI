@@ -2,6 +2,7 @@
 
 import { Button, type ButtonProps } from "@/components/ui/core/button";
 import { ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 
 const tones: { value: string; label: string }[] = [
   { value: "default", label: "Default" },
@@ -47,6 +48,11 @@ export default function BasicButton({
       iconOnly={iconOnly}
       isDisabled={isDisabled}
       isPending={isPending}
+      onPress={() =>
+        toast.info("Pressed!", {
+          position: "top-center",
+        })
+      }
     >
       {iconOnly ? <ArrowRight /> : children}
     </Button>

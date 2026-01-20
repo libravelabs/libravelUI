@@ -1,134 +1,182 @@
+import { Lock, Play, Settings, Signal } from "lucide-react";
+import { Skeleton } from "@/components/ui/core/skeleton";
 import { Button } from "@/components/ui/core/button";
-import { Card } from "@/components/ui/core/card";
-import { Badge } from "@/components/ui/core/badge";
-import { Link } from "@/components/ui/core/link";
-import { cn } from "@/lib/utils";
+import { ProgressBar } from "@/components/ui/core/progress";
+import { Switch } from "@/components/ui/core/switch";
+
+const EXAMPLES_SECTION_CONTENT = {
+  header: {
+    badge: "◼ SYSTEM_EXAMPLES",
+    title: "Constructed Reality",
+    description:
+      "Operational modules assembled from atomic primitives. Designed for precision and scalability in deep space environments.",
+    meta: {
+      labId: "LAB_ID: 94-B",
+      status: "STATUS: OPTIMAL",
+    },
+  },
+  items: [
+    {
+      id: "01",
+      label: "// IDENTITY_MODULE",
+      title: "Authentication",
+      description: "Secure access point assembled from atomic primitives.",
+      visual: (
+        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border border-border/40 bg-foreground/5 p-6 backdrop-blur-md">
+          <div className="flex justify-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border/50 bg-background/50 text-foreground">
+              <Lock className="size-5" />
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="space-y-2">
+              <Skeleton className="h-2 w-16 rounded-full" />
+              <Skeleton className="h-8 w-full rounded" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-2 w-24 rounded-full" />
+              <Skeleton className="h-8 w-full rounded" />
+            </div>
+          </div>
+          <div className="pt-2">
+            <Skeleton className="h-9 w-full rounded" />
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "02",
+      label: "// SYSTEM_CONTROL",
+      title: "Command Protocol",
+      description: "System configuration interface with toggle controls.",
+      visual: (
+        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border border-border/40 bg-foreground/5 p-6 backdrop-blur-md">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
+              <Settings className="size-3" />
+              <span>sys_cfg</span>
+            </div>
+            <div className="ms-2 size-1.5 rounded-full bg-primary/50 shadow-[0_0_8px_rgba(var(--primary),0.4)]" />
+          </div>
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-2 w-20 rounded-full" />
+              <Switch defaultSelected aria-label="Toggle system" />
+            </div>
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-2 w-16 rounded-full" />
+              <Switch aria-label="Toggle power" />
+            </div>
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-2 w-24 rounded-full" />
+              <Switch defaultSelected aria-label="Toggle network" />
+            </div>
+          </div>
+          <div className="pt-2">
+            <Skeleton className="h-9 w-full rounded" />
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "03",
+      label: "// MEDIA_CONTROLLER",
+      title: "Playback System",
+      description: "Interactive slider and progress controls.",
+      visual: (
+        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border border-border/40 bg-foreground/5 p-6 backdrop-blur-md">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10 shrink-0 rounded" />
+            <div className="space-y-1.5">
+              <Skeleton className="h-2 w-20 rounded-full" />
+              <Skeleton className="h-1.5 w-12 rounded-full" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <ProgressBar value={33} hideValue />
+            <div className="flex justify-between text-[10px] font-mono text-muted-foreground">
+              <span>04:20</span>
+              <span>12:00</span>
+            </div>
+          </div>
+          <div className="flex justify-center gap-4">
+            <Button
+              tone="outline"
+              radius="full"
+              iconOnly
+              className="h-8 w-8 border-border/30 hover:bg-foreground/5"
+            >
+              <Play className="h-3 w-3 fill-foreground/50" />
+            </Button>
+          </div>
+        </div>
+      ),
+    },
+  ],
+};
 
 export function ExamplesSection() {
   return (
-    <section className="py-24 bg-background border-b border-border">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
-            <h2 className="text-sm font-mono text-primary mb-2 tracking-widest uppercase">
-              // COMPOSITION
+    <section className="relative overflow-hidden bg-background py-32 border-b border-border">
+      <div className="absolute inset-0 bg-grid" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_800px_at_50%_-30%,rgba(120,119,198,0.05),transparent)]" />
+
+      <div className="container relative mx-auto px-6">
+        <div className="mb-20 flex flex-col items-start gap-4 border-l-2 border-primary/20 pl-6 md:flex-row md:items-end md:justify-between md:border-l-0 md:pl-0">
+          <div className="max-w-xl">
+            <div className="mb-2 flex items-center gap-2 text-xs font-mono tracking-[0.2em] text-primary">
+              {EXAMPLES_SECTION_CONTENT.header.badge}
+            </div>
+            <h2 className="text-3xl font-medium tracking-tight text-foreground md:text-5xl">
+              {EXAMPLES_SECTION_CONTENT.header.title}
             </h2>
-            <h3 className="text-3xl font-semibold text-foreground tracking-tight">
-              Built with Libravel
-            </h3>
-            <p className="text-muted-foreground mt-2 max-w-lg">
-              Real-world examples assembled from atomic primitives.
+            <p className="mt-4 text-lg text-muted-foreground font-light leading-relaxed">
+              {EXAMPLES_SECTION_CONTENT.header.description}
             </p>
+          </div>
+          <div className="hidden font-mono text-xs text-muted-foreground/50 md:block text-right">
+            <div>{EXAMPLES_SECTION_CONTENT.header.meta.labId}</div>
+            <div>{EXAMPLES_SECTION_CONTENT.header.meta.status}</div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Login Form Example */}
-          <div className="group relative rounded-xl border border-border bg-card/50 p-6">
-            <div className="absolute top-4 right-4 z-10">
-              <Badge
-                tone="active"
-                className="bg-primary/10 text-primary border-primary/20"
-              >
-                Auth
-              </Badge>
-            </div>
-
-            <div className="mt-8 space-y-4 bg-background border border-border p-6 rounded-lg pointer-events-none select-none">
-              <div className="text-center mb-6">
-                <div className="w-10 h-10 bg-muted rounded mx-auto mb-2" />
-                <div className="h-4 w-24 bg-muted rounded mx-auto" />
-              </div>
-              <div className="space-y-2">
-                <div className="h-9 w-full bg-card border border-input rounded px-2 flex items-center text-xs text-muted-foreground">
-                  email@company.com
-                </div>
-                <div className="h-9 w-full bg-card border border-input rounded px-2 flex items-center text-xs text-muted-foreground">
-                  ••••••••
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {EXAMPLES_SECTION_CONTENT.items.map((item) => (
+            <div
+              key={item.id}
+              className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-border bg-background/50 hover:bg-muted/5 transition-all duration-500"
+            >
+              <div className="aspect-4/3 w-full border-b border-border/50 bg-[radial-gradient(circle_at_center,var(--color-background)_0%,transparent_100%)] p-8 flex items-center justify-center relative">
+                <div className="absolute inset-0 opacity-20 bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.2)_50%,transparent_75%,transparent_100%)] bg-size-[4px_4px]" />
+                <div className="relative z-10 transition-transform duration-500 will-change-transform group-hover:scale-105">
+                  {item.visual}
                 </div>
               </div>
-              <div className="h-9 w-full bg-primary rounded flex items-center justify-center text-xs font-medium text-primary-foreground">
-                Sign In
-              </div>
-            </div>
 
-            <div className="mt-6">
-              <h4 className="text-foreground font-medium">Authentication</h4>
-              <p className="text-sm text-muted-foreground mt-1">
-                Login form composed of Card, Input, Label, and Button.
-              </p>
-            </div>
-          </div>
+              <div className="flex flex-1 flex-col justify-between p-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <span className="text-primary">0{item.id}</span>
+                    <span>{item.label}</span>
+                  </div>
+                  <h3 className="min-h-7 font-mono text-xl text-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="min-h-10 text-sm leading-relaxed text-muted-foreground/80">
+                    {item.description}
+                  </p>
+                </div>
 
-          {/* Dashboard Widget Example */}
-          <div className="group relative rounded-xl border border-border bg-card/50 p-6">
-            <div className="absolute top-4 right-4 z-10">
-              <Badge
-                tone="default"
-                className="bg-chart-2/10 text-chart-2 border-chart-2/20"
-              >
-                Data
-              </Badge>
-            </div>
-
-            <div className="mt-8 space-y-4 bg-background border border-border p-6 rounded-lg pointer-events-none select-none">
-              <div className="flex justify-between items-center mb-4">
-                <div className="h-4 w-20 bg-muted rounded" />
-                <div className="h-3 w-12 bg-muted rounded" />
-              </div>
-              <div className="flex items-end gap-2 h-24">
-                <div className="w-1/5 bg-muted h-[40%] rounded-t" />
-                <div className="w-1/5 bg-muted h-[70%] rounded-t" />
-                <div className="w-1/5 bg-chart-1 h-[50%] rounded-t" />
-                <div className="w-1/5 bg-muted h-[30%] rounded-t" />
-                <div className="w-1/5 bg-muted h-[80%] rounded-t" />
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <h4 className="text-foreground font-medium">Analytics Card</h4>
-              <p className="text-sm text-muted-foreground mt-1">
-                Dashboard tile with Badge, Select, and custom visualization.
-              </p>
-            </div>
-          </div>
-
-          {/* Media Player Example */}
-          <div className="group relative rounded-xl border border-border bg-card/50 p-6">
-            <div className="absolute top-4 right-4 z-10">
-              <Badge
-                tone="default"
-                className="bg-chart-5/10 text-chart-5 border-chart-5/20"
-              >
-                Media
-              </Badge>
-            </div>
-
-            <div className="mt-8 space-y-4 bg-background border border-border p-6 rounded-lg pointer-events-none select-none">
-              <div className="flex gap-4 items-center">
-                <div className="w-12 h-12 bg-muted rounded" />
-                <div>
-                  <div className="h-3 w-24 bg-muted rounded mb-2" />
-                  <div className="h-2 w-16 bg-card rounded" />
+                <div className="mt-8 flex items-center justify-between border-t border-border/50 pt-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-primary">
+                    <Signal className="h-3 w-3" />
+                    <span>LIVE_PREVIEW</span>
+                  </div>
+                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
                 </div>
               </div>
-              <div className="h-1 w-full bg-muted rounded overflow-hidden">
-                <div className="h-full w-1/3 bg-foreground" />
-              </div>
-              <div className="flex justify-center gap-4">
-                <div className="w-6 h-6 bg-muted rounded-full" />
-                <div className="w-8 h-8 bg-foreground rounded-full" />
-                <div className="w-6 h-6 bg-muted rounded-full" />
-              </div>
             </div>
-
-            <div className="mt-6">
-              <h4 className="text-foreground font-medium">Media Player</h4>
-              <p className="text-sm text-muted-foreground mt-1">
-                Complex stateful component with Slider, Progress, and Icons.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

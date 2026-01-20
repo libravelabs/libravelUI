@@ -8,6 +8,7 @@ import {
 } from "fumadocs-ui/components/dynamic-codeblock";
 
 export function CodeBlock({
+  className,
   classNames,
   icon,
   coloredIcon = false,
@@ -36,7 +37,8 @@ export function CodeBlock({
         "data-line-numbers": true,
         icon: iconClass,
         title: props.title,
-        className: cn(classNames?.codeblock),
+        className: cn(className ?? classNames?.codeblock),
+        ...props.codeblock,
       }}
     />
   );
