@@ -1,11 +1,9 @@
 import fs from "fs/promises";
-import { existsSync, statSync } from "fs";
 import path from "path";
 import { RegistryComponentDocs } from "./registry-docs";
 
-const COMPONENT_ROOT = path.join(process.cwd(), "src/components/ui");
-const LIB_ROOT = path.join(process.cwd(), "src/lib");
 const SRC_ROOT = path.join(process.cwd(), "src");
+const COMPONENT_ROOT = path.join(process.cwd(), "src/components/ui");
 
 export interface SourceFile {
   name: string;
@@ -17,14 +15,26 @@ export interface SourceFile {
 export interface SourceResponse {
   files: SourceFile[];
   docs?: RegistryComponentDocs[];
+  dependencies: string[];
+  registryDependencies: string[];
+  type: "components:ui" | "components:block" | "components:example";
   error?: string;
 }
 
-const MAX_DEPTH = 3;
+function getRegistryNameFromPath(filePath: string): string | null {
+  const relative = path.relative(COMPONENT_ROOT, filePath);
+  if (relative.startsWith("..") || path.isAbsolute(relative)) return null;
+
+  const parts = relative.split(path.sep);
+  if (parts.length >= 2) {
+    return parts[1].replace(/\.tsx$/, "");
+  }
+  return null;
+}
 
 async function resolveImportPath(
   currentDir: string,
-  importPath: string
+  importPath: string,
 ): Promise<string | null> {
   let targetPath = "";
 
@@ -33,7 +43,6 @@ async function resolveImportPath(
   } else if (importPath.startsWith(".")) {
     targetPath = path.resolve(currentDir, importPath);
   } else {
-    return null;
   }
 
   const extensions = [".tsx", ".ts", ".jsx", ".js"];
@@ -72,14 +81,25 @@ function extractImports(content: string): string[] {
 }
 
 export async function fetchComponentSource(
-  slug: string[]
+  slug: string[],
+  currentComponentName: string,
 ): Promise<SourceResponse> {
   const componentPath = path.join(SRC_ROOT, slug.join("/"));
 
-  // Security check: Prevent directory traversal
+  let type: SourceResponse["type"] = "components:ui";
+  if (slug.includes("blocks")) type = "components:block";
+  if (slug[0] === "components" && slug[1] === "docs")
+    type = "components:example";
+
   const resolvedPath = path.resolve(componentPath);
   if (!resolvedPath.startsWith(SRC_ROOT)) {
-    return { files: [], error: "Invalid path: Access denied" };
+    return {
+      files: [],
+      dependencies: [],
+      registryDependencies: [],
+      type,
+      error: "Invalid path",
+    };
   }
 
   let entryFile = resolvedPath;
@@ -102,18 +122,35 @@ export async function fetchComponentSource(
         }
       } catch {}
     }
-    if (!found) return { files: [], error: "File not found" };
+    if (!found)
+      return {
+        files: [],
+        dependencies: [],
+        registryDependencies: [],
+        type,
+        error: "File not found",
+      };
   }
 
-  const visited = new Set<string>();
   const files: SourceFile[] = [];
+  const dependencies = new Set<string>();
+  const registryDependencies = new Set<string>();
+  const visited = new Set<string>();
 
-  async function scan(filePath: string, depth: number) {
-    if (visited.has(filePath) || depth > MAX_DEPTH) return;
+  async function scan(filePath: string, isRoot: boolean) {
+    if (visited.has(filePath)) return;
     visited.add(filePath);
+
+    if (!isRoot) {
+      const registryName = getRegistryNameFromPath(filePath);
+      if (registryName && registryName !== currentComponentName) {
+        registryDependencies.add(registryName);
+      }
+    }
 
     try {
       const content = await fs.readFile(filePath, "utf8");
+
       files.push({
         name: path.basename(filePath),
         path: path.relative(SRC_ROOT, filePath),
@@ -121,24 +158,38 @@ export async function fetchComponentSource(
       });
 
       const imports = extractImports(content);
-      const resolvePromises = imports.map((imp) =>
-        resolveImportPath(path.dirname(filePath), imp)
-      );
-      const resolvedPaths = await Promise.all(resolvePromises);
 
-      const scanPromises: Promise<void>[] = [];
-      for (const resolved of resolvedPaths) {
-        if (resolved && resolved.startsWith(SRC_ROOT)) {
-          scanPromises.push(scan(resolved, depth + 1));
+      for (const imp of imports) {
+        if (imp.startsWith(".")) {
+          const resolved = await resolveImportPath(path.dirname(filePath), imp);
+          if (resolved) await scan(resolved, false);
+        } else if (imp.startsWith("@/")) {
+          const resolved = await resolveImportPath(path.dirname(filePath), imp);
+          if (resolved) {
+            await scan(resolved, false);
+          }
+        } else {
+          if (
+            !imp.startsWith("react") &&
+            !imp.startsWith("next") &&
+            !imp.startsWith("clsx") &&
+            !imp.startsWith("tailwind-merge")
+          ) {
+            dependencies.add(imp);
+          }
         }
       }
-      await Promise.all(scanPromises);
     } catch (e) {
       console.error(`Failed to read ${filePath}`, e);
     }
   }
 
-  await scan(entryFile, 0);
+  await scan(entryFile, true);
 
-  return { files };
+  return {
+    files,
+    dependencies: Array.from(dependencies),
+    registryDependencies: Array.from(registryDependencies),
+    type,
+  };
 }

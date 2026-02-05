@@ -1,0 +1,37 @@
+---
+title: Known Issues
+description: Current limitations and known issues in LibravelUI.
+icon: TriangleAlert
+---
+
+## Testing
+
+### JSDOM Limitations
+
+Some components, particularly those relying on complex positioning or browser-specific events (like `Tooltip`, `Popover`, `DateRangePicker` calendar interactions), may behave differently or be difficult to test in a JSDOM environment (e.g., Vitest, Jest).
+
+**Workaround:**
+
+- For interaction testing of overlays and popups, we recommend using **Playwright** or **Cypress** which run in a real browser environment.
+- If using JSDOM, you may need to mock certain browser APIs like `ResizeObserver` or `document.elementFromPoint`.
+
+```ts
+// Example mock for ResizeObserver in Vitest setup
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+```
+
+## Animation
+
+### Framer Motion & Layout
+
+Components using Framer Motion for layout animations (e.g., `Accordion`, `Tabs`) might require careful handling when nested or used in dynamic grids. Ensure you understand how `AnimatePresence` and `layout` props work in Framer Motion.
+
+## Accessibility
+
+### Screen Reader Announcements
+
+While we strive for 100% accessibility, some complex composite widgets might have verbose announcements depending on the screen reader and browser combination. We continuously improve this based on feedback.

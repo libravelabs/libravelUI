@@ -3,15 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "bun run build:registry && bun run next build",
+    "build": "bun run build:registry && bun run build:themes && bun run next build",
     "dev": "bun run next dev --turbo",
     "dev:stable": "NODE_OPTIONS='--max-old-space-size=2048' bun run next dev --turbo",
     "dev:lite": "NODE_OPTIONS='--max-old-space-size=512' bun run next dev",
-    "dev:all": "bun run build:registry && bun run next dev --turbo",
+    "dev:all": "bun run build:registry && bun run build:themes && bun run next dev --turbo",
     "start": "bun run next start",
     "postinstall": "bun x fumadocs-mdx",
     "lint": "bun run eslint",
-    "build:registry": "bun x tsx src/scripts/build-registry.ts"
+    "test": "vitest",
+    "test:run": "vitest run",
+    "build:registry": "bun x tsx src/scripts/build-registry.ts",
+    "build:themes": "bun x tsx src/scripts/build-themes.ts",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "dependencies": {
     "@next/third-parties": "^15.5.9",
@@ -44,18 +50,25 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "@eslint/eslintrc": "^3.3.3",
     "@tailwindcss/postcss": "^4.1.18",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/mdx": "^2.0.13",
     "@types/node": "24.3.3",
-    "@types/react": "^19.2.8",
+    "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
     "eslint": "^9.39.2",
     "eslint-config-next": "15.5.3",
+    "jsdom": "^27.4.0",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.17"
   }
 }

@@ -36,15 +36,25 @@ import {
 } from "@/components/ui/core/select";
 import { AnimatePresence, motion } from "motion/react";
 
+/**
+ * Props for the Calendar component.
+ */
 interface CalendarProps<T extends DateValue> extends Omit<
   CalendarPrimitiveProps<T>,
   "visibleDuration"
 > {
+  /** Error message to display. */
   errorMessage?: string;
+  /** Custom class name for the calendar. */
   className?: string;
+  /** Whether the calendar is in selection mode. */
   selectMode?: boolean;
 }
 
+/**
+ * A calendar component that allows users to select dates.
+ * Built on React Aria Components with Framer Motion animations.
+ */
 function Calendar<T extends DateValue>({
   errorMessage,
   className,
@@ -80,10 +90,10 @@ function Calendar<T extends DateValue>({
   return (
     <CalendarPrimitive
       data-slot="calendar"
-      defaultValue={now}
+      defaultValue={now as unknown as T}
       className={cn(
-        "grid gap-4 [&_*]:!border-none bg-card p-2 rounded-xl border",
-        className
+        "grid gap-4 **:border-none! bg-card p-2 rounded-xl border",
+        className,
       )}
       {...props}
     >
@@ -119,11 +129,11 @@ function Calendar<T extends DateValue>({
                           isToday &&
                             "bg-accent text-accent-foreground font-semibold hover:bg-accent/80 focus-visible:ring-ring",
                           isSelected &&
-                            "bg-primary !text-primary-foreground hover:bg-primary/70 focus-visible:ring-ring font-semibold",
+                            "bg-primary text-primary-foreground! hover:bg-primary/70 focus-visible:ring-ring font-semibold",
                           isDisabled &&
                             "text-muted-foreground opacity-30 pointer-events-none",
                           isUnavailable &&
-                            "text-destructive line-through pointer-events-none"
+                            "text-destructive line-through pointer-events-none",
                         )
                       }
                     />
@@ -166,14 +176,14 @@ function CalendarHeader({
   });
 
   const currentLabel = formatter.format(
-    state.focusedDate.toDate(state.timeZone)
+    state.focusedDate.toDate(state.timeZone),
   );
 
   return (
     <header
       className={cn(
         "flex w-full items-center justify-between gap-2",
-        className
+        className,
       )}
     >
       <Button
@@ -182,6 +192,7 @@ function CalendarHeader({
         slot="previous"
         onClick={() => navigate("left")}
         className="me-1"
+        aria-label="Previous"
       >
         {direction === "rtl" ? (
           <ChevronRight className="size-6" />
@@ -217,6 +228,7 @@ function CalendarHeader({
         slot="next"
         onClick={() => navigate("right")}
         className="ms-1"
+        aria-label="Next"
       >
         {direction === "rtl" ? (
           <ChevronLeft className="size-6" />
@@ -246,7 +258,7 @@ function SelectMonth({ state }: SelectMonthProps) {
         key: String(i + 1),
         label: formatter.format(date.toDate(state.timeZone)),
       };
-    }
+    },
   );
 
   return (

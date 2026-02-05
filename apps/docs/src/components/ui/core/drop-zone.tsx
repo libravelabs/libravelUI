@@ -1,3 +1,4 @@
+"use client";
 import type { DropZoneProps as DragAndDropPrimitiveProps } from "react-aria-components";
 import {
   composeRenderProps,
@@ -27,7 +28,7 @@ const dropZoneVariants = cva(
     defaultVariants: {
       tone: "dashed",
     },
-  }
+  },
 );
 
 const dropZoneSizes = cva("w-full", {
@@ -77,8 +78,8 @@ function DropZone({
           cn(
             dropZoneVariants({ tone, ...renderProps }),
             dropZoneSizes({ size }),
-            className
-          )
+            className,
+          ),
         )}
         {...props}
       />

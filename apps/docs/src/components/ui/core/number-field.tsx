@@ -6,6 +6,7 @@ import {
   type ButtonProps,
   NumberField as NumberFieldPrimitive,
   type NumberFieldProps as NumberFieldPrimitiveProps,
+  Group,
 } from "react-aria-components";
 import { Minus, Plus } from "lucide-react";
 import { composeTailwindRenderProps } from "@/lib/render-props";
@@ -18,14 +19,18 @@ interface NumberFieldProps extends NumberFieldPrimitiveProps {
 const NumberField = ({ indicator, ...props }: NumberFieldProps) => {
   return (
     <NumberFieldPrimitive {...props}>
-      <Input
-        classNames={{
-          wrapper: "px-0",
-          input: "text-center",
-        }}
-        startContent={<StepperButton slot="decrement" indicator={indicator} />}
-        endContent={<StepperButton slot="increment" indicator={indicator} />}
-      />
+      <Group>
+        <Input
+          classNames={{
+            wrapper: "px-0",
+            input: "text-center",
+          }}
+          startContent={
+            <StepperButton slot="decrement" indicator={indicator} />
+          }
+          endContent={<StepperButton slot="increment" indicator={indicator} />}
+        />
+      </Group>
     </NumberFieldPrimitive>
   );
 };
@@ -64,7 +69,7 @@ const StepperButton = ({
       data-fullsize-ele
       className={composeTailwindRenderProps(
         className,
-        "bg-secondary pressed:bg-secondary/70"
+        "bg-secondary pressed:bg-secondary/70",
       )}
       slot={slot}
       {...props}

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 // import ReactPlayer from "react-player";
 import { cn } from "@/lib/utils";

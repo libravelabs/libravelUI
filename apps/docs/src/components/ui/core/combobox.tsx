@@ -58,21 +58,33 @@ function ComboBoxRoot<T extends object>({
 }: ComboBoxRootProps<T>) {
   const [value, setValue] = React.useState<Key>(defaultValue);
   const [isOpen, setIsOpen] = React.useState(false);
-  const triggerRef = React.useRef<ComboBoxContextType["triggerRef"]>(null);
+  const triggerRef = React.useRef<HTMLDivElement>(null);
 
   const clear = () => setValue("");
 
+  const onSelectionChange = (key: Key | null) => {
+    if (key !== null) {
+      setValue(key);
+    }
+  };
+
   return (
     <ComboBoxContext.Provider
-      value={{ value, setValue, clear, isOpen, setIsOpen, error, triggerRef }}
+      value={{
+        value,
+        setValue,
+        clear,
+        isOpen,
+        setIsOpen,
+        error,
+        triggerRef: triggerRef as unknown as React.RefObject<HTMLElement>,
+      }}
     >
       <div>
         <ComboBoxPrimitive
-          isOpen={isOpen}
-          onOpenChange={setIsOpen}
           aria-label={props["aria-label"] ?? "combobox"}
           selectedKey={value}
-          onSelectionChange={setValue}
+          onSelectionChange={onSelectionChange}
           {...props}
         >
           {props.children}
@@ -89,14 +101,14 @@ interface ComboBoxInputProps extends InputProps {
 
 function ComboBoxInput({
   className,
-  label,
+  label, // kept for prop compatibility but unused
   placeholder,
   hideClear = false,
   ...props
 }: ComboBoxInputProps & {
   hideClear?: boolean;
 }) {
-  const { value, clear, error, triggerRef } = useComboBoxContext();
+  const { value, clear, triggerRef } = useComboBoxContext();
 
   return (
     <div
@@ -106,8 +118,6 @@ function ComboBoxInput({
       <Input
         {...props}
         placeholder={placeholder}
-        label={label}
-        error={error}
         className={cn("w-full min-w-3xs", className)}
         endContent={
           <div className="flex items-center gap-2 shrink-0">
@@ -158,7 +168,7 @@ function ComboBoxContent<T extends object>({
         {...props}
         className={cn(
           "bg-popover text-popover-foreground z-50 w-[calc(var(--trigger-width)+24px)] max-h-[30rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
-          className
+          className,
         )}
       >
         {children}
@@ -208,7 +218,7 @@ function ComboBoxItem({
           isDisabled && "pointer-events-none opacity-50",
           isSelected && "[&_svg:not([data-slot='indicator'])]:hidden",
           inset && "ps-8",
-          className
+          className,
         )
       }
       {...props}
@@ -268,7 +278,7 @@ function ComboBoxHeader({
       className={cn(
         "col-span-full px-2.5 py-2 font-semibold text-base sm:text-sm",
         separator && "-mx-1 mb-1 border-b sm:px-3 sm:pb-[0.625rem]",
-        className
+        className,
       )}
       {...props}
     />
@@ -306,10 +316,11 @@ function ComboBox<T extends object>({
         hideClear={hideClear}
         className={cn(classNames?.trigger)}
       />
-      <ComboBoxContent items={items} className={cn(classNames?.content)}>
+      <ComboBoxContent className={cn(classNames?.content)}>
         {items.map((item) => (
           <ComboBoxItem
             key={item.id as ComboBoxProps<T>["id"]}
+            id={item.id as ComboBoxProps<T>["id"]}
             className={cn(classNames?.item)}
             textValue={item.label}
           >

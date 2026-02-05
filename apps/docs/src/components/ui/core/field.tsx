@@ -24,7 +24,7 @@ function Label({ className, ...props }: LabelPrimitiveProps) {
       data-slot="label"
       className={cn(
         "flex items-center w-fit gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        className
+        className,
       )}
       {...props}
     />
@@ -50,7 +50,7 @@ function Description({ ref, className, ...props }: DescriptionProps) {
       slot="description"
       className={cn(
         "text-sm text-muted-foreground group-disabled:opacity-50",
-        className
+        className,
       )}
     />
   );
@@ -59,6 +59,7 @@ function Description({ ref, className, ...props }: DescriptionProps) {
 interface FieldErrorProps extends FieldErrorPrimitiveProps {
   ref?: React.RefObject<HTMLElement>;
   message?: FieldProps["error"];
+  slot?: string;
 }
 
 function FieldError({
@@ -74,7 +75,7 @@ function FieldError({
       {...props}
       className={cn(
         "text-sm text-destructive group-disabled:opacity-50",
-        className
+        className,
       )}
     >
       {message ?? children}

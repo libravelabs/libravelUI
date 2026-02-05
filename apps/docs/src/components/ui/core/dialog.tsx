@@ -1,6 +1,7 @@
 "use client";
 
 import { X, Menu } from "lucide-react";
+import * as React from "react";
 import { useEffect, useRef } from "react";
 import type {
   HeadingProps,
@@ -39,17 +40,16 @@ function Dialog({ children, ...props }: DialogPrimitiveProps) {
 
 type DialogTriggerProps = ButtonProps;
 
-function DialogTrigger({
-  children,
-  ref,
-  ...props
-}: DialogTriggerProps) {
-  return (
-    <Button ref={ref} {...props}>
-      {children ? children : <Menu />}
-    </Button>
-  );
-}
+const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
+  ({ children, ...props }, ref) => {
+    return (
+      <Button ref={ref} {...props}>
+        {children ? children : <Menu />}
+      </Button>
+    );
+  },
+);
+DialogTrigger.displayName = "DialogTrigger";
 
 interface DialogModalProps extends React.ComponentProps<typeof Modal> {
   size?: keyof typeof sizes;
@@ -73,7 +73,7 @@ function DialogModal({ size = "lg", children }: DialogModalProps) {
           isExiting && [
             "slide-out-to-bottom animate-out",
             "md:fade-out md:zoom-out-95 md:slide-out-to-bottom-0",
-          ]
+          ],
         )
       }
     >
@@ -105,7 +105,7 @@ function DialogContent({
           role={role}
           className={cn(
             "peer/dialog group/dialog bg-popover text-popover-foreground flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
-            className
+            className,
           )}
           {...props}
         >
@@ -136,7 +136,7 @@ function DialogOverlay({
           isEntering && "fade-in animate-in duration-300",
           isExiting && "fade-out animate-out duration-200",
           isBlurred && "backdrop-blur-sm backdrop-filter",
-          className
+          className,
         )
       }
       {...props}
@@ -162,7 +162,7 @@ function DialogHeader({ className, ...props }: DialogHeaderProps) {
       for (const entry of entries) {
         header.parentElement?.style.setProperty(
           "--dialog-header-height",
-          `${entry.target.clientHeight}px`
+          `${entry.target.clientHeight}px`,
         );
       }
     });
@@ -177,7 +177,7 @@ function DialogHeader({ className, ...props }: DialogHeaderProps) {
       ref={headerRef}
       className={cn(
         "relative flex flex-col gap-2 text-center sm:text-start",
-        className
+        className,
       )}
     >
       {props.title && <DialogTitle>{props.title}</DialogTitle>}
@@ -204,7 +204,7 @@ function DialogTitle({ className, ref, ...props }: DialogTitleProps) {
       ref={ref}
       className={cn(
         "text-balance font-semibold text-foreground text-lg/6 sm:text-base/6",
-        className
+        className,
       )}
       {...props}
     />
@@ -225,7 +225,7 @@ function DialogDescription({
       slot="description"
       className={cn(
         "text-pretty text-base/6 text-muted-foreground group-disabled:opacity-50",
-        className
+        className,
       )}
       ref={ref}
       {...props}
@@ -240,7 +240,7 @@ function DialogBody({ className, ref, ...props }: React.ComponentProps<"div">) {
       ref={ref}
       className={cn(
         "flex flex-col gap-4 max-h-[calc(var(--visual-viewport-height)-(var(--dialog-header-height)+var(--dialog-footer-height))*2)] overflow-auto",
-        className
+        className,
       )}
       {...props}
     />
@@ -261,7 +261,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
       for (const entry of entries) {
         footer.parentElement?.style.setProperty(
           "--dialog-footer-height",
-          `${entry.target.clientHeight}px`
+          `${entry.target.clientHeight}px`,
         );
       }
     });
@@ -277,26 +277,29 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="dialog-footer"
       className={cn(
         "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-        className
+        className,
       )}
       {...props}
     />
   );
 }
 
-function DialogClose({
-  children,
-  className,
-  tone = "outline",
-  ref,
-  ...props
-}: ButtonProps) {
-  return (
-    <Button slot="close" className={className} ref={ref} tone={tone} {...props}>
-      {children ? children : "Close"}
-    </Button>
-  );
-}
+const DialogClose = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, className, tone = "outline", ...props }, ref) => {
+    return (
+      <Button
+        slot="close"
+        className={className}
+        ref={ref}
+        tone={tone}
+        {...props}
+      >
+        {children ? children : "Close"}
+      </Button>
+    );
+  },
+);
+DialogClose.displayName = "DialogClose";
 
 interface DialogCloseIconProps extends Omit<ButtonProps, "children"> {
   className?: string;
@@ -311,7 +314,7 @@ function DialogCloseIcon({ className, ...props }: DialogCloseIconProps) {
       slot="close"
       className={cn(
         className,
-        "close absolute top-1 end-1 z-50 flex flex-col size-8 place-content-center rounded-xl hover:bg-secondary focus:bg-secondary focus:outline-hidden focus-visible:ring-1 focus-visible:ring-primary sm:top-2 sm:end-2 sm:size-7 sm:rounded-md"
+        "close absolute top-1 end-1 z-50 flex flex-col size-8 place-content-center rounded-xl hover:bg-secondary focus:bg-secondary focus:outline-hidden focus-visible:ring-1 focus-visible:ring-primary sm:top-2 sm:end-2 sm:size-7 sm:rounded-md",
       )}
     >
       <X className="size-4" />

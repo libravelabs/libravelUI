@@ -1,3 +1,4 @@
+"use client";
 import type { ToggleButtonProps } from "react-aria-components";
 import { composeRenderProps, ToggleButton } from "react-aria-components";
 import { cva, type VariantProps } from "class-variance-authority";

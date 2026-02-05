@@ -1,106 +1,80 @@
-import { Button } from "@/components/ui/core/button";
-import Link from "next/link";
+import { Wind, Zap, EyeOff, Layers } from "lucide-react";
 
 const COMPONENTS_OVERVIEW_CONTENT = {
   header: {
-    badge: "◼ COMPONENT INDEX",
-    title: "Inventory",
+    badge: "◼ MOTION_MODULE",
+    title: "Motion Primitives",
+    description: (
+      <>
+        Used for dialogs, menus, and state transitions.
+        <br />
+        Optional by default. Never blocks interaction.
+      </>
+    ),
+    meta: {
+      labId: "LAB_ID: 94-B",
+      status: "STATUS: OPTIMAL",
+    },
   },
-  cta: {
-    text: "View Full Registry",
-    href: "/docs/components",
-  },
-  categories: [
+  features: [
     {
-      title: "Primitives",
-      description: "Fundamental building blocks.",
-      items: ["Button", "Icon", "Typography", "Layout"],
-      count: "04",
-      status: "Available",
+      icon: Wind,
+      title: "Original Primitives",
+      description: "Built from scratch for React. Not a wrapper.",
     },
     {
-      title: "Form Elements",
-      description: "Input and data collection interfaces.",
-      items: ["Input", "Select", "Checkbox", "Switch", "Radio"],
-      count: "12",
-      status: "Available",
+      icon: EyeOff,
+      title: "Reduced Motion",
+      description: "Respects system preferences automatically.",
     },
     {
-      title: "Overlay System",
-      description: "Modals, dialogs, and popovers.",
-      items: ["Dialog", "Popover", "Tooltip", "Toast"],
-      count: "08",
-      status: "Available",
+      icon: Zap,
+      title: "Performance",
+      description: "Optimized for 60fps. Zero layout thrashing.",
     },
     {
-      title: "Data Display",
-      description: "Tables, lists, and visualization.",
-      items: ["Table", "Card", "Badge", "Avatar"],
-      count: "06",
-      status: "Available",
+      icon: Layers,
+      title: "Composable",
+      description: "Add motion to any component. Zero conflict.",
     },
   ],
 };
 
 export function ComponentsOverviewSection() {
   return (
-    <section className="py-24 bg-background border-b border-border">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
+    <section className="py-24 border-b">
+      <div className="container px-6 mx-auto">
+        <div className="mb-20 flex flex-col items-start gap-4 border-l-2 border-primary/20 pl-6 md:flex-row md:items-end md:justify-between md:border-l-0 md:pl-0">
+          <div className="max-w-xl">
             <div className="mb-2 flex items-center gap-2 text-xs font-mono tracking-[0.2em] text-primary">
               {COMPONENTS_OVERVIEW_CONTENT.header.badge}
             </div>
             <h2 className="text-3xl font-medium tracking-tight text-foreground md:text-5xl">
               {COMPONENTS_OVERVIEW_CONTENT.header.title}
             </h2>
+            <p className="mt-4 text-lg text-muted-foreground font-light leading-relaxed">
+              {COMPONENTS_OVERVIEW_CONTENT.header.description}
+            </p>
           </div>
-          <Link href={COMPONENTS_OVERVIEW_CONTENT.cta.href}>
-            <Button tone="ghost" className="text-muted-foreground group">
-              {COMPONENTS_OVERVIEW_CONTENT.cta.text}{" "}
-              <span className="group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </Button>
-          </Link>
+          <div className="hidden font-mono text-xs text-muted-foreground/50 md:block text-right">
+            <div>{COMPONENTS_OVERVIEW_CONTENT.header.meta.labId}</div>
+            <div>{COMPONENTS_OVERVIEW_CONTENT.header.meta.status}</div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-border border border-border">
-          {COMPONENTS_OVERVIEW_CONTENT.categories.map((category) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {COMPONENTS_OVERVIEW_CONTENT.features.map((feature) => (
             <div
-              key={category.title}
-              className="group relative flex flex-col h-full p-8 bg-card hover:bg-muted transition-colors duration-300"
+              key={feature.title}
+              className="group p-6 rounded-lg border  hover:bg-muted/5 transition-all duration-300"
             >
-              <div className="flex justify-between items-start mb-6">
-                <h4 className="text-lg font-medium text-card-foreground">
-                  {category.title}
-                </h4>
-                <span className="text-xs font-mono text-muted-foreground">
-                  {category.count}
-                </span>
+              <div className="mb-4 inline-flex items-center justify-center h-10 w-10 rounded-md bg-muted/10 text-foreground group-hover:text-primary transition-colors">
+                <feature.icon className="size-5" />
               </div>
-
-              <p className="text-sm text-muted-foreground mb-8 h-10">
-                {category.description}
+              <h3 className="text-base font-medium mb-2">{feature.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {feature.description}
               </p>
-
-              <div className="space-y-2 flex-1">
-                {category.items.map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center text-sm text-muted-foreground group-hover:text-foreground transition-colors"
-                  >
-                    <span className="w-1.5 h-1.5 bg-border rounded-sm mr-2 group-hover:bg-primary transition-colors" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 pt-4 border-t border-dashed border-border group-hover:border-input transition-colors">
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors">
-                  {category.status}
-                </span>
-              </div>
             </div>
           ))}
         </div>

@@ -1,6 +1,7 @@
+"use client";
 import type {
   TimeFieldProps as TimeFieldPrimitiveProps,
-  DateValue,
+  TimeValue,
   ValidationResult,
 } from "react-aria-components";
 import {
@@ -16,75 +17,53 @@ import { cn } from "@/lib/utils";
 
 type InputProps = Pick<
   InputPrimitiveProps,
-  | "error"
-  | "description"
-  | "startContent"
-  | "endContent"
-  | "label"
-  | "labelExtra"
-  | "required"
-  | "variant"
-  | "size"
-  | "classNames"
+  "startContent" | "endContent" | "tone" | "size" | "classNames"
 >;
 
-interface TimeFieldProps<T extends DateValue>
+interface TimeFieldProps<T extends TimeValue>
   extends TimeFieldPrimitiveProps<T>, InputProps {
   errorMessage?: string | ((validation: ValidationResult) => string);
+  label?: string;
+  description?: string;
+  error?: string;
 }
 
-function TimeField<T extends DateValue>({
-  errorMessage,
+function TimeField<T extends TimeValue>({
+  errorMessage: _errorMessage,
+  label: _label,
+  description: _description,
+  error: _error,
   ...props
 }: TimeFieldProps<T>) {
-  const {
-    error,
-    description,
-    startContent,
-    endContent,
-    label,
-    labelExtra,
-    required,
-    variant,
-    size,
-    classNames,
-  } = props;
+  const { startContent, endContent, tone, size, classNames } = props;
 
   const inputProps: InputProps = {
-    error,
-    description,
     startContent,
     endContent,
-    label,
-    labelExtra,
-    required,
-    variant,
+    tone,
     size,
     classNames,
   };
 
+  const AnyInput = Input as any;
+
   return (
     <TimeFieldPrimitive
-      aria-label={props["aria-label"] ?? "date-field"}
+      aria-label={props["aria-label"] ?? "time-field"}
       {...props}
     >
-      <Input
-        as={DateInput}
-        error={typeof errorMessage === "string" ? errorMessage : undefined}
-        description={description}
-        {...inputProps}
-      >
-        {(segment) => (
+      <AnyInput as={DateInput} {...inputProps}>
+        {(segment: any) => (
           <DateSegment
             segment={segment}
             className={cn(
               "inline shrink-0 rounded px-1.5 type-literal:px-0 text-foreground tracking-wider caret-transparent outline-0 forced-color-adjust-none data-placeholder:not-data-focused:text-muted-foreground sm:p-0.5 sm:py-0.5 sm:text-sm forced-colors:text-[ButtonText]",
               "focus:bg-accent focus:text-accent-foreground focus:data-invalid:bg-destructive focus:data-invalid:text-destructive-foreground forced-colors:focus:bg-[Highlight] forced-colors:focus:text-[HighlightText]",
-              "disabled:opacity-50 forced-colors:disabled:text-[GrayText]"
+              "disabled:opacity-50 forced-colors:disabled:text-[GrayText]",
             )}
           />
         )}
-      </Input>
+      </AnyInput>
     </TimeFieldPrimitive>
   );
 }

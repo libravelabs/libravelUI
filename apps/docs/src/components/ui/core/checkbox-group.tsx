@@ -8,14 +8,13 @@ import {
   Description,
   Label,
   type FieldProps,
-  type InputProps,
 } from "@/components/ui/core/field";
 
-type CheckboxGroupProps = CheckboxGroupPrimitiveProps &
-  Omit<InputProps, "placeholder"> & {
-    description?: string;
-    error?: FieldProps["error"];
-  };
+type CheckboxGroupProps = CheckboxGroupPrimitiveProps & {
+  label?: string;
+  description?: string;
+  error?: FieldProps["error"];
+};
 
 function CheckboxGroup({
   className,
@@ -31,7 +30,7 @@ function CheckboxGroup({
       aria-label={props["aria-label"] ?? "checkbox-group"}
       className={cn(
         "flex flex-col gap-3 has-[[slot=description]]:gap-6 has-[[slot=description]]:**:data-[slot=label]:font-medium **:[[slot=description]]:block",
-        className
+        className,
       )}
     >
       {(values) => (

@@ -10,7 +10,7 @@ import { getMDXComponents } from "@/mdx-components";
 
 import { CopyButton, LLMOptions } from "@/components/ai/page-actions";
 import { baseUrl, owner, repo } from "@/lib/github";
-import { DocLinks } from "@/components/doc-links";
+import { DocLinks } from "@/components/docs/doc-links";
 import { meta } from "@/lib/metadata/index";
 import { StyledHeader } from "@/components/app/docs/styled-header";
 import { DocGrid } from "@/components/examples/layout/doc-grid";

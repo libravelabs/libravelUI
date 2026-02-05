@@ -143,7 +143,7 @@ const tabTriggerVariants = cva(
       radius: "md",
       orientation: "horizontal",
     },
-  }
+  },
 );
 
 const tabContentVariants = cva(
@@ -181,7 +181,7 @@ const tabContentVariants = cva(
       radius: "lg",
       orientation: "horizontal",
     },
-  }
+  },
 );
 
 type TabsContextValue = VariantProps<typeof tabsVariants> & { id: string };
@@ -193,11 +193,18 @@ function useTabsContext() {
   return ctx;
 }
 
+/**
+ * Props for the Tabs component.
+ */
 type TabsProps = TabsPrimitiveProps &
   VariantProps<typeof tabsVariants> & {
     ref?: React.RefObject<HTMLDivElement>;
   };
 
+/**
+ * A tab system for organizing content into multiple views.
+ * Builds on React Aria Components with custom animated triggers and panels.
+ */
 function Tabs({
   className,
   ref,
@@ -218,7 +225,7 @@ function Tabs({
         className={cn(
           tabsVariants({ tone, size, orientation, width, radius }),
           orientation === "vertical" ? "items-start" : "items-stretch",
-          className
+          className,
         )}
         data-tone={tone}
         orientation={orientation}
@@ -260,7 +267,7 @@ function TabList<T extends object>({
           radius: resolvedRadius,
           size: resolvedSize,
         }),
-        className
+        className,
       )}
       ref={ref}
       {...props}
@@ -270,7 +277,7 @@ function TabList<T extends object>({
 
 interface TabTriggerProps
   extends TabTriggerPrimitiveProps, VariantProps<typeof tabTriggerVariants> {
-  ref?: React.RefObject<HTMLButtonElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }
 
 function TabTrigger({
@@ -298,7 +305,7 @@ function TabTrigger({
           radius: resolvedRadius,
           orientation: resolvedOrientation,
         }),
-        className
+        className,
       )}
       ref={ref}
       {...props}
@@ -323,7 +330,7 @@ function TabTrigger({
                   : resolvedTone === "underline" &&
                       resolvedOrientation === "horizontal"
                     ? "bottom-0 left-1 right-1 h-0.5 bg-primary"
-                    : "inset-0 bg-primary/10 border border-primary/20"
+                    : "inset-0 bg-primary/10 border border-primary/20",
               )}
             />
           )}
@@ -363,7 +370,7 @@ function TabContent({
           size: resolvedSize,
           radius: resolvedRadius,
         }),
-        className
+        className,
       )}
       ref={ref}
       {...props}

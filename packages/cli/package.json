@@ -1,0 +1,32 @@
+{
+  "name": "libravelui-cli",
+  "version": "1.0.0",
+  "description": "CLI for LibravelUI",
+  "main": "dist/libravelui-cli.js",
+  "bin": {
+    "libravelui": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup index.ts --format esm --clean --minify",
+    "dev": "tsx index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "commander": "^12.1.0",
+    "fs-extra": "^11.2.0",
+    "picocolors": "^1.0.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.14.9",
+    "tsup": "^8.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.5.2"
+  }
+}

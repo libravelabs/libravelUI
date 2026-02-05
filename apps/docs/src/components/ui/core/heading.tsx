@@ -17,16 +17,16 @@ const headingVariants = cva(
     defaultVariants: {
       level: 1,
     },
-  }
+  },
 );
 
 interface HeadingProps
   extends
-    React.ComponentProps<"h1" | "h2" | "h3" | "h4" | "h5" | "h6">,
+    React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof headingVariants> {}
 
 const Heading = ({ className, level = 1, ...props }: HeadingProps) => {
-  const Comp = `h${level}` as keyof React.JSX.IntrinsicElements;
+  const Comp = `h${level}` as React.ElementType;
 
   return (
     <Comp className={cn(headingVariants({ level }), className)} {...props} />

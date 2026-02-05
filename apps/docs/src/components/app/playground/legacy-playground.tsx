@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { PreviewContainer } from "@/components/preview-container";
+import { PreviewContainer } from "@/components/docs/preview-container";
 import { Loader } from "@/components/ui/core/loader";
-import { ComponentSource } from "@/components/component-source";
+import { ComponentSource } from "@/components/docs/component-source";
 import { useMemo } from "react";
 import {
   ResizablePanelGroup,
@@ -11,7 +11,7 @@ import {
   ResizableHandle,
 } from "@/components/app/resizable";
 import { useComponentSource } from "@/hooks/use-component-source";
-import { CodeBlock } from "@/components/code-block";
+import { CodeBlock } from "@/components/docs/code-block";
 
 interface LegacyPlaygroundProps {
   comp: string;
@@ -23,7 +23,7 @@ export function LegacyPlayground({
   section = "core",
 }: LegacyPlaygroundProps) {
   const { code, loading } = useComponentSource(
-    `components/examples/${section}/${comp}`
+    `components/examples/${section}/${comp}`,
   );
 
   const PreviewComponent = useMemo(
@@ -32,7 +32,7 @@ export function LegacyPlayground({
         ssr: false,
         loading: () => <Loader />,
       }),
-    [section, comp]
+    [section, comp],
   );
 
   return (
