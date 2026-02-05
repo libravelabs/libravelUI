@@ -1,3 +1,4 @@
+"use client";
 import { createContext, use, type ReactNode } from "react";
 import type {
   GridListItemProps,
@@ -86,7 +87,7 @@ const selectionboxItemStyles = cva(
         ],
       },
     },
-  }
+  },
 );
 
 const SelectionboxContext = createContext<{
@@ -97,8 +98,7 @@ const SelectionboxContext = createContext<{
 const useSelectionboxContext = () => use(SelectionboxContext);
 
 interface SelectionboxProps<T extends object>
-  extends GridListProps<T>,
-    VariantProps<typeof selectionboxStyles> {
+  extends GridListProps<T>, VariantProps<typeof selectionboxStyles> {
   className?: string;
   disabled?: boolean;
 }
@@ -111,7 +111,13 @@ function Selectionbox<T extends object>({
   ...props
 }: SelectionboxProps<T>) {
   return (
-    <SelectionboxContext.Provider value={{ columns, gap, disabled }}>
+    <SelectionboxContext.Provider
+      value={{
+        columns: columns ?? undefined,
+        gap: gap ?? undefined,
+        disabled,
+      }}
+    >
       <GridList
         aria-label="Selection options"
         layout={columns === 1 ? "stack" : "grid"}
@@ -124,8 +130,7 @@ function Selectionbox<T extends object>({
 }
 
 interface SelectionboxItemProps
-  extends GridListItemProps,
-    VariantProps<typeof selectionboxItemStyles> {
+  extends GridListItemProps, VariantProps<typeof selectionboxItemStyles> {
   label?: string;
   description?: string;
   disabled?: boolean;
@@ -145,7 +150,7 @@ function SelectionboxItem({
 
   if (children && (label || description || icon)) {
     console.warn(
-      "SelectionboxItem: Do not mix `children` with `label`, `description`, or `icon` props."
+      "SelectionboxItem: Do not mix `children` with `label`, `description`, or `icon` props.",
     );
   }
 
@@ -162,18 +167,17 @@ function SelectionboxItem({
         className,
         (
           className,
-          { isHovered, isFocusVisible, isSelected, ...renderProps }
+          { isHovered, isFocusVisible, isSelected, ...renderProps },
         ) =>
           cn(
             selectionboxItemStyles({
               ...renderProps,
               oneCol: columns === 1,
-              isLink: "href" in props,
               highlighted: isSelected || isHovered || isFocusVisible,
               disabled: disabled || props.disabled,
             }),
-            className
-          )
+            className,
+          ),
       )}
     >
       {composeRenderProps(children, (children) => {
@@ -229,7 +233,7 @@ function SelectionboxLabel({
         "select-none text-foreground group-disabled:opacity-50 text-sm/6",
         "col-start-1 row-start-1",
         "group-has-data-[slot=icon]:col-start-2",
-        className
+        className,
       )}
       {...props}
     />
@@ -252,7 +256,7 @@ function SelectionboxDescription({
         "group-has-data-[slot=icon]:col-start-2",
         "text-muted-foreground text-sm/6",
         "group-disabled:opacity-50",
-        className
+        className,
       )}
       {...props}
     />

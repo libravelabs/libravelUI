@@ -10,7 +10,13 @@ import { cn } from "@/lib/utils";
 import { Loader } from "@/components/ui/core/loader";
 import { Search, X } from "lucide-react";
 
-type SearchBarProps = SearchBarPrimitiveProps & InputProps;
+type SearchBarProps = SearchBarPrimitiveProps &
+  InputProps & {
+    label?: string;
+    error?: string;
+    description?: string;
+    labelExtra?: React.ReactNode;
+  };
 
 function SearchBar({
   placeholder,
@@ -24,7 +30,7 @@ function SearchBar({
     input:
       "[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
   },
-  variant,
+  tone,
   size,
   isDisabled,
   isLoading,
@@ -34,13 +40,9 @@ function SearchBar({
 }: SearchBarProps) {
   const inputProps: InputProps = {
     placeholder,
-    error,
-    description,
     endContent,
-    label,
-    labelExtra,
     classNames,
-    variant,
+    tone,
     size,
     isDisabled,
     isLoading,

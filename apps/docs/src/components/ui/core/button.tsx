@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import {
   Button as ButtonPrimitive,
@@ -52,7 +53,7 @@ export const buttonVariants = cva(
       radius: "md",
       iconOnly: false,
     },
-  }
+  },
 );
 
 const buttonGroupVariants = cva(
@@ -84,79 +85,101 @@ const buttonGroupVariants = cva(
     defaultVariants: {
       orientation: "horizontal",
     },
-  }
+  },
 );
 
 type ButtonGroupProps = React.ComponentProps<"div"> &
   VariantProps<typeof buttonGroupVariants>;
 
-function ButtonGroup({ className, orientation, ...props }: ButtonGroupProps) {
-  return (
-    <div
-      role="group"
-      data-slot="button-group"
-      data-orientation={orientation}
-      className={buttonGroupVariants({ orientation, className })}
-      {...props}
-    />
-  );
-}
+const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
+  ({ className, orientation, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        role="group"
+        data-slot="button-group"
+        data-orientation={orientation}
+        className={buttonGroupVariants({ orientation, className })}
+        {...props}
+      />
+    );
+  },
+);
+ButtonGroup.displayName = "ButtonGroup";
 
+/**
+ * Props for the Button component.
+ */
 type ButtonProps = ButtonPrimitiveProps &
   VariantProps<typeof buttonVariants> & {
-    ref?: React.Ref<HTMLButtonElement>;
+    /** The content to display when isPending or isLoading is true. Defaults to a standard spinner. */
     loader?: React.ReactNode;
+    /** Whether the button is in a loading state. */
+    isLoading?: boolean;
+    /** The content of the button. */
     children?: React.ReactNode;
   };
 
-function Button({
-  className,
-  tone,
-  size,
-  radius,
-  iconOnly,
-  loader,
-  children,
-  ...props
-}: ButtonProps) {
-  if (tone === "unstyled") {
+/**
+ * A versatile button component that supports various tones, sizes, and states.
+ * Wraps React Aria Components Button with custom styling.
+ */
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      tone,
+      size,
+      radius,
+      iconOnly,
+      loader,
+      isLoading,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    if (tone === "unstyled") {
+      return (
+        <ButtonPrimitive ref={ref} {...props}>
+          {(values) =>
+            typeof children === "function" ? children(values) : children
+          }
+        </ButtonPrimitive>
+      );
+    }
+
     return (
-      <ButtonPrimitive {...props}>
+      <ButtonPrimitive
+        ref={ref}
+        {...props}
+        isDisabled={props.isDisabled || isLoading}
+        className={cn(
+          buttonVariants({ tone, size, radius, iconOnly }),
+          className,
+        )}
+      >
         {(values) =>
-          typeof children === "function" ? children(values) : children
+          values.isPending || isLoading ? (
+            iconOnly ? (
+              (loader ?? <Loader className="text-inherit" />)
+            ) : (
+              <>
+                {loader ?? <Loader className="text-inherit" />}
+                {children}
+              </>
+            )
+          ) : typeof children === "function" ? (
+            children(values)
+          ) : (
+            children
+          )
         }
       </ButtonPrimitive>
     );
-  }
-
-  return (
-    <ButtonPrimitive
-      {...props}
-      isDisabled={props.isDisabled}
-      className={cn(
-        buttonVariants({ tone, size, radius, iconOnly }),
-        className
-      )}
-    >
-      {(values) =>
-        values.isPending ? (
-          iconOnly ? (
-            (loader ?? <Loader className="text-inherit" />)
-          ) : (
-            <>
-              {loader ?? <Loader className="text-inherit" />}
-              {children}
-            </>
-          )
-        ) : typeof children === "function" ? (
-          children(values)
-        ) : (
-          children
-        )
-      }
-    </ButtonPrimitive>
-  );
-}
+  },
+);
+Button.displayName = "Button";
 
 export { Button, ButtonGroup };
 export type { ButtonProps, ButtonGroupProps };

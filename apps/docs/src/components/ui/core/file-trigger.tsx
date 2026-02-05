@@ -1,3 +1,4 @@
+"use client";
 import {
   FileTrigger as FileTriggerPrimitive,
   type FileTriggerProps as FileTriggerPrimitiveProps,

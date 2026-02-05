@@ -1,13 +1,13 @@
 "use client";
 
-import { ComponentSource } from "@/components/component-source";
+import { ComponentSource } from "@/components/docs/component-source";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/core/accordion";
-import { PackageInstall } from "@/components/package-install";
+import { PackageInstall } from "@/components/docs/package-install";
 
 export type InstallationProps = {
   section?: string;

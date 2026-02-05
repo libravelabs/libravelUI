@@ -4,7 +4,7 @@ import React, { useMemo, useRef, useLayoutEffect, useState } from "react";
 import { registry, type RegistryKey } from "./registry";
 import { PlaygroundProvider, usePlayground } from "./playground-context";
 import { Controls } from "./controls";
-import { PreviewContainer } from "@/components/preview-container";
+import { PreviewContainer } from "@/components/docs/preview-container";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -14,9 +14,10 @@ import { LegacyPlayground } from "./legacy-playground";
 import { playgroundParser } from "./playground-parser";
 import { useComponentSource } from "@/hooks/use-component-source";
 import { Button, ButtonGroup } from "@/components/ui/core/button";
-import { LayoutPanelLeft, RefreshCw } from "lucide-react";
+import { LayoutPanelLeft, RefreshCw, Check, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CodeBlock } from "@/components/code-block";
+import { CodeBlock } from "@/components/docs/code-block";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 
 function usePreviewSize(trigger: unknown) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -63,7 +64,7 @@ function PlaygroundContent({
   } = usePlayground();
 
   const { code: sourceCode } = useComponentSource(
-    `components/examples/${section}/${compName}`
+    `components/examples/${section}/${compName}`,
   );
 
   const code = useMemo(() => {
@@ -71,6 +72,7 @@ function PlaygroundContent({
   }, [sourceCode, values, controls]);
 
   const { ref: previewRef, size } = usePreviewSize(refresh.key);
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const toolbar = (
     <ButtonGroup>
@@ -83,7 +85,7 @@ function PlaygroundContent({
         <LayoutPanelLeft
           className={cn(
             "size-4 text-foreground/60 transition-transform",
-            direction === "rtl" && "rotate-180"
+            direction === "rtl" && "rotate-180",
           )}
         />
       </Button>
@@ -148,9 +150,15 @@ function PlaygroundContent({
           <Button
             tone="outline"
             size="sm"
-            className="text-[10px] uppercase tracking-wide font-medium text-primary"
+            className="text-[10px] uppercase tracking-wide font-medium text-primary gap-1.5"
+            onClick={() => copyToClipboard(code)}
           >
-            Copy
+            {isCopied ? (
+              <Check className="size-3" />
+            ) : (
+              <Copy className="size-3" />
+            )}
+            {isCopied ? "Copied" : "Copy"}
           </Button>
         </div>
         <div className="h-full bg-card/80 p-1">
@@ -194,9 +202,15 @@ function PlaygroundContent({
                 <Button
                   tone="outline"
                   size="sm"
-                  className="text-[10px] uppercase tracking-wide font-medium text-primary"
+                  className="text-[10px] uppercase tracking-wide font-medium text-primary gap-1.5"
+                  onClick={() => copyToClipboard(code)}
                 >
-                  Copy
+                  {isCopied ? (
+                    <Check className="size-3" />
+                  ) : (
+                    <Copy className="size-3" />
+                  )}
+                  {isCopied ? "Copied" : "Copy"}
                 </Button>
               </div>
               <div className="h-full bg-card/80 p-1">

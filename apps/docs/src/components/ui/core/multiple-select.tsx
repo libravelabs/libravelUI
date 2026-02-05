@@ -89,7 +89,7 @@ function MultipleSelect<T extends OptionBase>({
 
   const availableItems = useMemo(
     () => (items ?? []).filter((it) => !selectedMap.has(String(it.id))),
-    [items, selectedMap]
+    [items, selectedMap],
   );
 
   const handleToggle = (key: string) => {
@@ -119,7 +119,7 @@ function MultipleSelect<T extends OptionBase>({
 
   const selectedItems = useMemo(
     () => (items ?? []).filter((it) => selectedMap.has(String(it.id))),
-    [items, selectedMap]
+    [items, selectedMap],
   );
 
   const atMax = !!maxItems && internal.length >= maxItems;
@@ -138,13 +138,13 @@ function MultipleSelect<T extends OptionBase>({
           if (!isDisabled) setOpen((s) => !s);
         }}
         className={cn(
-          "max-w-72 w-full border-input data-[placeholder]:text-muted-foreground hover:opacity-70 transition ease-linear [&_svg:not([class*='text-'])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 truncate",
+          "max-w-72 w-full border-input data-placeholder:text-muted-foreground hover:opacity-70 transition ease-linear [&_svg:not([class*='text-'])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 truncate",
           error
             ? "border border-destructive inset-ring-destructive ring-3 ring-destructive/20 focus-within:inset-ring-destructive focus-within:ring-3 focus-within:ring-destructive/20"
             : "inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 data-[state=true]:inset-ring-ring/70 data-[state=true]:ring-3 data-[state=true]:ring-ring/20",
           "cursor-pointer disabled:cursor-not-allowed",
           isDisabled && "opacity-60 pointer-events-none",
-          className
+          className,
         )}
       >
         <div className="flex-1 min-w-0">
@@ -158,7 +158,7 @@ function MultipleSelect<T extends OptionBase>({
               )}
             >
               {(item) => (
-                <Tag className="rounded-md flex items-center gap-1 max-w-[14rem]">
+                <Tag className="rounded-md flex items-center gap-1 max-w-56">
                   <span className="truncate">{getLabel(item)}</span>
                 </Tag>
               )}
@@ -190,7 +190,7 @@ function MultipleSelect<T extends OptionBase>({
           return text ? <Description>{text}</Description> : null;
         })()}
 
-      {error && <FieldError asDefault message={error} />}
+      {error && <FieldError message={error} />}
 
       <PopoverContent
         isOpen={open}

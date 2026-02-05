@@ -1,6 +1,6 @@
 "use client";
 
-import { ColorSlider } from "@/components/ui/core/colors";
+import { ColorSlider } from "@/components/ui/core/color-slider";
 
 export default function ColorSliderBasic() {
   return (

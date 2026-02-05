@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext } from "react";
 import {
   Breadcrumbs as BreadcrumbsPrimitive,
@@ -17,14 +18,14 @@ type BreadcrumbsContextProps = {
 };
 
 const BreadcrumbsContext = createContext<BreadcrumbsContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 function useBreadcrumbsContext() {
   const context = useContext(BreadcrumbsContext);
   if (!context) {
     throw new Error(
-      "useBreadcrumbsContext must be used within BreadcrumbsProvider"
+      "useBreadcrumbsContext must be used within BreadcrumbsProvider",
     );
   }
   return context;
@@ -43,7 +44,7 @@ const breadcrumbListVariants = cva(
     defaultVariants: {
       size: "default",
     },
-  }
+  },
 );
 
 const breadcrumbItemVariants = cva(
@@ -58,7 +59,7 @@ const breadcrumbItemVariants = cva(
     defaultVariants: {
       emphasis: "normal",
     },
-  }
+  },
 );
 
 type BreadcrumbProps<T> = BreadcrumbsPrimitiveProps<T> &
@@ -89,7 +90,7 @@ function BreadcrumbItem({
   emphasis,
   ...props
 }: BreadcrumbPrimitiveProps &
-  React.ComponentProps<typeof Link> &
+  Omit<React.ComponentProps<typeof Link>, "ref"> &
   VariantProps<typeof breadcrumbItemVariants>) {
   const { separator } = useBreadcrumbsContext();
 

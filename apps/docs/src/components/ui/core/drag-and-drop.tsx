@@ -168,12 +168,12 @@ function DragAndDrop({
               className={cn(
                 dropZoneSizes({ size }),
                 "w-full p-6 rounded-lg",
-                classNames?.dropZone
+                classNames?.dropZone,
               )}
             >
               {(values) =>
                 typeof children === "function" ? (
-                  children(values)
+                  children({ ...values, isDropTarget })
                 ) : (
                   <div className="grid items-center justify-center">
                     <div className="mx-auto">{icon}</div>

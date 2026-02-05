@@ -9,9 +9,9 @@ import {
   SidebarBody,
   SidebarFooter,
 } from "@/components/ui/blocks/sidebar";
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/app/logo";
 import { Alert } from "@/components/ui/core/alert";
-import { PageTree } from "fumadocs-core/server";
+import type { PageTree } from "fumadocs-core/server";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { LargeSearchToggle } from "@/components/app/partials/search-toggle";
@@ -43,12 +43,32 @@ export function AppSidebar({ pageTree }: { pageTree: PageTree.Root }) {
 function renderSidebarTree(
   items: PageTree.Node[],
   pathName: string,
-  depth: number
+  depth: number,
 ) {
   return items.map((item) => {
+    const isNested = depth > 0;
+
+    const Wrapper = ({ children }: { children: React.ReactNode }) => (
+      <div className={cn("relative grid gap-2 w-full", isNested && "ps-4")}>
+        {isNested && (
+          <>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-1 top-0 bottom-0 w-px bg-sidebar-border"
+            />
+            <span
+              aria-hidden
+              className="absolute left-1 z-10 top-[14px] h-px w-3 bg-sidebar-border"
+            />
+          </>
+        )}
+        {children}
+      </div>
+    );
+
     if (item.type === "separator") {
       return (
-        <div key={item.$id} className="px-3 pt-2">
+        <div key={item.$id} className={cn("px-3 pt-2", isNested && "ps-7")}>
           <h3 className="text-xs font-medium text-sidebar-foreground/50">
             {item.name}
           </h3>
@@ -57,37 +77,24 @@ function renderSidebarTree(
     }
 
     if (item.type === "folder") {
-      const isNestedFolder = depth > 0;
+      const folderUrl = item.index?.url ?? null;
 
       return (
-        <div
-          key={item.$id}
-          className={cn(
-            "relative grid gap-2 mt-2 w-full",
-            isNestedFolder && "ps-4 mt-0"
-          )}
-        >
-          {isNestedFolder && (
-            <>
-              <span
-                aria-hidden
-                className="pointer-events-none absolute left-1 top-0 bottom-0 w-px bg-sidebar-border"
-              />
-              <span
-                aria-hidden
-                className="absolute left-1 z-10 top-[14px] h-px w-3 bg-sidebar-border"
-              />
-            </>
-          )}
-
+        <Wrapper key={item.$id}>
           <SidebarGroup
             stickyHeader
-            label={item.name as string}
+            label={
+              folderUrl ? (
+                <Link href={folderUrl} className="truncate hover:underline">
+                  {item.name}
+                </Link>
+              ) : (
+                item.name
+              )
+            }
             icon={item.icon}
             defaultOpen={item.defaultOpen}
-            className={cn(
-              "relative [&_h3]:text-xs [&_svg:not([class*='size-'])]:size-3 [&_svg[fill^='#']]:fill-foreground"
-            )}
+            className="relative [&_h3]:text-xs [&_svg:not([class*='size-'])]:size-3 [&_svg[fill^='#']]:fill-foreground"
             classNames={{
               stickyHeader: `z-${10 + depth}`,
             }}
@@ -95,13 +102,13 @@ function renderSidebarTree(
             {renderSidebarTree(item.children, pathName, depth + 1)}
           </SidebarGroup>
 
-          {!isNestedFolder && <SidebarSeparator />}
-        </div>
+          {depth === 0 && <SidebarSeparator />}
+        </Wrapper>
       );
     }
 
     return (
-      <div key={item.url} className="my-1">
+      <Wrapper key={item.url}>
         <SidebarItem
           href={item.url}
           isActive={item.url === pathName}
@@ -109,7 +116,15 @@ function renderSidebarTree(
         >
           {item.name}
         </SidebarItem>
-      </div>
+      </Wrapper>
     );
   });
+}
+
+function getFolderUrl(folder: PageTree.Folder): string | null {
+  if (folder.index && folder.index.type === "page") {
+    return folder.index.url;
+  }
+
+  return null;
 }

@@ -8,21 +8,18 @@ export interface SlotProps extends React.HTMLAttributes<HTMLElement> {
 const Slot = React.forwardRef<HTMLElement, SlotProps>(
   ({ children, ...props }, ref) => {
     if (React.isValidElement(children)) {
-      const child = children as React.ReactElement<
-        React.HTMLAttributes<HTMLElement>,
-        string | React.JSXElementConstructor<React.HTMLAttributes<HTMLElement>>
-      > & { ref?: React.Ref<HTMLElement> };
+      const child = children as React.ReactElement<any>;
 
       return React.cloneElement(child, {
         ...mergeProps(props, child.props),
-        ref: ref ? composeRefs(ref, child.ref) : child.ref,
+        ref: ref ? composeRefs(ref, (child as any).ref) : (child as any).ref,
       });
     }
 
     return React.Children.count(children) > 1
       ? React.Children.only(null)
       : null;
-  }
+  },
 );
 
 Slot.displayName = "Slot";
@@ -44,7 +41,7 @@ function composeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
 
 function mergeProps(
   slotProps: React.HTMLAttributes<HTMLElement>,
-  childProps: React.HTMLAttributes<HTMLElement>
+  childProps: React.HTMLAttributes<HTMLElement>,
 ) {
   // Override style
   const style = { ...slotProps.style, ...childProps.style };

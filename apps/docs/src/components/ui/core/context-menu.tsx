@@ -29,7 +29,7 @@ interface ContextMenuContextType {
 }
 
 const ContextMenuContext = React.createContext<ContextMenuContextType | null>(
-  null
+  null,
 );
 
 function useContextMenuCtx() {
@@ -71,7 +71,7 @@ function ContextMenuTrigger({ className, ...props }: ContextMenuTriggerProps) {
 
   return (
     <div
-      ref={triggerRef as ContextMenuContextType["triggerRef"]}
+      ref={triggerRef as React.RefObject<HTMLDivElement>}
       className={cn("cursor-default select-none", className)}
       aria-haspopup="menu"
       onContextMenu={onContextMenu}
@@ -81,8 +81,7 @@ function ContextMenuTrigger({ className, ...props }: ContextMenuTriggerProps) {
 }
 
 interface ContextMenuContentProps<T>
-  extends MenuProps<T>,
-    Pick<PopoverContentProps, "withArrow"> {
+  extends MenuProps<T>, Pick<PopoverContentProps, "withArrow"> {
   className?: string;
   popover?: PopoverContentProps;
 }
@@ -114,7 +113,7 @@ function ContextMenuContent<T extends object>({
           data-slot="context-menu-content"
           className={cn(
             "bg-popover text-popover-foreground z-50 w-(--trigger-width) max-h-[35rem] overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
-            className
+            className,
           )}
           {...props}
         >

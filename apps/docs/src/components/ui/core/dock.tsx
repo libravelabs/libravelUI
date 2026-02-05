@@ -25,7 +25,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/core/dialog";
-import { AnimatePresence, motion, useMotionValue, animate } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  animate,
+  type PanInfo,
+} from "motion/react";
 
 type Sides = "top" | "bottom" | "left" | "right";
 
@@ -66,7 +72,7 @@ const dockContentStyles = cva(
         class: "rounded-lg ring-1 right-2 inset-y-2 border-l-0",
       },
     ],
-  }
+  },
 );
 
 type DockProps = DialogTriggerProps;
@@ -74,15 +80,24 @@ function Dock(props: DockProps) {
   return <DialogTriggerPrimitive {...props} />;
 }
 
+/**
+ * Props for the DockContent component.
+ */
 interface DockContentProps
   extends
     Omit<ModalOverlayProps, "children">,
     Pick<DialogProps, "aria-label" | "role" | "aria-labelledby" | "children"> {
+  /** Whether to show a close button. */
   closeButton?: boolean;
+  /** Whether to blur the background. */
   isBlurred?: boolean;
+  /** Whether the dock should float (have margins from edges). */
   isFloat?: boolean;
+  /** The side of the screen the dock appears from. */
   side?: Sides;
+  /** Whether to show a drag notch. */
   notch?: boolean;
+  /** Custom class names for various parts of the dock. */
   classNames?: {
     overlay?: string | string[];
     wrapper?: string | string[];
@@ -90,9 +105,13 @@ interface DockContentProps
   };
 }
 
-const DockOverlay = motion.create(ModalOverlay);
-const DockRoot = motion.create(Modal);
+const DockOverlay = (motion as any).create(ModalOverlay);
+const DockRoot = (motion as any).create(Modal);
 
+/**
+ * The content area of the Dock (Slide-out menu).
+ * Supports dragging, floating styles, and various side placements.
+ */
 function DockContent({
   className,
   classNames,
@@ -114,7 +133,7 @@ function DockContent({
   const w = typeof window !== "undefined" ? window.innerWidth : 0;
   const h = typeof window !== "undefined" ? window.innerHeight : 0;
   const offsetMotion = useMotionValue(
-    side === "left" || side === "right" ? w : h
+    side === "left" || side === "right" ? w : h,
   );
 
   return (
@@ -129,14 +148,14 @@ function DockContent({
           className={cn(
             "fixed inset-0 z-50 h-(--visual-viewport-height,100vh) w-screen overflow-hidden",
             isBlurred && "backdrop-blur-sm backdrop-filter",
-            classNames?.overlay
+            classNames?.overlay,
           )}
           {...props}
         >
           <DockRoot
             className={cn(
               dockContentStyles({ side, isFloat }),
-              className || classNames?.wrapper
+              className || classNames?.wrapper,
             )}
             initial={{
               x: side === "left" ? "-100%" : side === "right" ? "100%" : 0,
@@ -156,7 +175,7 @@ function DockContent({
             drag={side === "left" || side === "right" ? "x" : "y"}
             whileDrag={{ cursor: "grabbing" }}
             dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
-            onDragEnd={(_, { offset, velocity }) => {
+            onDragEnd={(_: any, { offset, velocity }: PanInfo) => {
               if (
                 side === "bottom" &&
                 (velocity.y > 150 || offset.y > h * 0.25)
@@ -184,7 +203,7 @@ function DockContent({
               className={cn(
                 "bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
                 !isFloat && "rounded-none",
-                classNames?.content
+                classNames?.content,
               )}
             >
               {(values) => (

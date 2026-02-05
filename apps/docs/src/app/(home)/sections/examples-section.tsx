@@ -7,9 +7,8 @@ import { Switch } from "@/components/ui/core/switch";
 const EXAMPLES_SECTION_CONTENT = {
   header: {
     badge: "◼ SYSTEM_EXAMPLES",
-    title: "Constructed Reality",
-    description:
-      "Operational modules assembled from atomic primitives. Designed for precision and scalability in deep space environments.",
+    title: "Real-world Patterns",
+    description: "Operational modules. Assembled from atomic primitives.",
     meta: {
       labId: "LAB_ID: 94-B",
       status: "STATUS: OPTIMAL",
@@ -22,9 +21,9 @@ const EXAMPLES_SECTION_CONTENT = {
       title: "Authentication",
       description: "Secure access point assembled from atomic primitives.",
       visual: (
-        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border border-border/40 bg-foreground/5 p-6 backdrop-blur-md">
+        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border bg-foreground/5 p-6 backdrop-blur-md">
           <div className="flex justify-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border/50 bg-background/50 text-foreground">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border text-foreground">
               <Lock className="size-5" />
             </div>
           </div>
@@ -50,7 +49,7 @@ const EXAMPLES_SECTION_CONTENT = {
       title: "Command Protocol",
       description: "System configuration interface with toggle controls.",
       visual: (
-        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border border-border/40 bg-foreground/5 p-6 backdrop-blur-md">
+        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border bg-foreground/5 p-6 backdrop-blur-md">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
               <Settings className="size-3" />
@@ -84,7 +83,7 @@ const EXAMPLES_SECTION_CONTENT = {
       title: "Playback System",
       description: "Interactive slider and progress controls.",
       visual: (
-        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border border-border/40 bg-foreground/5 p-6 backdrop-blur-md">
+        <div className="w-full max-w-[240px] h-[280px] flex flex-col justify-between rounded border bg-foreground/5 p-6 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <Skeleton className="h-10 w-10 shrink-0 rounded" />
             <div className="space-y-1.5">
@@ -104,7 +103,7 @@ const EXAMPLES_SECTION_CONTENT = {
               tone="outline"
               radius="full"
               iconOnly
-              className="h-8 w-8 border-border/30 hover:bg-foreground/5"
+              className="h-8 w-8 hover:bg-foreground/5"
             >
               <Play className="h-3 w-3 fill-foreground/50" />
             </Button>
@@ -117,7 +116,7 @@ const EXAMPLES_SECTION_CONTENT = {
 
 export function ExamplesSection() {
   return (
-    <section className="relative overflow-hidden bg-background py-32 border-b border-border">
+    <section className="relative overflow-hidden py-32 border-b">
       <div className="absolute inset-0 bg-grid" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_800px_at_50%_-30%,rgba(120,119,198,0.05),transparent)]" />
 
@@ -144,9 +143,9 @@ export function ExamplesSection() {
           {EXAMPLES_SECTION_CONTENT.items.map((item) => (
             <div
               key={item.id}
-              className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-border bg-background/50 hover:bg-muted/5 transition-all duration-500"
+              className="group relative flex h-full flex-col overflow-hidden rounded-sm border hover:bg-muted/5 transition-all duration-500"
             >
-              <div className="aspect-4/3 w-full border-b border-border/50 bg-[radial-gradient(circle_at_center,var(--color-background)_0%,transparent_100%)] p-8 flex items-center justify-center relative">
+              <div className="aspect-4/3 w-full border-b bg-[radial-gradient(circle_at_center,var(--color-background)_0%,transparent_100%)] p-8 flex items-center justify-center relative">
                 <div className="absolute inset-0 opacity-20 bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.2)_50%,transparent_75%,transparent_100%)] bg-size-[4px_4px]" />
                 <div className="relative z-10 transition-transform duration-500 will-change-transform group-hover:scale-105">
                   {item.visual}
@@ -167,7 +166,7 @@ export function ExamplesSection() {
                   </p>
                 </div>
 
-                <div className="mt-8 flex items-center justify-between border-t border-border/50 pt-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="mt-8 flex items-center justify-between border-t pt-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   <div className="flex items-center gap-2 text-[10px] font-mono text-primary">
                     <Signal className="h-3 w-3" />
                     <span>LIVE_PREVIEW</span>

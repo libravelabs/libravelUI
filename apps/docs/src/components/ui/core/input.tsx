@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import {
@@ -84,7 +85,7 @@ const inputVariants = cva(
       size: "default",
       radius: "md",
     },
-  }
+  },
 );
 
 const inputGroupVariants = cva(
@@ -192,24 +193,39 @@ const inputGroupVariants = cva(
       size: "default",
       radius: "md",
     },
-  }
+  },
 );
 
+/**
+ * Props for the Input component.
+ */
 type InputProps = InputPrimitiveProps &
   VariantProps<typeof inputVariants> & {
+    /** Content to display at the start of the input. */
     startContent?: React.ReactNode;
+    /** Content to display at the end of the input (e.g., icons, buttons). */
     endContent?: React.ReactNode;
+    /** Whether the input is disabled. */
     isDisabled?: boolean;
+    /** Whether the input is in a loading state. */
     isLoading?: boolean;
+    /** Custom class names for internal elements. */
     classNames?: {
       wrapper?: string;
       input?: string;
       startContent?: string;
       endContent?: string;
     };
+    /** Optional custom component to render as the input (e.g., textarea). */
     as?: React.ElementType;
+    /** Content or render prop for the input. */
+    children?: React.ReactNode | ((args: any) => React.ReactNode);
   };
 
+/**
+ * A stylized input component built on React Aria Components.
+ * Supports start/end content, password visibility toggle, and loading states.
+ */
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
@@ -226,7 +242,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       as,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = typeProp === "password";
@@ -280,7 +296,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           gapClass,
           isPassword && "px-0 ps-3",
           classNames?.wrapper,
-          className
+          className,
         )}
       >
         {startContent && (
@@ -291,7 +307,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               size === "default" && "[&_svg:not([class*='size-'])]:size-4.5",
               size === "lg" && "[&_svg:not([class*='size-'])]:size-5",
               size === "xl" && "[&_svg:not([class*='size-'])]:size-5.5",
-              classNames?.startContent
+              classNames?.startContent,
             )}
           >
             {startContent}
@@ -303,7 +319,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           disabled={isDisabled || isLoading}
           className={cn(
             "flex-1 min-w-0 bg-transparent outline-none placeholder:text-muted-foreground disabled:pointer-events-none px-0",
-            classNames?.input
+            classNames?.input,
           )}
           {...props}
         />
@@ -316,7 +332,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               size === "default" && "[&>svg]:size-4.5",
               size === "lg" && "[&>svg]:size-5",
               size === "xl" && "[&>svg]:size-5.5",
-              classNames?.endContent
+              classNames?.endContent,
             )}
           >
             {actualEndContent}
@@ -324,7 +340,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";
@@ -341,7 +357,7 @@ const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
         {children}
       </Group>
     );
-  }
+  },
 );
 
 InputGroup.displayName = "InputGroup";

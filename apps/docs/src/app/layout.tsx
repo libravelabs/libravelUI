@@ -2,7 +2,7 @@ import "./global.css";
 import { RootProvider } from "fumadocs-ui/provider";
 import type { ReactNode } from "react";
 import { Toast } from "@/components/ui/core/toast";
-import SearchDialog from "@/components/search";
+import SearchDialog from "@/components/app/search";
 import { FloatingNav } from "@/components/app/floating-nav";
 import { ThemeInitializer } from "@/components/theme/theme-intializer";
 import { generateThemeScript } from "@/scripts/generate-theme";

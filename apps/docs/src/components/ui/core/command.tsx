@@ -18,6 +18,7 @@ import {
   type TextProps,
   type MenuSectionProps,
   type MenuItemProps,
+  type Key,
 } from "react-aria-components";
 import { cn } from "@/lib/utils";
 import { Search, X } from "lucide-react";
@@ -29,11 +30,11 @@ interface CommandContextValue {
   setIsEmpty: (empty: boolean) => void;
 
   items?: { id: string; name: string }[];
-  onAction?: (key: string) => void;
+  onAction?: (key: Key) => void;
 }
 
 const CommandContext = React.createContext<CommandContextValue | undefined>(
-  undefined
+  undefined,
 );
 
 function useCommandContext() {
@@ -83,7 +84,7 @@ function Command({
       <div
         className={cn(
           "bg-popover text-popover-foreground border border-border flex h-full w-full flex-col overflow-hidden rounded-md",
-          className
+          className,
         )}
       >
         <Autocomplete filter={filter} {...props}>
@@ -117,7 +118,7 @@ function CommandInput({
             className={cn(
               "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
               "[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
-              className
+              className,
             )}
             placeholder={placeholder}
           />
@@ -150,7 +151,7 @@ function CommandList({
       renderEmptyState={() => <CommandEmpty />}
       className={cn(
         "max-h-96 scroll-py-1 overflow-x-hidden overflow-y-auto scrollbar-hidden p-1",
-        className
+        className,
       )}
       {...props}
     >
@@ -173,7 +174,7 @@ function CommandGroup<T extends object>({
       aria-label={props.title || "group"}
       className={cn(
         "col-span-full flex flex-col content-start gap-y-px",
-        className
+        className,
       )}
       {...props}
     >
@@ -212,9 +213,9 @@ function CommandItem({
         props.isDisabled &&
           "opacity-50 pointer-events-none cursor-not-allowed hover:bg-transparent focus:outline-none",
         tone === "destructive"
-          ? "text-destructive [&_svg]:!text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive"
+          ? "text-destructive [&_svg]:text-destructive! focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive"
           : "focus:bg-accent focus:text-accent-foreground",
-        className
+        className,
       )}
       {...props}
     >
@@ -251,7 +252,7 @@ function CommandShortcut({ className, ...props }: ShortcutProps) {
       data-slot="command-shortcut"
       className={cn(
         "text-muted-foreground ms-auto text-xs tracking-widest",
-        className
+        className,
       )}
       {...props}
     />
@@ -272,7 +273,7 @@ function CommandDescription({
       slot="description"
       className={cn(
         "text-pretty text-base/6 text-muted-foreground group-disabled:opacity-50 sm:text-sm/6 ms-auto",
-        className
+        className,
       )}
       ref={ref}
       {...props}

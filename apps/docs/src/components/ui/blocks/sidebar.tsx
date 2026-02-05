@@ -12,7 +12,7 @@ function Sidebar({ children, className }: React.ComponentProps<"aside">) {
     <aside
       className={cn(
         "w-[280px] h-screen bg-sidebar border-r border-sidebar-border flex flex-col",
-        className
+        className,
       )}
     >
       {children}
@@ -34,7 +34,7 @@ function SidebarBody({ className, ...props }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "relative flex-1 flex flex-col gap-1 overflow-y-auto px-3",
-        className
+        className,
       )}
       {...props}
     />
@@ -93,7 +93,7 @@ function SidebarItem({
           className={cn(
             "w-full justify-start [&_*:not(.truncate)]:truncate",
             isActive ? "bg-foreground/10" : "hover:bg-foreground/5",
-            button?.className
+            button?.className,
           )}
           {...button}
         >
@@ -111,7 +111,7 @@ function SidebarItem({
       className={cn(
         "w-full justify-start [&_*:not(.truncate)]:truncate",
         isActive ? "bg-foreground/10" : "hover:bg-foreground/5",
-        className
+        className,
       )}
       {...props}
     >
@@ -163,7 +163,7 @@ function SidebarGroup({
       <div
         className={cn(
           stickyHeader &&
-            cn("sticky top-0 bg-sidebar", classNames?.stickyHeader)
+            cn("sticky top-0 bg-sidebar", classNames?.stickyHeader),
         )}
       >
         <SidebarItem
@@ -177,7 +177,7 @@ function SidebarGroup({
           <ChevronDown
             className={cn(
               "size-4 shrink-0 transition-transform duration-200 ms-auto",
-              isOpen && "rotate-180"
+              isOpen && "rotate-180",
             )}
           />
         </SidebarItem>

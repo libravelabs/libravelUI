@@ -6,7 +6,7 @@ import { Loader } from "@/components/ui/core/loader";
 import { Modal, ModalTrigger, ModalContent } from "@/components/ui/core/modal";
 import { Code, LayoutPanelLeft, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ComponentSource } from "@/components/component-source";
+import { ComponentSource } from "@/components/docs/component-source";
 import { Button } from "@/components/ui/core/button";
 
 type ExampleProps = {
@@ -48,7 +48,7 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
     {
       ssr: false,
       loading: () => <Loader />,
-    }
+    },
   );
 
   return (
@@ -89,7 +89,7 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
           dir={state.dir}
           className={cn(
             "flex flex-col items-center justify-center w-full h-full relative p-4 not-prose",
-            className
+            className,
           )}
         >
           <Demo />

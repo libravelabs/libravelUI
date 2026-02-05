@@ -11,6 +11,7 @@ import {
   Heading,
   type DateValue,
   type RangeCalendarProps as RangeCalendarPrimitiveProps,
+  type RangeValue,
 } from "react-aria-components";
 import { cn } from "@/lib/utils";
 import { FieldError } from "@/components/ui/core/field";
@@ -52,7 +53,7 @@ function RangeCalendar<T extends DateValue>({
   const initialFocused = React.useMemo(() => {
     if (initialYear && initialMonth) {
       return parseDate(
-        `${initialYear}-${String(initialMonth).padStart(2, "0")}-01`
+        `${initialYear}-${String(initialMonth).padStart(2, "0")}-01`,
       );
     }
     return today(getLocalTimeZone());
@@ -91,11 +92,12 @@ function RangeCalendar<T extends DateValue>({
     <RangeCalendarPrimitive
       {...props}
       defaultFocusedValue={initialFocused}
-      defaultValue={initialValue}
+      defaultValue={initialValue as RangeValue<T> | undefined}
       visibleDuration={visibleDuration}
+      isInvalid={!!error}
       className={cn(
-        "grid gap-4 [&_*]:!border-none bg-card p-2 rounded-xl border",
-        className
+        "grid gap-4 **:border-none! bg-card p-2 rounded-xl border",
+        className,
       )}
     >
       {label && <Label className="mx-auto text-sm font-medium">{label}</Label>}
@@ -161,7 +163,7 @@ function RangeCalendar<T extends DateValue>({
                               isDisabled &&
                                 "text-muted-foreground opacity-30 cursor-not-allowed",
                               isUnavailable &&
-                                "text-destructive line-through pointer-events-none"
+                                "text-destructive line-through pointer-events-none",
                             )
                           }
                         >
@@ -175,13 +177,13 @@ function RangeCalendar<T extends DateValue>({
                     }}
                   </CalendarGridBody>
                 </CalendarGrid>
-              )
+              ),
             )}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {error && <FieldError asDefault slot="error" message={error} />}
+      {error && <div className="text-sm text-destructive">{error}</div>}
     </RangeCalendarPrimitive>
   );
 }
@@ -202,7 +204,7 @@ function RangeCalendarHeader({
     <header
       className={cn(
         "flex w-full items-center justify-between gap-2",
-        className
+        className,
       )}
     >
       <Button

@@ -2,11 +2,10 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-type CardProps = VariantProps<typeof cardVariants> & {
-  className?: string;
-  children: React.ReactNode;
-  circleGradient?: boolean;
-};
+type CardProps = React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof cardVariants> & {
+    circleGradient?: boolean;
+  };
 
 const cardVariants = cva("relative overflow-hidden", {
   variants: {
@@ -196,7 +195,7 @@ const cardVariants = cva("relative overflow-hidden", {
   },
 });
 
-function Card(props: CardProps) {
+const Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {
   const {
     variant,
     tone = "neutral",
@@ -206,6 +205,7 @@ function Card(props: CardProps) {
     className,
     children,
     circleGradient = false,
+    ...rest
   } = props;
 
   const classes = cn(
@@ -214,7 +214,7 @@ function Card(props: CardProps) {
   );
 
   return (
-    <div data-slot="card" className={classes}>
+    <div ref={ref} data-slot="card" className={classes} {...rest}>
       {circleGradient && (
         <div
           className={cn(
@@ -233,43 +233,67 @@ function Card(props: CardProps) {
       {children}
     </div>
   );
-}
+});
+Card.displayName = "Card";
 
-type SlotProps = {
-  className?: string;
-  children?: React.ReactNode;
-};
-
-function CardHeader({ className, children }: SlotProps) {
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-header"
       className={cn("w-full [&>*:first-child]:mb-1.5", className)}
+      {...props}
     >
       {children}
     </div>
   );
-}
+});
+CardHeader.displayName = "CardHeader";
 
-function CardContent({ className, children }: SlotProps) {
-  return (
-    <div data-slot="card-content" className={cn(className)}>
-      {children}
-    </div>
-  );
-}
-
-function CardFooter({ className, children }: SlotProps) {
-  return (
-    <div data-slot="card-footer" className={cn("w-full", className)}>
-      {children}
-    </div>
-  );
-}
-
-function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...props }, ref) => {
   return (
     <div
+      ref={ref}
+      data-slot="card-content"
+      className={cn(className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
+CardContent.displayName = "CardContent";
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      data-slot="card-footer"
+      className={cn("w-full", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
+CardFooter.displayName = "CardFooter";
+
+const CardAction = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
       data-slot="card-action"
       className={cn(
         "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
@@ -278,27 +302,38 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
       {...props}
     />
   );
-}
+});
+CardAction.displayName = "CardAction";
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+const CardTitle = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-title"
       className={cn("leading-none font-semibold", className)}
       {...props}
     />
   );
-}
+});
+CardTitle.displayName = "CardTitle";
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+const CardDescription = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-description"
       className={cn("text-muted-foreground text-sm", className)}
       {...props}
     />
   );
-}
+});
+CardDescription.displayName = "CardDescription";
 
 export {
   Card,

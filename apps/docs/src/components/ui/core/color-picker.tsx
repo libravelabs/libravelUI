@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/core/color-field";
 import { Input, type InputProps } from "@/components/ui/core/input";
 
-interface ColorPickerProps extends ColorPickerPrimitiveProps {
+interface ColorPickerProps extends Omit<ColorPickerPrimitiveProps, "children"> {
   label?: string;
   className?: string;
   children?: React.ReactNode;
@@ -86,7 +86,7 @@ function ColorPicker({
                 "inset-ring inset-ring-input",
                 "focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20",
                 "data-[state=open]:inset-ring-ring/70 data-[state=open]:ring-3 data-[state=open]:ring-ring/20",
-                "cursor-pointer disabled:cursor-not-allowed"
+                "cursor-pointer disabled:cursor-not-allowed",
               )}
             >
               <ColorSwatch {...colorSwatch} />

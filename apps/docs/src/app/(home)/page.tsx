@@ -1,22 +1,22 @@
-import { ShowcaseSection } from "@/app/(home)/sections/showcase-section";
-import {
-  HeroSection,
-  ComponentsOverviewSection,
-  PlaygroundSection,
-  SystemPrinciplesSection,
-  ExamplesSection,
-  CTASection,
-} from "./sections";
+import { HeroSection } from "./sections/hero-section";
+import { ComparisonSection } from "./sections/comparison-section";
+import { ShowcaseSection } from "./sections/showcase-section";
+import { ComponentsOverviewSection } from "./sections/components-overview-section";
+import { ExamplesSection } from "./sections/examples-section";
+import { PlaygroundSection } from "./sections/playground-section";
+import { AccessibilitySection } from "./sections/accessibility-section";
+import { CTASection } from "./sections/cta-section";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col min-h-screen overflow-x-hidden">
+    <main className="flex min-h-screen flex-col">
       <HeroSection />
+      <ComparisonSection />
       <ShowcaseSection />
       <ComponentsOverviewSection />
-      <PlaygroundSection />
-      <SystemPrinciplesSection />
       <ExamplesSection />
+      <PlaygroundSection />
+      <AccessibilitySection />
       <CTASection />
     </main>
   );

@@ -45,12 +45,22 @@ function useSelectContext() {
   return ctx;
 }
 
+/**
+ * Props for the SelectRoot component.
+ */
 type SelectRootProps = SelectPrimitiveProps & {
-  defaultValue?: Key | Key[];
+  /** The initial value of the selection. */
+  defaultValue?: Key | Key[] | null;
+  /** Error message to display. */
   error?: FieldProps["error"];
+  /** Whether the select allows multiple values. */
   multiple?: boolean;
 };
 
+/**
+ * The root component for the Select system.
+ * Manages state and context for triggers, lists, and items.
+ */
 function SelectRoot({
   defaultValue = "",
   error,
@@ -58,7 +68,7 @@ function SelectRoot({
   className,
   ...props
 }: SelectRootProps) {
-  const [value, setValue] = React.useState<Key | Key[]>(defaultValue);
+  const [value, setValue] = React.useState<Key | Key[] | null>(defaultValue);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const clear = () => setValue(Array.isArray(value) ? [] : "");
@@ -73,15 +83,22 @@ function SelectRoot({
 
   return (
     <SelectContext.Provider
-      value={{ value, setValue, clear, isOpen, setIsOpen, error }}
+      value={{
+        value: value ?? "",
+        setValue: (v) => setValue(v),
+        clear,
+        isOpen,
+        setIsOpen,
+        error,
+      }}
     >
       <SelectPrimitive
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         aria-label={props["aria-label"] ?? "select"}
-        selectedKey={value}
+        selectedKey={value as any}
         onSelectionChange={handleSelectionChange}
-        multiple={multiple}
+        {...({ multiple } as any)}
         className={cn(className)}
         {...props}
       >
@@ -112,13 +129,20 @@ function SelectTrigger({
       <Button
         {...props}
         data-state={isOpen}
+        onKeyDown={(e) => {
+          if (!hideClear && (e.key === "Delete" || e.key === "Backspace")) {
+            e.preventDefault();
+            e.stopPropagation();
+            setValue(Array.isArray(value) ? [] : "");
+          }
+        }}
         className={cn(
-          "min-w-0 w-full border-input data-[placeholder]:text-muted-foreground hover:opacity-70 transition ease-linear [&_svg:not([class*='text-'])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 truncate",
+          "min-w-0 w-full border-input data-placeholder:text-muted-foreground hover:opacity-70 transition ease-linear [&_svg:not([class*='text-'])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 truncate",
           error
             ? "border border-destructive inset-ring-destructive ring-3 ring-destructive/20 focus-within:inset-ring-destructive focus-within:ring-3 focus-within:ring-destructive/20"
             : "inset-ring inset-ring-input outline-hidden focus:inset-ring-ring/70 focus:ring-3 focus:ring-ring/20 data-[state=true]:inset-ring-ring/70 data-[state=true]:ring-3 data-[state=true]:ring-ring/20",
           "cursor-pointer disabled:cursor-not-allowed",
-          className
+          className,
         )}
       >
         <SelectValue
@@ -153,7 +177,7 @@ function SelectTrigger({
           />
         </div>
       </Button>
-      {error && <FieldError asDefault message={error} className="-mt-1" />}
+      {error && <FieldError message={error} className="-mt-1" />}
     </div>
   );
 }
@@ -173,7 +197,7 @@ function SelectContent<T extends object>({
       {...popover}
       className={cn(
         "bg-popover text-popover-foreground z-50 w-(--trigger-width) max-h-96 overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-hidden",
-        className
+        className,
       )}
     >
       <ListBox {...props}>{children}</ListBox>
@@ -222,7 +246,7 @@ function SelectItem({
           isDisabled && "pointer-events-none opacity-50",
           isSelected && "[&_svg:not([data-slot='indicator'])]:hidden",
           inset && "ps-8",
-          className
+          className,
         )
       }
       {...props}
@@ -282,7 +306,7 @@ function SelectHeader({
       className={cn(
         "col-span-full px-2.5 py-2 font-semibold text-base sm:text-sm",
         separator && "-mx-1 mb-1 border-b sm:px-3 sm:pb-[0.625rem]",
-        className
+        className,
       )}
       {...props}
     />
