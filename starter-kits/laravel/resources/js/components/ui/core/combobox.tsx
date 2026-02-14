@@ -1,0 +1,350 @@
+import * as React from 'react';
+import {
+    ListBox,
+    ListBoxItem,
+    ListBoxSection,
+    ComboBox as ComboBoxPrimitive,
+    Header,
+    Collection,
+} from 'react-aria-components';
+import type {
+    Key,
+    ComboBoxProps as ComboBoxPrimitiveProps,
+    PopoverProps,
+    ListBoxProps,
+} from 'react-aria-components';
+import { Check, ChevronsUpDown, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+    PopoverContent,
+    PopoverTrigger,
+    type PopoverContentProps,
+} from '@/components/ui/core/popover';
+import { Separator } from '@/components/ui/core/separator';
+import { Label, FieldProps } from '@/components/ui/core/field';
+import { Input, InputProps } from '@/components/ui/core/input';
+
+interface ComboBoxContextType {
+    value: Key;
+    setValue: (val: Key) => void;
+    clear: () => void;
+    isOpen: PopoverProps['isOpen'];
+    setIsOpen: PopoverProps['onOpenChange'];
+    error?: FieldProps['error'];
+    triggerRef: React.RefObject<HTMLElement>;
+}
+
+const ComboBoxContext = React.createContext<ComboBoxContextType | null>(null);
+
+function useComboBoxContext() {
+    const ctx = React.useContext(ComboBoxContext);
+    if (!ctx)
+        throw new Error('ComboBox components must be used within ComboBoxRoot');
+    return ctx;
+}
+
+type ComboBoxRootProps<T extends object> = ComboBoxPrimitiveProps<T> & {
+    defaultValue?: string;
+    label?: string;
+    error?: FieldProps['error'];
+};
+
+function ComboBoxRoot<T extends object>({
+    defaultValue = '',
+    error,
+    ...props
+}: ComboBoxRootProps<T>) {
+    const [value, setValue] = React.useState<Key>(defaultValue);
+    const [isOpen, setIsOpen] = React.useState(false);
+    const triggerRef = React.useRef<HTMLDivElement>(null);
+
+    const clear = () => setValue('');
+
+    const onSelectionChange = (key: Key | null) => {
+        if (key !== null) {
+            setValue(key);
+        }
+    };
+
+    return (
+        <ComboBoxContext.Provider
+            value={{
+                value,
+                setValue,
+                clear,
+                isOpen,
+                setIsOpen,
+                error,
+                triggerRef:
+                    triggerRef as unknown as React.RefObject<HTMLElement>,
+            }}
+        >
+            <div>
+                <ComboBoxPrimitive
+                    aria-label={props['aria-label'] ?? 'combobox'}
+                    selectedKey={value}
+                    onSelectionChange={onSelectionChange}
+                    {...props}
+                >
+                    {props.children}
+                </ComboBoxPrimitive>
+            </div>
+        </ComboBoxContext.Provider>
+    );
+}
+
+interface ComboBoxInputProps extends InputProps {
+    label?: string;
+    placeholder?: string;
+}
+
+function ComboBoxInput({
+    className,
+    label, // kept for prop compatibility but unused
+    placeholder,
+    hideClear = false,
+    ...props
+}: ComboBoxInputProps & {
+    hideClear?: boolean;
+}) {
+    const { value, clear, triggerRef } = useComboBoxContext();
+
+    return (
+        <div
+            ref={triggerRef as React.RefObject<HTMLDivElement>}
+            className="flex items-center gap-2"
+        >
+            <Input
+                {...props}
+                placeholder={placeholder}
+                className={cn('w-full min-w-3xs', className)}
+                endContent={
+                    <div className="flex shrink-0 items-center gap-2">
+                        {value !== '' && !hideClear && (
+                            <span
+                                onPointerDownCapture={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    clear();
+                                }}
+                                className="rounded p-1 hover:bg-muted focus:outline-none"
+                                tabIndex={-1}
+                                aria-label="Clear selected item"
+                                role="button"
+                            >
+                                <X className="size-3" />
+                            </span>
+                        )}
+
+                        <PopoverTrigger tone="unstyled">
+                            <ChevronsUpDown
+                                data-slot="chevron"
+                                className="-me-1 size-4 shrink-0 text-muted-foreground group-open/select:text-foreground group-disabled/select:opacity-50 sm:me-0"
+                            />
+                        </PopoverTrigger>
+                    </div>
+                }
+            />
+        </div>
+    );
+}
+
+interface ComboBoxContentProps<T extends object> extends ListBoxProps<T> {
+    popover?: PopoverContentProps;
+}
+
+function ComboBoxContent<T extends object>({
+    children,
+    popover,
+    className,
+    ...props
+}: ComboBoxContentProps<T>) {
+    const { triggerRef } = useComboBoxContext();
+
+    return (
+        <PopoverContent {...popover} triggerRef={triggerRef} className="p-0">
+            <ListBox
+                {...props}
+                className={cn(
+                    'z-50 max-h-[30rem] w-[calc(var(--trigger-width)+24px)] overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden',
+                    className,
+                )}
+            >
+                {children}
+            </ListBox>
+        </PopoverContent>
+    );
+}
+
+function ComboBoxGroup({
+    title,
+    children,
+    ...props
+}: React.ComponentProps<typeof ListBoxSection> & {
+    title?: string;
+}) {
+    return (
+        <ListBoxSection data-slot="dropdown-menu-group" {...props}>
+            {title && (
+                <Header className="col-span-full px-2 py-2 text-sm/6 font-medium text-muted-foreground/70 sm:py-1.5 sm:text-xs/5">
+                    {title}
+                </Header>
+            )}
+            <Collection>{children}</Collection>
+        </ListBoxSection>
+    );
+}
+
+function ComboBoxItem({
+    className,
+    inset,
+    children,
+    ...props
+}: React.ComponentProps<typeof ListBoxItem> & {
+    inset?: boolean;
+    href?: string;
+}) {
+    const textValue =
+        props.textValue ||
+        (typeof children === 'string' ? children : undefined);
+
+    return (
+        <ListBoxItem
+            data-slot="dropdown-menu-item"
+            textValue={textValue}
+            className={({ isDisabled, isSelected }) =>
+                cn(
+                    "relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
+                    isDisabled && 'pointer-events-none opacity-50',
+                    isSelected && "[&_svg:not([data-slot='indicator'])]:hidden",
+                    inset && 'ps-8',
+                    className,
+                )
+            }
+            {...props}
+        >
+            {(values) => (
+                <>
+                    {values.isSelected && (
+                        <Check className="size-4" data-slot="indicator" />
+                    )}
+
+                    {typeof children === 'function'
+                        ? children(values)
+                        : children}
+                </>
+            )}
+        </ListBoxItem>
+    );
+}
+
+function ComboBoxLabel({
+    className,
+    inset,
+    ...props
+}: React.ComponentProps<typeof Label> & {
+    inset?: boolean;
+}) {
+    return (
+        <Label
+            data-slot="dropdown-menu-label"
+            data-inset={inset}
+            className={cn('text-sm font-medium data-[inset]:ps-8', className)}
+            {...props}
+        />
+    );
+}
+
+function ComboBoxSeparator({
+    className,
+    ...props
+}: React.ComponentProps<typeof Separator>) {
+    return (
+        <Separator
+            data-slot="dropdown-menu-separator"
+            className={cn(
+                '-mx-1 my-1 h-px w-full shrink-0 bg-border',
+                className,
+            )}
+            {...props}
+        />
+    );
+}
+
+function ComboBoxHeader({
+    className,
+    separator = false,
+    ...props
+}: React.ComponentProps<typeof Header> & {
+    separator?: boolean;
+}) {
+    return (
+        <Header
+            className={cn(
+                'col-span-full px-2.5 py-2 text-base font-semibold sm:text-sm',
+                separator && '-mx-1 mb-1 border-b sm:px-3 sm:pb-[0.625rem]',
+                className,
+            )}
+            {...props}
+        />
+    );
+}
+
+type ComboBoxProps<T extends object> = ComboBoxPrimitiveProps<T> & {
+    placeholder?: string;
+    label?: string;
+    id?: string | number;
+    hideClear?: boolean;
+    classNames?: {
+        root?: string | string[];
+        trigger?: string | string[];
+        content?: string | string[];
+        item?: string | string[];
+    };
+    items: {
+        label: string;
+        id: string | number | boolean;
+    }[];
+};
+
+function ComboBox<T extends object>({
+    items,
+    placeholder,
+    hideClear = false,
+    classNames,
+    ...props
+}: ComboBoxProps<T>) {
+    return (
+        <ComboBoxRoot {...props} className={cn(classNames?.root)}>
+            <ComboBoxInput
+                placeholder={placeholder}
+                hideClear={hideClear}
+                className={cn(classNames?.trigger)}
+            />
+            <ComboBoxContent className={cn(classNames?.content)}>
+                {items.map((item) => (
+                    <ComboBoxItem
+                        key={item.id as ComboBoxProps<T>['id']}
+                        id={item.id as ComboBoxProps<T>['id']}
+                        className={cn(classNames?.item)}
+                        textValue={item.label}
+                    >
+                        {item.label}
+                    </ComboBoxItem>
+                ))}
+            </ComboBoxContent>
+        </ComboBoxRoot>
+    );
+}
+
+export {
+    ComboBox,
+    ComboBoxRoot,
+    ComboBoxInput,
+    ComboBoxContent,
+    ComboBoxItem,
+    ComboBoxGroup,
+    ComboBoxLabel,
+    ComboBoxSeparator,
+    ComboBoxHeader,
+};

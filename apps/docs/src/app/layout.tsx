@@ -45,6 +45,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             attribute: "class",
             defaultTheme: "system",
             enableSystem: true,
+            disableTransitionOnChange: true,
           }}
         >
           <TexturedBackground>

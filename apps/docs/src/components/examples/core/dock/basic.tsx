@@ -11,8 +11,10 @@ import {
   DockBody,
 } from "@/components/ui/core/dock";
 import { Button } from "@/components/ui/core/button";
+import { TextField } from "@/components/ui/core/text-field";
+import { Label } from "@/components/ui/core/field";
 import { Input } from "@/components/ui/core/input";
-import { AtSign, Lock, User } from "lucide-react";
+import { Lock, User } from "lucide-react";
 
 export default function BasicDock() {
   return (
@@ -31,27 +33,34 @@ export default function BasicDock() {
             </DockHeader>
 
             <DockBody>
-              <div className="grid flex-1 auto-rows-min gap-6 p-2">
-                <Input
-                  id="dock-example-name"
-                  label="Name"
-                  defaultValue="Travis Bickle"
-                  startContent={<User />}
-                  autoFocus
-                />
-                <Input
-                  id="dock-example-username"
-                  label="Username"
-                  defaultValue="@bicklelonewolf"
-                  startContent={<AtSign />}
-                />
-                <Input
-                  id="dock-example-password"
-                  label="Password"
-                  type="password"
-                  defaultValue="ilovebetsymorethanever"
-                  startContent={<Lock />}
-                />
+              <div className="flex flex-col gap-6">
+                <TextField isRequired>
+                  <Label>Username</Label>
+                  <Input
+                    type="text"
+                    id="username"
+                    placeholder="beatrix_kiddo"
+                    startContent={<User />}
+                  />
+                </TextField>
+
+                <TextField isRequired>
+                  <div className="flex justify-between items-center">
+                    <Label>Password</Label>
+                    <a
+                      href="#"
+                      className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
+                    >
+                      Forgot your password?
+                    </a>
+                  </div>
+                  <Input
+                    type="password"
+                    id="password"
+                    placeholder="It's a secret.."
+                    startContent={<Lock />}
+                  />
+                </TextField>
               </div>
             </DockBody>
 

@@ -13,12 +13,15 @@ import {
 } from "@/components/ui/core/dropdown-menu";
 import { Paintbrush } from "lucide-react";
 
+import { useUiPreferences } from "@/hooks/use-ui-preferences";
+
 const STORAGE_KEY = process.env.THEME_STORAGE as string;
 
 export function ThemeSelector() {
   const { theme: mode } = useTheme();
+  const selected = useUiPreferences((s) => s.theme) as ThemeName;
+  const setSelected = useUiPreferences((s) => s.setTheme);
 
-  const [selected, setSelected] = useState<ThemeName>("default");
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -28,7 +31,7 @@ export function ThemeSelector() {
     if (stored && getTheme(stored)) {
       setSelected(stored);
     }
-  }, []);
+  }, [setSelected]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -60,7 +63,7 @@ export function ThemeSelector() {
             onClick={() => setSelected(name)}
             className={name === selected ? "bg-accent" : ""}
           >
-            {name}
+            {themes[name].label}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

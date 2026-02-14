@@ -31,3 +31,4 @@ out/
 # Specific packages
 packages/cli-example/
 packages/cli/node_modules/
+starter-kits/backup laravel/

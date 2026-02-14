@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { LibraryBig } from "lucide-react";
-import React from "react";
 
 interface LogoProps {
   variant?: "icon" | "name" | "full";

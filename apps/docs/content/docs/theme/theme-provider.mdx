@@ -1,0 +1,100 @@
+---
+title: Theme Provider
+description: A component that manages light and dark mode for your application with support for system preferences and local storage.
+---
+
+The `ThemeProvider` is a wrapper around your application that provides theme context (light, dark, or system) to all components. It's built to be fast, prevents the flash of unstyled content (FOUC), and works seamlessly with Next.js and Tailwind CSS.
+
+## Installation
+
+```package-install
+npx libravel-ui add theme-provider
+```
+
+> **Note:** Since this is a core provider, you usually only need to install it once and wrap your root layout with it.
+
+## Usage
+
+### Root Layout
+
+Wrap your application with the `ThemeProvider` in your root layout file (e.g., `app/layout.tsx` for Next.js App Router).
+
+```tsx {1,14-16}
+import { ThemeProvider } from "@/components/theme/theme-provider";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+> **Important:** You must add `suppressHydrationWarning` to the `<html>` tag to avoid hydration mismatch warnings from Next.js, as the `ThemeProvider` modifies the HTML attributes on the client.
+
+### useTheme
+
+You can use the `useTheme` hook to access the current theme and update it.
+
+```tsx
+"use client";
+
+import { useTheme } from "@/components/theme/theme-provider";
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+      Toggle Theme
+    </button>
+  );
+}
+```
+
+## Props
+
+| Prop                        | Type       | Default             | Description                                                               |
+| :-------------------------- | :--------- | :------------------ | :------------------------------------------------------------------------ |
+| `attribute`                 | `string`   | `"class"`           | HTML attribute modified based on the active theme.                        |
+| `defaultTheme`              | `string`   | `"system"`          | Initial theme when no setting is found in storage.                        |
+| `enableSystem`              | `boolean`  | `true`              | Whether to switch between dark and light based on `prefers-color-scheme`. |
+| `storageKey`                | `string`   | `"theme"`           | Key used to store theme setting in `localStorage`.                        |
+| `themes`                    | `string[]` | `["light", "dark"]` | List of all available theme names.                                        |
+| `forcedTheme`               | `string`   | -                   | Forced theme name for the current page.                                   |
+| `disableTransitionOnChange` | `boolean`  | `false`             | Disable all CSS transitions when switching themes.                        |
+| `enableColorScheme`         | `boolean`  | `true`              | Whether to indicate to browsers which color scheme is used.               |
+
+## Examples
+
+### Custom Storage Key
+
+If you want to use a different key in local storage:
+
+```tsx
+<ThemeProvider storageKey="libravel-ui-theme">{children}</ThemeProvider>
+```
+
+### Data Attribute
+
+If you prefer using a data attribute instead of a class:
+
+```tsx
+<ThemeProvider attribute="data-theme">{children}</ThemeProvider>
+```
+
+This will apply `<html data-theme="dark">` instead of `<html class="dark">`.

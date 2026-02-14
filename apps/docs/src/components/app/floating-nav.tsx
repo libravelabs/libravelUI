@@ -6,6 +6,7 @@ import { ThemeSelector } from "../theme/theme-selector";
 import { AppearanceToggle } from "./partials/appearance-toggle";
 import { Separator } from "../ui/core/separator";
 import { RadiusSelector } from "./partials/radius-selector";
+import { CopyThemeButton } from "./partials/copy-theme-button";
 import { TextureToggle } from "./partials/texture-toggle";
 import { AnimatedTooltip } from "../ui/motion/animated-tooltip";
 import { NavPositionSelector } from "./partials/nav-position-selector";
@@ -39,7 +40,7 @@ export function FloatingNav() {
           transition={{ duration: 0.35, ease: "easeOut" }}
           className={cn(
             basePositionClass,
-            "flex items-center gap-3 rounded-xl bg-sidebar p-3 border shadow-xl"
+            "flex items-center gap-3 rounded-xl bg-sidebar p-3 border shadow-xl",
           )}
         >
           {isMobile ? (
@@ -60,6 +61,8 @@ export function FloatingNav() {
                 App Theme
               </AnimatedTooltip>
 
+              <CopyThemeButton />
+
               <RadiusSelector />
             </>
           ) : (
@@ -72,6 +75,8 @@ export function FloatingNav() {
               >
                 App Theme
               </AnimatedTooltip>
+
+              <CopyThemeButton />
 
               <Separator
                 orientation="vertical"
@@ -117,7 +122,7 @@ export function FloatingNav() {
           className={cn(
             basePositionClass,
             "-bottom-1",
-            "flex w-14 h-7 items-center justify-center rounded-md bg-sidebar text-sidebar-foreground border shadow-xl"
+            "flex w-14 h-7 items-center justify-center rounded-md bg-sidebar text-sidebar-foreground border shadow-xl",
           )}
           onClick={showNav}
           onMouseEnter={showNav}

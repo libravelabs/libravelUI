@@ -1,30 +1,11 @@
 import fs from "fs";
 import path from "path";
-import { fetchComponentSource, SourceResponse } from "../lib/source-fetcher";
+import { fetchComponentSource } from "../lib/source-fetcher";
 import { getComponentDocs } from "../lib/registry-docs";
 import { cleanCode } from "../lib/code-utils";
 
-const COMPONENT_ROOT = path.join(process.cwd(), "src/components/ui");
-const HOOKS_ROOT = path.join(process.cwd(), "src/hooks");
-const OUTPUT_PATH = path.join(process.cwd(), "public/registry.json");
 const SRC_ROOT = path.join(process.cwd(), "src");
-const CSS_PATH = path.join(process.cwd(), "src/app/libravel-ui.css");
-const UTILS_PATH = path.join(process.cwd(), "src/lib/utils.ts");
-const RENDER_PROPS_PATH = path.join(process.cwd(), "src/lib/render-props.ts");
-
-function getComponentType(
-  relativePath: string,
-):
-  | "registry:ui"
-  | "registry:block"
-  | "registry:example"
-  | "registry:style"
-  | "registry:hook" {
-  if (relativePath.includes("blocks")) return "registry:block";
-  if (relativePath.includes("hooks")) return "registry:hook";
-  if (relativePath.endsWith(".css")) return "registry:style";
-  return "registry:ui";
-}
+const OUTPUT_PATH = path.join(process.cwd(), "public/registry.json");
 
 function getAllFiles(
   dir: string,
@@ -42,8 +23,13 @@ function getAllFiles(
     if (stat && stat.isDirectory()) {
       results = results.concat(getAllFiles(filePath, extensions));
     } else if (extensions.some((ext) => file.endsWith(ext))) {
-      // Skip index files and private files
-      if (file.startsWith("_")) return;
+      if (
+        file.startsWith("_") ||
+        file.includes(".test.") ||
+        file.includes(".spec.") ||
+        file.includes("test")
+      )
+        return;
       results.push(filePath);
     }
   });
@@ -52,136 +38,79 @@ function getAllFiles(
 }
 
 async function buildRegistry() {
-  console.log("Building registry...");
+  console.log("Building smart registry...");
 
   const registry: Record<string, any> = {};
 
-  // 1. Process Components (UI, Blocks, Motion)
-  if (fs.existsSync(COMPONENT_ROOT)) {
-    const files = getAllFiles(COMPONENT_ROOT, [".tsx"]);
-
-    for (const filePath of files) {
-      const relativePath = path.relative(SRC_ROOT, filePath);
-      const slug = relativePath.replace(/\.tsx$/, "").split(path.sep);
-      const name = path.basename(filePath, ".tsx");
-
-      console.log(`Processing component: ${name}...`);
-      try {
-        const source = await fetchComponentSource(slug, name);
-        const docs = getComponentDocs(filePath);
-
-        if (source.files.length > 0) {
-          source.files = source.files.map((file) => ({
-            ...file,
-            code: cleanCode(file.content),
-          }));
-
-          registry[name] = {
-            name,
-            type: getComponentType(relativePath),
-            dependencies: source.dependencies,
-            registryDependencies: source.registryDependencies,
-            files: source.files,
-            docs,
-          };
-        }
-      } catch (error) {
-        console.error(`Failed to process ${name}:`, error);
-      }
-    }
-  }
-
-  // 2. Process Hooks
-  if (fs.existsSync(HOOKS_ROOT)) {
-    const hookFiles = getAllFiles(HOOKS_ROOT, [".ts", ".tsx"]);
-    for (const filePath of hookFiles) {
-      const relativePath = path.relative(SRC_ROOT, filePath);
-      const slug = relativePath.replace(/\.(ts|tsx)$/, "").split(path.sep);
-      const name = path.basename(filePath).replace(/\.(ts|tsx)$/, "");
-
-      console.log(`Processing hook: ${name}...`);
-      try {
-        const source = await fetchComponentSource(slug, name);
-
-        if (source.files.length > 0) {
-          source.files = source.files.map((file) => ({
-            ...file,
-            code: cleanCode(file.content),
-          }));
-
-          registry[name] = {
-            name,
-            type: "registry:hook",
-            dependencies: source.dependencies,
-            registryDependencies: source.registryDependencies,
-            files: source.files,
-          };
-        }
-      } catch (error) {
-        console.error(`Failed to process hook ${name}:`, error);
-      }
-    }
-  }
-
-  // 3. Process Styles
-  if (fs.existsSync(CSS_PATH)) {
-    console.log("Processing global CSS...");
-    const cssContent = fs.readFileSync(CSS_PATH, "utf8");
-    registry["styles"] = {
-      name: "styles",
-      type: "registry:style",
-      dependencies: [],
-      registryDependencies: [],
-      files: [
-        {
-          name: "libravel-ui.css",
-          path: "app/libravel-ui.css",
-          content: cssContent,
-          code: cssContent,
-        },
-      ],
-    };
-  }
-
-  // 4. Process Utils
-  const utilsToProcess = [
-    {
-      name: "utils",
-      path: UTILS_PATH,
-      target: "lib/utils.ts",
-      deps: ["clsx", "tailwind-merge"],
-    },
-    {
-      name: "render-props",
-      path: RENDER_PROPS_PATH,
-      target: "lib/render-props.ts",
-      deps: [],
-    },
+  const componentRoots = [
+    path.join(process.cwd(), "src/components/ui"),
+    path.join(process.cwd(), "src/components/theme"),
   ];
 
-  for (const util of utilsToProcess) {
-    if (fs.existsSync(util.path)) {
-      console.log(`Processing util: ${util.name}...`);
-      const content = fs.readFileSync(util.path, "utf8");
-      registry[util.name] = {
-        name: util.name,
-        type: "registry:ui",
-        dependencies: util.deps,
-        registryDependencies: [],
-        files: [
-          {
-            name: path.basename(util.path),
-            path: util.target,
-            content: content,
-            code: cleanCode(content),
-          },
-        ],
-      };
+  for (const root of componentRoots) {
+    if (fs.existsSync(root)) {
+      const files = getAllFiles(root, [".tsx"]);
+
+      for (const filePath of files) {
+        const relativePath = path.relative(SRC_ROOT, filePath);
+        const slug = relativePath.replace(/\.tsx$/, "").split(path.sep);
+        const name = path.basename(filePath, ".tsx");
+
+        if (name.includes(".") || name.includes("test")) continue;
+
+        console.log(`Processing component: ${name}...`);
+        try {
+          const source = await fetchComponentSource(slug, name);
+          const docs = getComponentDocs(filePath);
+
+          if (source.files.length > 0) {
+            registry[name] = {
+              name,
+              type: "registry:ui",
+              dependencies: source.dependencies,
+              registryDependencies: source.registryDependencies,
+              files: source.files.map((f) => ({
+                ...f,
+                path: f.path.replace(/\\/g, "/"),
+                code: cleanCode(f.content),
+              })),
+              docs,
+            };
+
+            for (const file of source.files) {
+              const rel = file.path.replace(/\\/g, "/");
+              if (rel.startsWith("lib/") || rel.startsWith("hooks/")) {
+                const depName = path.basename(rel).split(".")[0];
+                if (!registry[depName]) {
+                  const depSlug = rel.replace(/\.[^/.]+$/, "").split("/");
+                  const depSource = await fetchComponentSource(
+                    depSlug,
+                    depName,
+                  );
+
+                  registry[depName] = {
+                    name: depName,
+                    type: rel.startsWith("hooks/")
+                      ? "registry:hook"
+                      : "registry:lib",
+                    dependencies: depSource.dependencies,
+                    registryDependencies: depSource.registryDependencies,
+                    files: depSource.files.map((f) => ({
+                      ...f,
+                      path: f.path.replace(/\\/g, "/"),
+                      code: cleanCode(f.content),
+                    })),
+                  };
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error(`Failed to process ${name}:`, error);
+        }
+      }
     }
   }
-
-  // Note: We are REMOVING src/components/docs from the registry as per user request.
-  // Documentation-only components should not be in the core registry.
 
   const outputDir = path.dirname(OUTPUT_PATH);
   if (!fs.existsSync(outputDir)) {
@@ -189,7 +118,9 @@ async function buildRegistry() {
   }
 
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify(registry, null, 2));
-  console.log(`Registry built with ${Object.keys(registry).length} items.`);
+  console.log(
+    `Registry built with ${Object.keys(registry).length} total items.`,
+  );
 }
 
 buildRegistry().catch((err) => {
