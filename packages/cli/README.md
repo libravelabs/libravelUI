@@ -1,64 +1,63 @@
 # LibravelUI CLI
 
-Alat baris perintah (CLI) untuk mengintegrasikan LibravelUI ke dalam proyek kamu dengan cara yang bersih dan sesuai standar industri.
+A powerful command-line interface to integrate LibravelUI into your project with industry-standard practices.
 
-## Instalasi
+## Installation
 
-Kamu bisa menjalankan CLI ini langsung menggunakan `npx` atau menginstalnya secara global.
+You can run the CLI directly using `npx` or install it globally.
 
 ```bash
-# Menggunakan npx (Direkomendasikan)
-npx libravelui-cli@latest init
+# Using npx (Recommended)
+npx libravelui@latest init
 ```
 
-## Perintah
+## Commands
 
 ### `init`
 
-Menginisialisasi proyek kamu dengan tema pilihan dan konfigurasi CSS.
+Initializes your project with a selected theme and CSS configuration.
 
 ```bash
-npx libravelui-cli init
+npx libravelui init
 ```
 
-**Yang dilakukan perintah ini:**
+**What this command does:**
 
-1. Mengambil daftar tema dari API LibravelUI.
-2. Meminta kamu memilih satu tema.
-3. Meminta lokasi file CSS global kamu (default: `app/global.css`).
-4. Membuat/memperbarui file CSS dengan standard template LibravelUI (termasuk Tailwind @theme mapping).
-5. Menyimpan konfigurasi di `config/schema.json`.
+1. Fetches available themes from the LibravelUI registry.
+2. Prompts you to choose a theme (Default, Orbital, Vercel, etc.).
+3. Configures your global CSS file with Tailwind v4 `@theme` mappings.
+4. Creates a `components.json` configuration file.
 
 ### `add`
 
-Menambahkan komponen LibravelUI ke proyek kamu.
+Adds LibravelUI components to your project.
 
 ```bash
-# Menambah komponen tunggal
-npx libravelui-cli add button
+# Add a single component
+npx libravelui add button
 
-# Menambah beberapa komponen
-npx libravelui-cli add button accordion loader
+# Add multiple components
+npx libravelui add button accordion loader
 
-# Menambah semua komponen yang tersedia
-npx libravelui-cli add --all
+# Add all available components
+npx libravelui add --all
 
-# Memilih dari list (interaktif)
-npx libravelui-cli add
+# Search and select from the list (interactive)
+npx libravelui add
 ```
 
-**Fitur `add`:**
+**Features of `add`:**
 
-- **Resolusi Dependensi Otomatis**: Jika sebuah komponen bergantung pada komponen lain (misalnya `button` butuh `loader`), CLI akan secara otomatis menginstal dependensinya.
-- **Konfirmasi Override**: Jika file `lib` atau `hooks` sudah ada, CLI akan meminta konfirmasi sebelum menimpa file tersebut.
-- **Tanpa Modifikasi CSS**: Perintah `add` tidak akan menyentuh file CSS atau tema kamu, menjaga konfigurasi tetap bersih.
+- **Automatic Dependency Resolution**: If a component depends on others (e.g., `button` needs `loader`), the CLI will automatically install them.
+- **Safe Overwrites**: CLI prompts for confirmation before overwriting existing utility or hook files.
+- **Clean Configuration**: Only adds necessary files to your `src/components/ui`, `src/lib`, and `src/hooks` directories without touching your custom CSS.
 
-## Struktur Proyek
+## Project Structure
 
-Setelah inisialisasi, proyek kamu akan memiliki:
+After running `init`, your project will follow this convention:
 
-- `app/global.css` ( atau lokasi pilihanmu)
-- `config/schema.json`
-- `components/ui/core/...` (saat kamu menambah komponen)
-- `lib/utils.ts`
-- `hooks/...`
+- `src/app/globals.css`: (or your chosen location) Updated with theme variables.
+- `components.json`: Your local configuration.
+- `src/components/ui/core/...`: Where specific UI components are stored.
+- `src/lib/utils.ts`: Core utilities.
+- `src/hooks/...`: Essential React hooks for component logic.

@@ -1,0 +1,16 @@
+{
+  "theme": "default",
+  "tailwind": {
+    "config": "",
+    "css": "resources/css/app.css",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "iconLibrary": "lucide"
+}

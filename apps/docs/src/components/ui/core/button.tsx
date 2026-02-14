@@ -21,7 +21,7 @@ export const buttonVariants = cva(
       tone: {
         default: "bg-primary text-primary-foreground hover:opacity-70",
         destructive: "bg-destructive text-white hover:opacity-70",
-        outline: "border bg-transparent hover:opacity-70",
+        outline: "border border-border bg-transparent hover:opacity-70",
         secondary: "bg-secondary text-secondary-foreground hover:opacity-70",
         ghost: "hover:bg-foreground/10",
         link: "text-primary underline-offset-4 hover:underline",
@@ -40,6 +40,8 @@ export const buttonVariants = cva(
         sm: "rounded-sm",
         md: "rounded-md",
         lg: "rounded-lg",
+        xl: "rounded-xl",
+        "2xl": "rounded-2xl",
         full: "rounded-full",
       },
       iconOnly: {

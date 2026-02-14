@@ -169,12 +169,7 @@ export async function fetchComponentSource(
             await scan(resolved, false);
           }
         } else {
-          if (
-            !imp.startsWith("react") &&
-            !imp.startsWith("next") &&
-            !imp.startsWith("clsx") &&
-            !imp.startsWith("tailwind-merge")
-          ) {
+          if (!imp.startsWith("react") && !imp.startsWith("next")) {
             dependencies.add(imp);
           }
         }

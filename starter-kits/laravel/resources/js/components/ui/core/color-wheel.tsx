@@ -1,0 +1,35 @@
+import {
+    ColorWheel as ColorWheelPrimitive,
+    ColorWheelTrack,
+    type ColorWheelProps as ColorWheelPrimitiveProps,
+} from 'react-aria-components';
+import { ColorThumb } from '@/components/ui/core/color-thumb';
+
+type ColorWheelProps = Omit<
+    ColorWheelPrimitiveProps,
+    'outerRadius' | 'innerRadius'
+>;
+
+function ColorWheel(props: ColorWheelProps) {
+    return (
+        <ColorWheelPrimitive
+            aria-label={props['aria-label'] ?? 'Color-Wheel'}
+            outerRadius={100}
+            innerRadius={74}
+            {...props}
+        >
+            <ColorWheelTrack
+                className="disabled:bg-muted/75 forced-colors:disabled:bg-[GrayText]"
+                style={({ defaultStyle, isDisabled }) => ({
+                    ...defaultStyle,
+                    background: isDisabled
+                        ? undefined
+                        : `${defaultStyle.background}, repeating-conic-gradient(#CCC 0% 25%, white 0% 50%) 50% / 16px 16px`,
+                })}
+            />
+            <ColorThumb />
+        </ColorWheelPrimitive>
+    );
+}
+
+export { ColorWheel, type ColorWheelProps };

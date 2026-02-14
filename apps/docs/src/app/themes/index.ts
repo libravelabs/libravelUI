@@ -1,28 +1,10 @@
-import { defaultTheme } from "./default";
-import { amethyst } from "./amethyst";
-import { candy } from "./candy";
-import { coffeeBreak } from "./coffeeBreak";
-import { nature } from "./nature";
-import { monolith } from "./monolith";
-import { softmold } from "./softmold";
-import { vercel } from "./vercel";
-import { orbital } from "./orbital";
 import type { ThemeDefinition } from "@/types/theme";
+import themesRegistry from "./themes.registry.json";
 
-export const themes: Record<string, ThemeDefinition> = {
-  default: defaultTheme,
-  amethyst,
-  candy,
-  coffeeBreak,
-  nature,
-  monolith,
-  softmold,
-  vercel,
-  orbital,
-} as const;
+export const themes = themesRegistry as Record<string, ThemeDefinition>;
 
 export type ThemeName = keyof typeof themes;
 
-export function getTheme(name: ThemeName): ThemeDefinition {
+export function getTheme(name: string): ThemeDefinition {
   return themes[name];
 }

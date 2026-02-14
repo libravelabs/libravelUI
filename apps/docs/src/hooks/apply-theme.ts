@@ -13,5 +13,7 @@ export function applyTheme(theme: ThemeDefinition, isDark: boolean) {
     root.style.setProperty(key, value);
   }
 
+  root.style.setProperty("--radius", theme.radius);
+
   loadThemeFonts(theme.fontUrl);
 }

@@ -10,6 +10,7 @@ export const useUiPreferences = create<UiPreferencesState>()(
     (set, get) => ({
       isTextured: true,
       radius: "xl",
+      theme: "default",
       navPosition: "center",
       setIsTextured: (next) => set({ isTextured: next }),
       toggleTextured: () => set({ isTextured: !get().isTextured }),
@@ -18,10 +19,11 @@ export const useUiPreferences = create<UiPreferencesState>()(
         if (typeof document !== "undefined") {
           document.documentElement.style.setProperty(
             "--radius",
-            RADIUS_MAP[value]
+            RADIUS_MAP[value],
           );
         }
       },
+      setTheme: (value) => set({ theme: value }),
       setNavPosition: (value) => set({ navPosition: value }),
     }),
     {
@@ -35,6 +37,6 @@ export const useUiPreferences = create<UiPreferencesState>()(
           }
         }
       },
-    }
-  )
+    },
+  ),
 );

@@ -1,0 +1,97 @@
+import {
+    Button,
+    SearchField as SearchBarPrimitive,
+    type SearchFieldProps as SearchBarPrimitiveProps,
+} from 'react-aria-components';
+import { Input, type InputProps } from '@/components/ui/core/input';
+import { cn } from '@/lib/utils';
+import { Loader } from '@/components/ui/core/loader';
+import { Search, X } from 'lucide-react';
+
+type SearchBarProps = SearchBarPrimitiveProps &
+    InputProps & {
+        label?: string;
+        error?: string;
+        description?: string;
+        labelExtra?: React.ReactNode;
+    };
+
+function SearchBar({
+    placeholder,
+    error,
+    description,
+    endContent,
+    label,
+    labelExtra,
+    classNames = {
+        wrapper: 'group-disabled:[&_svg]:opacity-50',
+        input: '[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden',
+    },
+    tone,
+    size,
+    isDisabled,
+    isLoading,
+    className,
+    children,
+    ...props
+}: SearchBarProps) {
+    const inputProps: InputProps = {
+        placeholder,
+        endContent,
+        classNames,
+        tone,
+        size,
+        isDisabled,
+        isLoading,
+    };
+
+    const SearchFieldProps: SearchBarPrimitiveProps = {
+        ...props,
+        'aria-label':
+            typeof props['aria-label'] === 'string'
+                ? props['aria-label']
+                : typeof label === 'string'
+                  ? label
+                  : 'text-field',
+    };
+
+    return (
+        <SearchBarPrimitive
+            {...SearchFieldProps}
+            className={cn(className, 'group relative w-full')}
+        >
+            {(values) => (
+                <>
+                    {typeof children === 'function' ? (
+                        children(values)
+                    ) : children ? (
+                        children
+                    ) : (
+                        <Input
+                            {...inputProps}
+                            startContent={
+                                isLoading ? <Loader type="spin" /> : <Search />
+                            }
+                            endContent={
+                                <>
+                                    {!values.isEmpty && (
+                                        <Button
+                                            className="ms-auto cursor-pointer rounded hover:text-foreground"
+                                            aria-label="Clear selected item"
+                                        >
+                                            <X className="size-3" />
+                                        </Button>
+                                    )}
+                                    {endContent}
+                                </>
+                            }
+                        />
+                    )}
+                </>
+            )}
+        </SearchBarPrimitive>
+    );
+}
+
+export type { SearchBarProps };
+export { SearchBar };
