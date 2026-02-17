@@ -7,7 +7,7 @@ import {
   SparklesIcon,
 } from "lucide-react";
 
-import { BentoGrid, BentoCard } from "@/components/ui/blocks/bento";
+import { BentoGrid, BentoCard } from "@/components/ui/block/bento";
 
 const FEATURES = [
   {

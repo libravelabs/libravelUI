@@ -1,6 +1,6 @@
 import { RocketIcon, OrbitIcon, SatelliteIcon, CpuIcon } from "lucide-react";
 
-import { BentoGrid, BentoCard } from "@/components/ui/blocks/bento";
+import { BentoGrid, BentoCard } from "@/components/ui/block/bento";
 
 export default function BentoShowcaseSpace() {
   return (
