@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useRef } from "react";
-import { motion, LayoutGroup } from "framer-motion";
+import { motion, LayoutGroup } from "motion/react";
 import { cn } from "@/lib/utils";
 
 interface ToggleGroupContextValue {
@@ -10,14 +10,14 @@ interface ToggleGroupContextValue {
 }
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(
-  undefined
+  undefined,
 );
 
 const useToggleGroup = () => {
   const context = useContext(ToggleGroupContext);
   if (!context) {
     throw new Error(
-      "AnimatedToggleItem must be used within AnimatedToggleGroup"
+      "AnimatedToggleItem must be used within AnimatedToggleGroup",
     );
   }
   return context;
@@ -58,7 +58,7 @@ function AnimatedToggleGroup({
           role="radiogroup"
           className={cn(
             "inline-flex items-center gap-1 p-1 rounded-lg ring-2 ring-border bg-card",
-            className
+            className,
           )}
         >
           {children}
@@ -108,7 +108,7 @@ function AnimatedToggleItem({
         isActive
           ? "text-foreground"
           : "text-muted-foreground hover:text-foreground/80 hover:bg-muted",
-        className
+        className,
       )}
     >
       {isActive && (

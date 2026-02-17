@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from '@/components/ui/core/button';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 type ShowMoreTextProps = {
     text: string;

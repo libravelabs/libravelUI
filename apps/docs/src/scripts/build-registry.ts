@@ -69,11 +69,17 @@ async function buildRegistry() {
               type: "registry:ui",
               dependencies: source.dependencies,
               registryDependencies: source.registryDependencies,
-              files: source.files.map((f) => ({
-                ...f,
-                path: f.path.replace(/\\/g, "/"),
-                code: cleanCode(f.content),
-              })),
+              files: source.files.map((f) => {
+                const normalizedPath = f.path.replace(/\\/g, "/");
+                return {
+                  ...f,
+                  path: normalizedPath.replace(
+                    "components/app/partials",
+                    "components/ui",
+                  ),
+                  code: cleanCode(f.content),
+                };
+              }),
               docs,
             };
 

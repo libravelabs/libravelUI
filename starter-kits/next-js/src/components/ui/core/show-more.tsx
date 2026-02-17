@@ -4,7 +4,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/core/button";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 type ShowMoreTextProps = {
   text: string;
@@ -48,7 +48,7 @@ function ShowMoreText({
 
   const { visibleText, hiddenText } = React.useMemo(
     () => splitTextByWords(text, maxLength),
-    [text, maxLength]
+    [text, maxLength],
   );
 
   const handleToggle = () => setIsExpanded((prev) => !prev);
@@ -91,7 +91,7 @@ function ShowMoreText({
           tone="link"
           className={cn(
             "!px-0 !py-0 mt-1 flex items-center gap-1",
-            classNames?.toggle
+            classNames?.toggle,
           )}
           aria-expanded={isExpanded}
         >

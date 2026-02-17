@@ -1,5 +1,3 @@
-"use client";
-
 import { use } from "react";
 import type {
   DialogProps,
@@ -46,30 +44,30 @@ const dockContentStyles = cva(
         right: "inset-y-0 right-0 h-full w-[280px] overflow-hidden border-l",
       },
       isFloat: {
-        false: "border-border rounded-none",
-        true: "ring-foreground/5 dark:ring-border rounded-lg",
+        false: "rounded-none border-border",
+        true: "rounded-lg ring-foreground/5 dark:ring-border",
       },
     },
     compoundVariants: [
       {
         side: "top",
         isFloat: true,
-        class: "rounded-lg ring-1 top-2 inset-x-2 border-b-0",
+        class: "inset-x-2 top-2 rounded-lg border-b-0 ring-1",
       },
       {
         side: "bottom",
         isFloat: true,
-        class: "rounded-lg ring-1 bottom-2 inset-x-2 border-t-0",
+        class: "inset-x-2 bottom-2 rounded-lg border-t-0 ring-1",
       },
       {
         side: "left",
         isFloat: true,
-        class: "rounded-lg ring-1 left-2 inset-y-2 border-r-0",
+        class: "inset-y-2 left-2 rounded-lg border-r-0 ring-1",
       },
       {
         side: "right",
         isFloat: true,
-        class: "rounded-lg ring-1 right-2 inset-y-2 border-l-0",
+        class: "inset-y-2 right-2 rounded-lg border-l-0 ring-1",
       },
     ],
   },
@@ -105,8 +103,8 @@ interface DockContentProps
   };
 }
 
-const DockOverlay = (motion as any).create(ModalOverlay);
-const DockRoot = (motion as any).create(Modal);
+const DockOverlay = motion.create(ModalOverlay);
+const DockRoot = motion.create(Modal);
 
 /**
  * The content area of the Dock (Slide-out menu).
@@ -174,8 +172,16 @@ function DockContent({
             transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
             drag={side === "left" || side === "right" ? "x" : "y"}
             whileDrag={{ cursor: "grabbing" }}
-            dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
-            onDragEnd={(_: any, { offset, velocity }: PanInfo) => {
+            dragConstraints={{
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+            onDragEnd={(
+              _: MouseEvent | TouchEvent | PointerEvent,
+              { offset, velocity }: PanInfo,
+            ) => {
               if (
                 side === "bottom" &&
                 (velocity.y > 150 || offset.y > h * 0.25)
@@ -201,7 +207,7 @@ function DockContent({
               aria-label={props["aria-label"]}
               role={role}
               className={cn(
-                "bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
+                "flex w-full flex-col gap-8 rounded-lg border bg-background p-6 shadow-lg duration-200",
                 !isFloat && "rounded-none",
                 classNames?.content,
               )}

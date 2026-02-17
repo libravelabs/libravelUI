@@ -9,21 +9,25 @@ import {
   THEMES_API,
   REGISTRY_URL,
   CORE_DEPENDENCIES,
-} from "../utils/constants";
+  AUTO_INSTALL_COMPONENTS,
+} from "../constants";
 import {
   getPackageManager,
   getProjectDependencies,
   installDependencies,
 } from "../utils/package-manager";
+import { resolveRegistryPath } from "../utils/path-resolver";
+import { MESSAGES } from "../constants";
+import { transformImports } from "../utils/transformers";
 
 export async function init() {
-  intro(picocolors.cyan("LibravelUI Initialization"));
+  intro(picocolors.cyan(MESSAGES.INIT.INTRO));
 
   const cwd = process.cwd();
   const projectPaths = await scanProject(cwd);
 
   const s = spinner();
-  s.start("Fetching project configuration...");
+  s.start(MESSAGES.INIT.FETCHING_CONFIG);
 
   let themes: any[] = [];
   let registry: any = {};
@@ -34,28 +38,24 @@ export async function init() {
     ]);
 
     if (!themesRes.ok || !registryRes.ok)
-      throw new Error("Failed to fetch data");
+      throw new Error(MESSAGES.INIT.FAILED_FETCH_DATA);
 
     themes = await themesRes.json();
     registry = await registryRes.json();
-    s.stop("Configuration fetched successfully!");
+    s.stop(MESSAGES.INIT.CONFIG_FETCHED);
   } catch (err) {
-    s.stop(
-      picocolors.red(
-        "Could not connect to LibravelUI server. Make sure it's running on localhost:3000",
-      ),
-    );
+    s.stop(picocolors.red(MESSAGES.ERRORS.CONNECTION_FAILED));
     return;
   }
 
   const themeName = (await select({
-    message: "Select your theme:",
+    message: MESSAGES.INIT.THEME_SELECT,
     options: themes.map((t) => ({ value: t.name, label: t.label })),
   })) as string;
   if (typeof themeName !== "string") return;
 
   const iconLibrary = (await select({
-    message: "Select icon library:",
+    message: MESSAGES.INIT.ICON_LIBRARY_SELECT,
     options: [
       { value: "lucide", label: "Lucide" },
       { value: "radix", label: "Radix" },
@@ -66,7 +66,7 @@ export async function init() {
   const defaultCssPath = projectPaths.defaultCssPath.replace(/\\/g, "/");
 
   const cssPath = (await text({
-    message: "Where is your global CSS file located?",
+    message: MESSAGES.INIT.CSS_PATH_PROMPT,
     placeholder: defaultCssPath,
     initialValue: defaultCssPath,
   })) as string;
@@ -85,33 +85,33 @@ export async function init() {
 
     if (missingDeps.length > 0) {
       console.log(
-        picocolors.cyan(`Dependencies needed: ${missingDeps.join(", ")}`),
+        picocolors.cyan(MESSAGES.INIT.DEPS_NEEDED(missingDeps.join(", "))),
       );
 
       const shouldInstall = (await confirm({
-        message: "Would you like to install the required dependencies?",
+        message: MESSAGES.INIT.INSTALL_DEPS_PROMPT,
         initialValue: true,
       })) as boolean;
 
       if (shouldInstall) {
         const pm = await getPackageManager(cwd);
-        s.start(`Installing dependencies using ${pm}...`);
+        s.start(MESSAGES.INIT.INSTALLING_DEPS(pm));
         try {
           await installDependencies(missingDeps, cwd, pm);
-          s.stop("Dependencies installed successfully!");
+          s.stop(MESSAGES.INIT.DEPS_INSTALLED);
         } catch (error) {
-          s.stop(picocolors.red("Failed to install dependencies."));
+          s.stop(picocolors.red(MESSAGES.INIT.DEPS_INSTALL_FAILED));
           console.error(error);
         }
       }
     }
   }
 
-  s.start("Generating configuration...");
+  s.start(MESSAGES.INIT.GENERATING_CONFIG);
 
   try {
     const selectedTheme = themes.find((t) => t.name === themeName);
-    if (!selectedTheme) throw new Error("Theme not found");
+    if (!selectedTheme) throw new Error(MESSAGES.INIT.THEME_NOT_FOUND);
 
     const cssContent = getThemeTemplate(
       selectedTheme.cssVars.light,
@@ -121,11 +121,34 @@ export async function init() {
     );
 
     await fs.ensureDir(path.dirname(path.resolve(cwd, cssPath)));
-    await fs.writeFile(path.resolve(cwd, cssPath), cssContent);
+    await fs.writeFile(path.resolve(cwd, cssPath), cssContent + "\n", {
+      encoding: "utf8",
+    });
 
     await fs.ensureDir(path.resolve(cwd, projectPaths.componentsDir));
     await fs.ensureDir(path.resolve(cwd, projectPaths.libDir));
     await fs.ensureDir(path.resolve(cwd, projectPaths.hooksDir));
+
+    for (const componentName of AUTO_INSTALL_COMPONENTS) {
+      const component = registry[componentName];
+      if (!component) {
+        console.warn(
+          picocolors.yellow(MESSAGES.ADD.COMPONENT_NOT_FOUND(componentName)),
+        );
+        continue;
+      }
+
+      for (const file of component.files) {
+        const targetPath = resolveRegistryPath(file.path, projectPaths, cwd);
+        await fs.ensureDir(path.dirname(targetPath));
+
+        const content = file.content || file.code;
+        const transformedContent = transformImports(content, projectPaths);
+        await fs.writeFile(targetPath, transformedContent, {
+          encoding: "utf8",
+        });
+      }
+    }
 
     const getAlias = (dir: string) => {
       const normalized = dir.replace(/\\/g, "/");
@@ -154,14 +177,10 @@ export async function init() {
     };
     await fs.writeJSON(path.resolve(cwd, CONFIG_PATH), config, { spaces: 2 });
 
-    s.stop("Theme and configuration saved!");
-    outro(
-      picocolors.green(
-        "Initialization successful! Enjoy building with LibravelUI.",
-      ),
-    );
+    s.stop(MESSAGES.INIT.THEME_SAVED);
+    outro(picocolors.green(MESSAGES.INIT.SUCCESS));
   } catch (err) {
-    s.stop(picocolors.red("Initialization failed"));
+    s.stop(picocolors.red(MESSAGES.INIT.FAILED));
     console.error(err);
   }
 }

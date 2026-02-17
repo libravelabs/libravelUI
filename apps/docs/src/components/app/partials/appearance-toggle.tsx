@@ -3,7 +3,7 @@
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { AnimatedSwitch } from "../../ui/motion/animated-switch";
+import { AnimatedSwitch } from "@/components/ui/motion/animated-switch";
 
 export function AppearanceToggle() {
   const { setTheme, resolvedTheme } = useTheme();

@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, BookCopy, Files } from 'lucide-react';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -11,16 +11,32 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     useSidebar,
-} from '@/components/ui/core/sidebar';
+} from '@/components/ui/block/sidebar';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
-import { AppLogoIcon, AppName } from './logo';
+import { AppLogoIcon, AppName } from '@/components/logo';
+import { NavFooter } from '@/components/nav-footer';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: <LayoutGrid />,
+    },
+];
+
+const footerNavItems: NavItem[] = [
+    {
+        title: 'Repository',
+        href: 'https://github.com/',
+        icon: <BookCopy />,
+        target: '_blank',
+    },
+    {
+        title: 'Docs',
+        href: 'https://github.com/libravelabs/libravelUI/',
+        icon: <Files />,
+        target: '_blank',
     },
 ];
 
@@ -49,6 +65,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
+                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

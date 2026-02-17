@@ -14,6 +14,8 @@ export interface ThemeProviderProps {
     children?: React.ReactNode;
 }
 
+export type Appearance = 'light' | 'dark' | 'system';
+
 interface UseThemeProps {
     setTheme: (theme: string) => void;
     theme?: string;

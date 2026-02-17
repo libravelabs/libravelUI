@@ -1,6 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
-import { SidebarProvider } from '@/components/ui/core/sidebar';
+import { SidebarProvider } from '@/components/ui/block/sidebar';
 import type { SharedData } from '@/types';
 import { NavbarProvider } from './ui/core/navbar';
 

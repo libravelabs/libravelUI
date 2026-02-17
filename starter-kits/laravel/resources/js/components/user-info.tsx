@@ -1,5 +1,5 @@
 import { Avatar } from '@/components/ui/core/avatar';
-import { useSidebar } from '@/components/ui/core/sidebar';
+import { useSidebar } from '@/components/ui/block/sidebar';
 import { useInitials } from '@/hooks/use-initials';
 import type { User } from '@/types';
 
