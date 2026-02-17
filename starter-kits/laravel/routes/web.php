@@ -14,12 +14,4 @@ Route::get('dashboard', function () {
     return Inertia::render('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/navbar', function () {
-    return Inertia::render('navbar-showcase');
-});
-
-Route::get('/navigation', function () {
-    return Inertia::render('navigation-showcase');
-});
-
 require __DIR__ . '/settings.php';
