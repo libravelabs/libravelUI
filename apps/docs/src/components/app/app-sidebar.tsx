@@ -8,7 +8,7 @@ import {
   SidebarHeader,
   SidebarBody,
   SidebarFooter,
-} from "@/components/ui/blocks/sidebar";
+} from "@/components/ui/block/sidebar";
 import { Logo } from "@/components/app/logo";
 import { Alert } from "@/components/ui/core/alert";
 import type { PageTree } from "fumadocs-core/server";
