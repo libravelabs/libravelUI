@@ -106,8 +106,8 @@ interface DockContentProps
     };
 }
 
-const DockOverlay = (motion as any).create(ModalOverlay);
-const DockRoot = (motion as any).create(Modal);
+const DockOverlay = motion.create(ModalOverlay);
+const DockRoot = motion.create(Modal);
 
 /**
  * The content area of the Dock (Slide-out menu).
@@ -201,7 +201,10 @@ function DockContent({
                             left: 0,
                             right: 0,
                         }}
-                        onDragEnd={(_: any, { offset, velocity }: PanInfo) => {
+                        onDragEnd={(
+                            _: MouseEvent | TouchEvent | PointerEvent,
+                            { offset, velocity }: PanInfo,
+                        ) => {
                             if (
                                 side === 'bottom' &&
                                 (velocity.y > 150 || offset.y > h * 0.25)

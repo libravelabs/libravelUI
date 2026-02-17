@@ -3,15 +3,23 @@ import fs from "fs-extra";
 import path from "path";
 import picocolors from "picocolors";
 import { scanProject } from "../scanners/project-scanner";
-import { REGISTRY_URL, CONFIG_PATH, CRITICAL_DIRS } from "../utils/constants";
+import {
+  REGISTRY_URL,
+  CONFIG_PATH,
+  CRITICAL_DIRS,
+  REGISTRY_VALID_TYPES,
+} from "../constants";
 import {
   getPackageManager,
   getProjectDependencies,
   installDependencies,
 } from "../utils/package-manager";
+import { resolveRegistryPath } from "../utils/path-resolver";
+import { MESSAGES } from "../constants";
+import { transformImports } from "../utils/transformers";
 
 export async function add(components?: string[], options?: { all?: boolean }) {
-  intro(picocolors.cyan("LibravelUI Component Adder"));
+  intro(picocolors.cyan(MESSAGES.ADD.INTRO));
 
   const cwd = process.cwd();
   let config: any = null;
@@ -42,25 +50,21 @@ export async function add(components?: string[], options?: { all?: boolean }) {
   };
 
   const s = spinner();
-  s.start("Fetching component registry...");
+  s.start(MESSAGES.ADD.FETCHING_REGISTRY);
 
   let registry: any;
   try {
     const response = await fetch(REGISTRY_URL);
-    if (!response.ok) throw new Error("Failed to fetch registry");
+    if (!response.ok) throw new Error(MESSAGES.ADD.FAILED_FETCH_REGISTRY);
     registry = await response.json();
-    s.stop("Registry fetched successfully!");
+    s.stop(MESSAGES.ADD.REGISTRY_FETCHED);
   } catch (err) {
-    s.stop(
-      picocolors.red(
-        "Could not connect to LibravelUI server. Make sure it's running on localhost:3000",
-      ),
-    );
+    s.stop(picocolors.red(MESSAGES.ERRORS.CONNECTION_FAILED));
     return;
   }
 
   const availableComponents = Object.keys(registry).filter((key) =>
-    ["registry:ui", "registry:block"].includes(registry[key].type),
+    REGISTRY_VALID_TYPES.includes(registry[key].type),
   );
 
   let selected: string[] = [];
@@ -71,7 +75,7 @@ export async function add(components?: string[], options?: { all?: boolean }) {
     selected = components;
   } else {
     const choice = await multiselect({
-      message: "Select components to install:",
+      message: MESSAGES.ADD.SELECT_COMPONENTS,
       options: availableComponents.map((c) => ({ value: c, label: c })),
     });
     if (Array.isArray(choice)) {
@@ -80,7 +84,7 @@ export async function add(components?: string[], options?: { all?: boolean }) {
   }
 
   if (selected.length === 0) {
-    outro("No components selected.");
+    outro(MESSAGES.ADD.NO_COMPONENTS);
     return;
   }
 
@@ -103,7 +107,7 @@ export async function add(components?: string[], options?: { all?: boolean }) {
       );
     }
   } finally {
-    s.stop("All components processed.");
+    s.stop(MESSAGES.ADD.ALL_PROCESSED);
   }
 
   if (allDependencies.size > 0) {
@@ -116,28 +120,26 @@ export async function add(components?: string[], options?: { all?: boolean }) {
 
     if (missingDeps.length > 0) {
       console.log(
-        picocolors.cyan(
-          `Missing dependencies found: ${missingDeps.join(", ")}`,
-        ),
+        picocolors.cyan(MESSAGES.ADD.MISSING_DEPS(missingDeps.join(", "))),
       );
 
       let shouldInstall = options?.all;
 
       if (!shouldInstall) {
         shouldInstall = (await confirm({
-          message: "Would you like to install the missing dependencies?",
+          message: MESSAGES.ADD.INSTALL_MISSING_DEPS_PROMPT,
           initialValue: true,
         })) as boolean;
       }
 
       if (shouldInstall) {
         const pm = await getPackageManager(cwd);
-        s.start(`Installing dependencies using ${pm}...`);
+        s.start(MESSAGES.INIT.INSTALLING_DEPS(pm));
         try {
           await installDependencies(missingDeps, cwd, pm);
-          s.stop("Dependencies installed successfully!");
+          s.stop(MESSAGES.INIT.DEPS_INSTALLED);
         } catch (error) {
-          s.stop(picocolors.red("Failed to install dependencies."));
+          s.stop(picocolors.red(MESSAGES.INIT.DEPS_INSTALL_FAILED));
           console.error(error);
         }
       }
@@ -145,9 +147,7 @@ export async function add(components?: string[], options?: { all?: boolean }) {
   }
 
   outro(
-    picocolors.green(
-      `Successfully installed: ${Array.from(installed).join(", ")}`,
-    ),
+    picocolors.green(MESSAGES.ADD.SUCCESS(Array.from(installed).join(", "))),
   );
 }
 
@@ -165,15 +165,11 @@ async function installComponent(
 
   const component = registry[name];
   if (!component) {
-    console.warn(
-      picocolors.yellow(
-        `\nWarning: Component "${name}" not found in registry.`,
-      ),
-    );
+    console.warn(picocolors.yellow(MESSAGES.ADD.COMPONENT_NOT_FOUND(name)));
     return;
   }
 
-  s.message(`Installing ${name}...`);
+  s.message(MESSAGES.ADD.INSTALLING(name));
 
   if (component.dependencies && Array.isArray(component.dependencies)) {
     component.dependencies.forEach((dep: string) => allDependencies.add(dep));
@@ -195,30 +191,14 @@ async function installComponent(
   }
 
   for (const file of component.files) {
-    let normalizedPath = file.path.replace(/\\/g, "/");
-
-    if (normalizedPath.startsWith("components/ui/")) {
-      const base = getPath("components", "components");
-      normalizedPath = normalizedPath.replace("components/ui/", `${base}/ui/`);
-    } else if (normalizedPath.startsWith("lib/utils")) {
-      const base = getPath("utils", "lib/utils");
-      normalizedPath = normalizedPath.replace("lib/utils", base);
-    } else if (normalizedPath.startsWith("lib/")) {
-      const base = getPath("lib", "lib");
-      normalizedPath = normalizedPath.replace("lib/", `${base}/`);
-    } else if (normalizedPath.startsWith("hooks/")) {
-      const base = getPath("hooks", "hooks");
-      normalizedPath = normalizedPath.replace("hooks/", `${base}/`);
-    }
-
-    const targetPath = path.resolve(process.cwd(), normalizedPath);
+    const cwd = process.cwd();
+    const projectPaths = await scanProject(cwd);
+    const targetPath = resolveRegistryPath(file.path, projectPaths, cwd);
     const absolutePath = path.normalize(targetPath);
 
     if (processedFiles.has(absolutePath)) continue;
 
-    const isCriticalFile = CRITICAL_DIRS.some((dir) =>
-      normalizedPath.includes(dir),
-    );
+    const isCriticalFile = CRITICAL_DIRS.some((dir) => file.path.includes(dir));
 
     if (fs.existsSync(absolutePath) && isCriticalFile) {
       if (decidedFiles.has(absolutePath)) {
@@ -227,31 +207,32 @@ async function installComponent(
           continue;
         }
       } else {
-        s.stop(`File "${normalizedPath}" already exists.`);
+        s.stop(MESSAGES.ADD.FILE_EXISTS(file.path));
         const shouldOverwrite = await confirm({
-          message: `Overwrite ${normalizedPath}?`,
+          message: MESSAGES.ADD.OVERWRITE_PROMPT(file.path),
           initialValue: false,
         });
 
         decidedFiles.set(absolutePath, !!shouldOverwrite);
 
         if (!shouldOverwrite) {
-          console.log(picocolors.dim(`Skipping "${normalizedPath}"`));
+          console.log(picocolors.dim(MESSAGES.ADD.SKIPPING(file.path)));
           processedFiles.add(absolutePath);
-          s.start(`Installing ${name}...`);
+          s.start(MESSAGES.ADD.INSTALLING(name));
           continue;
         }
-        s.start(`Installing ${name}...`);
+        s.start(MESSAGES.ADD.INSTALLING(name));
       }
     }
 
     await fs.ensureDir(path.dirname(absolutePath));
     const content = file.content || file.code;
+    const transformedContent = transformImports(content, projectPaths);
 
-    await fs.writeFile(absolutePath, content);
+    await fs.writeFile(absolutePath, transformedContent);
     processedFiles.add(absolutePath);
   }
 
   installed.add(name);
-  console.log(picocolors.green(`✓ ${name} installed`));
+  console.log(picocolors.green(MESSAGES.ADD.INSTALLED(name)));
 }

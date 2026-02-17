@@ -1,11 +1,13 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "libravelui/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "The skeleton application for the Laravel framework with Inertia.js and libravelUI.",
     "keywords": [
         "laravel",
-        "framework"
+        "framework",
+        "libravelui",
+        "inertia"
     ],
     "license": "MIT",
     "require": {

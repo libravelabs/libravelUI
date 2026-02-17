@@ -9,7 +9,7 @@ import {
     SidebarMenu,
     SidebarMenuItem,
     useSidebar,
-} from '@/components/ui/core/sidebar';
+} from '@/components/ui/block/sidebar';
 import { UserInfo } from '@/components/user-info';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useIsMobile } from '@/hooks/use-mobile';

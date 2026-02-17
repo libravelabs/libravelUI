@@ -44,20 +44,20 @@ export function AppearanceDropdown({
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         className="cursor-pointer"
-                        onClick={() => setTheme('dark')}
-                    >
-                        <span className="flex items-center gap-2">
-                            <Moon className="h-5 w-5" />
-                            Dark
-                        </span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        className="cursor-pointer"
                         onClick={() => setTheme('system')}
                     >
                         <span className="flex items-center gap-2">
                             <Monitor className="h-5 w-5" />
                             System
+                        </span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => setTheme('dark')}
+                    >
+                        <span className="flex items-center gap-2">
+                            <Moon className="h-5 w-5" />
+                            Dark
                         </span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>

@@ -28,13 +28,7 @@ interface TimeFieldProps<T extends TimeValue>
   error?: string;
 }
 
-function TimeField<T extends TimeValue>({
-  errorMessage: _errorMessage,
-  label: _label,
-  description: _description,
-  error: _error,
-  ...props
-}: TimeFieldProps<T>) {
+function TimeField<T extends TimeValue>({ ...props }: TimeFieldProps<T>) {
   const { startContent, endContent, tone, size, classNames } = props;
 
   const inputProps: InputProps = {
@@ -45,15 +39,13 @@ function TimeField<T extends TimeValue>({
     classNames,
   };
 
-  const AnyInput = Input as any;
-
   return (
     <TimeFieldPrimitive
       aria-label={props["aria-label"] ?? "time-field"}
       {...props}
     >
-      <AnyInput as={DateInput} {...inputProps}>
-        {(segment: any) => (
+      <Input as={DateInput} {...inputProps}>
+        {(segment: DateSegment) => (
           <DateSegment
             segment={segment}
             className={cn(
@@ -63,7 +55,7 @@ function TimeField<T extends TimeValue>({
             )}
           />
         )}
-      </AnyInput>
+      </Input>
     </TimeFieldPrimitive>
   );
 }

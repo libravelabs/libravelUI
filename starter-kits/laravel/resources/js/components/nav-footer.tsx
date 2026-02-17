@@ -6,7 +6,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     useSidebar,
-} from '@/components/ui/core/sidebar';
+} from '@/components/ui/block/sidebar';
 import { toUrl } from '@/lib/utils';
 import type { NavItem } from '@/types';
 
@@ -30,11 +30,11 @@ export function NavFooter({
                         <SidebarMenuItem key={item.title}>
                             <a
                                 href={toUrl(item.href)}
-                                target="_blank"
+                                target={item.target}
                                 rel="noopener noreferrer"
                             >
                                 <SidebarMenuButton>
-                                    {item.icon && <item.icon />}
+                                    {item.icon && item.icon}
                                     {state !== 'collapsed' && (
                                         <span>{item.title}</span>
                                     )}

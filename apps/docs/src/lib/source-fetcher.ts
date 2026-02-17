@@ -170,7 +170,23 @@ export async function fetchComponentSource(
           }
         } else {
           if (!imp.startsWith("react") && !imp.startsWith("next")) {
-            dependencies.add(imp);
+            let dep = imp;
+
+            // Handle scoped packages (e.g. @radix-ui/react-slot -> @radix-ui/react-slot)
+            if (dep.startsWith("@")) {
+              const parts = dep.split("/");
+              if (parts.length >= 2) {
+                dep = `${parts[0]}/${parts[1]}`;
+              }
+            } else {
+              // Handle regular packages with subpaths (e.g. zustand/middleware -> zustand)
+              const parts = dep.split("/");
+              if (parts.length >= 1) {
+                dep = parts[0];
+              }
+            }
+
+            dependencies.add(dep);
           }
         }
       }

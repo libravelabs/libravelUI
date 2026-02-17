@@ -1,7 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookCopy, LayoutGrid, Search } from 'lucide-react';
-import { Breadcrumb, BreadcrumbItem } from '@/components/ui/core/breadcrumbs';
-import { Button } from '@/components/ui/core/button';
+import { BookCopy, Files, LayoutGrid } from 'lucide-react';
 import {
     Navbar,
     NavbarDrawer,
@@ -11,17 +9,13 @@ import {
     NavbarSpacer,
     NavbarStart,
     NavbarTrigger,
-} from '@/components/ui/core/navbar';
+} from '@/components/ui/block/navbar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
-import type { BreadcrumbItem as BreadcrumbItemType, NavItem } from '@/types';
+import type { NavItem } from '@/types';
 import { AppLogo } from '@/components/logo';
 import { NavUser } from './nav-user';
-
-type Props = {
-    breadcrumbs?: BreadcrumbItemType[];
-};
 
 const mainNavItems: NavItem[] = [
     {
@@ -31,18 +25,24 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Repository',
-        href: 'https://github.com',
+        href: 'https://github.com/',
         icon: <BookCopy />,
+        target: '_blank',
+    },
+    {
+        title: 'Docs',
+        href: 'https://github.com/libravelabs/libravelUI/',
+        icon: <Files />,
         target: '_blank',
     },
 ];
 
-export function AppHeader({ breadcrumbs = [] }: Props) {
+export function AppHeader() {
     const { isCurrentUrl } = useCurrentUrl();
 
     return (
         <>
-            <Navbar isSticky variant="inset">
+            <Navbar variant="inset">
                 <NavbarStart>
                     <Link
                         href={dashboard()}
@@ -70,16 +70,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                 <NavbarSpacer />
 
                 <NavbarSection>
-                    <div className="flex items-center gap-1">
-                        <Button
-                            tone="ghost"
-                            iconOnly
-                            className="group size-9 cursor-pointer"
-                        >
-                            <Search className="size-5! opacity-80 group-hover:opacity-100" />
-                        </Button>
-                        <NavUser variant="avatar" />
-                    </div>
+                    <NavUser variant="avatar" />
                 </NavbarSection>
             </Navbar>
 
@@ -110,28 +101,6 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     ))}
                 </NavbarSection>
             </NavbarDrawer>
-
-            {breadcrumbs.length > 1 && (
-                <div className="flex w-full border-b border-sidebar-border/70">
-                    <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-neutral-500 md:max-w-7xl">
-                        <Breadcrumb>
-                            {breadcrumbs.map((breadcrumb, index) => (
-                                <BreadcrumbItem
-                                    key={index}
-                                    href={breadcrumb.href}
-                                    className={
-                                        index === breadcrumbs.length - 1
-                                            ? 'pointer-events-none opacity-50'
-                                            : ''
-                                    }
-                                >
-                                    {breadcrumb.title}
-                                </BreadcrumbItem>
-                            ))}
-                        </Breadcrumb>
-                    </div>
-                </div>
-            )}
         </>
     );
 }

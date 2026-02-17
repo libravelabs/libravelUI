@@ -10,6 +10,8 @@ import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { dashboard, logout } from '@/routes';
 import { edit } from '@/routes/profile';
 import type { User } from '@/types';
+import { AppearanceTab } from './appearance-tabs';
+import { MenuItem } from 'react-aria-components';
 
 type Props = {
     user: User;
@@ -29,6 +31,10 @@ export function UserMenuContent({ user }: Props) {
                 <UserInfo user={user} showEmail showName showAvatar={false} />
             </DropdownMenuHeader>
             <DropdownMenuGroup>
+                {/* @ts-expect-error closeOnSelect is valid prop but missing in types */}
+                <MenuItem closeOnSelect={false}>
+                    <AppearanceTab />
+                </MenuItem>
                 <DropdownMenuItem onAction={() => router.visit(dashboard())}>
                     <Gauge /> Dashboard
                 </DropdownMenuItem>

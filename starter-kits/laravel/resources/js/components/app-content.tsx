@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SidebarInset } from '@/components/ui/core/sidebar';
+import { SidebarInset } from '@/components/ui/block/sidebar';
 import { NavbarInset } from './ui/core/navbar';
 
 type Props = React.ComponentProps<typeof NavbarInset> & {
