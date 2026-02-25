@@ -3,7 +3,7 @@ import type { ControlsMap, PlaygroundValue } from "./types";
 type GeneratedResult = {
   imports: Set<string>;
   props: string[];
-  children: string;
+  children: string | null;
   handlers: string[];
 };
 
@@ -41,7 +41,7 @@ function extractImports(code: string) {
 }
 
 function extractJSXTag(code: string) {
-  const m = code.match(/return\s*\(\s*<([A-Z]\w+)/);
+  const m = code.match(/return\s*(?:\(\s*)?(?:<>\s*)?<([A-Z]\w+)/);
   return m?.[1] ?? "";
 }
 
@@ -56,15 +56,19 @@ function extractHandlers(code: string) {
 }
 
 function extractChildren(code: string) {
+  if (code.match(/return\s*(?:\(\s*)?(?:<>\s*)?<([A-Z]\w+)[\s\S]*?\/>/)) {
+    return null;
+  }
+
   const m = code.match(
-    /return\s*\(\s*<[\s\S]*?>\s*([\s\S]*?)\s*<\/[A-Z]\w+>\s*\)/
+    /return\s*(?:\(\s*)?(?:<>\s*)?<[\s\S]*?>\s*([\s\S]*?)\s*<\/[A-Z]\w+>\s*(?:<\/>\s*)?(?:\)\s*)?;?/,
   );
   return m?.[1].trim() ?? "{children}";
 }
 
 function buildFromControls(
   values: Record<string, PlaygroundValue>,
-  controls: ControlsMap
+  controls: ControlsMap,
 ): GeneratedResult {
   const imports = new Set<string>();
   const props: string[] = [];
@@ -73,7 +77,6 @@ function buildFromControls(
 
   for (const [key, schema] of Object.entries(controls)) {
     const value = values[key] ?? schema.defaultValue;
-    const showDefault = schema.showDefault === true;
 
     if (key === "children") {
       fallbackChildren = String(value);
@@ -91,13 +94,13 @@ function buildFromControls(
 
       if (value === true) {
         props.push(key);
-      } else if (value === false && showDefault) {
+      } else if (value === false && schema.showDefault === true) {
         props.push(`${key}={false}`);
       }
       continue;
     }
 
-    const shouldRender = showDefault || value !== schema.defaultValue;
+    const shouldRender = schema.showDefault || value !== schema.defaultValue;
 
     if (shouldRender) {
       if (typeof value === "string") {
@@ -119,17 +122,26 @@ function buildComponent(
   tag: string,
   props: string[],
   handlers: string[],
-  children: string
+  children: string | null,
+  template?: (props: string, children: string | null) => string,
 ) {
   const allProps = [...props, ...handlers];
   const propLine = allProps.length ? " " + allProps.join(" ") : "";
 
+  let jsx = "";
+
+  if (template) {
+    jsx = template(propLine.trim(), children);
+  } else if (children === null) {
+    jsx = `<${tag}${propLine} />`;
+  } else {
+    jsx = `<${tag}${propLine}>\n      ${children}\n    </${tag}>`;
+  }
+
   return `
 export function Component() {
   return (
-    <${tag}${propLine}>
-      ${children}
-    </${tag}>
+    ${jsx}
   );
 }
 `.trim();
@@ -138,7 +150,8 @@ export function Component() {
 export function playgroundParser(
   code: string,
   values: Record<string, PlaygroundValue>,
-  controls: ControlsMap
+  controls: ControlsMap,
+  template?: (props: string, children: string | null) => string,
 ) {
   if (!code) return "";
 
@@ -156,7 +169,7 @@ export function playgroundParser(
 
   const jsxComponents = new Set<string>([
     tag,
-    ...extractJSXComponentsFromString(generated.children),
+    ...extractJSXComponentsFromString(generated.children ?? ""),
   ]);
 
   const usedImports = new Set<string>();
@@ -175,7 +188,7 @@ export function playgroundParser(
   const output = `
 ${Array.from(usedImports).join("\n")}
 
-${buildComponent(tag, generated.props, generated.handlers, generated.children)}
+${buildComponent(tag, generated.props, generated.handlers, generated.children, template)}
 `;
 
   return format(output);

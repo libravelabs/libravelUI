@@ -9,11 +9,12 @@ import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
 
 import { CopyButton, LLMOptions } from "@/components/ai/page-actions";
-import { baseUrl, owner, repo } from "@/lib/github";
+import { baseUrl } from "@/lib/github";
 import { DocLinks } from "@/components/docs/doc-links";
 import { meta } from "@/lib/metadata/index";
 import { StyledHeader } from "@/components/app/docs/styled-header";
 import { DocGrid } from "@/components/examples/layout/doc-grid";
+import { AppToc } from "@/components/app/app-toc";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -27,13 +28,13 @@ export default async function Page(props: {
   return (
     <DocsPage
       toc={page.data.toc}
-      full={page.data.full}
+      full={true}
       breadcrumb={{
         enabled: !page.data.gridLayout,
       }}
       tableOfContent={{
         enabled: page.data.enableToc ?? !page.data.gridLayout,
-        style: "clerk",
+        component: <AppToc toc={page.data.toc} />,
       }}
       footer={{
         enabled: true,
@@ -48,7 +49,7 @@ export default async function Page(props: {
         page.data.lastModified ? new Date(page.data.lastModified) : undefined
       }
       article={{
-        className: "max-sm:pb-16",
+        className: "pb-20 max-w-none",
       }}
     >
       {page.data.gridLayout ? (

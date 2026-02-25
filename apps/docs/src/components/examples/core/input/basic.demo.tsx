@@ -50,6 +50,7 @@ export const controls = {
     type: "text",
     defaultValue: "Enter text...",
     label: "Placeholder",
+    showDefault: true,
   },
   tone: {
     type: "select",

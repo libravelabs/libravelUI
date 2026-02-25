@@ -45,6 +45,7 @@ async function buildRegistry() {
   const componentRoots = [
     path.join(process.cwd(), "src/components/ui"),
     path.join(process.cwd(), "src/components/theme"),
+    path.join(process.cwd(), "src/components/examples"),
   ];
 
   for (const root of componentRoots) {
@@ -56,17 +57,26 @@ async function buildRegistry() {
         const slug = relativePath.replace(/\.tsx$/, "").split(path.sep);
         const name = path.basename(filePath, ".tsx");
 
-        if (name.includes(".") || name.includes("test")) continue;
+        const isExample = relativePath.startsWith(
+          "components" + path.sep + "examples",
+        );
+        const registryKey = isExample ? slug.join("/") : name;
 
-        console.log(`Processing component: ${name}...`);
+        if (name.includes("test") || name.includes("spec")) continue;
+        if (name.includes(".") && !isExample) continue;
+
+        console.log(`Processing component: ${registryKey}...`);
         try {
-          const source = await fetchComponentSource(slug, name);
-          const docs = getComponentDocs(filePath);
+          const source = await fetchComponentSource(
+            slug,
+            isExample ? name : registryKey,
+          );
+          const docs = isExample ? undefined : getComponentDocs(filePath);
 
           if (source.files.length > 0) {
-            registry[name] = {
-              name,
-              type: "registry:ui",
+            registry[registryKey] = {
+              name: isExample ? registryKey : name,
+              type: isExample ? "components:example" : "registry:ui",
               dependencies: source.dependencies,
               registryDependencies: source.registryDependencies,
               files: source.files.map((f) => {

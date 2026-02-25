@@ -56,9 +56,9 @@ export function LegacyPlayground({
       <div className="overflow-auto p-4 text-sm">
         <CodeBlock
           lang="tsx"
-          code={code}
+          code={code as string}
           className="bg-transparent border-none shadow-none rounded-none"
-          codeblock={{ allowCopy: false }}
+          codeblock={{ allowCopy: true }}
         />
       </div>
     </div>

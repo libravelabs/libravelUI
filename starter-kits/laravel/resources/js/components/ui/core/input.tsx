@@ -199,36 +199,22 @@ const inputGroupVariants = cva(
     },
 );
 
-/**
- * Props for the Input component.
- */
-type InputProps = InputPrimitiveProps &
+type InputProps = Omit<InputPrimitiveProps, 'size'> &
     VariantProps<typeof inputVariants> & {
-        /** Content to display at the start of the input. */
         startContent?: React.ReactNode;
-        /** Content to display at the end of the input (e.g., icons, buttons). */
         endContent?: React.ReactNode;
-        /** Whether the input is disabled. */
         isDisabled?: boolean;
-        /** Whether the input is in a loading state. */
         isLoading?: boolean;
-        /** Custom class names for internal elements. */
         classNames?: {
             wrapper?: string;
             input?: string;
             startContent?: string;
             endContent?: string;
         };
-        /** Optional custom component to render as the input (e.g., textarea). */
         as?: React.ElementType;
-        /** Content or render prop for the input. */
-        children?: React.ReactNode | ((args: any) => React.ReactNode);
+        children?: React.ReactNode | ((args: unknown) => React.ReactNode);
     };
 
-/**
- * A stylized input component built on React Aria Components.
- * Supports start/end content, password visibility toggle, and loading states.
- */
 const Input = forwardRef<HTMLInputElement, InputProps>(
     (
         {

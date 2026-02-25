@@ -34,6 +34,7 @@ export type ControlsMap = Record<string, ControlSchema>;
 
 export interface DemoComponent<T> extends React.FC<T> {
   controls?: ControlsMap;
+  template?: (props: string, children: string | null) => string;
 }
 
 export interface PlaygroundProps {

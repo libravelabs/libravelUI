@@ -8,24 +8,28 @@ import {
   SidebarHeader,
   SidebarBody,
   SidebarFooter,
-} from "@/components/ui/block/sidebar";
-import { Logo } from "@/components/app/logo";
+  SidebarTrigger,
+} from "./sidebar";
+import { AppLogo } from "@/components/app/logo";
 import { Alert } from "@/components/ui/core/alert";
 import type { PageTree } from "fumadocs-core/server";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { LargeSearchToggle } from "@/components/app/partials/search-toggle";
+import { LargeSearchToggle } from "@/components/app/search/search-toggle";
 import { cn } from "@/lib/utils";
 
 export function AppSidebar({ pageTree }: { pageTree: PageTree.Root }) {
   const pathName = usePathname();
 
   return (
-    <Sidebar className="fixed top-0 left-0 h-screen z-999">
+    <Sidebar className="h-screen sticky top-0">
       <SidebarHeader className="gap-4">
-        <Link href="/docs" className="w-fit">
-          <Logo />
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/docs" className="w-fit">
+            <AppLogo />
+          </Link>
+          <SidebarTrigger className="md:hidden" />
+        </div>
         <LargeSearchToggle className="w-full" />
       </SidebarHeader>
 
@@ -83,15 +87,15 @@ function renderSidebarTree(
         <Wrapper key={item.$id}>
           <SidebarGroup
             stickyHeader
-            label={
+            label={String(
               folderUrl ? (
                 <Link href={folderUrl} className="truncate hover:underline">
                   {item.name}
                 </Link>
               ) : (
                 item.name
-              )
-            }
+              ),
+            )}
             icon={item.icon}
             defaultOpen={item.defaultOpen}
             className="relative [&_h3]:text-xs [&_svg:not([class*='size-'])]:size-3 [&_svg[fill^='#']]:fill-foreground"
