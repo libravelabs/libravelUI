@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=TASA+Orbiter:wght@400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque&display=swap");
 
 @import "tailwindcss";
 @import "fumadocs-ui/css/shadcn.css";
@@ -7,6 +8,16 @@
 @import "./libravel-ui.css";
 
 @layer base {
+  :root {
+    --fd-page-width: 100vw;
+    --spacing-fd-container: 100vw;
+    --fd-layout-width: 100vw;
+  }
+
+  .container {
+    max-width: 100% !important;
+  }
+
   *,
   ::after,
   ::before,
@@ -20,8 +31,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans);
+    @apply bg-background text-foreground font-sans;
   }
 }
 

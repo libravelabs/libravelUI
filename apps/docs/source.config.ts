@@ -34,7 +34,7 @@ export const docs = defineDocs({
                 url: zod.string(),
                 icon: zod.custom<React.ReactNode>().optional(),
               }),
-            ])
+            ]),
           ),
         ])
         .optional(),
@@ -43,7 +43,7 @@ export const docs = defineDocs({
           zod.object({
             title: zod.string(),
             icon: zod.custom<LucideIcon>().optional(),
-          })
+          }),
         )
         .optional(),
     }),
@@ -57,6 +57,8 @@ export const docs = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
-    remarkPlugins: [remarkDocCode],
+    remarkPlugins: [
+      /* remarkDocCode */
+    ],
   },
 });

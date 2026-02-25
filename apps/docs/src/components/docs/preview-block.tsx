@@ -68,14 +68,14 @@ function PreviewItem({
     {
       ssr: false,
       loading: () => <Loader />,
-    }
+    },
   );
 
   return (
     <div
       className={cn(
         "relative border flex flex-col items-center justify-center w-full sm:max-w-sm min-h-48 rounded-xl overflow-hidden not-prose",
-        wrapperClass
+        wrapperClass,
       )}
     >
       <Button
@@ -97,7 +97,7 @@ function PreviewItem({
         data-content
         className={cn(
           "flex flex-col items-center justify-center w-full h-full scale-85 not-prose",
-          className
+          className,
         )}
       >
         <Demo />

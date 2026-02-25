@@ -2,9 +2,9 @@ import "./global.css";
 import { RootProvider } from "fumadocs-ui/provider";
 import type { ReactNode } from "react";
 import { Toast } from "@/components/ui/core/toast";
-import SearchDialog from "@/components/app/search";
+import SearchDialog from "@/components/app/search/search";
 import { FloatingNav } from "@/components/app/floating-nav";
-import { ThemeInitializer } from "@/components/theme/theme-intializer";
+import { ThemeInitializer } from "@/components/app/theme/theme-intializer";
 import { generateThemeScript } from "@/scripts/generate-theme";
 import { TexturedBackground } from "@/components/app/textured-background";
 import {
@@ -15,6 +15,7 @@ import {
   domine,
   afacad_flux,
 } from "@/lib/fonts";
+import { SidebarProvider } from "@/components/app/sidebar";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -37,26 +38,28 @@ export default function Layout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
-        <RootProvider
-          search={{
-            SearchDialog,
-          }}
-          theme={{
-            attribute: "class",
-            defaultTheme: "system",
-            enableSystem: true,
-            disableTransitionOnChange: true,
-          }}
-        >
-          <TexturedBackground>
-            <ThemeInitializer />
-            <main className="flex flex-col min-h-screen scroll-smooth">
-              {children}
-            </main>
-            <FloatingNav />
-            <Toast richColors />
-          </TexturedBackground>
-        </RootProvider>
+        <SidebarProvider>
+          <RootProvider
+            search={{
+              SearchDialog,
+            }}
+            theme={{
+              attribute: "class",
+              defaultTheme: "system",
+              enableSystem: true,
+              disableTransitionOnChange: true,
+            }}
+          >
+            <TexturedBackground>
+              <ThemeInitializer />
+              <main className="flex flex-col min-h-screen scroll-smooth">
+                {children}
+              </main>
+              <FloatingNav />
+              <Toast richColors />
+            </TexturedBackground>
+          </RootProvider>
+        </SidebarProvider>
       </body>
     </html>
   );

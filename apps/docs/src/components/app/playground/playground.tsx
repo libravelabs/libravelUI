@@ -46,6 +46,7 @@ interface PlaygroundContentProps {
   Component: React.ComponentType;
   section: "core" | "motion";
   orientation: "horizontal" | "vertical";
+  template?: (props: string, children: string | null) => string;
 }
 
 function PlaygroundContent({
@@ -53,6 +54,7 @@ function PlaygroundContent({
   Component,
   section = "core",
   orientation,
+  template,
 }: PlaygroundContentProps) {
   const {
     values,
@@ -68,8 +70,8 @@ function PlaygroundContent({
   );
 
   const code = useMemo(() => {
-    return playgroundParser(sourceCode || "", values, controls);
-  }, [sourceCode, values, controls]);
+    return playgroundParser(sourceCode || "", values, controls, template);
+  }, [sourceCode, values, controls, template]);
 
   const { ref: previewRef, size } = usePreviewSize(refresh.key);
   const { isCopied, copyToClipboard } = useCopyToClipboard();
@@ -253,6 +255,7 @@ export function Playground({
         compName={comp}
         Component={Component.default}
         orientation={orientation}
+        template={(Component as any).template}
       />
     </PlaygroundProvider>
   );

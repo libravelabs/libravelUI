@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "motion/react";
 
-import { ThemeSelector } from "../theme/theme-selector";
+import { ThemeSelector } from "./theme/theme-selector";
 import { AppearanceToggle } from "./partials/appearance-toggle";
 import { Separator } from "../ui/core/separator";
 import { RadiusSelector } from "./partials/radius-selector";

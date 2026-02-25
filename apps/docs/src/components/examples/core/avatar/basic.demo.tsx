@@ -11,6 +11,7 @@ export const controls = {
     label: "Image URL",
     type: "text",
     defaultValue: "https://i.pravatar.cc/100?img=3",
+    showDefault: true,
   },
   shape: {
     type: "select",

@@ -52,6 +52,7 @@ export const controls = {
     type: "text",
     defaultValue: "Enter text...",
     label: "Placeholder",
+    showDefault: true,
   },
   tone: {
     type: "select",
@@ -82,3 +83,9 @@ export const controls = {
     label: "Loading",
   },
 };
+
+export function template(props: string) {
+  return `<TextField>
+      <Input ${props} />
+    </TextField>`;
+}
