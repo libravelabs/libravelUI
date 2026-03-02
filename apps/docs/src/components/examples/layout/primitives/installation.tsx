@@ -40,7 +40,7 @@ export function Installation({
             </p>
           </AccordionTrigger>
           <AccordionContent className="pt-1">
-            <PackageInstall packageName={name} />
+            <PackageInstall packageName={name} command="add" />
           </AccordionContent>
         </AccordionItem>
 
