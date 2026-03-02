@@ -107,8 +107,8 @@ function Slider({
         >
             <div className="flex text-foreground">
                 {props.label && <Label>{props.label}</Label>}
-                {output === 'inline' && (
-                    <SliderOutput className="text-sm text-muted-foreground tabular-nums data-[orientation=horizontal]:ml-auto data-[orientation=vertical]:mx-auto">
+                {output === 'inline' && orientation === 'horizontal' && (
+                    <SliderOutput className="ml-auto text-sm text-muted-foreground tabular-nums">
                         {({ state }) =>
                             state.values
                                 .map((_, i) => state.getThumbValueLabel(i))
@@ -129,6 +129,15 @@ function Slider({
                     </>
                 )}
             </SliderTrack>
+            {output === 'inline' && orientation === 'vertical' && (
+                <SliderOutput className="text-sm text-muted-foreground tabular-nums">
+                    {({ state }) =>
+                        state.values
+                            .map((_, i) => state.getThumbValueLabel(i))
+                            .join(' – ')
+                    }
+                </SliderOutput>
+            )}
             {props.description && (
                 <Description>{props.description}</Description>
             )}
@@ -202,7 +211,7 @@ const thumbStyles = cva(
                 true: 'size-[1.35rem] cursor-grabbing border-primary',
             },
             isDisabled: {
-                true: 'opacity-50 forced-colors:border-[GrayText]',
+                true: 'forced-colors:border-[GrayText]',
             },
         },
     },

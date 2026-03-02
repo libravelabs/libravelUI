@@ -5,7 +5,7 @@ import { Select } from "@/components/ui/core/select";
 import { Switch } from "@/components/ui/core/switch";
 import { Input } from "@/components/ui/core/input";
 import { Label } from "@/components/ui/core/field";
-import { NumberField } from "@/components/ui/core/number-field";
+import { NumberField, NumberInput } from "@/components/ui/core/number-field";
 import { ToggleGroup, ToggleItem } from "@/components/ui/core/toggle-group";
 import { TextField } from "@/components/ui/core/text-field";
 import { Textarea } from "@/components/ui/core/text-area";
@@ -77,48 +77,44 @@ export function Controls() {
 
         if (schema.type === "text") {
           return (
-            <div key={key}>
-              <TextField
-                value={(values[key] as string) || ""}
-                onChange={(value) => setValue(key, value)}
-              >
-                <Label className="capitalize">{schema.label || key}</Label>
-                <Input placeholder={schema.placeholder} />
-              </TextField>
-            </div>
+            <TextField
+              key={key}
+              value={(values[key] as string) || ""}
+              onChange={(value) => setValue(key, value)}
+            >
+              <Label className="capitalize">{schema.label || key}</Label>
+              <Input placeholder={schema.placeholder} />
+            </TextField>
           );
         }
 
         if (schema.type === "textarea") {
           return (
-            <div key={key}>
-              <TextField
-                value={(values[key] as string) || ""}
-                onChange={(value) => setValue(key, value)}
-              >
-                <Label className="capitalize">{schema.label || key}</Label>
-                <Textarea placeholder={schema.placeholder} />
-              </TextField>
-            </div>
+            <TextField
+              key={key}
+              value={(values[key] as string) || ""}
+              onChange={(value) => setValue(key, value)}
+            >
+              <Label className="capitalize">{schema.label || key}</Label>
+              <Textarea placeholder={schema.placeholder} />
+            </TextField>
           );
         }
 
         if (schema.type === "number") {
           return (
-            <div key={key} className="grid gap-2">
-              <NumberField
-                value={(values[key] as number) || 0}
-                onChange={(e) => {
-                  const val = parseFloat(e.target.value);
-                  setValue(key, isNaN(val) ? 0 : val);
-                }}
-                minValue={schema.min}
-                maxValue={schema.max}
-              >
-                <Label className="capitalize">{schema.label || key}</Label>
-                <Input placeholder={schema.placeholder} />
-              </NumberField>
-            </div>
+            <NumberField
+              key={key}
+              value={(values[key] as number) || 0}
+              onChange={(val) => {
+                setValue(key, isNaN(val) ? 0 : val);
+              }}
+              minValue={schema.min}
+              maxValue={schema.max}
+            >
+              <Label className="capitalize">{schema.label || key}</Label>
+              <NumberInput placeholder={schema.placeholder} />
+            </NumberField>
           );
         }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { NumberField } from "@/components/ui/core/number-field";
+import { NumberField, NumberInput } from "@/components/ui/core/number-field";
 
 export default function FormatOptionsNumberField() {
   return (
@@ -15,7 +15,9 @@ export default function FormatOptionsNumberField() {
           currencySign: "accounting",
         }}
         className="max-w-72"
-      />
+      >
+        <NumberInput />
+      </NumberField>
     </section>
   );
 }

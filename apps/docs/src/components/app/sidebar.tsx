@@ -86,7 +86,11 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar, openMobile } = useSidebar();
+  const context = useContext(SidebarContext);
+
+  if (!context) return null;
+
+  const { toggleSidebar, openMobile } = context;
 
   return (
     <Button

@@ -8,16 +8,6 @@
 @import "./libravel-ui.css";
 
 @layer base {
-  :root {
-    --fd-page-width: 100vw;
-    --spacing-fd-container: 100vw;
-    --fd-layout-width: 100vw;
-  }
-
-  .container {
-    max-width: 100% !important;
-  }
-
   *,
   ::after,
   ::before,

@@ -1,6 +1,7 @@
 "use client";
 
 import { DropZone, type DropZoneProps } from "@/components/ui/core/drop-zone";
+import { useState } from "react";
 
 const tones: { value: string; label: string }[] = [
   { value: "default", label: "Default" },
@@ -27,9 +28,16 @@ export default function DropZoneTones({
   tone = "default",
   size = "md",
 }: DropZoneProps) {
+  const [dropped, setDropped] = useState(false);
+
   return (
-    <DropZone tone={tone} size={size} className="m-auto">
-      Hit us with your best shot!
+    <DropZone
+      onDrop={() => setDropped(true)}
+      tone={tone}
+      size={size}
+      className="m-auto"
+    >
+      {dropped ? "Not that easy, bro!" : "Hit us with your best shot!"}
     </DropZone>
   );
 }

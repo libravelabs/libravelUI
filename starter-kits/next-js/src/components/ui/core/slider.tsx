@@ -99,15 +99,15 @@ function Slider({
           orientation === "horizontal" && "w-full min-w-56 gap-y-2",
           orientation === "vertical" &&
             "h-full min-h-56 w-1.5 items-center gap-y-2",
-          className
-        )
+          className,
+        ),
       )}
       {...props}
     >
       <div className="flex text-foreground">
         {props.label && <Label>{props.label}</Label>}
-        {output === "inline" && (
-          <SliderOutput className="text-muted-foreground text-sm tabular-nums data-[orientation=vertical]:mx-auto data-[orientation=horizontal]:ml-auto">
+        {output === "inline" && orientation === "horizontal" && (
+          <SliderOutput className="text-muted-foreground text-sm tabular-nums ml-auto">
             {({ state }) =>
               state.values
                 .map((_, i) => state.getThumbValueLabel(i))
@@ -126,6 +126,13 @@ function Slider({
           </>
         )}
       </SliderTrack>
+      {output === "inline" && orientation === "vertical" && (
+        <SliderOutput className="text-muted-foreground text-sm tabular-nums">
+          {({ state }) =>
+            state.values.map((_, i) => state.getThumbValueLabel(i)).join(" – ")
+          }
+        </SliderOutput>
+      )}
       {props.description && <Description>{props.description}</Description>}
     </SliderPrimitive>
   );
@@ -139,8 +146,8 @@ function SliderTrack({ className, ...props }: SliderTrackProps) {
         className,
         cn(
           "group/track relative cursor-default rounded-full bg-muted disabled:cursor-default disabled:opacity-60",
-          "grow group-data-[orientation=horizontal]:h-1.5 group-data-[orientation=horizontal]:w-full group-data-[orientation=vertical]:w-1.5 group-data-[orientation=vertical]:flex-1"
-        )
+          "grow group-data-[orientation=horizontal]:h-1.5 group-data-[orientation=horizontal]:w-full group-data-[orientation=vertical]:w-1.5 group-data-[orientation=vertical]:flex-1",
+        ),
       )}
     />
   );
@@ -180,7 +187,7 @@ function SliderFiller({
       style={getStyle()}
       className={cn(
         "group-data-[orientation=horizontal]/top-0 pointer-events-none absolute rounded-full bg-primary group-disabled/track:opacity-60 group-data-[orientation=vertical]/track:bottom-0 group-data-[orientation=horizontal]/track:h-full group-data-[orientation=vertical]/track:w-full",
-        className
+        className,
       )}
     />
   );
@@ -197,10 +204,10 @@ const thumbStyles = cva(
         true: "size-[1.35rem] cursor-grabbing border-primary",
       },
       isDisabled: {
-        true: "opacity-50 forced-colors:border-[GrayText]",
+        true: "forced-colors:border-[GrayText]",
       },
     },
-  }
+  },
 );
 
 function SliderThumb({ className, ...props }: SliderThumbProps) {
@@ -208,7 +215,7 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
     <SliderThumbPrimitive
       {...props}
       className={composeRenderProps(className, (className, renderProps) =>
-        thumbStyles({ ...renderProps, className })
+        thumbStyles({ ...renderProps, className }),
       )}
     />
   );

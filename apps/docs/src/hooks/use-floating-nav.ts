@@ -33,7 +33,7 @@ export function useFloatingNav({
 }: UseFloatingNavOptions = {}): UseFloatingNavResult {
   const navPosition = useUiPreferences((s) => s.navPosition as NavPosition);
   const setNavPosition = useUiPreferences(
-    (s) => s.setNavPosition as (position: NavPosition) => void
+    (s) => s.setNavPosition as (position: NavPosition) => void,
   );
 
   const [isVisible, setIsVisible] = useState<boolean>(true);
@@ -60,11 +60,30 @@ export function useFloatingNav({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      lastScrollY.current = window.scrollY ?? 0;
+      const customContainer = document.querySelector("[data-scrollable]");
+      lastScrollY.current = customContainer
+        ? (customContainer as HTMLElement).scrollTop
+        : window.scrollY;
     }
 
-    const handleScroll = () => {
-      const current = window.scrollY ?? 0;
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement | Document | Window;
+      let current = 0;
+      let isTrackedScroll = false;
+
+      if (target === document || target === window) {
+        current = window.scrollY;
+        isTrackedScroll = true;
+      } else if (
+        target instanceof HTMLElement &&
+        target.hasAttribute("data-scrollable")
+      ) {
+        current = target.scrollTop;
+        isTrackedScroll = true;
+      }
+
+      if (!isTrackedScroll) return;
+
       const diff = current - lastScrollY.current;
 
       if (diff > scrollThreshold) {
@@ -76,8 +95,12 @@ export function useFloatingNav({
       lastScrollY.current = current;
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+      capture: true,
+    });
+    return () =>
+      window.removeEventListener("scroll", handleScroll, { capture: true });
   }, [scrollThreshold, hideNav, showNav]);
 
   return {

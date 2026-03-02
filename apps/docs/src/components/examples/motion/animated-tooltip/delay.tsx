@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { AnimatedTooltip } from "@/components/ui/motion/animated-tooltip";
 import { Button } from "@/components/ui/core/button";
-import { NumberField } from "@/components/ui/core/number-field";
+import { NumberField, NumberInput } from "@/components/ui/core/number-field";
 
 export default function TooltipDelayShowcase() {
   const [delay, setDelay] = useState(500);

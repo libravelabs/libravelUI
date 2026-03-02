@@ -15,7 +15,6 @@ import {
   domine,
   afacad_flux,
 } from "@/lib/fonts";
-import { SidebarProvider } from "@/components/app/sidebar";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -38,28 +37,26 @@ export default function Layout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
-        <SidebarProvider>
-          <RootProvider
-            search={{
-              SearchDialog,
-            }}
-            theme={{
-              attribute: "class",
-              defaultTheme: "system",
-              enableSystem: true,
-              disableTransitionOnChange: true,
-            }}
-          >
-            <TexturedBackground>
-              <ThemeInitializer />
-              <main className="flex flex-col min-h-screen scroll-smooth">
-                {children}
-              </main>
-              <FloatingNav />
-              <Toast richColors />
-            </TexturedBackground>
-          </RootProvider>
-        </SidebarProvider>
+        <RootProvider
+          search={{
+            SearchDialog,
+          }}
+          theme={{
+            attribute: "class",
+            defaultTheme: "system",
+            enableSystem: true,
+            disableTransitionOnChange: true,
+          }}
+        >
+          <TexturedBackground>
+            <ThemeInitializer />
+            <main className="flex flex-col min-h-screen scroll-smooth">
+              {children}
+            </main>
+            <FloatingNav />
+            <Toast richColors />
+          </TexturedBackground>
+        </RootProvider>
       </body>
     </html>
   );

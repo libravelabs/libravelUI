@@ -22,7 +22,7 @@ export function AppSidebar({ pageTree }: { pageTree: PageTree.Root }) {
   const pathName = usePathname();
 
   return (
-    <Sidebar className="h-screen sticky top-0">
+    <Sidebar className="h-screen pt-10 xl:pt-0">
       <SidebarHeader className="gap-4">
         <div className="flex items-center justify-between">
           <Link href="/docs" className="w-fit">

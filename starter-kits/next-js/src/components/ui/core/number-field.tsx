@@ -6,34 +6,39 @@ import {
   type ButtonProps,
   NumberField as NumberFieldPrimitive,
   type NumberFieldProps as NumberFieldPrimitiveProps,
-  Group,
 } from "react-aria-components";
 import { Minus, Plus } from "lucide-react";
 import { composeTailwindRenderProps } from "@/lib/render-props";
-import { Input } from "@/components/ui/core/input";
+import { Input, type InputProps } from "@/components/ui/core/input";
+import { cn } from "@/lib/utils";
+import { fieldStyles } from "@/components/ui/core/field";
 
-interface NumberFieldProps extends NumberFieldPrimitiveProps {
+function NumberField({ className, ...props }: NumberFieldPrimitiveProps) {
+  return (
+    <NumberFieldPrimitive {...props} className={cn(fieldStyles(), className)} />
+  );
+}
+
+interface NumberInputProps extends Omit<
+  InputProps,
+  "startContent" | "endContent"
+> {
   indicator?: StepperButtonProps["indicator"];
 }
 
-const NumberField = ({ indicator, ...props }: NumberFieldProps) => {
+function NumberInput({ indicator, ...props }: NumberInputProps) {
   return (
-    <NumberFieldPrimitive {...props}>
-      <Group>
-        <Input
-          classNames={{
-            wrapper: "px-0",
-            input: "text-center",
-          }}
-          startContent={
-            <StepperButton slot="decrement" indicator={indicator} />
-          }
-          endContent={<StepperButton slot="increment" indicator={indicator} />}
-        />
-      </Group>
-    </NumberFieldPrimitive>
+    <Input
+      classNames={{
+        wrapper: "px-0",
+        input: "text-center",
+      }}
+      startContent={<StepperButton slot="decrement" indicator={indicator} />}
+      endContent={<StepperButton slot="increment" indicator={indicator} />}
+      {...props}
+    />
   );
-};
+}
 
 interface StepperButtonProps extends ButtonProps {
   slot: "increment" | "decrement";
@@ -44,12 +49,12 @@ interface StepperButtonProps extends ButtonProps {
   className?: string;
 }
 
-const StepperButton = ({
+function StepperButton({
   slot,
   className,
   indicator,
   ...props
-}: StepperButtonProps) => {
+}: StepperButtonProps) {
   let icon: React.ReactNode;
 
   if (
@@ -77,7 +82,7 @@ const StepperButton = ({
       {icon}
     </Button>
   );
-};
+}
 
-export type { NumberFieldProps };
-export { NumberField };
+export type { NumberInputProps };
+export { NumberField, NumberInput };
