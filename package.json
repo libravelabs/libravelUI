@@ -1,6 +1,6 @@
 {
-  "name": "libravel-ui",
-  "version": "0.0.0",
+  "name": "ui",
+  "version": "0.1.0",
   "private": true,
   "workspaces": [
     "apps/*",
