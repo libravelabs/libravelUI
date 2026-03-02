@@ -6,7 +6,7 @@ import {
   type RefObject,
   use,
   useEffect,
-  useEffectEvent,
+  useCallback,
   useRef,
 } from "react";
 import { cn } from "fumadocs-ui/utils/cn";
@@ -76,29 +76,26 @@ export function TocThumb({
     element.style.setProperty("--fd-height", `${info[1]}px`);
   }
 
-  const onPrint = useEffectEvent(() => {
+  const onPrint = useCallback(() => {
     if (containerRef.current) {
       update(calc(containerRef.current, active));
     }
-  });
+  }, [containerRef, active]);
 
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
 
-    const observer = new ResizeObserver(onPrint);
+    const observer = new ResizeObserver(() => {
+      onPrint();
+    });
+
     observer.observe(container);
 
     return () => {
       observer.disconnect();
     };
-  }, [containerRef]);
-
-  useOnChange(active, () => {
-    if (containerRef.current) {
-      update(calc(containerRef.current, active));
-    }
-  });
+  }, [containerRef, onPrint]);
 
   return <div ref={thumbRef} data-hidden={active.length === 0} {...props} />;
 }
