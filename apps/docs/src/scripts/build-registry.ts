@@ -40,7 +40,7 @@ function getAllFiles(
 async function buildRegistry() {
   console.log("Building smart registry...");
 
-  const registry: Record<string, any> = {};
+  const registry: Record<string, unknown> = {};
 
   const componentRoots = [
     path.join(process.cwd(), "src/components/ui"),

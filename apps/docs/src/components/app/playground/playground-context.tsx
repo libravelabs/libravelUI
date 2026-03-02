@@ -4,8 +4,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import type { ControlsMap } from "./types";
 
 interface PlaygroundContextType {
-  values: Record<string, any>;
-  setValue: (key: string, value: any) => void;
+  values: Record<string, unknown>;
+  setValue: (key: string, value: unknown) => void;
   controls: ControlsMap;
   refresh: { key: number; rotation: number };
   handleRefresh: () => void;
@@ -15,7 +15,7 @@ interface PlaygroundContextType {
 }
 
 const PlaygroundContext = createContext<PlaygroundContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function usePlayground() {
@@ -35,7 +35,7 @@ export function PlaygroundProvider({
   children,
   controls = {},
 }: PlaygroundProviderProps) {
-  const [values, setValues] = useState<Record<string, any>>({});
+  const [values, setValues] = useState<Record<string, unknown>>({});
   const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
   const [refresh, setRefresh] = useState<{ key: number; rotation: number }>({
     key: 0,
@@ -43,14 +43,14 @@ export function PlaygroundProvider({
   });
 
   useEffect(() => {
-    const defaults: Record<string, any> = {};
+    const defaults: Record<string, unknown> = {};
     Object.entries(controls).forEach(([key, schema]) => {
       defaults[key] = schema.defaultValue;
     });
     setValues(defaults);
   }, [controls]);
 
-  const setValue = (key: string, value: any) => {
+  const setValue = (key: string, value: unknown) => {
     setValues((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -60,7 +60,7 @@ export function PlaygroundProvider({
       rotation: prev.rotation + 360,
     }));
 
-    const defaults: Record<string, any> = {};
+    const defaults: Record<string, unknown> = {};
     Object.entries(controls).forEach(([key, schema]) => {
       defaults[key] = schema.defaultValue;
     });

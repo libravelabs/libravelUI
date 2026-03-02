@@ -255,7 +255,13 @@ export function Playground({
         compName={comp}
         Component={Component.default}
         orientation={orientation}
-        template={(Component as any).template}
+        template={
+          (
+            Component as {
+              template: (props: string, children: string | null) => string;
+            }
+          ).template
+        }
       />
     </PlaygroundProvider>
   );

@@ -16,11 +16,17 @@ vi.mock("motion/react", async () => {
       <>{children}</>
     ),
     motion: {
-      div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-      span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
-      create: (Component: any) => (props: any) => <Component {...props} />,
+      div: ({ children, ...props }: unknown) => (
+        <div {...props}>{children}</div>
+      ),
+      span: ({ children, ...props }: unknown) => (
+        <span {...props}>{children}</span>
+      ),
+      create: (Component: unknown) => (props: unknown) => (
+        <Component {...props} />
+      ),
     },
-    useMotionValue: (v: any) => ({ get: () => v, set: () => {} }),
+    useMotionValue: (v: unknown) => ({ get: () => v, set: () => {} }),
     animate: () => ({ stop: () => {} }),
   };
 });
