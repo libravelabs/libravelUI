@@ -1,7 +1,11 @@
 "use client";
 
-import { NumberField } from "@/components/ui/core/number-field";
+import { NumberField, NumberInput } from "@/components/ui/core/number-field";
 
 export default function DisabledNumberField() {
-  return <NumberField isDisabled defaultValue={100} className="max-w-72" />;
+  return (
+    <NumberField isDisabled defaultValue={100} className="max-w-72">
+      <NumberInput />
+    </NumberField>
+  );
 }

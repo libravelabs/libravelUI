@@ -56,14 +56,83 @@ function extractHandlers(code: string) {
 }
 
 function extractChildren(code: string) {
-  if (code.match(/return\s*(?:\(\s*)?(?:<>\s*)?<([A-Z]\w+)[\s\S]*?\/>/)) {
-    return null;
+  const tag = extractJSXTag(code);
+  if (!tag) return "{children}";
+
+  const startTagPrefix = `<${tag}`;
+  const startIndex = code.indexOf(startTagPrefix);
+  if (startIndex === -1) return "{children}";
+
+  let inQuotes = false;
+  let quoteChar = null;
+  let bracesDepth = 0;
+  let i = startIndex + startTagPrefix.length;
+
+  let openingTagEnd = -1;
+  let isSelfClosing = false;
+
+  for (; i < code.length; i++) {
+    const char = code[i];
+    if (inQuotes) {
+      if (char === quoteChar) {
+        inQuotes = false;
+      }
+      continue;
+    }
+
+    if (char === '"' || char === "'") {
+      inQuotes = true;
+      quoteChar = char;
+    } else if (char === "{") {
+      bracesDepth++;
+    } else if (char === "}") {
+      bracesDepth--;
+    } else if (char === ">" && bracesDepth === 0) {
+      openingTagEnd = i;
+      if (code[i - 1] === "/") {
+        isSelfClosing = true;
+      }
+      break;
+    }
   }
 
-  const m = code.match(
-    /return\s*(?:\(\s*)?(?:<>\s*)?<[\s\S]*?>\s*([\s\S]*?)\s*<\/[A-Z]\w+>\s*(?:<\/>\s*)?(?:\)\s*)?;?/,
-  );
-  return m?.[1].trim() ?? "{children}";
+  if (isSelfClosing) return null;
+  if (openingTagEnd === -1) return "{children}";
+
+  let depth = 1;
+  let closingStart = -1;
+  for (i = openingTagEnd + 1; i < code.length; i++) {
+    const isClosing = code.startsWith(`</${tag}>`, i);
+    const isOpening = code.startsWith(startTagPrefix, i);
+
+    if (isClosing) {
+      depth--;
+      if (depth === 0) {
+        closingStart = i;
+        break;
+      }
+    } else if (isOpening) {
+      const nextChar = code[i + startTagPrefix.length];
+      if (
+        !nextChar ||
+        nextChar === " " ||
+        nextChar === ">" ||
+        nextChar === "/" ||
+        nextChar === "\n"
+      ) {
+        depth++;
+      }
+    }
+  }
+
+  if (closingStart === -1) return "{children}";
+
+  return code.slice(openingTagEnd + 1, closingStart).trim();
+}
+
+function extractFunctionSignature(code: string) {
+  const match = code.match(/export\s+(?:default\s+)?function\s+[A-Za-z0-9_]+/);
+  return match ? match[0] : "export function Component";
 }
 
 function buildFromControls(
@@ -123,7 +192,13 @@ function buildComponent(
   props: string[],
   handlers: string[],
   children: string | null,
-  template?: (props: string, children: string | null) => string,
+  values: Record<string, PlaygroundValue>,
+  template?: (
+    props: string,
+    children: string | null,
+    values: Record<string, PlaygroundValue>,
+  ) => string,
+  functionSignature: string = "export function Component",
 ) {
   const allProps = [...props, ...handlers];
   const propLine = allProps.length ? " " + allProps.join(" ") : "";
@@ -131,7 +206,7 @@ function buildComponent(
   let jsx = "";
 
   if (template) {
-    jsx = template(propLine.trim(), children);
+    jsx = template(propLine.trim(), children, values);
   } else if (children === null) {
     jsx = `<${tag}${propLine} />`;
   } else {
@@ -139,7 +214,7 @@ function buildComponent(
   }
 
   return `
-export function Component() {
+${functionSignature}() {
   return (
     ${jsx}
   );
@@ -151,7 +226,11 @@ export function playgroundParser(
   code: string,
   values: Record<string, PlaygroundValue>,
   controls: ControlsMap,
-  template?: (props: string, children: string | null) => string,
+  template?: (
+    props: string,
+    children: string | null,
+    values: Record<string, PlaygroundValue>,
+  ) => string,
 ) {
   if (!code) return "";
 
@@ -159,6 +238,7 @@ export function playgroundParser(
   const tag = extractJSXTag(code);
   const childrenTemplate = extractChildren(code);
   const handlers = extractHandlers(code);
+  const functionSignature = extractFunctionSignature(code);
 
   const generated = buildFromControls(values, controls);
   generated.handlers = handlers;
@@ -188,7 +268,7 @@ export function playgroundParser(
   const output = `
 ${Array.from(usedImports).join("\n")}
 
-${buildComponent(tag, generated.props, generated.handlers, generated.children, template)}
+${buildComponent(tag, generated.props, generated.handlers, generated.children, values, template, functionSignature)}
 `;
 
   return format(output);

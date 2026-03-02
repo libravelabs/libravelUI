@@ -21,6 +21,7 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   const page = source.getPage(params.slug);
+
   if (!page) notFound();
 
   const MDX = page.data.body;
@@ -28,7 +29,7 @@ export default async function Page(props: {
   return (
     <DocsPage
       toc={page.data.toc}
-      full={true}
+      full
       breadcrumb={{
         enabled: !page.data.gridLayout,
       }}
@@ -48,8 +49,11 @@ export default async function Page(props: {
       lastUpdate={
         page.data.lastModified ? new Date(page.data.lastModified) : undefined
       }
+      container={{
+        className: "max-w-none! w-full! px-0!",
+      }}
       article={{
-        className: "pb-20 max-w-none",
+        className: "pb-20",
       }}
     >
       {page.data.gridLayout ? (
@@ -74,7 +78,7 @@ export default async function Page(props: {
         </>
       )}
 
-      <DocsBody>
+      <DocsBody className="max-w-none w-full!">
         {page.data.gridLayout ? (
           <DocGrid>
             <MDX components={getMDXComponents()} />

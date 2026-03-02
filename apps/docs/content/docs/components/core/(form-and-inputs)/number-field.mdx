@@ -51,27 +51,25 @@ Number fields can be built with `<input type="number">`, but the behavior is ver
 ## Anatomy
 
 ```tsx
-import { NumberField } from "@/components/ui/core/number-field";
+import { NumberField, NumberInput } from "@/components/ui/core/number-field";
 ```
 
 ```tsx
 <NumberField
-  label="Label"
-  aria-label="Label"
-  placeholder="0"
-  description="Description goes here."
-  error="Error message goes here."
   defaultValue={0}
   minValue={0}
   maxValue={100}
   step={1}
   formatOptions={{ style: "decimal" }}
   onChange={(value) => console.log("Changed:", value)}
-  indicator={{
-    increment: "INCREMENT INDICATOR GOES HERE (OPTIONAL)",
-    decrement: "DECREMENT INDICATOR GOES HERE (OPTIONAL)",
-  }}
-/>
+>
+  <NumberInput
+    indicator={{
+      increment: "INCREMENT INDICATOR GOES HERE (OPTIONAL)",
+      decrement: "DECREMENT INDICATOR GOES HERE (OPTIONAL)",
+    }}
+  />
+</NumberField>
 ```
 
 ## Another Examples

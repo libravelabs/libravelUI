@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/core/badge';
 import { Button } from '@/components/ui/core/button';
 import {
     DropZone,
-    dropZoneSizes,
+    dropZoneVariants,
     type DropZoneProps,
 } from '@/components/ui/core/drop-zone';
 import { motion, AnimatePresence } from 'motion/react';
@@ -78,11 +78,6 @@ function DragAndDrop({
     multiple = false,
     ...props
 }: DragAndDropProps) {
-    const accept =
-        typeof acceptedFileType === 'string'
-            ? acceptedFileType
-            : acceptedFileType?.join(',');
-
     const [internalFiles, setInternalFiles] = React.useState<FileState[]>([]);
     const [internalErrors, setInternalErrors] = React.useState<string[]>([]);
 
@@ -140,6 +135,7 @@ function DragAndDrop({
         <div className={cn('space-y-4', className, classNames?.wrapper)}>
             <DropZone
                 {...props}
+                data-drag-and-drop
                 isDisabled={isDisabled}
                 onDrop={async (e) => {
                     const dropped = e.items.filter(
@@ -168,7 +164,7 @@ function DragAndDrop({
                         <ButtonPrimitive
                             isDisabled={isDisabled}
                             className={cn(
-                                dropZoneSizes({ size }),
+                                dropZoneVariants({ size }),
                                 'w-full rounded-lg p-6',
                                 classNames?.dropZone,
                             )}
@@ -311,7 +307,7 @@ function FilesPreview({ files, onRemove }: FilesPreviewProps) {
                                         ) : (
                                             <UploadCloud className="size-10 opacity-60" />
                                         )}
-                                        <span className="mt-1 block max-w-full truncate text-xs">
+                                        <span className="mt-1 block max-w-40 truncate text-xs">
                                             {f.file.name}
                                         </span>
                                     </div>
@@ -404,7 +400,7 @@ function FilesPreview({ files, onRemove }: FilesPreviewProps) {
                                         <ProgressBar value={f.progress} />
                                     ) : (
                                         <>
-                                            <p className="max-w-72 truncate text-sm font-medium md:max-w-96">
+                                            <p className="max-w-60 truncate text-sm font-medium">
                                                 {f.file.name}
                                             </p>
                                             <p className="text-xs opacity-80">

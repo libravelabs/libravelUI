@@ -9,6 +9,7 @@ export function baseOptions(): BaseLayoutProps {
     themeSwitch: {
       enabled: false,
     },
+    githubUrl: "https://github.com/libravelabs/libravelUI",
     nav: {
       title: <AppLogo />,
     },

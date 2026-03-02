@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
-import { NumberField } from "../number-field";
+import { NumberField, NumberInput } from "../number-field";
 import React from "react";
 
 // Mock ResizeObserver
@@ -13,7 +13,11 @@ global.ResizeObserver = class ResizeObserver {
 
 describe("NumberField", () => {
   it("renders correctly", () => {
-    render(<NumberField aria-label="Quantity" defaultValue={10} />);
+    render(
+      <NumberField aria-label="Quantity" defaultValue={10}>
+        <NumberInput />
+      </NumberField>,
+    );
     expect(screen.getByRole("textbox")).toHaveValue("10");
   });
 
@@ -21,11 +25,9 @@ describe("NumberField", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <NumberField
-        aria-label="Quantity"
-        defaultValue={10}
-        onChange={onChange}
-      />,
+      <NumberField aria-label="Quantity" defaultValue={10} onChange={onChange}>
+        <NumberInput />
+      </NumberField>,
     );
 
     const buttons = screen.getAllByRole("button");
@@ -46,7 +48,11 @@ describe("NumberField", () => {
 
   it("updates value on typing", async () => {
     const user = userEvent.setup();
-    render(<NumberField aria-label="Quantity" defaultValue={10} />);
+    render(
+      <NumberField aria-label="Quantity" defaultValue={10}>
+        <NumberInput />
+      </NumberField>,
+    );
 
     const input = screen.getByRole("textbox");
     await user.clear(input);

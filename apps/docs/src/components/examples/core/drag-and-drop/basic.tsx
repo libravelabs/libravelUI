@@ -8,9 +8,9 @@ export default function BasicDragAndDrop() {
     <div className="grid gap-4">
       <DragAndDrop
         multiple
-        onError={(msg) => toast.error("Error:" + msg)}
-        onFileAdd={(file) => toast.success("Added:" + file.file.name)}
-        onFileRemove={(file) => toast.success("Removed:" + file.file.name)}
+        onError={(msg) => toast.error("Error: " + msg)}
+        onFileAdd={(file) => toast.success("Added: " + file.file.name)}
+        onFileRemove={(file) => toast.success("Removed: " + file.file.name)}
         onClear={() => toast.success("Cleared all")}
       />
     </div>
