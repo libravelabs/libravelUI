@@ -19,18 +19,30 @@ const PACKAGE_MANAGER_LABELS: Record<PackageManager, string> = {
 
 type PackageInstallProps = {
   packageName?: string;
+  command?: "install" | "add";
 };
 
-export function PackageInstall({ packageName }: PackageInstallProps) {
+export function PackageInstall({
+  packageName,
+  command = "install",
+}: PackageInstallProps) {
   const [manager, setManager] = useState<PackageManager>("npm");
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
-  const cliCommands: Record<PackageManager, string> = {
-    npm: `npm install ${packageName}`,
-    pnpm: `pnpm add ${packageName}`,
-    yarn: `yarn add ${packageName}`,
-    bun: `bun add ${packageName}`,
-  };
+  const cliCommands: Record<PackageManager, string> =
+    command === "add"
+      ? {
+          npm: `npx libravelui@latest add ${packageName}`,
+          pnpm: `pnpm dlx libravelui@latest add ${packageName}`,
+          yarn: `yarn dlx libravelui@latest add ${packageName}`,
+          bun: `bunx libravelui@latest add ${packageName}`,
+        }
+      : {
+          npm: `npm install ${packageName}`,
+          pnpm: `pnpm add ${packageName}`,
+          yarn: `yarn add ${packageName}`,
+          bun: `bun add ${packageName}`,
+        };
 
   const handleCopy = () => {
     copyToClipboard(cliCommands[manager]);
