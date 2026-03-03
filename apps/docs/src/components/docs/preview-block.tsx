@@ -58,7 +58,7 @@ function PreviewItem({
   const finalPath = `@/components/examples/${section}/${name}/${file}`;
   const Demo = dynamic(
     () =>
-      import(`${finalPath}`).catch(() => ({
+      import(finalPath).catch(() => ({
         default: () => (
           <div className="text-sm text-destructive">
             Component not found: {finalPath}

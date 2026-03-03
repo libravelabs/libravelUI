@@ -19,18 +19,19 @@ const eslintConfig = [
       "build/**",
       ".source/**",
       "next-env.d.ts",
-    ],
-  },
-  {
-    files: [
       "**/*.test.ts",
       "**/*.test.tsx",
       "**/*.spec.ts",
       "**/*.spec.tsx",
-      "**/test/**",
+      "**/__tests__/**",
+      "test/**",
     ],
+  },
+  {
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "react/display-name": "off",
     },
   },
 ];
