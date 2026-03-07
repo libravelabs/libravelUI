@@ -1,0 +1,76 @@
+---
+title: Animated Circle Indicator
+description: A customizable animated circle to indicate statuses, notifications, or activity with smooth motion animations.
+component: true
+gridLayout: true
+features:
+  - title: 14 built-in animations
+    icon: Sparkles
+  - title: Multiple sizes and tones
+    icon: Palette
+  - title: Fully customizable
+    icon: Sliders
+---
+
+<DocCard span={6} title="Basic">
+  <Example name="animated-circle-indicator/basic" />
+</DocCard>
+
+<DocCard span={6} title="Features">
+  <Features
+    items={[
+      {
+        title: "Status Indication",
+        description: "Perfect for online, away, or busy statuses.",
+        icon: <Sparkles />,
+      },
+      {
+        title: "Notification Dot",
+        description: "Use it to alert users about new messages or updates.",
+        icon: <Palette />,
+      },
+      {
+        title: "Activity Pulse",
+        description: "Indicate ongoing processes or live activity.",
+        icon: <Sliders />,
+      },
+      {
+        title: "Attention Grabber",
+        description: "Subtle animations to draw user focus naturally.",
+        icon: <Sparkles />,
+      },
+    ]}
+  />
+</DocCard>
+
+<DocCard span={12} title="Installation" badge={<InstallationBadge />}>
+  <Installation name="animated-circle-indicator" />
+</DocCard>
+
+<DocCard span={12} title="Anatomy">
+  <Anatomy code={`
+import { AnimatedCircleIndicator } from "@/components/ui/motion/animated-circle-indicator";
+
+<AnimatedCircleIndicator
+  size="md"
+  tone="primary"
+  animation="pulseTransparent"
+/>
+`} />
+</DocCard>
+
+<DocCard span={12} title="User Statuses">
+  <Example name="animated-circle-indicator/status" />
+</DocCard>
+
+<DocCard span={6} title="Notification Badge">
+  <Example name="animated-circle-indicator/notification" />
+</DocCard>
+
+<DocCard span={6} title="Task Activity">
+  <Example name="animated-circle-indicator/activity" />
+</DocCard>
+
+<DocCard span={12} title="Props">
+  <AutoTypeTable comp="components/ui/motion/animated-circle-indicator.tsx" />
+</DocCard>

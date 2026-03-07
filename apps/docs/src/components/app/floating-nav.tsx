@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useFloatingNav } from "@/hooks/use-floating-nav";
 import { ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { MobileNavDropdown } from "./partials/mobile-nav-dropdown";
 
 export function FloatingNav() {
   const isMobile = useIsMobile();
@@ -46,24 +47,7 @@ export function FloatingNav() {
           {isMobile ? (
             <>
               <AppearanceToggle />
-
-              <AnimatedTooltip
-                trigger={<TextureToggle />}
-                animationStyle="wobble"
-              >
-                Textured Background
-              </AnimatedTooltip>
-
-              <AnimatedTooltip
-                trigger={<ThemeSelector />}
-                animationStyle="wobble"
-              >
-                App Theme
-              </AnimatedTooltip>
-
-              <CopyThemeButton />
-
-              <RadiusSelector />
+              <MobileNavDropdown />
             </>
           ) : (
             <>

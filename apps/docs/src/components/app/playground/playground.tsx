@@ -18,6 +18,7 @@ import { LayoutPanelLeft, RefreshCw, Check, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/docs/code-block";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 function usePreviewSize(trigger: unknown) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -75,6 +76,7 @@ function PlaygroundContent({
 
   const { ref: previewRef, size } = usePreviewSize(refresh.key);
   const { isCopied, copyToClipboard } = useCopyToClipboard();
+  const isMobile = useIsMobile();
 
   const toolbar = (
     <ButtonGroup>
@@ -124,6 +126,55 @@ function PlaygroundContent({
       </PreviewContainer>
     </div>
   );
+
+  if (isMobile) {
+    return (
+      <div className="bg-card rounded-2xl border border-border overflow-hidden flex flex-col">
+        <div key={refresh.key} dir={direction} className="flex flex-col">
+          <div className="flex items-center justify-end gap-2 p-3 border-b border-border">
+            {toolbar}
+          </div>
+          <div className="h-[350px] relative border-b border-border">
+            {preview}
+          </div>
+          <div className="p-4 bg-card/50 border-b border-border">
+            <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-4">
+              Component Configuration
+            </div>
+            <Controls />
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/50">
+            <span className="text-xs font-mono text-muted-foreground">
+              Usage
+            </span>
+            <Button
+              tone="outline"
+              size="sm"
+              className="text-[10px] uppercase tracking-wide font-medium text-primary gap-1.5"
+              onClick={() => copyToClipboard(code)}
+            >
+              {isCopied ? (
+                <Check className="size-3" />
+              ) : (
+                <Copy className="size-3" />
+              )}
+              {isCopied ? "Copied" : "Copy"}
+            </Button>
+          </div>
+          <div className="bg-card/80 p-1">
+            <CodeBlock
+              lang="tsx"
+              code={code}
+              className="bg-transparent border-none shadow-none rounded-none"
+              codeblock={{ allowCopy: false }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (orientation === "vertical") {
     return (

@@ -10,23 +10,19 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-svh w-full overflow-hidden">
-        <AppSidebar pageTree={source.pageTree} />
-        <main
-          data-scrollable
-          className="flex-1 min-w-0 w-full max-w-screen overflow-y-auto h-screen"
-        >
-          <DocsLayout
-            {...base}
-            tree={source.pageTree}
-            sidebar={{
-              enabled: false,
-            }}
-          >
-            {children}
-          </DocsLayout>
-        </main>
-      </div>
+      <AppSidebar
+        pageTree={source.pageTree}
+        className="sticky top-0 self-start h-screen"
+      />
+      <DocsLayout
+        {...base}
+        tree={source.pageTree}
+        sidebar={{
+          enabled: false,
+        }}
+      >
+        {children}
+      </DocsLayout>
     </SidebarProvider>
   );
 }

@@ -42,8 +42,8 @@ export default async function Page(props: {
       }}
       editOnGithub={{
         owner: "libravelabs",
-        repo: "libravelui",
-        sha: "master",
+        repo: "libravelUi",
+        sha: "main",
         path: `content/docs/${page.file.path}`,
       }}
       lastUpdate={
