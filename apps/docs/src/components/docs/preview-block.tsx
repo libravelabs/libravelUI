@@ -24,7 +24,6 @@ interface PreviewBlockProps {
   comp: string | CompItem | (string | CompItem)[];
   section: string;
   file?: string;
-  cols?: number;
   classNames?: ClassNames;
 }
 
@@ -120,22 +119,17 @@ export function PreviewBlock({
   comp,
   section,
   file = "index",
-  cols = 3,
   classNames,
 }: PreviewBlockProps) {
-  const gridColsClass =
-    {
-      1: "grid-cols-1",
-      2: "grid-cols-1 sm:grid-cols-2",
-      3: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
-      4: "grid-cols-1 sm:grid-cols-2 md:grid-cols-4",
-      5: "grid-cols-1 sm:grid-cols-2 md:grid-cols-5",
-    }[cols] || "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
-
   const comps = Array.isArray(comp) ? comp : [comp];
 
   return (
-    <div className={cn("grid gap-4", gridColsClass, classNames?.grid)}>
+    <div
+      className={cn(
+        "grid [&>*:nth-last-child(1):nth-child(3n+1)]:lg:col-span-3 [&>*:nth-last-child(2):nth-child(3n+1)]:lg:col-span-1 [&>*:nth-last-child(1):nth-child(3n+2)]:lg:col-span-2 gap-4",
+        classNames?.grid,
+      )}
+    >
       {comps.map((c) => {
         const name = typeof c === "string" ? c : c.name;
         const itemFile = typeof c === "string" ? file : c.file || file;
