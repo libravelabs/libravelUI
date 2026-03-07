@@ -37,11 +37,13 @@ import { Avatar } from "@/components/ui/core/avatar";
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col overflow-x-hidden px-6 pt-20 relative">
+    <main className="flex min-h-screen flex-col overflow-x-hidden px-2 md:px-6 pt-20 relative">
       <HeroSection GRID={GRID} />
       <ShowcaseSection GRID={GRID} />
       <ComparisonSection />
-      <PlaygroundSection />
+      <div className="hidden md:block">
+        <PlaygroundSection />
+      </div>
       <CTASection />
     </main>
   );
