@@ -2,7 +2,10 @@
 
 import { Heading, type HeadingProps } from "@/components/ui/core/heading";
 
-export default function HeadingExample({ level, children }: HeadingProps) {
+export default function HeadingExample({
+  level,
+  children = "Sphinx of black quartz, judge my vow.",
+}: HeadingProps) {
   return <Heading level={level}>{children}</Heading>;
 }
 

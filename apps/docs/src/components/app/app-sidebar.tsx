@@ -16,11 +16,22 @@ import Link from "next/link";
 import { LargeSearchToggle } from "@/components/app/search/search-toggle";
 import { cn } from "@/lib/utils";
 
-export function AppSidebar({ pageTree }: { pageTree: PageTree.Root }) {
+export function AppSidebar({
+  pageTree,
+  className,
+}: {
+  pageTree: PageTree.Root;
+  className?: string;
+}) {
   const pathName = usePathname();
 
   return (
-    <Sidebar className="h-screen pt-10 xl:pt-0 **:bg-background **:text-foreground border-0">
+    <Sidebar
+      className={cn(
+        "h-screen pt-10 xl:pt-0 **:bg-background **:text-foreground border-0",
+        className,
+      )}
+    >
       <SidebarHeader className="gap-4">
         <div className="flex items-center justify-between">
           <Link href="/docs" className="w-fit">
@@ -28,7 +39,7 @@ export function AppSidebar({ pageTree }: { pageTree: PageTree.Root }) {
           </Link>
           <SidebarTrigger className="md:hidden" />
         </div>
-        <LargeSearchToggle className="w-full" />
+        <LargeSearchToggle className="hidden md:flex w-full" />
       </SidebarHeader>
 
       <SidebarBody className="gap-0">

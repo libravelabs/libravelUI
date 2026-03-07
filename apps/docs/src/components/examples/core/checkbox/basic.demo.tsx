@@ -4,8 +4,8 @@ import { Checkbox, type CheckboxProps } from "@/components/ui/core/checkbox";
 
 export default function CheckboxExample({
   size,
-  label,
-  description,
+  label = "Subscribe newsletter",
+  description = "Get the latest updates and news delivered to your inbox.",
   isDisabled,
 }: CheckboxProps) {
   return (

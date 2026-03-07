@@ -41,9 +41,7 @@ export default function HomePage() {
       <HeroSection GRID={GRID} />
       <ShowcaseSection GRID={GRID} />
       <ComparisonSection />
-      <div className="hidden md:block">
-        <PlaygroundSection />
-      </div>
+      <PlaygroundSection />
       <CTASection />
     </main>
   );
