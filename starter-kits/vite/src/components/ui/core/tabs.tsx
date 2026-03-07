@@ -75,15 +75,16 @@ const tabListVariants = cva("flex shrink-0 w-fit", {
       vertical: "flex-col items-stretch",
     },
     size: {
-      sm: "gap-1 p-1",
-      default: "gap-1.5 p-1",
-      lg: "gap-2 p-1",
+      sm: "gap-1",
+      default: "gap-1.5",
+      lg: "gap-2",
     },
     tone: {
       default:
         "bg-card backdrop-blur-xl border border-border/40 data-[orientation=horizontal]:w-full shadow-sm",
       ghost: "bg-transparent data-[orientation=horizontal]:w-full",
-      underline: "bg-transparent data-[orientation=horizontal]:w-full",
+      underline:
+        "bg-transparent data-[orientation=horizontal]:w-full data-[orientation=horizontal]:border-b rounded-none!",
       outline: "data-[orientation=horizontal]:w-full bg-transparent border",
     },
     radius: {
@@ -326,7 +327,7 @@ function TabTrigger({
                 "absolute rounded-[calc(var(--tab-radius)-2px)]",
                 resolvedTone === "underline" &&
                   resolvedOrientation === "vertical"
-                  ? "start-0 top-1 bottom-1 w-0.5 bg-primary"
+                  ? "inset-s-0 top-1 bottom-1 w-0.5 bg-primary"
                   : resolvedTone === "underline" &&
                       resolvedOrientation === "horizontal"
                     ? "bottom-0 left-1 right-1 h-0.5 bg-primary"
