@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/core/button";
 
 export default function ActionableCard() {
   return (
-    <Card className="w-full max-w-xl">
+    <Card variant="gradient" className="w-full max-w-xl">
       <CardHeader>
         <CardTitle>Customers</CardTitle>
         <CardDescription>

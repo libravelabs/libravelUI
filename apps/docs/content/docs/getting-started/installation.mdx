@@ -4,6 +4,8 @@ description: How to install and configure LibravelUI in your project.
 icon: Download
 ---
 
+import { StarterKits } from "@/components/app/docs/starter-kits";
+
 ## Prerequisites
 
 LibravelUI requires the following:
@@ -16,20 +18,9 @@ LibravelUI requires the following:
 
 The fastest way to start is using one of our **Starter Kits**. These are pre-configured repositories with LibravelUI, Tailwind CSS v4, and TypeScript ready to go.
 
-### Starter Kits (Recommended)
+### Framework Guide
 
-**Next.js 15 + Tailwind v4:**
-
-```bash
-npx create-next-app@latest -e https://github.com/libravelUI/starters/tree/main/next-starter
-```
-
-**Vite + React 19:**
-
-```bash
-# Clone the vite-starter template
-npx tiged libravelUI/starters/tree/main/vite-starter my-app
-```
+<StarterKits />
 
 ---
 
@@ -42,7 +33,7 @@ If you already have a project, use the CLI to configure LibravelUI automatically
 Run `init` to set up dependencies and configuration.
 
 ```bash
-npx libravel-ui init
+npx @libravelui@latest init
 ```
 
 ### 2. Add Components
@@ -50,7 +41,7 @@ npx libravel-ui init
 Use `add` to specific components to your project.
 
 ```bash
-npx libravel-ui add button
+npx @libravelui@latest add button
 ```
 
 ## Manual Installation

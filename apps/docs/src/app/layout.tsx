@@ -15,7 +15,14 @@ import {
   domine,
   afacad_flux,
 } from "@/lib/fonts";
+import { meta } from "@/lib/metadata/index";
+import { AppFooter } from "@/components/app/app-footer";
 
+export const metadata = meta.page({
+  description:
+    "LibravelUI is a React component library for building beautiful and accessible user interfaces.",
+  canonicalUrl: process.env.NEXT_PUBLIC_APP_URL,
+});
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
@@ -53,9 +60,10 @@ export default function Layout({ children }: { children: ReactNode }) {
             <main className="flex flex-col min-h-screen scroll-smooth">
               {children}
             </main>
-            <FloatingNav />
-            <Toast richColors />
           </TexturedBackground>
+          <FloatingNav />
+          <Toast richColors />
+          <AppFooter />
         </RootProvider>
       </body>
     </html>

@@ -1,0 +1,67 @@
+---
+title: Vite Starter Kit
+description: Start building your SPA with Vite, React, LibravelUI, and Tailwind CSS v4.
+---
+
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+This starter kit provides a pre-configured Vite SPA setup packed with React 19, Tailwind CSS v4, and LibravelUI components right out of the box.
+
+<Steps>
+
+<Step>
+
+### Clone the Starter Kit
+
+Use `tiged` to clone the boilerplate repository quickly without git history:
+
+```bash
+npx tiged libravelabs/starters/tree/main/vite-starter my-app
+```
+
+</Step>
+
+<Step>
+
+### Install Dependencies
+
+Navigate to your application directory and install the necessary Node.js dependencies:
+
+```package-install
+cd my-app
+npm install
+```
+
+</Step>
+
+<Step>
+
+### Start Development Server
+
+Start building your application by running the Vite development server:
+
+```bash
+npm run dev
+```
+
+Your application should now be accessible at `http://localhost:5173`.
+
+</Step>
+
+</Steps>
+
+## What's Included?
+
+- **Vite 6**: The fast and incredibly lightweight frontend tooling module.
+- **React 19**: The library for web user interfaces.
+- **React Router**: Preconfigured with basic routes.
+- **Tailwind CSS v4**: Utility-first CSS framework integrated via Vite plugin.
+- **LibravelUI**: Pre-configured with the core CLI, CSS variables, and basic primitives.
+
+## Adding Components
+
+You can easily add more LibravelUI components using the CLI just as you normally would:
+
+```bash
+npx @libravelui@latest add button card dialog
+```

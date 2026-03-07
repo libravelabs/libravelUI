@@ -48,7 +48,7 @@ const badgeVariants = cva(
       size: "sm",
       radius: "full",
     },
-  }
+  },
 );
 
 interface BadgeProps
@@ -68,8 +68,8 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Badge.displayName = "Badge";
 
-export { Badge, badgeVariants };
+export { Badge, badgeVariants, type BadgeProps };

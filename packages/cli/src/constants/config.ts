@@ -1,6 +1,6 @@
 export const DEFAULT_CSS_PATH = "app/globals.css";
 export const CONFIG_PATH = "components.json";
-export const BASE_URL = "https://ui.libravelabs.com";
+export const BASE_URL = "http://localhost:3000";
 export const THEMES_API = `${BASE_URL}/theme.json`;
 export const REGISTRY_URL = `${BASE_URL}/registry.json`;
 
@@ -24,3 +24,16 @@ export const REGISTRY_PATH_PREFIXES = {
 } as const;
 
 export const REGISTRY_VALID_TYPES = ["registry:ui", "registry:block"];
+
+export const STARTERS = {
+  repo: "libravelabs/libravelUI/starter-kits",
+  next: "next-js",
+  vite: "vite",
+} as const;
+
+export type Framework = typeof STARTERS.next | typeof STARTERS.vite;
+
+export const FRAMEWORK_LABELS: Record<Framework, string> = {
+  [STARTERS.next]: "Next.js",
+  [STARTERS.vite]: "Vite",
+} as const;

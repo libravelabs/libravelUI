@@ -15,14 +15,6 @@
   ::file-selector-button {
     border-color: var(--color-border, currentColor);
   }
-
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
 }
 
 @utility scrollbar-hidden {
