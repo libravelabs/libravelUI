@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@internationalized/date": "^3.11.0",
+    "@react-aria/i18n": "^3.12.15",
+    "@react-stately/color": "^3.9.4",
+    "@tailwindcss/vite": "^4.1.18",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",
