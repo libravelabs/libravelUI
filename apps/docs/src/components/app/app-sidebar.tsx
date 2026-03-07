@@ -7,11 +7,9 @@ import {
   SidebarSeparator,
   SidebarHeader,
   SidebarBody,
-  SidebarFooter,
   SidebarTrigger,
 } from "./sidebar";
 import { AppLogo } from "@/components/app/logo";
-import { Alert } from "@/components/ui/core/alert";
 import type { PageTree } from "fumadocs-core/server";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -22,7 +20,7 @@ export function AppSidebar({ pageTree }: { pageTree: PageTree.Root }) {
   const pathName = usePathname();
 
   return (
-    <Sidebar className="h-screen pt-10 xl:pt-0">
+    <Sidebar className="h-screen pt-10 xl:pt-0 **:bg-background **:text-foreground border-0">
       <SidebarHeader className="gap-4">
         <div className="flex items-center justify-between">
           <Link href="/docs" className="w-fit">
@@ -36,10 +34,6 @@ export function AppSidebar({ pageTree }: { pageTree: PageTree.Root }) {
       <SidebarBody className="gap-0">
         {renderSidebarTree(pageTree.children, pathName, 0)}
       </SidebarBody>
-
-      <SidebarFooter>
-        <Alert title="Testing" />
-      </SidebarFooter>
     </Sidebar>
   );
 }
@@ -58,11 +52,11 @@ function renderSidebarTree(
           <>
             <span
               aria-hidden
-              className="pointer-events-none absolute left-1 top-0 bottom-0 w-px bg-sidebar-border"
+              className="pointer-events-none absolute left-1 top-0 bottom-0 w-px bg-background-border"
             />
             <span
               aria-hidden
-              className="absolute left-1 z-10 top-[14px] h-px w-3 bg-sidebar-border"
+              className="absolute left-1 z-10 top-[14px] h-px w-3 bg-background-border"
             />
           </>
         )}
@@ -73,7 +67,7 @@ function renderSidebarTree(
     if (item.type === "separator") {
       return (
         <div key={item.$id} className={cn("px-3 pt-2", isNested && "ps-7")}>
-          <h3 className="text-xs font-medium text-sidebar-foreground/50">
+          <h3 className="text-xs font-medium text-foreground/50">
             {item.name}
           </h3>
         </div>
@@ -87,15 +81,15 @@ function renderSidebarTree(
         <Wrapper key={item.$id}>
           <SidebarGroup
             stickyHeader
-            label={String(
+            label={
               folderUrl ? (
                 <Link href={folderUrl} className="truncate hover:underline">
                   {item.name}
                 </Link>
               ) : (
                 item.name
-              ),
-            )}
+              )
+            }
             icon={item.icon}
             defaultOpen={item.defaultOpen}
             className="relative [&_h3]:text-xs [&_svg:not([class*='size-'])]:size-3 [&_svg[fill^='#']]:fill-foreground"
@@ -123,12 +117,4 @@ function renderSidebarTree(
       </Wrapper>
     );
   });
-}
-
-function getFolderUrl(folder: PageTree.Folder): string | null {
-  if (folder.index && folder.index.type === "page") {
-    return folder.index.url;
-  }
-
-  return null;
 }

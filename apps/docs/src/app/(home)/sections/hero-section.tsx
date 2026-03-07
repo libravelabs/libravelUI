@@ -1,79 +1,69 @@
+"use client";
+
 import { PackageInstall } from "@/components/docs/package-install";
-import { Button } from "@/components/ui/core/button";
-import { AnimatedCircleIndicator } from "@/components/ui/motion/animated-circle-indicator";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Glow } from "@/components/app/glow";
+import type { GridItem } from "../page";
+import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader } from "@/components/ui/core/card";
 
-const HERO_SECTION_CONTENT = {
-  header: {
-    badge: "SYSTEM_ONLINE v1.0.0",
-    title: (
-      <>
-        Composable React components
-        <span className="block text-muted-foreground mt-2 text-2xl sm:text-4xl md:text-5xl font-normal">
-          built on React Aria.
-        </span>
-      </>
-    ),
-    description: (
-      <>
-        Accessible by default. Predictable APIs.
-        <br />
-        Zero visual opinion.
-      </>
-    ),
-    meta: {
-      status: "STATUS: OPTIMAL",
-      version: "v1.0.0",
-    },
-  },
-  actions: {
-    install: "@libravel/ui",
-    cta: {
-      label: (
-        <>
-          Browse Components <ArrowRight />
-        </>
-      ),
-      href: "/docs/components",
-    },
-  },
-};
-
-export function HeroSection() {
+export function HeroSection({ GRID }: { GRID: GridItem[] }) {
   return (
-    <section className="relative min-h-[80vh] flex flex-col items-center justify-center overflow-hidden border-b">
-      <div className="absolute inset-0 bg-grid" />
+    <section className="bg-grid overflow-hidden px-2">
+      <Glow
+        variant="center"
+        className="absolute inset-0 pointer-events-none opacity-20"
+      />
 
-      <div className="container relative z-10 flex flex-col items-center text-center px-4 md:px-6">
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-mono text-muted-foreground backdrop-blur-sm">
-          <AnimatedCircleIndicator
-            tone="success"
-            animation="pulseTransparent"
-          />
-          <span>{HERO_SECTION_CONTENT.header.badge}</span>
-        </div>
-
-        <h1 className="max-w-4xl text-4xl font-medium tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl">
-          {HERO_SECTION_CONTENT.header.title}
-        </h1>
-
-        <div className="mt-10 flex flex-col items-center gap-6 w-full max-w-md">
-          <div className="w-full">
+      <div className="relative">
+        <div className="fade-up max-w-xl" style={{ animationDelay: "0ms" }}>
+          <p className="text-xs text-card-foreground uppercase tracking-widest mb-5 font-mono">
+            Open-source UI components
+          </p>
+          <h1 className="serif text-6xl font-normal leading-none text-foreground mb-4 tracking-tight">
+            Build interfaces
+            <br />
+            <em className="text-muted-foreground">without limits.</em>
+          </h1>
+          <p className="text-sm text-muted-foreground leading-relaxed mb-8">
+            Copy-paste components you own and adapt — not a runtime dependency.
+          </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-end w-full gap-4">
             <PackageInstall
-              packageName={HERO_SECTION_CONTENT.actions.install}
+              packageName="@libravelui"
+              className="w-full sm:w-80"
             />
+            <Link
+              href="/components"
+              className="shrink-0 sm:mb-1.5 hover:underline font-medium"
+            >
+              Browse Components &rarr;
+            </Link>
           </div>
-          <Link href={HERO_SECTION_CONTENT.actions.cta.href}>
-            <Button radius="none" size="xl">
-              {HERO_SECTION_CONTENT.actions.cta.label}
-            </Button>
-          </Link>
         </div>
 
-        <p className="mt-8 max-w-2xl text-lg text-muted-foreground/80 font-light leading-relaxed">
-          {HERO_SECTION_CONTENT.header.description}
-        </p>
+        <div
+          className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 fade-up"
+          style={{ animationDelay: "130ms" }}
+        >
+          {GRID.slice(0, 5).map(({ name, Preview }, i) => (
+            <Card
+              key={name}
+              variant="gradient"
+              padding="none"
+              className={cn(i === 0 && "lg:col-span-2")}
+            >
+              <CardHeader>
+                <p className="text-xs text-card-foreground px-4 pt-3 font-mono">
+                  {name}
+                </p>
+              </CardHeader>
+              <CardContent className="h-56 flex items-center justify-center">
+                <Preview />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );

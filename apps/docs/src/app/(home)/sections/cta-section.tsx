@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/core/button";
+import { Glow } from "@/components/app/glow";
 
 const CTA_SECTION_CONTENT = {
   header: {
@@ -19,9 +20,7 @@ const CTA_SECTION_CONTENT = {
 
 export function CTASection() {
   return (
-    <section className="py-24 flex flex-col items-center justify-center text-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_70%)] opacity-[0.1] pointer-events-none" />
-
+    <section className="group pt-24 pb-12 flex flex-col items-center justify-center text-center relative overflow-hidden">
       <div className="relative z-10 max-w-xl px-6">
         <div className="mb-8 flex flex-col items-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-mono text-primary">
@@ -47,6 +46,10 @@ export function CTASection() {
             </Button>
           </Link>
         </div>
+      </div>
+
+      <div className="absolute top-0 left-0 h-full w-full translate-y-4 opacity-40 transition-all duration-500 ease-in-out group-hover:translate-y-8 group-hover:opacity-100">
+        <Glow variant="bottom" />
       </div>
     </section>
   );

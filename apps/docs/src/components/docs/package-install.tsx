@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/motion/animated-toggle-group";
 import { Check, Clipboard } from "lucide-react";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { cn } from "@/lib/utils";
 
 type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 const PACKAGE_MANAGER_LABELS: Record<PackageManager, string> = {
@@ -20,11 +21,15 @@ const PACKAGE_MANAGER_LABELS: Record<PackageManager, string> = {
 type PackageInstallProps = {
   packageName?: string;
   command?: "install" | "add";
+  title?: string;
+  className?: string;
 };
 
 export function PackageInstall({
   packageName,
   command = "install",
+  title,
+  className,
 }: PackageInstallProps) {
   const [manager, setManager] = useState<PackageManager>("npm");
   const { isCopied, copyToClipboard } = useCopyToClipboard();
@@ -49,9 +54,9 @@ export function PackageInstall({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={cn("flex flex-col gap-2", className)}>
       <div className="flex items-end justify-between">
-        <span>Install command</span>
+        {title && <span>{title}</span>}
         <AnimatedToggleGroup
           value={manager}
           onValueChange={(val) => setManager(val as PackageManager)}
@@ -70,7 +75,7 @@ export function PackageInstall({
         </AnimatedToggleGroup>
       </div>
 
-      <div className="relative overflow-hidden rounded-lg border border-border/80 bg-[radial-gradient(circle_at_0_0,--theme(--color-primary/8%),transparent_55%),radial-gradient(circle_at_100%_100%,--theme(--color-accent/10%),transparent_55%)]">
+      <div className="relative w-full overflow-hidden rounded-lg border border-border/80 bg-[radial-gradient(circle_at_0_0,--theme(--color-primary/8%),transparent_55%),radial-gradient(circle_at_100%_100%,--theme(--color-accent/10%),transparent_55%)]">
         {/* Copy Button */}
         <button
           onClick={handleCopy}

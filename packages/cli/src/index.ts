@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { init } from "./commands/init";
 import { add } from "./commands/add";
+import { create } from "./commands/create";
 
 const program = new Command();
 
@@ -18,5 +19,12 @@ program
   .argument("[components...]", "Components to add")
   .option("-a, --all", "Add all components")
   .action(add);
+
+program
+  .command("create [project-name]")
+  .description("Create a new project using LibravelUI starter templates")
+  .option("--next", "Use Next.js starter template")
+  .option("--vite", "Use Vite starter template")
+  .action(create);
 
 program.parse();

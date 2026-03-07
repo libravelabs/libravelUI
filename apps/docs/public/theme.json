@@ -297,11 +297,11 @@
     "cssVars": {
       "light": {
         "--background": "oklch(0.98 0.002 240)",
-        "--foreground": "oklch(0.12 0.01 240)",
+        "--foreground": "oklch(14.5% 0 0)",
         "--card": "oklch(1 0 0)",
-        "--card-foreground": "oklch(0.12 0.01 240)",
+        "--card-foreground": "oklch(14.5% 0 0)",
         "--popover": "oklch(1 0 0)",
-        "--popover-foreground": "oklch(0.12 0.01 240)",
+        "--popover-foreground": "oklch(14.5% 0 0)",
         "--primary": "oklch(0.6728 0.226 4.75)",
         "--primary-foreground": "oklch(1 0 0)",
         "--secondary": "oklch(0.96 0.005 240)",
@@ -336,9 +336,9 @@
       "dark": {
         "--background": "oklch(0.1 0.01 240)",
         "--foreground": "oklch(0.98 0 0)",
-        "--card": "oklch(0.12 0.01 240)",
+        "--card": "oklch(14.5% 0 0)",
         "--card-foreground": "oklch(0.98 0 0)",
-        "--popover": "oklch(0.12 0.01 240)",
+        "--popover": "oklch(14.5% 0 0)",
         "--popover-foreground": "oklch(0.98 0 0)",
         "--primary": "oklch(0.7 0.16 160)",
         "--primary-foreground": "oklch(0.1 0.01 160)",

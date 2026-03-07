@@ -1,4 +1,5 @@
 {
   "title": "Components",
-  "defaultOpen": true
+  "defaultOpen": true,
+  "description": "Browse and understand all reusable UI components available in libravelUI"
 }

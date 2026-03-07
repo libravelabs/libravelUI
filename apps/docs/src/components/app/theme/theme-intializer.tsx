@@ -4,41 +4,28 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { getTheme, type ThemeName } from "@/app/themes";
 import { applyTheme } from "@/hooks/apply-theme";
-
-const STORAGE_KEY = process.env.THEME_STORAGE as string;
+import { useUiPreferences } from "@/hooks/use-ui-preferences";
 
 export function ThemeInitializer() {
   const { theme: mode } = useTheme();
+  const themeName = useUiPreferences((s) => s.theme) as ThemeName;
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    applyStoredTheme(mode);
-
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) {
-        applyStoredTheme(mode);
-      }
-    };
-
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   useEffect(() => {
     if (mounted) {
-      applyStoredTheme(mode);
+      applyStoredTheme(mode, themeName);
     }
-  }, [mounted, mode]);
+  }, [mounted, mode, themeName]);
 
   return null;
 }
 
-function applyStoredTheme(mode: string | undefined) {
-  const stored = localStorage.getItem(STORAGE_KEY) as ThemeName | null;
-
-  const themeName = stored && getTheme(stored) ? stored : "default";
-  const theme = getTheme(themeName);
+function applyStoredTheme(mode: string | undefined, themeName: ThemeName) {
+  const theme = getTheme(themeName) || getTheme("default");
 
   const isDark =
     mode === "dark"
@@ -47,5 +34,7 @@ function applyStoredTheme(mode: string | undefined) {
         ? false
         : window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-  applyTheme(theme, isDark);
+  if (theme) {
+    applyTheme(theme, isDark);
+  }
 }

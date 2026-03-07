@@ -212,7 +212,7 @@ function SidebarItem({
 }
 
 interface SidebarGroupProps extends ButtonProps {
-  label: string;
+  label: React.ReactNode;
   icon?: React.ReactNode;
   defaultOpen?: boolean;
   open?: boolean;

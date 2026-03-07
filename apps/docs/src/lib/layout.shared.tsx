@@ -26,7 +26,7 @@ export function baseOptions(): BaseLayoutProps {
     links: [
       {
         icon: <Book />,
-        url: "/docs/getting-started/introduction",
+        url: "/docs",
         text: "Docs",
       },
       {

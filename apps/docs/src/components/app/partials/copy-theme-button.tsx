@@ -32,11 +32,10 @@ export function CopyThemeButton() {
       trigger={
         <Button
           tone="outline"
-          size="lg"
           iconOnly
-          radius="lg"
           onClick={handleCopy}
           aria-label="Copy Theme CSS"
+          className="border-foreground/10"
         >
           <CodeXml className="size-5" />
         </Button>

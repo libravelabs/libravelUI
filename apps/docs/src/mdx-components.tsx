@@ -14,6 +14,7 @@ import { Callout } from "fumadocs-ui/components/callout";
 import { RelatedComponents } from "@/components/docs/related-components";
 import { PreviewBlock } from "@/components/docs/preview-block";
 import { DocCard } from "@/components/examples/layout/doc-card";
+import { Step, Steps } from "fumadocs-ui/components/steps";
 import * as icons from "lucide-react";
 import * as primitives from "@/components/examples/layout/primitives";
 
@@ -24,6 +25,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ...primitives,
     Tab,
     Tabs,
+    Step,
+    Steps,
     AutoTypeTable: AutoTypeTable,
     TypeTable,
     RequiredBlock,
