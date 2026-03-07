@@ -1,10 +1,10 @@
 {
-  "name": "libravelui-cli",
+  "name": "libravelui",
   "version": "1.0.0",
   "description": "CLI for LibravelUI",
   "main": "./src/index.ts",
   "bin": {
-    "libravelui": "./dist/index.mjs"
+    "libravelui": "dist/index.mjs"
   },
   "scripts": {
     "build": "tsup ./src/index.ts --format esm --clean --minify",
