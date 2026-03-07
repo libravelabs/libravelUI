@@ -156,13 +156,14 @@ const cardVariants = cva("relative overflow-hidden", {
     },
     {
       variant: "glass",
-      className: "bg-white/6 dark:bg-black/20 border",
+      className: "bg-foreground/6 border",
     },
 
     {
       variant: "gradient",
       tone: "neutral",
-      className: "bg-linear-to-b from-white/3 to-white/2 border border-white/6",
+      className:
+        "bg-linear-to-b from-foreground/3 to-foreground/2 border border-foreground/6",
     },
     {
       variant: "gradient",
