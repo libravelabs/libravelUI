@@ -27,7 +27,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/core/command";
 import BasicComboboxBasic from "@/components/examples/core/combobox/basic";
-import BasicPagination from "@/components/examples/core/pagination/basic";
+import PaginationExample from "@/components/examples/core/pagination/basic.demo";
 import { Switch } from "@/components/ui/core/switch";
 import { ProgressBar } from "@/components/ui/core/progress";
 import { Slider, SliderTrack, SliderThumb } from "@/components/ui/core/slider";
@@ -216,7 +216,7 @@ function ComboboxPreview() {
 function PaginationPreview() {
   return (
     <div className="p-4 w-full">
-      <BasicPagination />
+      <PaginationExample />
     </div>
   );
 }
