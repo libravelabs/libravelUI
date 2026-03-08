@@ -54,15 +54,6 @@ export async function init() {
   })) as string;
   if (typeof themeName !== "string") return;
 
-  const iconLibrary = (await select({
-    message: MESSAGES.INIT.ICON_LIBRARY_SELECT,
-    options: [
-      { value: "lucide", label: "Lucide" },
-      { value: "radix", label: "Radix" },
-    ],
-  })) as string;
-  if (typeof iconLibrary !== "string") return;
-
   const defaultCssPath = projectPaths.defaultCssPath.replace(/\\/g, "/");
 
   const cssPath = (await text({
@@ -173,7 +164,6 @@ export async function init() {
         lib: getAlias(projectPaths.libDir),
         hooks: getAlias(projectPaths.hooksDir),
       },
-      iconLibrary: iconLibrary,
     };
     await fs.writeJSON(path.resolve(cwd, CONFIG_PATH), config, { spaces: 2 });
 

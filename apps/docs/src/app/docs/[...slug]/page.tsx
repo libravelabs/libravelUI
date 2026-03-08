@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
 
 import { CopyButton, LLMOptions } from "@/components/ai/page-actions";
-import { baseUrl } from "@/lib/github";
+import { app } from "@/config/app";
 import { DocLinks } from "@/components/docs/doc-links";
 import { meta } from "@/lib/metadata/index";
 import { StyledHeader } from "@/components/app/docs/styled-header";
@@ -41,8 +41,8 @@ export default async function Page(props: {
         enabled: true,
       }}
       editOnGithub={{
-        owner: "libravelabs",
-        repo: "libravelUi",
+        owner: app.author.username,
+        repo: app.name,
         sha: "main",
         path: `content/docs/${page.file.path}`,
       }}
@@ -68,7 +68,10 @@ export default async function Page(props: {
             {page.data.title}
             <div className="flex gap-2">
               <CopyButton markdownUrl={`${page.url}.mdx`} />
-              <LLMOptions markdownUrl={`${page.url}.mdx`} githubUrl={baseUrl} />
+              <LLMOptions
+                markdownUrl={`${page.url}.mdx`}
+                githubUrl={app.repo.url}
+              />
             </div>
           </DocsTitle>
           <DocsDescription className="mb-0">

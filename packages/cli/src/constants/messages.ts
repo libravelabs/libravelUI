@@ -7,7 +7,6 @@ export const MESSAGES = {
     CONFIG_FETCHED: "Configuration fetched successfully!",
     FAILED_FETCH_DATA: "Failed to fetch data",
     THEME_SELECT: "Select your theme:",
-    ICON_LIBRARY_SELECT: "Select icon library:",
     CSS_PATH_PROMPT: "Where is your global CSS file located?",
     DEPS_NEEDED: (deps: string) => `Dependencies needed: ${deps}`,
     INSTALL_DEPS_PROMPT: "Would you like to install the required dependencies?",
@@ -41,6 +40,6 @@ export const MESSAGES = {
     INSTALLED: (name: string) => `✓ ${name} installed`,
   },
   ERRORS: {
-    CONNECTION_FAILED: `Could not connect to LibravelUI server. Make sure it's running on ${BASE_URL}`,
+    CONNECTION_FAILED: `Could not connect to LibravelUI server.`,
   },
 } as const;
