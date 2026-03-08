@@ -169,7 +169,12 @@ export async function fetchComponentSource(
             await scan(resolved, false);
           }
         } else {
-          dependencies.add(imp);
+          const isScoped = imp.startsWith("@");
+          const dep = isScoped
+            ? imp.split("/").slice(0, 2).join("/")
+            : imp.split("/")[0];
+
+          dependencies.add(dep);
         }
       }
     } catch (e) {
