@@ -55,7 +55,27 @@ export function PackageInstall({
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      {title && <span className="text-sm font-medium w-full">{title}</span>}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between sm:gap-3 w-full">
+        {title && <span className="text-sm font-medium">{title}</span>}
+        <div className="overflow-x-auto [scrollbar-width:none]">
+          <AnimatedToggleGroup
+            value={manager}
+            onValueChange={(val) => setManager(val as PackageManager)}
+          >
+            {(Object.keys(PACKAGE_MANAGER_LABELS) as PackageManager[]).map(
+              (key) => (
+                <AnimatedToggleItem
+                  key={key}
+                  value={key}
+                  className="text-xs sm:text-sm size-fit py-0.5 px-1.5 sm:px-2"
+                >
+                  {PACKAGE_MANAGER_LABELS[key]}
+                </AnimatedToggleItem>
+              ),
+            )}
+          </AnimatedToggleGroup>
+        </div>
+      </div>
 
       <div className="relative w-full overflow-hidden rounded-lg border border-border/80 bg-[radial-gradient(circle_at_0_0,--theme(--color-primary/8%),transparent_55%),radial-gradient(circle_at_100%_100%,--theme(--color-accent/10%),transparent_55%)]">
         {/* Copy Button */}

@@ -57,7 +57,7 @@ export function DocCard({
       )}
       {...props}
     >
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full sm:pr-24">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
         <div className="flex flex-col gap-1">
           {title && <CardTitle className="leading-tight">{title}</CardTitle>}
           {description && <CardDescription>{description}</CardDescription>}
