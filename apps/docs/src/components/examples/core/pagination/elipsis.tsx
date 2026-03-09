@@ -7,6 +7,9 @@ import {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationInfo,
 } from "@/components/ui/core/pagination";
 
 export default function Elipsis() {
@@ -57,30 +60,56 @@ export default function Elipsis() {
   };
 
   return (
-    <Pagination className="flex-wrap min-w-fit">
-      <PaginationPrevious
-        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-        disabled={currentPage === 1}
-      />
+    <Pagination className="flex-wrap min-w-fit mx-auto">
+      <div className="flex sm:hidden items-center gap-1">
+        <PaginationFirst
+          onClick={() => setCurrentPage(1)}
+          disabled={currentPage === 1}
+        />
+        <PaginationPrevious
+          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+        >
+          <span className="sr-only">Previous</span>
+        </PaginationPrevious>
+        <PaginationInfo currentPage={currentPage} totalPages={totalPages} />
+        <PaginationNext
+          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage === totalPages}
+        >
+          <span className="sr-only">Next</span>
+        </PaginationNext>
+        <PaginationLast
+          onClick={() => setCurrentPage(totalPages)}
+          disabled={currentPage === totalPages}
+        />
+      </div>
 
-      {getVisiblePages().map((page, index) =>
-        page === "..." ? (
-          <PaginationEllipsis key={`ellipsis-${index}`} />
-        ) : (
-          <PaginationItem
-            key={page}
-            isActive={page === currentPage}
-            onClick={() => setCurrentPage(page)}
-          >
-            {page}
-          </PaginationItem>
-        )
-      )}
+      <div className="hidden sm:flex items-center gap-1">
+        <PaginationPrevious
+          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+        />
 
-      <PaginationNext
-        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-        disabled={currentPage === totalPages}
-      />
+        {getVisiblePages().map((page, index) =>
+          page === "..." ? (
+            <PaginationEllipsis key={`ellipsis-${index}`} />
+          ) : (
+            <PaginationItem
+              key={page}
+              isActive={page === currentPage}
+              onClick={() => setCurrentPage(page as number)}
+            >
+              {page}
+            </PaginationItem>
+          ),
+        )}
+
+        <PaginationNext
+          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage === totalPages}
+        />
+      </div>
     </Pagination>
   );
 }

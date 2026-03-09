@@ -8,7 +8,7 @@ import {
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
 
-import { CopyButton, LLMOptions } from "@/components/ai/page-actions";
+import { PageActions } from "@/components/ai/page-actions";
 import { app } from "@/config/app";
 import { DocLinks } from "@/components/docs/doc-links";
 import { meta } from "@/lib/metadata/index";
@@ -67,8 +67,7 @@ export default async function Page(props: {
           <DocsTitle className="flex items-center gap-2 justify-between w-full">
             {page.data.title}
             <div className="flex gap-2">
-              <CopyButton markdownUrl={`${page.url}.mdx`} />
-              <LLMOptions
+              <PageActions
                 markdownUrl={`${page.url}.mdx`}
                 githubUrl={app.repo.url}
               />

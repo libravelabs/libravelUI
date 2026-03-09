@@ -57,7 +57,7 @@ export function MobileNavDropdown() {
         <Palette className="size-5" />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent popover={{ placement: "top end" }}>
+      <DropdownMenuContent>
         <DropdownMenuHeader separator>Customise</DropdownMenuHeader>
 
         <DropdownMenuGroup>

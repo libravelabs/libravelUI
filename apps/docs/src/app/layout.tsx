@@ -17,6 +17,7 @@ import {
 } from "@/lib/fonts";
 import { meta } from "@/lib/metadata/index";
 import { AppFooter } from "@/components/app/app-footer";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = meta.page({
   description:
@@ -65,6 +66,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Toast richColors />
           <AppFooter />
         </RootProvider>
+        <Analytics />
       </body>
     </html>
   );

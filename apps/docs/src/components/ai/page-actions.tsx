@@ -6,6 +6,7 @@ import {
   Copy,
   ExternalLinkIcon,
   MessageCircleIcon,
+  MoreVertical,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
@@ -14,20 +15,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/core/popover";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+} from "@/components/ui/core/dropdown-menu";
 import { cva } from "class-variance-authority";
 import { Button } from "../ui/core/button";
 import { toast } from "sonner";
 
 const cache = new Map<string, string>();
 
-export function CopyButton({
-  /**
-   * A URL to fetch the raw Markdown/MDX content of page
-   */
-  markdownUrl,
-}: {
-  markdownUrl: string;
-}) {
+export function useMarkdownCopy(markdownUrl: string) {
   const [isLoading, setLoading] = useState(false);
   const [checked, onCopyClick] = useCopyButton(async () => {
     const cached = cache.get(markdownUrl);
@@ -52,6 +54,19 @@ export function CopyButton({
     }
   });
 
+  return { isLoading, checked, onCopyClick };
+}
+
+export function CopyButton({
+  /**
+   * A URL to fetch the raw Markdown/MDX content of page
+   */
+  markdownUrl,
+}: {
+  markdownUrl: string;
+}) {
+  const { isLoading, checked, onCopyClick } = useMarkdownCopy(markdownUrl);
+
   return (
     <Button
       tone="secondary"
@@ -66,24 +81,11 @@ export function CopyButton({
 }
 
 const optionVariants = cva(
-  "text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-fd-accent-foreground hover:bg-fd-accent [&_svg]:size-4"
+  "text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-fd-accent-foreground hover:bg-fd-accent [&_svg]:size-4",
 );
 
-export function LLMOptions({
-  markdownUrl,
-  githubUrl,
-}: {
-  /**
-   * A URL to the raw Markdown/MDX content of page
-   */
-  markdownUrl: string;
-
-  /**
-   * Source file URL on GitHub
-   */
-  githubUrl: string;
-}) {
-  const items = useMemo(() => {
+export function useLLMOptions(markdownUrl: string, githubUrl: string) {
+  return useMemo(() => {
     const fullMarkdownUrl =
       typeof window !== "undefined"
         ? new URL(markdownUrl, window.location.origin)
@@ -209,6 +211,23 @@ export function LLMOptions({
       },
     ];
   }, [githubUrl, markdownUrl]);
+}
+
+export function LLMOptions({
+  markdownUrl,
+  githubUrl,
+}: {
+  /**
+   * A URL to the raw Markdown/MDX content of page
+   */
+  markdownUrl: string;
+
+  /**
+   * Source file URL on GitHub
+   */
+  githubUrl: string;
+}) {
+  const items = useLLMOptions(markdownUrl, githubUrl);
 
   return (
     <Popover>
@@ -232,5 +251,60 @@ export function LLMOptions({
         ))}
       </PopoverContent>
     </Popover>
+  );
+}
+
+export function PageActions({
+  markdownUrl,
+  githubUrl,
+}: {
+  markdownUrl: string;
+  githubUrl: string;
+}) {
+  const { checked, onCopyClick } = useMarkdownCopy(markdownUrl);
+  const items = useLLMOptions(markdownUrl, githubUrl);
+
+  return (
+    <>
+      <div className="flex md:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger tone="secondary" size="sm" iconOnly>
+            <MoreVertical className="size-4 text-fd-muted-foreground" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onAction={() => onCopyClick(undefined as any)}>
+              {checked ? (
+                <Check className="size-4" />
+              ) : (
+                <Copy className="size-4" />
+              )}
+              {checked ? "Copied" : "Copy Markdown"}
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuGroup title="Open in...">
+              {items.map((item) => (
+                <DropdownMenuItem
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  {item.icon}
+                  {item.title}
+                  <ExternalLinkIcon className="text-fd-muted-foreground size-3.5 ms-auto" />
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      <div className="hidden md:flex gap-2">
+        <CopyButton markdownUrl={markdownUrl} />
+        <LLMOptions markdownUrl={markdownUrl} githubUrl={githubUrl} />
+      </div>
+    </>
   );
 }

@@ -14,15 +14,17 @@ export default function Layout({ children }: { children: ReactNode }) {
         pageTree={source.pageTree}
         className="sticky top-0 self-start h-screen"
       />
-      <DocsLayout
-        {...base}
-        tree={source.pageTree}
-        sidebar={{
-          enabled: false,
-        }}
-      >
-        {children}
-      </DocsLayout>
+      <main data-scrollable className="flex-1 min-w-0 w-full max-w-screen">
+        <DocsLayout
+          {...base}
+          tree={source.pageTree}
+          sidebar={{
+            enabled: false,
+          }}
+        >
+          {children}
+        </DocsLayout>
+      </main>
     </SidebarProvider>
   );
 }

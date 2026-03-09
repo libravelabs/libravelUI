@@ -54,45 +54,65 @@ export type GridItem = {
 };
 
 export const GRID: GridItem[] = [
-  { name: "Button", Preview: ButtonPreview, href: "/components/core/button" },
-  { name: "Input", Preview: InputPreview, href: "/components/core/input" },
-  { name: "Card", Preview: CardPreview, href: "/components/core/card" },
-  { name: "Dialog", Preview: DialogPreview, href: "/components/core/dialog" },
-  { name: "Tabs", Preview: TabsPreview, href: "/components/core/tabs" },
+  {
+    name: "Button",
+    Preview: ButtonPreview,
+    href: "/docs/components/core/button",
+  },
+  { name: "Input", Preview: InputPreview, href: "/docs/components/core/input" },
+  { name: "Card", Preview: CardPreview, href: "/docs/components/core/card" },
+  {
+    name: "Dialog",
+    Preview: DialogPreview,
+    href: "/docs/components/core/dialog",
+  },
+  { name: "Tabs", Preview: TabsPreview, href: "/docs/components/core/tabs" },
   {
     name: "Command",
     Preview: CommandPreview,
-    href: "/components/core/command",
+    href: "/docs/components/core/command",
   },
   {
     name: "Combobox",
     Preview: ComboboxPreview,
-    href: "/components/core/combobox",
+    href: "/docs/components/core/combobox",
   },
   {
     name: "Pagination",
     Preview: PaginationPreview,
-    href: "/components/core/pagination",
+    href: "/docs/components/core/pagination",
   },
-  { name: "Badge", Preview: BadgePreview, href: "/components/core/badge" },
-  { name: "Switch", Preview: SwitchPreview, href: "/components/core/switch" },
+  { name: "Badge", Preview: BadgePreview, href: "/docs/components/core/badge" },
+  {
+    name: "Switch",
+    Preview: SwitchPreview,
+    href: "/docs/components/core/switch",
+  },
   {
     name: "Progress",
     Preview: ProgressPreview,
-    href: "/components/core/progress",
+    href: "/docs/components/core/progress",
   },
-  { name: "Slider", Preview: SliderPreview, href: "/components/core/slider" },
+  {
+    name: "Slider",
+    Preview: SliderPreview,
+    href: "/docs/components/core/slider",
+  },
   {
     name: "Checkbox",
     Preview: CheckboxPreview,
-    href: "/components/core/checkbox",
+    href: "/docs/components/core/checkbox",
   },
   {
     name: "RadioGroup",
     Preview: RadioGroupPreview,
-    href: "/components/core/radio-group",
+    href: "/docs/components/core/radio-group",
   },
-  { name: "Avatar", Preview: AvatarPreview, href: "/components/core/avatar" },
+  {
+    name: "Avatar",
+    Preview: AvatarPreview,
+    href: "/docs/components/core/avatar",
+  },
 ];
 
 function ButtonPreview() {

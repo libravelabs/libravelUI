@@ -78,7 +78,7 @@ function renderSidebarTree(
     if (item.type === "separator") {
       return (
         <div key={item.$id} className={cn("px-3 pt-2", isNested && "ps-7")}>
-          <h3 className="text-xs font-medium text-foreground/50">
+          <h3 className="text-xs font-medium text-foreground/50!">
             {item.name}
           </h3>
         </div>
