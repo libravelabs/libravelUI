@@ -52,8 +52,8 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
   );
 
   return (
-    <>
-      <div className="flex items-center gap-1.5 absolute top-5.5 end-5.5 z-10">
+    <div className="flex flex-col w-full h-full text-sm">
+      <div className="flex items-center justify-end gap-1.5 sm:absolute sm:top-5.5 sm:end-5.5 z-10 w-full pb-2 sm:pb-0 sm:w-auto">
         <Button tone="secondary" iconOnly size="xs" onClick={handleDirection}>
           {state.dir === "ltr" ? (
             <LayoutPanelLeft />
@@ -95,6 +95,6 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
           <Demo />
         </div>
       </div>
-    </>
+    </div>
   );
 }

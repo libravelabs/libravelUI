@@ -53,11 +53,11 @@ export function DocCard({
       className={cn(
         "flex flex-col gap-4 relative bg-card border shadow-md overflow-hidden",
         span && spanMap[span],
-        className
+        className,
       )}
       {...props}
     >
-      <CardHeader className="flex justify-between w-full">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full sm:pr-24">
         <div className="flex flex-col gap-1">
           {title && <CardTitle className="leading-tight">{title}</CardTitle>}
           {description && <CardDescription>{description}</CardDescription>}

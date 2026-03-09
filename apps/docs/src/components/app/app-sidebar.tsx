@@ -28,7 +28,7 @@ export function AppSidebar({
   return (
     <Sidebar
       className={cn(
-        "h-screen pt-10 xl:pt-0 **:bg-background **:text-foreground border-0",
+        "h-screen pt-14 md:pt-0 **:bg-background **:text-foreground border-0",
         className,
       )}
     >

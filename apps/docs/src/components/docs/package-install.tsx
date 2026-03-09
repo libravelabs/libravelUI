@@ -55,25 +55,7 @@ export function PackageInstall({
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      <div className="flex items-end justify-between">
-        {title && <span>{title}</span>}
-        <AnimatedToggleGroup
-          value={manager}
-          onValueChange={(val) => setManager(val as PackageManager)}
-        >
-          {(Object.keys(PACKAGE_MANAGER_LABELS) as PackageManager[]).map(
-            (key) => (
-              <AnimatedToggleItem
-                key={key}
-                value={key}
-                className="text-sm size-fit py-0.5 px-1"
-              >
-                {PACKAGE_MANAGER_LABELS[key]}
-              </AnimatedToggleItem>
-            ),
-          )}
-        </AnimatedToggleGroup>
-      </div>
+      {title && <span className="text-sm font-medium w-full">{title}</span>}
 
       <div className="relative w-full overflow-hidden rounded-lg border border-border/80 bg-[radial-gradient(circle_at_0_0,--theme(--color-primary/8%),transparent_55%),radial-gradient(circle_at_100%_100%,--theme(--color-accent/10%),transparent_55%)]">
         {/* Copy Button */}
@@ -91,10 +73,12 @@ export function PackageInstall({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="flex items-center gap-2 bg-linear-to-tr from-background/95 via-background/80 to-background/60 px-3 py-2 text-xs font-mono text-foreground/90 [scrollbar-width:none]"
+            className="flex items-center gap-2 bg-linear-to-tr from-background/95 via-background/80 to-background/60 px-3 pr-10 py-2.5 text-xs font-mono text-foreground/90 [scrollbar-width:none]"
           >
-            <span className="select-none text-muted-foreground/80">$</span>
-            <code className="overflow-x-auto scrollbar-hidden">
+            <span className="select-none text-muted-foreground/80 shrink-0">
+              $
+            </span>
+            <code className="min-w-0 overflow-x-auto scrollbar-hidden whitespace-nowrap">
               {cliCommands[manager]}
             </code>
           </motion.pre>
