@@ -1,29 +1,45 @@
 # LibravelUI
 
-A customizable, accessible, and beautiful registry-driven UI System designed for Next.js, Laravel Inertia, and Vite.
+LibravelUI is a customizable, accessible React UI system built on top of the React Aria Components primitives.
 
-LibravelUI follows the shadcn/ui paradigm: **it is not a component library you install via npm**. Instead, it provides a CLI to generate and inject the components directly into your project's source code. You own the code!
+It provides a structured way to generate production-ready UI components directly into your project, giving you full control over the source code, styling, and behavior.
+
+Rather than shipping precompiled components, LibravelUI uses a registry-driven CLI that installs components into your codebase. This ensures the UI layer remains fully customizable, maintainable, and aligned with your project's architecture.
+
+## Features
+
+- Accessible by default — powered by React Aria primitives.
+- Registry-driven architecture — components are generated directly into your project.
+- Full code ownership — modify, extend, and customize without restrictions.
+- Framework friendly — designed to integrate smoothly with modern React environments including Next.js, Laravel Inertia, and Vite.
+- Composable design system — components are built to be modular and easily extended.
 
 ## Quick Start
 
-To use LibravelUI in your own project, use our CLI:
+Initialize LibravelUI in your project:
 
 ```bash
-# Initialize layout and theme
 npx libravelui@latest init
+```
 
-# Add components
+Add components to your project:
+
+```bash
 npx libravelui@latest add button input
 ```
 
+The CLI will generate the components directly into your project structure, allowing you to customize them as needed.
+
 ## Documentation
 
-Full documentation, visual component previews, and customization guides are available at [https://ui.libravelabs.com](https://ui.libravelabs.com).
+Full documentation, component previews, and configuration guides are available at:
+
+[https://ui.libravelabs.com](https://ui.libravelabs.com)
 
 ## Contributing
 
-We welcome contributions! Please see the [`CONTRIBUTING.md`](./CONTRIBUTING.md) guide for details on how to propose bug fixes, add new components, and register them within the system.
+Contributions are welcome. Please refer to the CONTRIBUTING.md guide for information about proposing changes, adding components, and contributing to the registry.
 
 ## License
 
-This project is licensed under the [MIT License](./LICENSE).
+Licensed under the MIT License.

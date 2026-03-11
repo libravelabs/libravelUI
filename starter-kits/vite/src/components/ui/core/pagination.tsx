@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  ChevronFirst,
+  ChevronLast,
+} from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { motion, LayoutGroup } from "motion/react";
@@ -51,7 +57,7 @@ const paginationItem = cva(
       size: "default",
       radius: "md",
     },
-  }
+  },
 );
 
 const paginationNav = cva(
@@ -87,7 +93,7 @@ const paginationNav = cva(
       size: "default",
       radius: "md",
     },
-  }
+  },
 );
 
 const activeVariants = cva("absolute inset-0 z-0 transition-none", {
@@ -128,7 +134,7 @@ type PaginationVariantProps = VariantProps<typeof paginationContainer> &
   };
 
 const PaginationContext = React.createContext<PaginationVariantProps | null>(
-  null
+  null,
 );
 
 function usePagination() {
@@ -184,7 +190,7 @@ function PaginationItem({
       className={cn(
         paginationItem({ tone, size, radius }),
         "relative group",
-        className
+        className,
       )}
       aria-current={isActive ? "page" : undefined}
       {...props}
@@ -235,6 +241,88 @@ function PaginationNext({ className, children, ...props }: PaginationNavProps) {
   );
 }
 
+function PaginationFirst({
+  className,
+  children,
+  ...props
+}: PaginationNavProps) {
+  const { tone, size, radius } = usePagination();
+
+  return (
+    <button
+      className={cn(paginationNav({ tone, size, radius }), className, "px-2")}
+      {...props}
+    >
+      <ChevronFirst className="size-4" />
+      {children}
+    </button>
+  );
+}
+
+function PaginationLast({ className, children, ...props }: PaginationNavProps) {
+  const { tone, size, radius } = usePagination();
+
+  return (
+    <button
+      className={cn(paginationNav({ tone, size, radius }), className, "px-2")}
+      {...props}
+    >
+      {children}
+      <ChevronLast className="size-4" />
+    </button>
+  );
+}
+
+interface PaginationInfoProps extends React.HTMLAttributes<HTMLDivElement> {
+  currentPage: number;
+  totalPages: number;
+}
+
+function PaginationInfo({
+  className,
+  currentPage,
+  totalPages,
+  ...props
+}: PaginationInfoProps) {
+  const { tone, size, radius } = usePagination();
+
+  return (
+    <div
+      className={cn(
+        paginationNav({ tone, size, radius }),
+        "pointer-events-none hover:bg-transparent font-medium px-4 relative overflow-hidden",
+        tone === "default" && "text-primary-foreground",
+        tone === "destructive" && "text-destructive-foreground",
+        className,
+      )}
+      {...props}
+    >
+      {tone !== "ghost" && (
+        <div
+          className={cn(
+            activeVariants({ tone, size, radius }),
+            "pointer-events-none",
+          )}
+        />
+      )}
+      <span className="relative z-10 flex items-center">
+        {currentPage}{" "}
+        <span
+          className={cn(
+            "font-normal mx-2",
+            tone === "default" || tone === "destructive" || tone === "secondary"
+              ? "opacity-70 text-current"
+              : "text-muted-foreground",
+          )}
+        >
+          /
+        </span>{" "}
+        {totalPages}
+      </span>
+    </div>
+  );
+}
+
 type PaginationEllipsisProps = React.HTMLAttributes<HTMLSpanElement>;
 
 function PaginationEllipsis({ className, ...props }: PaginationEllipsisProps) {
@@ -242,7 +330,7 @@ function PaginationEllipsis({ className, ...props }: PaginationEllipsisProps) {
     <span
       className={cn(
         "inline-flex size-9 items-center justify-center text-muted-foreground",
-        className
+        className,
       )}
       {...props}
     >
@@ -259,6 +347,9 @@ export {
   PaginationItem,
   PaginationPrevious,
   PaginationNext,
+  PaginationFirst,
+  PaginationLast,
+  PaginationInfo,
   PaginationEllipsis,
   paginationContainer,
   paginationItem,

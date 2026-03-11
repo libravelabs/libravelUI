@@ -63,7 +63,7 @@ export function AppearanceImage({ themes, images }: AppearanceImageProps) {
                 alt={value}
                 className={cn(
                   "max-w-52 rounded-lg transition ease-in-out hover:opacity-100",
-                  theme === value ? "opacity-100" : "opacity-70"
+                  theme === value ? "opacity-100" : "opacity-70",
                 )}
               />
               <AnimatePresence>
@@ -104,7 +104,7 @@ export function AppearanceImage({ themes, images }: AppearanceImageProps) {
                   "relative z-10 px-4 py-1 capitalize rounded-lg transition-all",
                   theme === value
                     ? "text-primary-foreground"
-                    : "text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground"
+                    : "text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground",
                 )}
               >
                 {label || value}

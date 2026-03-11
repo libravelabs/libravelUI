@@ -59,7 +59,7 @@ export async function RequiredBlock({
                       {index < pages.length - 2 && ", "}
                       {index === pages.length - 2 && " and "}
                     </span>
-                  )
+                  ),
               )}
               . Make sure you have installed and configured it before using this
               component.

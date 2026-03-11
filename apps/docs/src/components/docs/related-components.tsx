@@ -33,7 +33,7 @@ export async function RelatedComponents({
       className={cn(
         "my-4 grid gap-3",
         pages.length === 1 ? "grid-cols-1" : "sm:grid-cols-2",
-        className
+        className,
       )}
     >
       {pages.map((page) => (
