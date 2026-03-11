@@ -1,6 +1,6 @@
 {
   "name": "libravelui",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "CLI for LibravelUI",
   "main": "./src/index.ts",
   "bin": {
@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@clack/prompts": "^0.9.1",
     "commander": "^12.1.0",
