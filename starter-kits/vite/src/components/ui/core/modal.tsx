@@ -1,5 +1,3 @@
-"use client";
-
 import type {
   DialogProps,
   DialogTriggerProps,
@@ -39,11 +37,10 @@ const sizes = {
   "5xl": "sm:max-w-5xl",
 };
 
-interface ModalContentProps
-  extends Pick<
-    DialogProps,
-    "aria-label" | "aria-labelledby" | "role" | "children"
-  > {
+interface ModalContentProps extends Pick<
+  DialogProps,
+  "aria-label" | "aria-labelledby" | "role" | "children"
+> {
   size?: keyof typeof sizes;
   showCloseButton?: boolean;
   blurred?: boolean;
@@ -75,7 +72,7 @@ function ModalContent({
           "grid grid-rows-[1fr_auto] justify-items-center sm:grid-rows-[1fr_auto_3fr]",
           isEntering && "fade-in animate-in duration-300",
           isExiting && "fade-out animate-out duration-200",
-          blurred && "backdrop-blur-sm backdrop-filter"
+          blurred && "backdrop-blur-sm backdrop-filter",
         )
       }
       {...overlayProps}
@@ -97,7 +94,7 @@ function ModalContent({
             isExiting && [
               "slide-out-to-bottom animate-out",
               "md:fade-out md:zoom-out-95 md:slide-out-to-bottom-0",
-            ]
+            ],
           )
         }
       >
@@ -105,8 +102,8 @@ function ModalContent({
           role={role}
           {...props}
           className={cn(
-            "peer/dialog group/dialog bg-background flex flex-col w-full gap-8 rounded-lg border p-6 shadow-lg duration-200",
-            className
+            "peer/dialog group/dialog bg-background flex flex-col w-full max-w-screen gap-8 rounded-lg border p-6 shadow-lg duration-200",
+            className,
           )}
         >
           {(values) => (

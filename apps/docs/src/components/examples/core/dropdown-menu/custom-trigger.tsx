@@ -59,7 +59,7 @@ export default function CustomTrigger() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger aria-label="Open Menu" plain>
+      <DropdownMenuTrigger aria-label="Open Menu" tone="unstyled">
         <Avatar
           alt="Martin Scorsese"
           size="lg"

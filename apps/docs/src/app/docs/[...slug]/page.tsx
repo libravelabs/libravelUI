@@ -69,7 +69,7 @@ export default async function Page(props: {
             <div className="flex gap-2">
               <PageActions
                 markdownUrl={`${page.url}.mdx`}
-                githubUrl={app.repo.url}
+                githubUrl={`${app.repo.url}/blob/main/apps/docs/content/docs/${page.file.path}`}
               />
             </div>
           </DocsTitle>

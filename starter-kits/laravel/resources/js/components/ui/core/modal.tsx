@@ -102,7 +102,7 @@ function ModalContent({
                     role={role}
                     {...props}
                     className={cn(
-                        'peer/dialog group/dialog flex w-full flex-col gap-8 rounded-lg border bg-background p-6 shadow-lg duration-200',
+                        'peer/dialog group/dialog flex w-full max-w-screen flex-col gap-8 rounded-lg border bg-background p-6 shadow-lg duration-200',
                         className,
                     )}
                 >

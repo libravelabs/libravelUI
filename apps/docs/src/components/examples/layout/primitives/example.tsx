@@ -74,7 +74,7 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
             <Code /> Show Code
           </ModalTrigger>
 
-          <ModalContent blurred size="xl" className="h-full">
+          <ModalContent blurred size="xl" className="h-full max-w-screen">
             <ComponentSource
               comp={`components/examples/${section}/${name}`}
               tone="ghost"

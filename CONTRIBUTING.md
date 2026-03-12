@@ -2,33 +2,67 @@
 
 Thank you for your interest in contributing to LibravelUI!
 
+## Code of Conduct
+
+Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md) before participating.
+
+## Ways to Contribute
+
+- **Bug reports** — Open an issue with a clear description and reproduction steps.
+- **Feature requests** — Open an issue describing the use case and expected behavior.
+- **Bug fixes** — Submit a pull request referencing the related issue.
+- **New components** — Discuss in an issue first before submitting a PR.
+- **Docs improvements** — PRs for docs fixes are always welcome.
+
+## Development Setup
+
+This is a monorepo managed with npm workspaces.
+
+```bash
+# Install dependencies
+npm install
+
+# Start the docs dev server
+npm run dev --workspace=apps/docs
+```
+
+## Pull Request Guidelines
+
+1. **Fork** the repository and create your branch from `main`.
+2. **Keep PRs focused** — one change per PR.
+3. **Add a changeset** before opening the PR (see below).
+4. **Write clear commit messages** following conventional commits where possible.
+5. **Ensure the build passes** before submitting.
+
 ## Versioning Policy
 
 We follow [Semantic Versioning (SemVer)](https://semver.org/) strictly.
 
-- **Major (x.0.0)**: Breaking changes. This includes removing props, changing default behaviors that affect existing implementations, or upgrading dependencies that require user intervention.
-- **Minor (0.x.0)**: New features that are backward compatible. This includes adding new components, new props to existing components, or new hooks.
-- **Patch (0.0.x)**: Bug fixes and internal improvements that do not affect the public API.
+| Type              | When                                                                                          |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| **Major** `x.0.0` | Breaking changes — removed props, changed defaults, dependency upgrades requiring user action |
+| **Minor** `0.x.0` | New features — new components, new props, new hooks                                           |
+| **Patch** `0.0.x` | Bug fixes and internal improvements with no public API change                                 |
+
+## Adding a Changeset
+
+When your change requires a release, add a changeset:
+
+```bash
+bun x changeset
+```
+
+1. Select the package(s) you modified.
+2. Choose the change type (major / minor / patch).
+3. Write a brief summary — this becomes the CHANGELOG entry.
 
 ## Release Process
 
-We use [Changesets](https://github.com/changesets/changesets) to manage versioning and changelogs.
+Releases are automated via GitHub Actions:
 
-### Creating a Changeset
+1. A "Version Packages" PR is created automatically when changesets are merged.
+2. Merging that PR triggers the release action which publishes to npm.
 
-When you make a change that requires a release (feature, fix, or breaking change), you must add a changeset.
+## License
 
-1. Run the following command:
-   ```bash
-   bun x changeset
-   ```
-2. Select the package(s) you modified.
-3. Choose the type of change (major, minor, or patch).
-4. Write a summary of the change. This will be added to the CHANGELOG.
-
-### Releasing
-
-Releases are handled automatically via CI/CD (GitHub Actions) when a PR with a changeset is merged.
-
-1. The "Version Packages" action will create a PR that updates versions and changelogs.
-2. Merging that PR will trigger the "Release" action which publishes to npm.
+By contributing, you agree that your contributions will be licensed under the [MIT License](./LICENSE).

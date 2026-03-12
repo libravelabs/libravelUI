@@ -38,7 +38,7 @@ export function DocTabs({
   ...props
 }: DocTabsProps) {
   const [selectedKey, setSelectedKey] = React.useState<string>(
-    defaultValue ?? items[0]?.value ?? ""
+    defaultValue ?? items[0]?.value ?? "",
   );
 
   return (
@@ -50,7 +50,7 @@ export function DocTabs({
       tone={tone}
       {...props}
     >
-      <TabList className={cn("w-fit!", classNames?.tabList)}>
+      <TabList className={cn(classNames?.tabList)}>
         {items.map((item) => (
           <TabTrigger
             key={item.value}

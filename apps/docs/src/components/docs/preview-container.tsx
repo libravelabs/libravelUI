@@ -9,7 +9,7 @@ export const PreviewContainer = ({
     <div
       className={cn(
         "relative w-full not-prose p-2 md:p-8 overflow-hidden",
-        className
+        className,
       )}
       {...props}
     >

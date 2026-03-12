@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import type { ControlsMap } from "./types";
 
+const EMPTY_CONTROLS: ControlsMap = {};
+
 interface PlaygroundContextType {
   values: Record<string, unknown>;
   setValue: (key: string, value: unknown) => void;
@@ -33,7 +35,7 @@ interface PlaygroundProviderProps {
 
 export function PlaygroundProvider({
   children,
-  controls = {},
+  controls = EMPTY_CONTROLS,
 }: PlaygroundProviderProps) {
   const [values, setValues] = useState<Record<string, unknown>>({});
   const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");

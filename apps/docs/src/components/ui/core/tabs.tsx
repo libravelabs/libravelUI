@@ -68,42 +68,45 @@ const tabsVariants = cva("group relative flex w-full", {
   },
 });
 
-const tabListVariants = cva("flex shrink-0 w-fit", {
-  variants: {
-    orientation: {
-      horizontal: "flex-row items-center",
-      vertical: "flex-col items-stretch",
+const tabListVariants = cva(
+  "flex shrink-0 w-fit max-w-full overflow-x-auto scrollbar-hidden",
+  {
+    variants: {
+      orientation: {
+        horizontal: "flex-row items-center",
+        vertical: "flex-col items-stretch",
+      },
+      size: {
+        sm: "gap-1",
+        default: "gap-1.5",
+        lg: "gap-2",
+      },
+      tone: {
+        default:
+          "bg-card backdrop-blur-xl border border-border/40 data-[orientation=horizontal]:w-full shadow-sm",
+        ghost: "bg-transparent data-[orientation=horizontal]:w-full",
+        underline:
+          "bg-transparent data-[orientation=horizontal]:w-full data-[orientation=horizontal]:border-b rounded-none!",
+        outline: "data-[orientation=horizontal]:w-full bg-transparent border",
+      },
+      radius: {
+        none: "",
+        sm: "rounded-lg",
+        md: "rounded-lg",
+        lg: "rounded-lg",
+        xl: "rounded-lg",
+        "2xl": "rounded-lg",
+        "3xl": "rounded-lg",
+      },
     },
-    size: {
-      sm: "gap-1",
-      default: "gap-1.5",
-      lg: "gap-2",
-    },
-    tone: {
-      default:
-        "bg-card backdrop-blur-xl border border-border/40 data-[orientation=horizontal]:w-full shadow-sm",
-      ghost: "bg-transparent data-[orientation=horizontal]:w-full",
-      underline:
-        "bg-transparent data-[orientation=horizontal]:w-full data-[orientation=horizontal]:border-b rounded-none!",
-      outline: "data-[orientation=horizontal]:w-full bg-transparent border",
-    },
-    radius: {
-      none: "",
-      sm: "rounded-lg",
-      md: "rounded-lg",
-      lg: "rounded-lg",
-      xl: "rounded-lg",
-      "2xl": "rounded-lg",
-      "3xl": "rounded-lg",
+    defaultVariants: {
+      orientation: "horizontal",
+      size: "default",
+      tone: "default",
+      radius: "md",
     },
   },
-  defaultVariants: {
-    orientation: "horizontal",
-    size: "default",
-    tone: "default",
-    radius: "md",
-  },
-});
+);
 
 const tabTriggerVariants = cva(
   "relative inline-flex items-center gap-1.5 whitespace-nowrap font-medium transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4",

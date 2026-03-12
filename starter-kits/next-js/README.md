@@ -1,48 +1,41 @@
-# LibravelUI Starter Kit
+# LibravelUI — Next.js Starter Kit
 
-The official LibravelUI starter project for Next.js. This kit is pre-configured to get you up and running with LibravelUI components and theming instantly.
+The official LibravelUI starter for [Next.js](https://nextjs.org) (App Router), pre-configured with components, theming, and Tailwind CSS.
 
-## Getting Started
-
-### 1. Installation
-
-Install dependencies using your preferred package manager:
+## Quick Start
 
 ```bash
-bun install
-# or
+# 1. Install dependencies
 npm install
-# or
-pnpm install
-```
 
-### 2. Development
-
-Start the development server:
-
-```bash
-bun dev
-# or
+# 2. Start the dev server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your LibravelUI project in action.
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Adding Components
 
-You can add new LibravelUI components to this project using the CLI:
-
 ```bash
-npx libravelui add [component-name]
+npx libravelui@latest add button input modal
 ```
+
+Components are copied into `src/components/ui/core/` — you own and can modify the source freely.
 
 ## Project Structure
 
-- `src/app`: Next.js App Router with pre-configured layout and styles.
-- `src/components/ui`: Location for your LibravelUI components.
-- `components.json`: Configuration for the LibravelUI CLI.
+```
+src/
+├── app/              # Next.js App Router (layout, pages)
+├── components/
+│   └── ui/
+│       └── core/     # LibravelUI core components
+│       └── motion/   # LibravelUI motion components
+│       └── block/    # LibravelUI block components
+└── lib/              # Utilities (cn, etc.)
+components.json       # LibravelUI CLI config
+```
 
-## Learn More
+## Documentation
 
-- [LibravelUI Documentation](https://ui.libravelabs.com/docs)
-- [Next.js Documentation](https://nextjs.org/docs)
+[https://ui.libravelabs.com](https://ui.libravelabs.com)

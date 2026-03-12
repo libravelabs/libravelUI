@@ -4,7 +4,7 @@ import {
   GridListItem,
   GridListLoadMore,
 } from "@/components/ui/core/grid-list";
-import { ProgressSpinner } from "@/components/ui/core/progress";
+import { Loader } from "@/components/ui/core/loader";
 import { useAsyncList } from "react-stately";
 
 interface Planets {
@@ -22,7 +22,7 @@ export default function InfiniteScroll() {
         cursor || `https://swapi.py4e.com/api/planets/?search=`,
         {
           signal,
-        }
+        },
       );
       const json = await res.json();
 
@@ -42,11 +42,7 @@ export default function InfiniteScroll() {
         onLoadMore={list.loadMore}
         isLoading={list.loadingState === "loadingMore"}
       >
-        <ProgressSpinner
-          className="mx-auto my-4"
-          isIndeterminate
-          aria-label="Loading more..."
-        />
+        <Loader className="mx-auto my-4" aria-label="Loading more..." />
       </GridListLoadMore>
     </GridList>
   );

@@ -150,34 +150,36 @@ export function TypeTable({ type, className, title }: TypeTableProps) {
   return (
     <div
       className={cn(
-        "not-prose overflow-hidden rounded-lg border border-border/60 bg-background shadow-sm",
+        "not-prose overflow-x-auto rounded-lg border border-border/60 bg-background shadow-sm",
         className,
       )}
     >
-      {title && (
-        <div className="px-4 py-3 bg-muted/50 border-b border-border/40">
-          <h3 className="text-sm font-semibold text-foreground tracking-tight">
-            {title}
-          </h3>
-        </div>
-      )}
+      <div className="min-w-[540px]">
+        {title && (
+          <div className="px-4 py-3 bg-muted/50 border-b border-border/40">
+            <h3 className="text-sm font-semibold text-foreground tracking-tight">
+              {title}
+            </h3>
+          </div>
+        )}
 
-      <div className="grid grid-cols-[1fr_1.2fr_0.6fr] gap-4 px-4 py-2.5 bg-muted/30 border-b border-border/60">
-        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Prop
+        <div className="grid grid-cols-[1fr_1.2fr_0.6fr] gap-4 px-4 py-2.5 bg-muted/30 border-b border-border/60">
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Prop
+          </div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Type
+          </div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground text-right">
+            Default
+          </div>
         </div>
-        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Type
-        </div>
-        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground text-right">
-          Default
-        </div>
-      </div>
 
-      <div>
-        {entries.map(([name, def]) => (
-          <TypeRow key={name} name={name} def={def} />
-        ))}
+        <div>
+          {entries.map(([name, def]) => (
+            <TypeRow key={name} name={name} def={def} />
+          ))}
+        </div>
       </div>
     </div>
   );

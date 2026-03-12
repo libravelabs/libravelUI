@@ -8,6 +8,7 @@ import {
   AccordionContent,
 } from "@/components/ui/core/accordion";
 import { PackageInstall } from "@/components/docs/package-install";
+import { CodeBlock } from "@/components/docs/code-block";
 
 export type InstallationProps = {
   section?: string;
@@ -128,11 +129,10 @@ const steps = [
     description:
       "Import the component wherever you need it and start using it in your UI. The component is fully compatible with MDX pages.",
     content: ({ section, name }: InstallationProps) => (
-      <div className="overflow-hidden rounded-md border border-border/80 bg-background/90">
-        <pre className="px-3 py-2 text-[11px] font-mono [scrollbar-width:none]">
-          <code>{`import { ${kebabToPascal(name)} } from "@/components/ui/${section}/${name}";`}</code>
-        </pre>
-      </div>
+      <CodeBlock
+        lang="tsx"
+        code={`import { ${kebabToPascal(name)} } from "@/components/ui/${section}/${name}";`}
+      />
     ),
   },
 ];

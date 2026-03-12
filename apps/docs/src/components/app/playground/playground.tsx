@@ -1,17 +1,13 @@
 "use client";
 
 import React, { useMemo, useRef, useLayoutEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { registry, type RegistryKey } from "./registry";
 import { PlaygroundProvider, usePlayground } from "./playground-context";
 import { Controls } from "./controls";
+import type { ControlsMap } from "./types";
 import { Skeleton, SkeletonText } from "@/components/ui/core/skeleton";
 import { PreviewContainer } from "@/components/docs/preview-container";
-import {
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-} from "@/components/app/resizable";
-import { LegacyPlayground } from "./legacy-playground";
 import { playgroundParser } from "./playground-parser";
 import { useComponentSource } from "@/hooks/use-component-source";
 import { Button, ButtonGroup } from "@/components/ui/core/button";
@@ -21,151 +17,11 @@ import { CodeBlock } from "@/components/docs/code-block";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-function usePreviewSize(trigger: unknown) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [size, setSize] = useState<{ w: number; h: number } | null>(null);
+function Toolbar() {
+  const { direction, refresh, handleRefresh, handleDirection } =
+    usePlayground();
 
-  useLayoutEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current;
-    const update = () => {
-      const rect = el.getBoundingClientRect();
-      if (rect.width > 0 && rect.height > 0) {
-        setSize({ w: Math.round(rect.width), h: Math.round(rect.height) });
-      }
-    };
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [trigger]);
-
-  return { ref, size };
-}
-
-interface PlaygroundContentProps {
-  compName: string;
-  Component: React.ComponentType;
-  section: "core" | "motion";
-  orientation: "horizontal" | "vertical";
-  template?: (props: string, children: string | null) => string;
-}
-
-function PlaygroundContent({
-  compName,
-  Component,
-  section = "core",
-  orientation,
-  template,
-}: PlaygroundContentProps) {
-  const {
-    values,
-    controls,
-    direction,
-    refresh,
-    handleRefresh,
-    handleDirection,
-  } = usePlayground();
-
-  const { code: sourceCode, loading } = useComponentSource(
-    `components/examples/${section}/${compName}`,
-  );
-
-  const code = useMemo(() => {
-    return playgroundParser(
-      sourceCode || "",
-      values as Record<string, string | number | boolean>,
-      controls,
-      template,
-    );
-  }, [sourceCode, values, controls, template]);
-
-  const { ref: previewRef, size } = usePreviewSize(refresh.key);
-  const { isCopied, copyToClipboard } = useCopyToClipboard();
-  const isMobile = useIsMobile();
-
-  if (loading) {
-    if (isMobile) {
-      return (
-        <div className="bg-card rounded-2xl border border-border overflow-hidden flex flex-col w-full max-w-full">
-          <div className="flex items-center justify-end gap-2 p-3 border-b border-border">
-            <Skeleton className="h-8 w-16" />
-          </div>
-          <div className="h-[350px] relative border-b border-border overflow-hidden flex items-center justify-center p-8">
-            <Skeleton className="h-8 w-32" />
-          </div>
-          <div className="p-4 bg-card/50 border-b border-border overflow-hidden">
-            <Skeleton className="h-4 w-32 mb-4" />
-            <SkeletonText lines={3} />
-          </div>
-          <div className="w-full max-w-full overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between px-4 py-3 border-b border-border bg-muted/50 gap-2">
-              <Skeleton className="h-4 w-12" />
-              <Skeleton className="h-6 w-16" />
-            </div>
-            <div className="p-4 bg-card/80">
-              <SkeletonText lines={4} />
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (orientation === "vertical") {
-      return (
-        <div className="bg-card rounded-2xl border border-border overflow-hidden divide-y w-full max-w-full">
-          <div className="w-full max-w-full">
-            <div className="flex items-center justify-end gap-2 p-4 border-b">
-              <Skeleton className="h-8 w-16" />
-            </div>
-            <div className="flex h-96 w-full max-w-full">
-              <div className="w-[75%] flex flex-col items-center justify-center border-r p-8">
-                <Skeleton className="h-8 w-32" />
-              </div>
-              <div className="w-[25%] p-4 bg-card/50">
-                <Skeleton className="h-4 w-32 mb-4" />
-                <SkeletonText lines={4} />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center justify-between px-4 py-3 border-b border-border bg-muted/50 gap-2">
-            <Skeleton className="h-4 w-12" />
-            <Skeleton className="h-6 w-16" />
-          </div>
-          <div className="p-4 bg-card/80">
-            <SkeletonText lines={5} />
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <section className="relative w-full max-w-full">
-        <div className="bg-card rounded-2xl border border-border overflow-hidden w-full max-w-full">
-          <div className="flex min-h-[480px]">
-            <div className="w-[22%] p-6 bg-card border-r border-border">
-              <Skeleton className="h-4 w-32 mb-4" />
-              <SkeletonText lines={5} />
-            </div>
-            <div className="w-[50%] flex items-center justify-center p-8">
-              <Skeleton className="h-8 w-32" />
-            </div>
-            <div className="w-[28%] border-l border-border bg-card/80 flex flex-col">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/50">
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-6 w-16" />
-              </div>
-              <div className="p-4">
-                <SkeletonText lines={6} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  const toolbar = (
+  return (
     <ButtonGroup>
       <Button
         tone="outline"
@@ -193,21 +49,149 @@ function PlaygroundContent({
       </Button>
     </ButtonGroup>
   );
+}
 
-  const preview = (
-    <div className="relative h-full overflow-hidden" ref={previewRef}>
+function CodePanel({ code }: { code: string }) {
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
+  return (
+    <>
+      <div className="flex flex-wrap items-center justify-between px-4 py-3 border-b border-border bg-muted/50 gap-2">
+        <span className="text-xs font-mono text-muted-foreground">Usage</span>
+        <Button
+          tone="outline"
+          size="sm"
+          className="text-[10px] uppercase tracking-wide font-medium text-primary gap-1.5"
+          onClick={() => copyToClipboard(code)}
+        >
+          {isCopied ? (
+            <Check className="size-3" />
+          ) : (
+            <Copy className="size-3" />
+          )}
+          {isCopied ? "Copied" : "Copy"}
+        </Button>
+      </div>
+      <div className="bg-card/80 p-1 w-full overflow-hidden">
+        <CodeBlock
+          lang="tsx"
+          code={code}
+          className="bg-transparent border-none shadow-none rounded-none"
+          codeblock={{ allowCopy: false }}
+        />
+      </div>
+    </>
+  );
+}
+
+function PlaygroundSkeleton({
+  hasControls,
+  isMobile,
+}: {
+  hasControls: boolean;
+  isMobile: boolean;
+}) {
+  const codeSection = (
+    <div className="border-t border-border">
+      <div className="flex flex-wrap items-center justify-between px-4 py-3 border-b border-border bg-muted/50 gap-2">
+        <Skeleton className="h-4 w-12" />
+        <Skeleton className="h-6 w-16" />
+      </div>
+      <div className="p-4 bg-card/80">
+        <SkeletonText lines={4} />
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <div className="bg-card rounded-2xl border border-border overflow-hidden flex flex-col w-full">
+        <div className="flex items-center justify-end gap-2 p-3 border-b border-border">
+          <Skeleton className="h-8 w-16" />
+        </div>
+        <div className="h-[350px] flex items-center justify-center p-8 border-b border-border">
+          <Skeleton className="h-8 w-32" />
+        </div>
+        {hasControls && (
+          <div className="p-4 bg-card/50 border-b border-border">
+            <Skeleton className="h-4 w-32 mb-4" />
+            <SkeletonText lines={3} />
+          </div>
+        )}
+        {codeSection}
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-card rounded-2xl border border-border overflow-hidden w-full">
+      <div className="flex items-center justify-end gap-2 p-3 border-b border-border">
+        <Skeleton className="h-8 w-16" />
+      </div>
+      <div
+        className={cn(
+          "grid min-h-[480px]",
+          hasControls ? "grid-cols-12" : "grid-cols-1",
+        )}
+      >
+        {hasControls && (
+          <div className="col-span-3 p-6 bg-card border-r border-border">
+            <Skeleton className="h-4 w-32 mb-4" />
+            <SkeletonText lines={5} />
+          </div>
+        )}
+        <div
+          className={cn(
+            "flex items-center justify-center p-8",
+            hasControls ? "col-span-9" : "col-span-1",
+          )}
+        >
+          <Skeleton className="h-8 w-32" />
+        </div>
+      </div>
+      {codeSection}
+    </div>
+  );
+}
+
+interface PlaygroundContentProps {
+  compName: string;
+  Component: React.ComponentType;
+  hasControls: boolean;
+  section: "core" | "motion";
+  template?: (props: string, children: string | null) => string;
+}
+
+function PlaygroundContent({
+  compName,
+  Component,
+  hasControls,
+  section = "core",
+  template,
+}: PlaygroundContentProps) {
+  const { values, controls, direction, refresh } = usePlayground();
+  const { code: sourceCode, loading } = useComponentSource(
+    `components/examples/${section}/${compName}`,
+  );
+  const code = useMemo(
+    () =>
+      playgroundParser(
+        sourceCode || "",
+        values as Record<string, string | number | boolean>,
+        controls,
+        template,
+      ),
+    [sourceCode, values, controls, template],
+  );
+  const isMobile = useIsMobile();
+
+  if (loading) {
+    return <PlaygroundSkeleton hasControls={hasControls} isMobile={isMobile} />;
+  }
+
+  const previewArea = (
+    <div className="relative h-full overflow-visible">
       <div className="absolute inset-0 bg-dots pointer-events-none" />
       <div className="absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-card/80 via-card/40 to-transparent pointer-events-none" />
-      {orientation === "horizontal" && (
-        <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
-          {size && (
-            <div className="rounded-full bg-card px-3 py-1 text-xs text-foreground/60">
-              W: {size.w}px &nbsp; H: {size.h}px
-            </div>
-          )}
-          {toolbar}
-        </div>
-      )}
       <PreviewContainer className="relative flex h-full items-center justify-center">
         <React.Suspense
           fallback={
@@ -224,172 +208,124 @@ function PlaygroundContent({
 
   if (isMobile) {
     return (
-      <div className="bg-card rounded-2xl border border-border overflow-hidden flex flex-col w-full max-w-full">
-        <div
-          key={refresh.key}
-          dir={direction}
-          className="flex flex-col w-full max-w-full"
-        >
+      <div className="bg-card rounded-2xl border border-border overflow-hidden flex flex-col w-full">
+        <div key={refresh.key} dir={direction} className="flex flex-col w-full">
           <div className="flex items-center justify-end gap-2 p-3 border-b border-border">
-            {toolbar}
+            <Toolbar />
           </div>
-          <div className="h-[350px] relative border-b border-border overflow-hidden">
-            {preview}
+          <div className="h-[350px] relative border-b border-border overflow-visible">
+            {previewArea}
           </div>
-          <div className="p-4 bg-card/50 border-b border-border overflow-hidden">
-            <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-4">
-              Component Configuration
-            </div>
-            <Controls />
-          </div>
-        </div>
-        <div className="w-full max-w-full overflow-hidden">
-          <div className="flex flex-wrap items-center justify-between px-4 py-3 border-b border-border bg-muted/50 gap-2">
-            <span className="text-xs font-mono text-muted-foreground">
-              Usage
-            </span>
-            <Button
-              tone="outline"
-              size="sm"
-              className="text-[10px] uppercase tracking-wide font-medium text-primary gap-1.5"
-              onClick={() => copyToClipboard(code)}
-            >
-              {isCopied ? (
-                <Check className="size-3" />
-              ) : (
-                <Copy className="size-3" />
-              )}
-              {isCopied ? "Copied" : "Copy"}
-            </Button>
-          </div>
-          <div className="bg-card/80 p-1 w-full max-w-full overflow-hidden">
-            <CodeBlock
-              lang="tsx"
-              code={code}
-              className="bg-transparent border-none shadow-none rounded-none"
-              codeblock={{ allowCopy: false }}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (orientation === "vertical") {
-    return (
-      <div className="bg-card rounded-2xl border border-border overflow-hidden divide-y w-full max-w-full">
-        <div key={refresh.key} dir={direction} className="w-full max-w-full">
-          <div className="flex items-center justify-end gap-2 p-4 border-b">
-            {toolbar}
-          </div>
-          <ResizablePanelGroup
-            orientation="horizontal"
-            className="h-full min-h-96 w-full max-w-full"
-          >
-            <ResizablePanel
-              defaultSize="75%"
-              minSize="30%"
-              className="w-full max-w-full"
-            >
-              {preview}
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel
-              defaultSize="30%"
-              minSize="1%"
-              className="w-full max-w-full"
-            >
-              <div className="h-full overflow-y-auto p-4 bg-card/50">
-                <Controls />
+          {hasControls && (
+            <div className="p-4 bg-card/50 border-b border-border">
+              <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-4">
+                Component Configuration
               </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+              <Controls />
+            </div>
+          )}
         </div>
-        <div className="flex flex-wrap items-center justify-between px-4 py-3 border-b border-border bg-muted/50 gap-2">
-          <span className="text-xs font-mono text-muted-foreground">Usage</span>
-          <Button
-            tone="outline"
-            size="sm"
-            className="text-[10px] uppercase tracking-wide font-medium text-primary gap-1.5"
-            onClick={() => copyToClipboard(code)}
-          >
-            {isCopied ? (
-              <Check className="size-3" />
-            ) : (
-              <Copy className="size-3" />
-            )}
-            {isCopied ? "Copied" : "Copy"}
-          </Button>
-        </div>
-        <div className="h-full bg-card/80 p-1 w-full max-w-full overflow-hidden">
-          <CodeBlock
-            lang="tsx"
-            code={code}
-            className="bg-transparent border-none shadow-none rounded-none"
-            codeblock={{ allowCopy: false }}
-          />
+        <div className="border-t border-border">
+          <CodePanel code={code} />
         </div>
       </div>
     );
   }
 
   return (
-    <section className="relative w-full max-w-full">
-      <div className="bg-card rounded-2xl border border-border overflow-hidden w-full max-w-full">
+    <div className="bg-card rounded-2xl border border-border overflow-hidden w-full">
+      <div key={refresh.key} dir={direction} className="flex flex-col w-full">
+        <div className="flex items-center justify-end gap-2 border-b border-border">
+          <Toolbar />
+        </div>
         <div
-          key={refresh.key}
-          dir={direction}
-          className="h-full w-full max-w-full"
+          className={cn(
+            "grid min-h-[480px]",
+            hasControls ? "grid-cols-12" : "grid-cols-1",
+          )}
         >
-          <ResizablePanelGroup
-            orientation="horizontal"
-            className="min-h-[480px]"
+          {hasControls && (
+            <div className="col-span-3 border-r border-border overflow-y-auto p-6 bg-card">
+              <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-4">
+                Component Configuration
+              </div>
+              <Controls />
+            </div>
+          )}
+          <div
+            className={cn(
+              "relative",
+              hasControls ? "col-span-9" : "col-span-1",
+            )}
           >
-            <ResizablePanel defaultSize="22%" minSize="18%">
-              <div className="p-6 bg-card">
-                <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-4">
-                  Component Configuration
-                </div>
-                <Controls />
-              </div>
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize="50%" minSize="30%">
-              {preview}
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize="28%" minSize="20%">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/50">
-                <span className="text-xs font-mono text-muted-foreground">
-                  Usage
-                </span>
-                <Button
-                  tone="outline"
-                  size="sm"
-                  className="text-[10px] uppercase tracking-wide font-medium text-primary gap-1.5"
-                  onClick={() => copyToClipboard(code)}
-                >
-                  {isCopied ? (
-                    <Check className="size-3" />
-                  ) : (
-                    <Copy className="size-3" />
-                  )}
-                  {isCopied ? "Copied" : "Copy"}
-                </Button>
-              </div>
-              <div className="h-full bg-card/80 p-1">
-                <CodeBlock
-                  lang="tsx"
-                  code={code}
-                  className="bg-transparent border-none shadow-none rounded-none"
-                  codeblock={{ allowCopy: false }}
-                />
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+            {previewArea}
+          </div>
+        </div>
+        <div className="border-t border-border">
+          <CodePanel code={code} />
         </div>
       </div>
-    </section>
+    </div>
+  );
+}
+
+function FallbackContent({ comp, section }: { comp: string; section: string }) {
+  const { direction, refresh } = usePlayground();
+  const { code, loading } = useComponentSource(
+    `components/examples/${section}/${comp}`,
+  );
+  const isMobile = useIsMobile();
+
+  const DynamicComponent = useMemo(
+    () =>
+      dynamic(() => import(`@/components/examples/${section}/${comp}`), {
+        ssr: false,
+        loading: () => (
+          <div className="flex w-full items-center justify-center p-8">
+            <Skeleton className="h-6 w-24" />
+          </div>
+        ),
+      }),
+    [section, comp],
+  );
+
+  if (loading) {
+    return <PlaygroundSkeleton hasControls={false} isMobile={isMobile} />;
+  }
+
+  const previewHeight = isMobile ? "h-[350px]" : "min-h-[480px]";
+
+  return (
+    <div className="bg-card rounded-2xl border border-border overflow-hidden w-full">
+      <div key={refresh.key} dir={direction} className="flex flex-col w-full">
+        <div className="flex items-center justify-end gap-2 p-3 border-b border-border">
+          <Toolbar />
+        </div>
+        <div
+          className={cn(
+            "relative flex items-center justify-center w-full",
+            previewHeight,
+          )}
+        >
+          <div className="absolute inset-0 bg-dots pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-card/80 via-card/40 to-transparent pointer-events-none" />
+          <PreviewContainer className="relative z-10 flex w-full items-center justify-center p-8">
+            <React.Suspense
+              fallback={
+                <div className="flex w-full items-center justify-center p-8">
+                  <Skeleton className="h-6 w-24" />
+                </div>
+              }
+            >
+              <DynamicComponent />
+            </React.Suspense>
+          </PreviewContainer>
+        </div>
+      </div>
+      <div className="border-t border-border">
+        <CodePanel code={code ?? ""} />
+      </div>
+    </div>
   );
 }
 
@@ -399,28 +335,31 @@ interface PlaygroundProps {
   orientation?: "horizontal" | "vertical";
 }
 
-export function Playground({
-  comp,
-  section = "core",
-  orientation = "vertical",
-}: PlaygroundProps) {
-  const Component = registry[comp as RegistryKey];
+export function Playground({ comp, section = "core" }: PlaygroundProps) {
+  const entry = registry[comp];
 
-  if (!Component) {
-    return <LegacyPlayground comp={comp} section={section} />;
+  if (!entry) {
+    return (
+      <PlaygroundProvider>
+        <FallbackContent comp={comp} section={section} />
+      </PlaygroundProvider>
+    );
   }
 
+  const controls = (entry as { controls?: ControlsMap }).controls;
+  const hasControls = Boolean(controls && Object.keys(controls).length > 0);
+
   return (
-    <PlaygroundProvider controls={Component.controls as any}>
+    <PlaygroundProvider controls={controls}>
       <PlaygroundContent
         section={section}
         compName={comp}
-        Component={Component.default}
-        orientation={orientation}
+        Component={entry.default}
+        hasControls={hasControls}
         template={
           (
-            Component as {
-              template: (props: string, children: string | null) => string;
+            entry as {
+              template?: (props: string, children: string | null) => string;
             }
           ).template
         }
