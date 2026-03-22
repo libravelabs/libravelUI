@@ -30,7 +30,7 @@ export function HeroSection({ GRID }: { GRID: GridItem[] }) {
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-end w-full gap-4">
             <PackageInstall
-              packageName="@libravelui"
+              packageName="libravelui@latest"
               className="w-full sm:w-80"
             />
             <Link
