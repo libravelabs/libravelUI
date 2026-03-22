@@ -7,25 +7,11 @@ doc: ColorField
 
 ## Example
 
-<Playground comp="color-field/basic" />
+<Playground path="components/examples/core/color-field/basic.tsx" />
 
 ## Installation
 
-<Installation
-  section="core"
-  name="color-field"
-  packages={[
-    "react-aria-components",
-    "tw-animate-css",
-    "tailwindcss-react-aria-components",
-    "class-variance-authority",
-    "lucide-react",
-    "clsx",
-    "tailwind-merge",
-    "motion",
-    "@react-stately/color",
-  ]}
-/>
+<Installation path="components/ui/core/color-field" packages={[ "react-aria-components", "tw-animate-css", "tailwindcss-react-aria-components", "class-variance-authority", "lucide-react", "clsx", "tailwind-merge", "motion", "@react-stately/color", ]} />
 
 ### Anatomy
 
@@ -45,13 +31,13 @@ import { Label, Input } from "@/components/ui/core/field";
 
 Control the color field value using external state. This is useful when the color value needs to stay in sync with form state or application logic.
 
-<Playground comp="color-field/controlled" />
+<Playground path="components/examples/core/color-field/controlled.tsx" />
 
 ### With Picker
 
 Use a color field together with a color picker. This lets users input a color value directly or choose it visually from the picker.
 
-<Playground comp="color-field/with-picker" />
+<Playground path="components/examples/core/color-field/with-picker.tsx" />
 
 ## Props
 

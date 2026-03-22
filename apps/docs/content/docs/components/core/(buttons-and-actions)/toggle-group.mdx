@@ -5,15 +5,20 @@ component: true
 doc: ToggleButtonGroup
 ---
 
+import { controls } from "@/components/examples/core/toggle-group/basic.demo";
+
 ## Example
 
-<Playground comp="toggle-group/basic.demo" />
+<Playground
+  controls={controls}
+  path="components/examples/core/toggle-group/basic.demo.tsx"
+/>
 
 ### Controlled
 
 Manage the toggle group’s state externally, allowing full control over which toggles are active and enabling dynamic interactions.
 
-<Playground comp="toggle-group/controlled" />
+<Playground path="components/examples/core/toggle-group/controlled.tsx" />
 
 ## Features
 

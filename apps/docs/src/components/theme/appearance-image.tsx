@@ -19,7 +19,10 @@ type AppearanceImageProps = {
   images?: Partial<Record<ThemeValue, string>>;
 };
 
-export function AppearanceImage({ themes, images }: AppearanceImageProps) {
+export default function AppearanceImage({
+  themes,
+  images,
+}: AppearanceImageProps) {
   const id = useId();
   const { theme, setTheme } = useTheme();
 

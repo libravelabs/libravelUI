@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { RegistryComponentDocs } from "./registry-docs";
+import { getComponentDocs, RegistryComponentDocs } from "./registry-docs";
 
 const SRC_ROOT = path.join(process.cwd(), "src");
 const COMPONENT_ROOT = path.join(process.cwd(), "src/components/ui");
@@ -186,6 +186,7 @@ export async function fetchComponentSource(
 
   return {
     files,
+    docs: getComponentDocs(entryFile),
     dependencies: Array.from(dependencies),
     registryDependencies: Array.from(registryDependencies),
     type,

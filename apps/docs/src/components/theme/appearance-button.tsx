@@ -1,9 +1,11 @@
+"use client";
+
 import { Sun, Moon } from "lucide-react";
 import * as React from "react";
-import { useTheme } from "@/components/theme/theme-provider";
+import { useTheme } from "next-themes";
 import { Button, type ButtonProps } from "@/components/ui/core/button";
 
-export function AppearanceButton({ ...props }: ButtonProps) {
+export default function AppearanceButton({ ...props }: ButtonProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 

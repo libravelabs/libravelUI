@@ -7,25 +7,11 @@ doc: ColorPicker
 
 ## Example
 
-<Playground comp="color-picker/basic" />
+<Playground path="components/examples/core/color-picker/basic.tsx" />
 
 ## Installation
 
-<Installation
-  section="core"
-  name="color-picker"
-  requiredBlock={
-    <RequiredBlock
-      components={[
-        "button",
-        "popover",
-        "color-swatch",
-        "color-area",
-        "color-slider",
-        "color-field",
-        "input",
-      ]}
-    />
+<Installation path="components/ui/core/color-picker" requiredBlock={ <RequiredBlock components={[ "button", "popover", "color-swatch", "color-area", "color-slider", "color-field", "input", ]} />
   }
   packages={[
     "react-aria-components",
@@ -97,7 +83,7 @@ import {
 
 Build a color picker using custom building blocks. This allows you to fully control the layout, styling, and behavior instead of relying on the default preset.
 
-<Playground comp="color-picker/custom-build" />
+<Playground path="components/examples/core/color-picker/custom-build.tsx" />
 
 ## Props
 

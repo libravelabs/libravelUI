@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
+import React, { useState, useMemo } from "react";
+import { runtimeRegistry } from "@/generated/runtime-registry";
 import { Loader } from "@/components/ui/core/loader";
 import { Modal, ModalTrigger, ModalContent } from "@/components/ui/core/modal";
 import { Code, LayoutPanelLeft, RefreshCw } from "lucide-react";
@@ -10,8 +10,7 @@ import { ComponentSource } from "@/components/docs/component-source";
 import { Button } from "@/components/ui/core/button";
 
 type ExampleProps = {
-  section?: string;
-  name: string;
+  path: string;
   className?: string | string[];
 };
 
@@ -21,12 +20,16 @@ type ExampleState = {
   dir: "ltr" | "rtl";
 };
 
-export function Example({ section = "motion", name, className }: ExampleProps) {
+export function Example({ path: rawPath, className }: ExampleProps) {
   const [state, setState] = useState<ExampleState>({
     key: 0,
     rotation: 0,
     dir: "ltr",
   });
+
+  const path = useMemo(() => {
+    return rawPath.replace(/\.(tsx|ts|jsx|js)$/, "").replace(/^\/+|\/+$/g, "");
+  }, [rawPath]);
 
   const handleRefresh = () => {
     setState((prev) => ({
@@ -43,13 +46,17 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
     }));
   };
 
-  const Demo = dynamic(
-    () => import(`@/components/examples/${section}/${name}`),
-    {
-      ssr: false,
-      loading: () => <Loader />,
-    },
-  );
+  const registryEntry = runtimeRegistry[path as keyof typeof runtimeRegistry];
+  const Demo = useMemo(() => {
+    if (!registryEntry) {
+      return () => (
+        <div className="text-sm text-destructive">
+          Component not found in registry: {path}
+        </div>
+      );
+    }
+    return (registryEntry as any).Component || (registryEntry as any);
+  }, [registryEntry, path]);
 
   return (
     <div className="flex flex-col w-full h-full text-sm">
@@ -75,10 +82,7 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
           </ModalTrigger>
 
           <ModalContent blurred size="xl" className="h-full max-w-screen">
-            <ComponentSource
-              comp={`components/examples/${section}/${name}`}
-              tone="ghost"
-            />
+            <ComponentSource comp={path} tone="ghost" />
           </ModalContent>
         </Modal>
       </div>
@@ -92,7 +96,9 @@ export function Example({ section = "motion", name, className }: ExampleProps) {
             className,
           )}
         >
-          <Demo />
+          <React.Suspense fallback={<Loader />}>
+            <Demo />
+          </React.Suspense>
         </div>
       </div>
     </div>

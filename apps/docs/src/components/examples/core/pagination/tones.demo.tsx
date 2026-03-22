@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { type PaginationVariantProps } from "@/components/ui/core/pagination";
 import { RadioGroup, Radio } from "@/components/ui/core/radio-group";
@@ -40,7 +42,7 @@ export default function PaginationTonesDemo() {
     <div className="space-y-6 w-full min-h-72">
       <div className="flex flex-col gap-4">
         <div className="space-y-2">
-          <Heading size={3}>Tone</Heading>
+          <Heading level={3}>Tone</Heading>
           <RadioGroup
             value={tone}
             onChange={(v) => setTone(v as PaginationVariantProps["tone"])}
@@ -55,7 +57,7 @@ export default function PaginationTonesDemo() {
         </div>
 
         <div className="space-y-2">
-          <Heading size={3}>Size</Heading>
+          <Heading level={3}>Size</Heading>
           <RadioGroup
             value={size}
             onChange={(v) => setSize(v as PaginationVariantProps["size"])}
@@ -70,7 +72,7 @@ export default function PaginationTonesDemo() {
         </div>
 
         <div className="space-y-2">
-          <Heading size={3}>Radius</Heading>
+          <Heading level={3}>Radius</Heading>
           <RadioGroup
             value={radius}
             onChange={(v) => setRadius(v as PaginationVariantProps["radius"])}
@@ -85,7 +87,7 @@ export default function PaginationTonesDemo() {
         </div>
 
         <div className="space-y-2">
-          <Heading size={3}>Spacing</Heading>
+          <Heading level={3}>Spacing</Heading>
           <RadioGroup
             value={spacing}
             onChange={(v) => setSpacing(v as PaginationVariantProps["spacing"])}

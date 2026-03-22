@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { ComponentSource } from "@/components/docs/component-source";
 import {
   Accordion,
@@ -11,18 +12,38 @@ import { PackageInstall } from "@/components/docs/package-install";
 import { CodeBlock } from "@/components/docs/code-block";
 
 export type InstallationProps = {
+  path?: string;
+  name?: string;
   section?: string;
-  name: string;
   packages?: string | string[];
   requiredBlock?: React.ReactNode;
 };
 
 export function Installation({
-  name,
-  section = "motion",
+  path: rawPath,
+  name: nameProp,
+  section: sectionProp,
   packages = ["tailwind-merge", "clsx", "motion"],
   requiredBlock,
 }: InstallationProps) {
+  const path = useMemo(() => {
+    if (rawPath) return rawPath.replace(/^\/+|\/+$/g, "");
+    const section = sectionProp || "motion";
+    const name = nameProp || "";
+    return `components/ui/${section}/${name}`.replace(/^\/+|\/+$/g, "");
+  }, [rawPath, nameProp, sectionProp]);
+
+  const name = useMemo(() => {
+    if (nameProp) return nameProp;
+    return path.split("/").pop() || "";
+  }, [path, nameProp]);
+
+  const section = useMemo(() => {
+    if (sectionProp) return sectionProp;
+    const parts = path.split("/");
+    return parts[parts.length - 2] || "motion";
+  }, [path, sectionProp]);
+
   const packageList = Array.isArray(packages)
     ? packages
     : typeof packages === "string"
@@ -70,7 +91,7 @@ export function Installation({
                   <p>{item.description}</p>
 
                   {typeof item.content === "function"
-                    ? item.content({ packageList, section, name })
+                    ? item.content({ packageList, path, name, section })
                     : item.content}
                 </li>
               ))}
@@ -119,19 +140,17 @@ const steps = [
         You can customize the path if needed.
       </>
     ),
-    content: ({ section, name }: InstallationProps) => (
-      <ComponentSource comp={`components/ui/${section}/${name}`} />
-    ),
+    content: ({ path }: { path: string }) => <ComponentSource comp={path} />,
   },
   {
     step: 4,
     title: "Import and use in your app",
     description:
       "Import the component wherever you need it and start using it in your UI. The component is fully compatible with MDX pages.",
-    content: ({ section, name }: InstallationProps) => (
+    content: ({ path, name }: { path: string; name: string }) => (
       <CodeBlock
         lang="tsx"
-        code={`import { ${kebabToPascal(name)} } from "@/components/ui/${section}/${name}";`}
+        code={`import { ${kebabToPascal(name)} } from "@/${path}";`}
       />
     ),
   },

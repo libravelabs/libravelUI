@@ -18,7 +18,7 @@ const themes = [
   { label: "System", value: "system", icon: Monitor },
 ] as const;
 
-export function AppearanceDropdown({
+export default function AppearanceDropdown({
   className,
   tone = "ghost",
   ...props

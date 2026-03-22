@@ -14,6 +14,7 @@ export function AutoTypeTable({
   const [types, setTypes] = React.useState<RegistryComponentDocs[] | null>(
     null,
   );
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const run = async () => {
@@ -22,29 +23,38 @@ export function AutoTypeTable({
         if (name) {
           slug = name;
         } else if (comp) {
-          const basename = comp.split("/").pop();
-          slug = basename ? basename.replace(/\.tsx$/, "") : "";
+          slug = comp.replace(/^@\//, "").replace(/\.tsx$/, "");
         }
 
         if (!slug) return;
 
+        setError(null);
         const res = await fetch(`/api/source/${slug}`);
-        if (!res.ok) return;
+        if (!res.ok) {
+          setError(`Component not found or API error (${res.status})`);
+          return;
+        }
 
         const json = await res.json();
         if (json.docs) {
           setTypes(json.docs);
+        } else {
+          setTypes([]);
         }
-      } catch {
-        //
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Unknown error");
       }
     };
     run();
   }, [comp, name]);
 
+  if (error) {
+    return <p className="text-destructive text-sm italic">{error}</p>;
+  }
+
   if (!types) return <p className="text-muted-foreground">Loading types…</p>;
 
-  if (types.length === 0) return null;
+  if (types.length === 0) return <p className="text-muted-foreground text-sm italic">No props documented for this component.</p>;
 
   return (
     <div className="flex flex-col gap-8">

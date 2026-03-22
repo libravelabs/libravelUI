@@ -38,7 +38,9 @@ export interface DemoComponent<T> extends React.FC<T> {
 }
 
 export interface PlaygroundProps {
-  comp: string;
-  section?: string;
-  Component: React.ComponentType;
+  path?: string | string[];
+  Component?: React.ComponentType<any>;
+  orientation?: "horizontal" | "vertical";
+  controls?: ControlsMap;
+  template?: (props: string, children: string | null) => string;
 }

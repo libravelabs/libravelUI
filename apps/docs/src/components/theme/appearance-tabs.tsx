@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { motion, LayoutGroup } from "motion/react";
 import { type HTMLAttributes } from "react";
 
-export function AppearanceTab({
+export default function AppearanceTab({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) {

@@ -137,7 +137,7 @@ function extractFunctionSignature(code: string) {
 
 function buildFromControls(
   values: Record<string, PlaygroundValue>,
-  controls: ControlsMap,
+  controls: ControlsMap = {},
 ): GeneratedResult {
   const imports = new Set<string>();
   const props: string[] = [];
@@ -225,7 +225,8 @@ ${functionSignature}() {
 export function playgroundParser(
   code: string,
   values: Record<string, PlaygroundValue>,
-  controls: ControlsMap,
+  controls: ControlsMap = {},
+  pathArg?: string,
   template?: (
     props: string,
     children: string | null,
@@ -233,6 +234,12 @@ export function playgroundParser(
   ) => string,
 ) {
   if (!code) return "";
+
+  const hasControls = Object.keys(controls).length > 0;
+
+  if (!hasControls && !template) {
+    return format(code);
+  }
 
   const baseImports = extractImports(code);
   const tag = extractJSXTag(code);
@@ -259,6 +266,18 @@ export function playgroundParser(
       if (imp.includes(comp)) {
         usedImports.add(imp);
         break;
+      }
+    }
+  }
+
+  if (pathArg && tag && !Array.from(usedImports).some((i) => i.includes(tag))) {
+    if (!pathArg.includes(".demo")) {
+      const importPath = `@/${pathArg}`;
+      const isDefault = /export\s+default\s+/.test(code);
+      if (isDefault) {
+        usedImports.add(`import ${tag} from "${importPath}";`);
+      } else {
+        usedImports.add(`import { ${tag} } from "${importPath}";`);
       }
     }
   }
