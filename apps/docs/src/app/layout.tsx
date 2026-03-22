@@ -24,6 +24,7 @@ export const metadata = meta.page({
     "LibravelUI is a React component library for building beautiful and accessible user interfaces.",
   canonicalUrl: process.env.NEXT_PUBLIC_APP_URL,
 });
+
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html

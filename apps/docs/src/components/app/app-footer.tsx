@@ -15,11 +15,7 @@ const navigation = {
     { name: "Landing Page", href: "/" },
     { name: "Portfolio", href: "/" },
   ],
-  labs: [
-    { name: "GitHub", href: app.links.github },
-    { name: "X / Twitter", href: app.links.twitter },
-    { name: "Discord", href: app.links.discord },
-  ],
+  labs: [{ name: "GitHub", href: app.links.github }],
   starterKits: [
     { name: "Next.js", href: "/docs/starter-kits/nextjs" },
     { name: "Vite", href: "/docs/starter-kits/vite" },

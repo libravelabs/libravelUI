@@ -4,14 +4,14 @@ export const app = {
   description:
     "Accessible React component library to copy, customize, and own your UI. Built for Next.js, Vite, and Laravel.",
   author: {
-    username: "libravelabs",
-    name: "libravelabs",
-    url: "https://github.com/libravelabs",
+    username: "dervyon",
+    name: "dervyon",
+    url: "https://github.com/dervyon",
   },
   links: {
-    twitter: "https://x.com/libravelabs",
+    twitter: "",
     github: "https://github.com/libravelabs/libravelUI",
-    discord: "https://discord.gg/libravelabs",
+    discord: "",
   },
   repo: {
     url: "https://github.com/libravelabs/libravelUI",
