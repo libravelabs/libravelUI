@@ -40,13 +40,20 @@ export function AppFooter() {
             <div className="mt-4 space-y-3 text-sm text-muted-foreground leading-relaxed">
               <p>{app.description}</p>
               <p>
-                Crafted by {app.author.name}. Peep the Source Code on{" "}
-                <a
+                Crafted by{" "}
+                <Link
                   href={app.author.url}
                   className="text-foreground hover:underline"
                 >
+                  {app.author.name}
+                </Link>
+                . Peep the Source Code on{" "}
+                <Link
+                  href={app.repo.url}
+                  className="text-foreground hover:underline"
+                >
                   GitHub
-                </a>
+                </Link>
                 .
               </p>
               <p>
@@ -121,14 +128,14 @@ export function AppFooter() {
               <ul className="space-y-3 text-sm">
                 {navigation.labs.map((item) => (
                   <li key={item.name}>
-                    <a
+                    <Link
                       href={item.href}
                       target="_blank"
                       rel="noreferrer"
                       className="text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

@@ -104,9 +104,13 @@ export async function generateMetadata(props: {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  const appUrl = (
+    process.env.NEXT_PUBLIC_APP_URL || "https://ui.libravelabs.com"
+  ).replace(/\/$/, "");
+
   return meta.docs({
     title: page.data.title,
     description: page.data.description,
-    canonicalUrl: `${process.env.NEXT_PUBLIC_APP_URL}${page.slugs.join("/")}`,
+    canonicalUrl: `${appUrl}${page.url}`,
   });
 }
