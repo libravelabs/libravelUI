@@ -69,7 +69,7 @@ const tabsVariants = cva("group relative flex w-full", {
 });
 
 const tabListVariants = cva(
-  "flex shrink-0 w-fit max-w-full overflow-x-auto scrollbar-hidden",
+  "flex shrink-0 w-fit! max-w-full overflow-x-auto scrollbar-hidden",
   {
     variants: {
       orientation: {
@@ -381,6 +381,7 @@ function TabContent({
     >
       {(values) => (
         <motion.div
+          className="h-full"
           initial={{
             opacity: 0,
             filter: "blur(4px)",

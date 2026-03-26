@@ -6,7 +6,7 @@ export default function Layout({ children }: LayoutProps<"/">) {
   return (
     <HomeLayout {...baseOptions()}>
       <BlocksHeader />
-      <div className="p-8">{children}</div>
+      <div className="p-8 px-20">{children}</div>
     </HomeLayout>
   );
 }

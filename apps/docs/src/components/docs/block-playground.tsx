@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { cn } from "@/lib/utils";
 import {
   Monitor,
   Tablet,
@@ -16,6 +15,9 @@ import {
 } from "@/components/ui/motion/animated-toggle-group";
 import { Separator } from "../ui/core/separator";
 import { Mockup, MockupFrame } from "../ui/block/mockup";
+import { Heading } from "../ui/core/heading";
+import { TabContent, TabList, Tabs, TabTrigger } from "../ui/core/tabs";
+import { PackageInstall } from "./package-install";
 
 interface BlockPlaygroundProps extends React.HTMLAttributes<HTMLDivElement> {
   src: string;
@@ -31,10 +33,40 @@ const VIEWPORT_WIDTHS: Record<Viewport, number> = {
   mobile: 375,
 };
 
-export function BlockPlayground({
+export function BlockPlayground({ title, src }: BlockPlaygroundProps) {
+  return (
+    <div className="grid gap-4 w-full h-full">
+      <Tabs width="full">
+        <div className="flex items-center justify-between">
+          {title && <Heading level={4}>{title}</Heading>}
+          <div className="flex items-center gap-4">
+            <PackageInstall
+              command="add"
+              packageName="block/navbar-01"
+              showHeader={false}
+            />
+
+            <Separator orientation="vertical" className="h-10" />
+
+            <TabList size="sm" className="p-0.5">
+              <TabTrigger id="preview" className="h-8" radius="lg">
+                Preview
+              </TabTrigger>
+              <TabTrigger id="code" className="h-8" radius="lg">
+                Code
+              </TabTrigger>
+            </TabList>
+          </div>
+        </div>
+        <BlockPreview src={src} />
+      </Tabs>
+    </div>
+  );
+}
+
+export function BlockPreview({
   src,
   className,
-  title = "Block Preview",
   defaultHeight = 600,
   ...props
 }: BlockPlaygroundProps) {
@@ -75,26 +107,29 @@ export function BlockPlayground({
                 {vp === "mobile" && <Smartphone />}
               </AnimatedToggleItem>
             ))}
-          </AnimatedToggleGroup>
 
-          <Separator orientation="vertical" className="h-8 mx-1" />
+            <Separator orientation="vertical" className="h-4" />
 
-          <ButtonGroup>
             <Button
-              tone="outline"
+              size="xs"
+              tone="ghost"
               iconOnly
               onClick={() => setRefreshKey((k) => k + 1)}
             >
               <RotateCcw />
             </Button>
+
+            <Separator orientation="vertical" className="h-4" />
+
             <Button
-              tone="outline"
+              size="xs"
+              tone="ghost"
               iconOnly
               onClick={() => window.open(src, "_blank")}
             >
               <Maximize2 />
             </Button>
-          </ButtonGroup>
+          </AnimatedToggleGroup>
         </div>
       }
       {...props}
@@ -114,17 +149,18 @@ export function BlockPlayground({
         }}
         className="w-full transition-all duration-300 ease-in-out"
       >
-        <iframe
-          key={refreshKey}
-          src={src}
-          title={title}
-          style={{
-            display: "block",
-            border: "none",
-            width: "100%",
-            height: "100%",
-          }}
-        />
+        <TabContent id="preview" className="p-0">
+          <iframe
+            key={refreshKey}
+            src={src}
+            style={{
+              display: "block",
+              border: "none",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </TabContent>
       </div>
     </Mockup>
   );

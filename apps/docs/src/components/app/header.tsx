@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 
 export function Header({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={cn("pt-14 pb-6", className)}>
-      <div className="mx-auto px-8">{props.children}</div>
+    <div className={cn("pt-14 pb-6 px-8 mx-auto", className)}>
+      {props.children}
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { twJoin } from "tailwind-merge";
 import {
   Header,
   HeaderDescription,
@@ -9,11 +8,12 @@ import {
   HeaderTitle,
 } from "@/components/app/header";
 import { Link, type LinkProps } from "@/components/ui/core/link";
+import { cn } from "@/lib/utils";
 
 export function BlocksHeader() {
   return (
     <div>
-      <Header>
+      <Header className="px-20">
         <HeaderInner>
           <HeaderTitle>Blocks</HeaderTitle>
           <HeaderDescription className="mb-6">
@@ -22,8 +22,8 @@ export function BlocksHeader() {
           </HeaderDescription>
         </HeaderInner>
       </Header>
-      <div className="border-y bg-popover px-8">
-        <div className="flex items-center justify-center gap-x-2 sm:justify-start">
+      <div className="border-y bg-popover px-20">
+        <div className="flex items-center justify-center gap-5 sm:justify-start">
           <NavLink href="/blocks">Featured</NavLink>
           <NavLink href="/blocks/sidebar">Sidebar</NavLink>
           <NavLink href="/blocks/navbar">Navbar</NavLink>
@@ -40,8 +40,8 @@ function NavLink(props: LinkProps) {
 
   return (
     <Link
-      className={twJoin(
-        "inline-flex items-center gap-x-2.5 px-2 py-3 text-sm/6 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0",
+      className={cn(
+        "inline-flex items-center py-3 text-sm/6 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0",
         "text-muted-foreground hover:text-foreground",
         pathname === props.href ? "text-foreground" : "text-muted-foreground",
       )}

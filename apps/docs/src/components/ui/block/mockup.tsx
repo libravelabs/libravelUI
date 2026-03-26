@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const mockupVariants = cva(
-  "group relative flex flex-col rounded-xl border border-border bg-background shadow-sm transition-all duration-300 w-full",
+  "group relative flex flex-col rounded-xl border border-border bg-muted shadow-sm transition-all duration-300 w-full",
   {
     variants: {
       type: {
