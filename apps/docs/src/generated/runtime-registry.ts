@@ -5,6 +5,48 @@ export const runtimeRegistry = {
     Component: dynamic(() => import("@/components/app/search/search")),
     module: () => import("@/components/app/search/search")
   },
+"components/examples/block/navbar/navbar-default": {
+    Component: dynamic(() => import("@/components/examples/block/navbar/navbar-default")),
+    module: () => import("@/components/examples/block/navbar/navbar-default"),
+    name: "Navbar",
+    url: "/docs/components/block/navbar",
+    section: "block"
+  },
+"components/examples/block/navbar/navbar-drawer-right": {
+    Component: dynamic(() => import("@/components/examples/block/navbar/navbar-drawer-right")),
+    module: () => import("@/components/examples/block/navbar/navbar-drawer-right"),
+    name: "Navbar",
+    url: "/docs/components/block/navbar",
+    section: "block"
+  },
+"components/examples/block/navbar/navbar-float": {
+    Component: dynamic(() => import("@/components/examples/block/navbar/navbar-float")),
+    module: () => import("@/components/examples/block/navbar/navbar-float"),
+    name: "Navbar",
+    url: "/docs/components/block/navbar",
+    section: "block"
+  },
+"components/examples/block/navbar/navbar-inset": {
+    Component: dynamic(() => import("@/components/examples/block/navbar/navbar-inset")),
+    module: () => import("@/components/examples/block/navbar/navbar-inset"),
+    name: "Navbar",
+    url: "/docs/components/block/navbar",
+    section: "block"
+  },
+"components/examples/block/navbar/navbar-placement-bottom": {
+    Component: dynamic(() => import("@/components/examples/block/navbar/navbar-placement-bottom")),
+    module: () => import("@/components/examples/block/navbar/navbar-placement-bottom"),
+    name: "Navbar",
+    url: "/docs/components/block/navbar",
+    section: "block"
+  },
+"components/examples/block/navbar/navbar-sticky": {
+    Component: dynamic(() => import("@/components/examples/block/navbar/navbar-sticky")),
+    module: () => import("@/components/examples/block/navbar/navbar-sticky"),
+    name: "Navbar",
+    url: "/docs/components/block/navbar",
+    section: "block"
+  },
 "components/examples/blocks/bento/basic-2": {
     Component: dynamic(() => import("@/components/examples/blocks/bento/basic-2")),
     module: () => import("@/components/examples/blocks/bento/basic-2"),

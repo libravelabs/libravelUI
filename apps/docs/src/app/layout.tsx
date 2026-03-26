@@ -1,12 +1,11 @@
-import "./global.css";
-import { RootProvider } from "fumadocs-ui/provider";
+import "@/styles/global.css";
 import type { ReactNode } from "react";
-import { Toast } from "@/components/ui/core/toast";
-import SearchDialog from "@/components/app/search/search";
-import { FloatingNav } from "@/components/app/floating-nav";
 import { ThemeInitializer } from "@/components/app/theme/theme-intializer";
-import { generateThemeScript } from "@/scripts/generate-theme";
+import { RootProvider } from "fumadocs-ui/provider";
+import SearchDialog from "@/components/app/search/search";
 import { TexturedBackground } from "@/components/app/textured-background";
+import { Toast } from "@/components/ui/core/toast";
+import { generateThemeScript } from "@/scripts/generate-theme";
 import {
   geist,
   geist_mono,
@@ -16,8 +15,8 @@ import {
   afacad_flux,
 } from "@/lib/fonts";
 import { meta } from "@/lib/metadata/index";
-import { AppFooter } from "@/components/app/app-footer";
 import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "next-themes";
 
 export const metadata = meta.page({
   description:
@@ -51,23 +50,23 @@ export default function Layout({ children }: { children: ReactNode }) {
             SearchDialog,
           }}
           theme={{
-            attribute: "class",
-            defaultTheme: "system",
-            enableSystem: true,
-            disableTransitionOnChange: true,
+            enabled: false,
           }}
         >
           <TexturedBackground>
             <ThemeInitializer />
-            <main className="flex flex-col min-h-screen scroll-smooth">
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Toast richColors />
               {children}
-            </main>
+              <Analytics />
+            </ThemeProvider>
           </TexturedBackground>
-          <FloatingNav />
-          <Toast richColors />
-          <AppFooter />
         </RootProvider>
-        <Analytics />
       </body>
     </html>
   );

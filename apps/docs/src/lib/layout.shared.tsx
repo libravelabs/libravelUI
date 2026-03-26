@@ -36,7 +36,7 @@ export function baseOptions(): BaseLayoutProps {
       },
       {
         icon: <Blocks />,
-        url: "/docs/blocks",
+        url: "/blocks",
         text: "Blocks",
       },
     ],
