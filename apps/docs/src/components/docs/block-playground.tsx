@@ -93,7 +93,6 @@ export function BlockPreview({
     <Mockup
       showHeader
       style={{ height: defaultHeight }}
-      title={new URL(src, process.env.NEXT_PUBLIC_APP_URL).toString()}
       headerAction={
         <div className="flex items-center gap-1.5 sm:gap-2">
           <AnimatedToggleGroup

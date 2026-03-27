@@ -152,6 +152,13 @@ function SidebarProvider({
   );
 }
 
+type SidebarProps = React.ComponentProps<"div"> &
+  React.ComponentProps<typeof DockContent> & {
+    side?: "left" | "right";
+    variant?: "sidebar" | "floating" | "inset";
+    collapsible?: "offcanvas" | "icon" | "none";
+  };
+
 function Sidebar({
   side = "left",
   variant = "sidebar",
@@ -159,12 +166,7 @@ function Sidebar({
   className,
   children,
   ...props
-}: React.ComponentProps<"div"> &
-  React.ComponentProps<typeof DockContent> & {
-    side?: "left" | "right";
-    variant?: "sidebar" | "floating" | "inset";
-    collapsible?: "offcanvas" | "icon" | "none";
-  }) {
+}: SidebarProps) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
   if (collapsible === "none") {
@@ -290,7 +292,6 @@ function SidebarRail({
       data-sidebar="rail"
       data-slot="sidebar-rail"
       aria-label="Toggle Sidebar"
-      tabIndex={-1}
       onClick={toggleSidebar}
       tone="unstyled"
       className={cn(

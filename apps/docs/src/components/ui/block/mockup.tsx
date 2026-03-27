@@ -50,9 +50,11 @@ function Mockup({
             <div className="size-3 rounded-full bg-green-400/80 dark:bg-green-500/80" />
           </div>
 
-          <div className="bg-input absolute left-1/2 inline-flex h-6 w-full max-w-52 -translate-x-1/2 items-center justify-center rounded-md text-sm truncate p-1 lg:max-w-96">
-            {title}
-          </div>
+          {title && (
+            <div className="bg-input absolute left-1/2 inline-flex h-6 w-full max-w-52 -translate-x-1/2 items-center justify-center rounded-md text-sm truncate p-1 lg:max-w-96">
+              {title}
+            </div>
+          )}
 
           {headerAction && headerAction}
         </div>

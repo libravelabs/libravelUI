@@ -11,9 +11,9 @@ export function proxy(request: NextRequest) {
     return maintenance;
   }
 
-  if (denyBlock) {
-    return denyBlock;
-  }
+  // if (denyBlock) {
+  //   return denyBlock;
+  // }
 
   return NextResponse.next();
 }

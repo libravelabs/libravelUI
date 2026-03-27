@@ -37,7 +37,7 @@ import { Avatar } from "@/components/ui/core/avatar";
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col overflow-x-hidden px-2 md:px-6 pt-20 relative">
+    <main className="flex min-h-screen flex-col overflow-x-hidden px-2 md:px-14 pt-20 relative">
       <HeroSection GRID={GRID} />
       <ShowcaseSection GRID={GRID} />
       <ComparisonSection />

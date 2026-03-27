@@ -44,7 +44,7 @@ export function PlaygroundSection() {
 
         <div className="mx-auto shadow-2xl shadow-primary/5 rounded-2xl overflow-hidden border backdrop-blur-sm">
           <Playground
-            comp="button/basic.demo"
+            path="components/examples/core/button/basic.demo.tsx"
             orientation={isMobile ? "vertical" : "horizontal"}
           />
         </div>
