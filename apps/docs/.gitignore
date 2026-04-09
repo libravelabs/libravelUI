@@ -44,3 +44,5 @@ junit.xml
 
 # OS
 Thumbs.db
+
+*.py
