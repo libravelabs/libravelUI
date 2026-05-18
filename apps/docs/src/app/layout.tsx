@@ -50,21 +50,17 @@ export default function Layout({ children }: { children: ReactNode }) {
             SearchDialog,
           }}
           theme={{
-            enabled: false,
+            attribute: "class",
+            defaultTheme: "system",
+            enableSystem: true,
+            disableTransitionOnChange: true,
           }}
         >
           <TexturedBackground>
             <ThemeInitializer />
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Toast richColors />
-              {children}
-              <Analytics />
-            </ThemeProvider>
+            <Toast richColors />
+            {children}
+            <Analytics />
           </TexturedBackground>
         </RootProvider>
       </body>

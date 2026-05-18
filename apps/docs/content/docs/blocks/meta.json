@@ -1,5 +1,7 @@
 {
   "title": "Blocks",
   "description": "Use pre-built layout blocks to quickly assemble complex and responsive page structures.",
-  "root": true
+  "root": true,
+  "icon": "Blocks",
+  "soon": true
 }

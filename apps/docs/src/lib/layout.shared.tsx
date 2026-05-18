@@ -1,8 +1,9 @@
 import { AppLogo } from "@/components/app/logo";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import { Blocks, Book, Component } from "lucide-react";
+import { Book, Component } from "lucide-react";
 import { SidebarTrigger } from "@/components/app/sidebar";
 import { SearchToggle } from "@/components/app/search/search-toggle";
+import { AnimatedTooltip } from "@/components/ui/motion/animated-tooltip";
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -35,9 +36,15 @@ export function baseOptions(): BaseLayoutProps {
         text: "Components",
       },
       {
-        icon: <Blocks />,
-        url: "/blocks",
-        text: "Blocks",
+        type: "custom",
+        children: (
+          <AnimatedTooltip
+            position="bottom"
+            trigger={<span className="text-sm opacity-40">Blocks</span>}
+          >
+            Coming Soon
+          </AnimatedTooltip>
+        ),
       },
     ],
   };

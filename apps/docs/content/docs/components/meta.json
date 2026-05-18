@@ -1,5 +1,7 @@
 {
   "title": "Components",
   "defaultOpen": true,
-  "description": "Browse and understand all reusable UI components available in libravelUI"
+  "root": true,
+  "description": "Browse and understand all reusable UI components available in libravelUI",
+  "icon": "Layers"
 }

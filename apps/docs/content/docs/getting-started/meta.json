@@ -1,4 +1,6 @@
 {
   "defaultOpen": true,
-  "description": "Learn how to install, configure, and start building with libravelUI"
+  "root": true,
+  "description": "Learn how to install, configure, and start building with libravelUI",
+  "icon": "Zap"
 }

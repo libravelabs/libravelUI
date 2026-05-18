@@ -10,7 +10,7 @@ export default function BasicHoverGlow() {
           duration: 0.1,
         }}
       />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-background flex flex-col items-center">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-card flex flex-col items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

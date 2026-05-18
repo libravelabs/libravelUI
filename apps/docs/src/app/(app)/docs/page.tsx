@@ -11,6 +11,7 @@ import {
 import { meta } from "@/lib/metadata/index";
 import { Badge } from "@/components/ui/core/badge";
 import { AnimatedCircleIndicator } from "@/components/ui/motion/animated-circle-indicator";
+import { cn } from "@/lib/utils";
 
 export const metadata = meta.page({
   title: "Docs",
@@ -43,25 +44,32 @@ export default function DocsPage() {
         </p>
         <div className="mt-8 mb-8 w-24 h-0.5 bg-linear-to-r from-transparent via-primary/50 to-transparent" />
         <div className="mt-8 grid [&>*:nth-last-child(1):nth-child(3n+1)]:lg:col-span-3 [&>*:nth-last-child(2):nth-child(3n+1)]:lg:col-span-1 [&>*:nth-last-child(1):nth-child(3n+2)]:lg:col-span-2 gap-4 text-start">
-          {sections.map((item) => (
-            <Link key={item.name as React.Key} href={`/docs/${item.$id}`}>
-              <Card variant="gradient" className="flex flex-col gap-2 h-full">
-                <CardHeader className="flex items-center gap-2 [&>*:first-child]:mb-0">
-                  {item.icon && (
-                    <span className="bg-foreground/10 p-1.5 rounded [&_svg]:size-4.5">
-                      {item.icon}
-                    </span>
-                  )}
-                  <CardTitle className="text-sm">{item.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    {item.type === "folder" && "page" && item.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+          {sections.map((item) => {
+            console.log(item);
+            return (
+              <Link
+                key={item.name as React.Key}
+                href={`/docs/${item.$id}`}
+                className={cn(item.soon && "pointer-events-none")}
+              >
+                <Card variant="gradient" className="flex flex-col gap-2 h-full">
+                  <CardHeader className="flex items-center gap-2 [&>*:first-child]:mb-0">
+                    {item.icon && (
+                      <span className="bg-foreground/10 p-1.5 rounded [&_svg]:size-4.5">
+                        {item.icon}
+                      </span>
+                    )}
+                    <CardTitle className="text-sm">{item.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription>
+                      {item.type !== "separator" && item.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </main>

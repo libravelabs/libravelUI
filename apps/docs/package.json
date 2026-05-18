@@ -20,6 +20,9 @@
     "release": "changeset publish"
   },
   "dependencies": {
+    "@react-aria/i18n": "^3.13.0",
+    "@react-stately/color": "^3.10.0",
+    "@react-stately/data": "^3.16.0",
     "@types/acorn": "^4.0.6",
     "@vercel/analytics": "^1.6.1",
     "acorn": "^8.16.0",
@@ -28,7 +31,7 @@
     "fumadocs-docgen": "^3.0.8",
     "fumadocs-mdx": "11.10.1",
     "fumadocs-typescript": "^4.0.14",
-    "fumadocs-ui": "15.7.13",
+    "fumadocs-ui": "15",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.544.0",
     "motion": "^12.34.3",
