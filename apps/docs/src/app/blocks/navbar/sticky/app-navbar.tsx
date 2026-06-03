@@ -1,5 +1,4 @@
 import {
-  NavbarProvider,
   Navbar,
   NavbarItem,
   NavbarSection,
@@ -10,12 +9,12 @@ import {
   NavbarStart,
   NavbarGap,
 } from "@/components/ui/block/navbar";
-import { Button } from "@/components/ui/core/button";
 import { Command } from "lucide-react";
+import { UserMenu } from "./user-menu";
 
-export default function NavbarDrawerRight() {
+export function AppNavbar() {
   return (
-    <NavbarProvider>
+    <>
       <NavbarMobile>
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
@@ -25,7 +24,7 @@ export default function NavbarDrawerRight() {
         <NavbarTrigger />
       </NavbarMobile>
 
-      <NavbarDrawer side="right">
+      <NavbarDrawer>
         <NavbarSection>
           <NavbarItem href="#">Overview</NavbarItem>
           <NavbarItem href="#">Customers</NavbarItem>
@@ -34,7 +33,7 @@ export default function NavbarDrawerRight() {
         </NavbarSection>
       </NavbarDrawer>
 
-      <Navbar>
+      <Navbar isSticky>
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
           <span className="font-semibold text-sm">Acme</span>
@@ -50,10 +49,9 @@ export default function NavbarDrawerRight() {
         </NavbarSection>
         <NavbarSpacer />
         <NavbarSection>
-          <Button tone="ghost">Log In</Button>
-          <Button>Sign Up</Button>
+          <UserMenu />
         </NavbarSection>
       </Navbar>
-    </NavbarProvider>
+    </>
   );
 }

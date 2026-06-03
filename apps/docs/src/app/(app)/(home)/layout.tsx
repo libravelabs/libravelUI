@@ -3,7 +3,7 @@ import { baseOptions } from "@/lib/layout.shared";
 
 export default function Layout({ children }: LayoutProps<"/">) {
   return (
-    <HomeLayout {...baseOptions()} className="px-4">
+    <HomeLayout {...baseOptions()} className="px-4 [&_nav]:px-10">
       {children}
     </HomeLayout>
   );

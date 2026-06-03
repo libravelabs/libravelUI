@@ -286,8 +286,8 @@
     }
   },
   {
-    "name": "default",
-    "label": "Default",
+    "name": "libravel",
+    "label": "libravel",
     "radius": "0.5rem",
     "fontUrl": [
       "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque&display=swap",

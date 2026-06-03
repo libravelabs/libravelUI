@@ -1,22 +1,29 @@
-export interface SourceFile {
-  name: string;
-  content: string;
+export type RegistryFile = {
   path: string;
-  code?: string;
-}
+  code: string;
+};
 
-export interface SourceResponse {
-  files: SourceFile[];
-  error?: string;
-}
+export type RegistryEntry = {
+  name: string;
+  type: "registry:file" | "registry:block";
+  docs: unknown[];
+  files: RegistryFile[];
+  preview?: string;
+  previewEntry?: string;
+};
 
-export async function fetchSource(key: string): Promise<SourceResponse | null> {
+export async function fetchSource(key: string): Promise<RegistryEntry | null> {
   try {
-    const res = await fetch(`/api/source/${key}`);
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (err) {
-    console.error("Error fetching source:", err);
+    const response = await fetch(`/api/source/${key}`);
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+
     return null;
   }
 }

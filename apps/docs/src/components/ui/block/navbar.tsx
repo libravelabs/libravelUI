@@ -212,8 +212,7 @@ const Navbar = ({
         "peer/navbar",
         navbarSurfaceStyle({
           variant,
-          sticky:
-            variant === "inset" || variant === "default" ? true : isSticky,
+          sticky: variant === "inset" ? true : isSticky,
           placement,
           breakpoint,
         }),

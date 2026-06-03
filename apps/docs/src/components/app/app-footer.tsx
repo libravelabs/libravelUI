@@ -31,7 +31,7 @@ export function AppFooter() {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="container mx-auto px-6 py-12 max-w-6xl">
+      <div className="p-12 max-w-6xl">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-[20rem_auto] lg:grid-cols-[18rem_auto] xl:grid-cols-[20rem_auto] lg:gap-10 xl:gap-24">
           <div>
             <Link href="/" className="flex items-center w-fit">

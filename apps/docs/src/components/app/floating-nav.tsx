@@ -106,7 +106,7 @@ export function FloatingNav() {
           className={cn(
             basePositionClass,
             "-bottom-1",
-            "flex w-14 h-7 items-center justify-center rounded-md bg-sidebar text-sidebar-foreground border shadow-xl",
+            "flex w-14 h-7 items-center justify-center rounded-t-md bg-sidebar text-sidebar-foreground border shadow-xl",
           )}
           onClick={showNav}
           onMouseEnter={showNav}

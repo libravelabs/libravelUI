@@ -1,5 +1,4 @@
 import {
-  NavbarProvider,
   Navbar,
   NavbarItem,
   NavbarSection,
@@ -9,15 +8,15 @@ import {
   NavbarDrawer,
   NavbarStart,
   NavbarGap,
-  NavbarInset,
 } from "@/components/ui/block/navbar";
 import { Button } from "@/components/ui/core/button";
 import { Command } from "lucide-react";
+import { UserMenu } from "./user-menu";
 
-export default function NavbarPlacementBottom() {
+export function AppNavbar() {
   return (
-    <NavbarProvider>
-      <NavbarMobile className="order-last">
+    <>
+      <NavbarMobile>
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
           <span className="font-semibold text-sm">Acme</span>
@@ -35,13 +34,7 @@ export default function NavbarPlacementBottom() {
         </NavbarSection>
       </NavbarDrawer>
 
-      <NavbarInset>
-        <div className="h-[300px] border-2 border-dashed border-muted m-4 rounded-lg flex items-center justify-center">
-          <span className="text-muted-foreground">Main Content Above Navbar</span>
-        </div>
-      </NavbarInset>
-      
-      <Navbar placement="bottom">
+      <Navbar className="p-2">
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
           <span className="font-semibold text-sm">Acme</span>
@@ -57,10 +50,9 @@ export default function NavbarPlacementBottom() {
         </NavbarSection>
         <NavbarSpacer />
         <NavbarSection>
-          <Button tone="ghost">Log In</Button>
-          <Button>Sign Up</Button>
+          <UserMenu />
         </NavbarSection>
       </Navbar>
-    </NavbarProvider>
+    </>
   );
 }

@@ -4,7 +4,7 @@ type PreviewLoader = () => Promise<ComponentType>;
 
 export const previewComponents: Record<string, PreviewLoader> = {
   "navbar-default": () =>
-    import("@/components/examples/block/navbar/navbar-default").then(
+    import("@/app/blocks/navbar/default/app-navbar").then(
       (m) => m.NavbarDefault,
     ),
 };

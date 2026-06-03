@@ -13,10 +13,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       links={[]}
       tree={source.pageTree}
       containerProps={{
-        className: "md:!flex-row md:!pl-0 md:!w-full md:!mx-0",
+        className: "md:!flex-row md:!pl-0 md:!pl-0 md:!w-full md:!mx-0",
       }}
       sidebar={{
-        collapsible: false,
         className:
           "md:!sticky md:!top-0 md:!h-screen md:!shrink-0 md:!overflow-y-auto !bg-background",
       }}

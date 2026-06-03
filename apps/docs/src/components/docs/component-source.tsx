@@ -1,7 +1,7 @@
 "use client";
 
 import { TStoJSCodeBlock } from "./ts2js-code-block";
-import { useComponentSource } from "@/hooks/use-component-source";
+import { useComponentCode } from "@/hooks/use-component-source";
 
 export function ComponentSource({
   comp,
@@ -14,7 +14,7 @@ export function ComponentSource({
 > & {
   comp: string;
 }) {
-  const { code, loading } = useComponentSource(comp);
+  const { code, loading } = useComponentCode(comp);
 
   return (
     <TStoJSCodeBlock

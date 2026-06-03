@@ -279,9 +279,9 @@
       "https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
     ]
   },
-  "default": {
-    "name": "default",
-    "label": "Default",
+  "libravel": {
+    "name": "libravel",
+    "label": "libravel",
     "radius": "0.5rem",
     "light": {
       "--background": "oklch(0.98 0.002 240)",

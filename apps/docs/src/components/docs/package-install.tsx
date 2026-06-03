@@ -9,6 +9,7 @@ import {
 import { Check, Clipboard } from "lucide-react";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { cn } from "@/lib/utils";
+import { app } from "@/config/app";
 
 type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
@@ -25,12 +26,14 @@ type PackageInstallProps = {
   title?: string;
   className?: string;
   showHeader?: boolean;
+  prefix?: string;
 };
 
 export function PackageInstall({
   packageName,
   command = "install",
   title,
+  prefix = "$",
   className,
   showHeader = true,
 }: PackageInstallProps) {
@@ -40,10 +43,10 @@ export function PackageInstall({
   const cliCommands: Record<PackageManager, string> =
     command === "add"
       ? {
-          npm: `npx libravelui@latest add ${packageName}`,
-          pnpm: `pnpm dlx libravelui@latest add ${packageName}`,
-          yarn: `yarn dlx libravelui@latest add ${packageName}`,
-          bun: `bunx libravelui@latest add ${packageName}`,
+          npm: `npx ${app.cliCommand} add ${packageName}`,
+          pnpm: `pnpm dlx ${app.cliCommand} add ${packageName}`,
+          yarn: `yarn dlx ${app.cliCommand} add ${packageName}`,
+          bun: `bunx ${app.cliCommand} add ${packageName}`,
         }
       : {
           npm: `npm install ${packageName}`,
@@ -61,7 +64,7 @@ export function PackageInstall({
       {showHeader && (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between sm:gap-3 w-full">
           {title && <span className="text-sm font-medium">{title}</span>}
-          <div className="overflow-x-auto [scrollbar-width:none]">
+          <div className="overflow-x-auto scrollbar-none">
             <AnimatedToggleGroup
               value={manager}
               onValueChange={(val) => setManager(val as PackageManager)}
@@ -97,11 +100,13 @@ export function PackageInstall({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="flex items-center gap-2 bg-linear-to-tr from-background/95 via-background/80 to-background/60 px-3 pr-10 py-2.5 text-xs font-mono text-foreground/90 [scrollbar-width:none]"
+            className="flex items-center gap-2 bg-linear-to-tr from-background/95 via-background/80 to-background/60 px-3 pr-10 py-2.5 text-xs font-mono text-foreground/90 scrollbar-none"
           >
-            <span className="select-none text-muted-foreground/80 shrink-0">
-              $
-            </span>
+            {prefix && (
+              <span className="select-none text-muted-foreground/80 shrink-0">
+                {prefix}
+              </span>
+            )}
             <code className="min-w-0 overflow-x-auto scrollbar-hidden whitespace-nowrap">
               {cliCommands[manager]}
             </code>

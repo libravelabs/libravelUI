@@ -221,7 +221,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {
       {circleGradient && (
         <div
           className={cn(
-            "absolute -left-20 -top-20 w-[420px] h-[420px] rounded-full bg-linear-to-tr blur-3xl pointer-events-none",
+            "absolute -left-20 -top-20 size-105 rounded-full bg-linear-to-tr blur-3xl pointer-events-none",
             (tone === "neutral" || tone === "primary") &&
               "from-primary/70 to-primary-65 dark:from-primary/20 dark:to-primary/6",
             tone === "destructive" &&

@@ -20,12 +20,12 @@ export const app = {
   },
   cli: {
     version: "latest",
-    command: "libravelui@latest",
+    command: "libravelui",
   },
   get cliCommand() {
     return `${this.cli.command}@${this.cli.version}`;
   },
-  libravel: "npx libravelui@latest",
+  libravel: "npx libravelui",
   editorThemes: {
     light: "github-light",
     dark: "github-dark",

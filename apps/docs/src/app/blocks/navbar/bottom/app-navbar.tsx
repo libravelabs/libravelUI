@@ -1,5 +1,4 @@
 import {
-  NavbarProvider,
   Navbar,
   NavbarItem,
   NavbarSection,
@@ -11,13 +10,13 @@ import {
   NavbarGap,
   NavbarInset,
 } from "@/components/ui/block/navbar";
-import { Button } from "@/components/ui/core/button";
 import { Command } from "lucide-react";
+import { UserMenu } from "./user-menu";
 
-export default function NavbarSticky() {
+export function AppNavbar() {
   return (
-    <NavbarProvider>
-      <NavbarMobile>
+    <>
+      <NavbarMobile className="order-last">
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
           <span className="font-semibold text-sm">Acme</span>
@@ -35,7 +34,7 @@ export default function NavbarSticky() {
         </NavbarSection>
       </NavbarDrawer>
 
-      <Navbar isSticky>
+      <Navbar placement="bottom" variant="inset">
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
           <span className="font-semibold text-sm">Acme</span>
@@ -51,19 +50,9 @@ export default function NavbarSticky() {
         </NavbarSection>
         <NavbarSpacer />
         <NavbarSection>
-          <Button tone="ghost">Log In</Button>
-          <Button>Sign Up</Button>
+          <UserMenu />
         </NavbarSection>
       </Navbar>
-      <NavbarInset>
-        <div className="p-4">
-          <div className="h-[800px] border-2 border-dashed border-muted rounded-lg flex items-center justify-center bg-muted/20">
-            <span className="text-muted-foreground">
-              Scroll to see sticky effect
-            </span>
-          </div>
-        </div>
-      </NavbarInset>
-    </NavbarProvider>
+    </>
   );
 }

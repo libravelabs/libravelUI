@@ -1,6 +1,5 @@
 import { AppLogo } from "@/components/app/logo";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import { Book, Component } from "lucide-react";
 import { SidebarTrigger } from "@/components/app/sidebar";
 import { SearchToggle } from "@/components/app/search/search-toggle";
 import { AnimatedTooltip } from "@/components/ui/motion/animated-tooltip";
@@ -26,12 +25,10 @@ export function baseOptions(): BaseLayoutProps {
     },
     links: [
       {
-        icon: <Book />,
         url: "/docs",
         text: "Docs",
       },
       {
-        icon: <Component />,
         url: "/docs/components",
         text: "Components",
       },

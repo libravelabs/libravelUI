@@ -10,7 +10,7 @@ import { Skeleton, SkeletonText } from "@/components/ui/core/skeleton";
 import { Button, ButtonGroup } from "@/components/ui/core/button";
 import { LayoutPanelLeft, RefreshCw, Check, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useComponentSource } from "@/hooks/use-component-source";
+import { useComponentCode } from "@/hooks/use-component-source";
 import { playgroundParser } from "./playground-parser";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -189,7 +189,7 @@ function PlaygroundContent({
     refresh,
     controls: contextControls,
   } = usePlayground();
-  const { code: sourceCode, loading } = useComponentSource(resolvedPath);
+  const { code: sourceCode, loading } = useComponentCode(resolvedPath);
   const isMobile = useIsMobile();
 
   const registryEntry =

@@ -1,5 +1,4 @@
 import {
-  NavbarProvider,
   Navbar,
   NavbarItem,
   NavbarSection,
@@ -11,12 +10,12 @@ import {
   NavbarGap,
   NavbarInset,
 } from "@/components/ui/block/navbar";
-import { Button } from "@/components/ui/core/button";
 import { Command } from "lucide-react";
+import { UserMenu } from "./user-menu";
 
-export default function NavbarFloat() {
+export function AppNavbar() {
   return (
-    <NavbarProvider>
+    <>
       <NavbarMobile>
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
@@ -35,7 +34,7 @@ export default function NavbarFloat() {
         </NavbarSection>
       </NavbarDrawer>
 
-      <Navbar variant="float">
+      <Navbar variant="inset">
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
           <span className="font-semibold text-sm">Acme</span>
@@ -51,15 +50,9 @@ export default function NavbarFloat() {
         </NavbarSection>
         <NavbarSpacer />
         <NavbarSection>
-          <Button tone="ghost">Log In</Button>
-          <Button>Sign Up</Button>
+          <UserMenu />
         </NavbarSection>
       </Navbar>
-      <NavbarInset>
-        <div className="p-4 rounded-xl mx-4 my-2 border bg-muted/20 h-[300px] flex items-center justify-center">
-            <span className="text-muted-foreground">Main Content Container</span>
-        </div>
-      </NavbarInset>
-    </NavbarProvider>
+    </>
   );
 }

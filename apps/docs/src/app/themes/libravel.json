@@ -1,6 +1,6 @@
 {
-  "name": "default",
-  "label": "Default",
+  "name": "libravel",
+  "label": "libravel",
   "radius": "0.5rem",
   "light": {
     "--background": "oklch(0.98 0.002 240)",

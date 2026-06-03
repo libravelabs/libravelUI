@@ -1,0 +1,13 @@
+{
+  "navbar": {
+    "title": "Navbar",
+    "description": "Ready-to-use navigation bar blocks with multiple variants for different layouts, links, and responsive app navigation.",
+    "variants": ["default", "float", "sticky", "inset", "bottom"]
+  },
+
+  "auth": {
+    "title": "Authentication",
+    "description": "Authentication flows.",
+    "variants": ["simple", "card", "card-image", "split"]
+  }
+}
