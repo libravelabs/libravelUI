@@ -7,7 +7,13 @@
 
   "auth": {
     "title": "Authentication",
-    "description": "Authentication flows.",
+    "description": "Beautifully designed authentication layouts and form blocks tailored for seamless login, signup, and auth experiences.",
     "variants": ["simple", "card", "card-image", "split"]
+  },
+
+  "sidebar": {
+    "title": "Sidebar",
+    "description": "Versatile vertical navigation panels with support for collapsible menus, nested links, and responsive mobile behaviors.",
+    "variants": ["default", "float", "inset"]
   }
 }

@@ -811,9 +811,15 @@
         "displayName": "Sandbox",
         "description": "",
         "props": {
-          "src": {
-            "type": "string",
+          "comp": {
+            "type": "BlockVariant",
             "required": true,
+            "description": "",
+            "defaultValue": null
+          },
+          "number": {
+            "type": "number",
+            "required": false,
             "description": "",
             "defaultValue": null
           },
@@ -829,7 +835,7 @@
     "files": [
       {
         "path": "components/app/sandbox/sandbox.tsx",
-        "code": "\"use client\";\n\nimport { useState } from \"react\";\nimport { Heading } from \"@/components/ui/core/heading\";\nimport { Separator } from \"@/components/ui/core/separator\";\nimport {\n  Tabs,\n  TabList,\n  TabTrigger,\n  TabContent,\n} from \"@/components/ui/core/tabs\";\nimport SandboxToolbar from \"./toolbar\";\nimport { PackageInstall } from \"@/components/docs/package-install\";\nimport { cn } from \"@/lib/utils\";\nimport { motion, type HTMLMotionProps } from \"motion/react\";\nimport type { Key } from \"react-aria-components\";\nimport { useComponentEntry } from \"@/hooks/use-component-source\";\nimport { CodeBlock } from \"@/components/docs/code-block\";\n\nexport type ToolbarDevice = \"desktop\" | \"tablet\" | \"mobile\";\n\nconst deviceWidth = {\n  desktop: \"100%\",\n  tablet: 768,\n  mobile: 390,\n} satisfies Record<ToolbarDevice, string | number>;\n\nexport function Sandbox({\n  src: rawSrc,\n  ...iframe\n}: {\n  src: string;\n  iframe?: HTMLMotionProps<\"iframe\">;\n}) {\n  const src = `/${rawSrc}`;\n  const { entry, loading } = useComponentEntry(src);\n  const [key, setKey] = useState<number>(0);\n  const [tab, setTab] = useState<Key>(\"preview\");\n  const [device, setDevice] = useState<ToolbarDevice>(\"desktop\");\n\n  function handleRefresh() {\n    return setKey(key + 1);\n  }\n\n  return (\n    <Tabs width=\"full\" selectedKey={tab} onSelectionChange={setTab}>\n      <div className=\"flex w-full justify-between\">\n        <div className=\"flex items-center justify-between lg:justify-start w-full gap-4\">\n          <Heading level={4} className=\"block lg:hidden capitalize\">\n            {entry?.name}\n          </Heading>\n\n          <TabList className=\"h-9 p-1 *:h-6\">\n            <TabTrigger id=\"preview\">Preview</TabTrigger>\n            <TabTrigger id=\"code\">Code</TabTrigger>\n            <TabTrigger href=\"\" target=\"_blank\" className=\"lg:hidden\">\n              Fullscreen\n            </TabTrigger>\n          </TabList>\n\n          <div className=\"hidden lg:flex items-center gap-4 h-full\">\n            <Separator orientation=\"vertical\" />\n\n            <Heading level={4} className=\"capitalize\">\n              {entry?.name}\n            </Heading>\n          </div>\n        </div>\n\n        <div className=\"hidden lg:flex gap-4 items-center\">\n          <SandboxToolbar\n            href={src as string}\n            device={device}\n            setDevice={setDevice}\n            isDisabled={tab === \"code\"}\n            onRefresh={handleRefresh}\n          />\n\n          <Separator orientation=\"vertical\" />\n\n          <PackageInstall\n            command=\"add\"\n            packageName={rawSrc}\n            showHeader={false}\n          />\n        </div>\n      </div>\n\n      <div key={key}>\n        <TabContent id=\"preview\" className=\"p-0 border-0\">\n          <div className=\"bg-dots\">\n            <motion.iframe\n              animate={{\n                width: deviceWidth[device],\n              }}\n              transition={{\n                type: \"spring\",\n                stiffness: 200,\n                damping: 24,\n              }}\n              className=\"aspect-video rounded-lg border h-96 md:h-auto md:min-h-160\"\n              src={src}\n              {...iframe}\n            />\n          </div>\n        </TabContent>\n        <TabContent id=\"code\" className=\"p-0\">\n          <Tabs\n            orientation=\"vertical\"\n            width=\"full\"\n            radius=\"lg\"\n            tone=\"underline\"\n            className=\"gap-0\"\n          >\n            <TabList className=\"w-72 shrink-0\">\n              <TabTrigger\n                isDisabled\n                className=\"h-9.5 opacity-100! border-b rounded-none\"\n              >\n                Files\n              </TabTrigger>\n              {entry?.files.map((file) => (\n                <TabTrigger\n                  key={file.path}\n                  id={file.path}\n                  className=\"outline-none!\"\n                >\n                  {file.path.split(\"/\").pop()}\n                </TabTrigger>\n              ))}\n            </TabList>\n\n            {entry?.files.map((file) => (\n              <TabContent\n                key={file.path}\n                id={file.path}\n                className=\"overflow-auto p-0 shadow-none border-s rounded-none\"\n              >\n                <div className=\"h-9.5 opacity-100! border-b rounded-none p-2 text-sm text-muted-foreground\">\n                  {file.path.split(\"/\").pop()}\n                </div>\n                <CodeBlock\n                  code={file.code}\n                  lang=\"ts\"\n                  className=\"rounded-none border-none h-96 md:h-auto md:min-h-160\"\n                />\n              </TabContent>\n            ))}\n          </Tabs>\n        </TabContent>\n      </div>\n    </Tabs>\n  );\n}\n"
+        "code": "\"use client\";\n\nimport { useState } from \"react\";\nimport { Heading } from \"@/components/ui/core/heading\";\nimport { Separator } from \"@/components/ui/core/separator\";\nimport {\n  Tabs,\n  TabList,\n  TabTrigger,\n  TabContent,\n} from \"@/components/ui/core/tabs\";\nimport SandboxToolbar from \"./toolbar\";\nimport { PackageInstall } from \"@/components/docs/package-install\";\nimport { cn } from \"@/lib/utils\";\nimport { motion, type HTMLMotionProps } from \"motion/react\";\nimport type { Key } from \"react-aria-components\";\nimport { CodeBlock } from \"@/components/docs/code-block\";\nimport { BlockVariant } from \"@/scripts/build-registry/types\";\n\nexport type ToolbarDevice = \"desktop\" | \"tablet\" | \"mobile\";\n\nconst deviceWidth = {\n  desktop: \"100%\",\n  tablet: 768,\n  mobile: 390,\n} satisfies Record<ToolbarDevice, string | number>;\n\nexport function Sandbox({\n  comp,\n  number,\n  ...iframe\n}: {\n  comp: BlockVariant;\n  number?: number;\n  iframe?: HTMLMotionProps<\"iframe\">;\n}) {\n  const [key, setKey] = useState<number>(0);\n  const [tab, setTab] = useState<Key>(\"preview\");\n  const [device, setDevice] = useState<ToolbarDevice>(\"desktop\");\n\n  function handleRefresh() {\n    return setKey(key + 1);\n  }\n\n  return (\n    <Tabs width=\"full\" selectedKey={tab} onSelectionChange={setTab}>\n      <div className=\"flex w-full justify-between\">\n        <div className=\"flex items-center justify-between lg:justify-start w-full gap-4\">\n          <Heading level={1} className=\"capitalize\">\n            {number ? `#${number} ` : \"\"}\n            {comp?.name}\n          </Heading>\n\n          <Separator orientation=\"vertical\" className=\"h-6 hidden lg:block\" />\n\n          <TabList className=\"h-9 p-1 *:h-6\">\n            <TabTrigger id=\"preview\">Preview</TabTrigger>\n            <TabTrigger id=\"code\">Code</TabTrigger>\n            <TabTrigger href=\"\" target=\"_blank\" className=\"lg:hidden\">\n              Fullscreen\n            </TabTrigger>\n          </TabList>\n        </div>\n\n        <div className=\"hidden lg:flex gap-4 items-center\">\n          <SandboxToolbar\n            href={comp.preview as string}\n            device={device}\n            setDevice={setDevice}\n            isDisabled={tab === \"code\"}\n            onRefresh={handleRefresh}\n          />\n\n          <Separator orientation=\"vertical\" />\n\n          <PackageInstall\n            command=\"add\"\n            packageName={comp.preview.replace(\"/\", \"\")}\n            showHeader={false}\n          />\n        </div>\n      </div>\n\n      <div key={key}>\n        <TabContent id=\"preview\" className=\"p-0 border-0\">\n          <div className=\"bg-dots\">\n            <motion.iframe\n              animate={{\n                width: deviceWidth[device],\n              }}\n              transition={{\n                type: \"spring\",\n                stiffness: 200,\n                damping: 24,\n              }}\n              className=\"aspect-video rounded-lg border h-96 md:h-auto md:min-h-160\"\n              src={comp.preview}\n              {...iframe}\n            />\n          </div>\n        </TabContent>\n        <TabContent id=\"code\" className=\"p-0\">\n          <Tabs\n            orientation=\"vertical\"\n            width=\"full\"\n            radius=\"lg\"\n            tone=\"underline\"\n            className=\"gap-0\"\n          >\n            <TabList className=\"w-72 shrink-0\">\n              <TabTrigger\n                isDisabled\n                className=\"h-9.5 opacity-100! border-b rounded-none\"\n              >\n                Files\n              </TabTrigger>\n              {comp?.files.map((file) => (\n                <TabTrigger\n                  key={file.path}\n                  id={file.path}\n                  className=\"outline-none!\"\n                >\n                  {file.path.split(\"/\").pop()}\n                </TabTrigger>\n              ))}\n            </TabList>\n\n            {comp?.files.map((file) => (\n              <TabContent\n                key={file.path}\n                id={file.path}\n                className=\"overflow-auto p-0 shadow-none border-s rounded-none\"\n              >\n                <div className=\"h-9.5 opacity-100! border-b rounded-none p-2 text-sm text-muted-foreground\">\n                  {file.path.split(\"/\").pop()}\n                </div>\n                <CodeBlock\n                  code={file.code}\n                  lang=\"ts\"\n                  className=\"rounded-none border-none h-96 md:h-auto md:min-h-160\"\n                />\n              </TabContent>\n            ))}\n          </Tabs>\n        </TabContent>\n      </div>\n    </Tabs>\n  );\n}\n"
       }
     ]
   },
@@ -5737,17 +5743,6 @@
       }
     ]
   },
-  "components/ui/block/auth/01": {
-    "name": "01",
-    "type": "registry:file",
-    "docs": [],
-    "files": [
-      {
-        "path": "components/ui/block/auth/01.tsx",
-        "code": "import { Link } from \"@/components/ui/core/link\";\nimport { Button } from \"@/components/ui/core/button\";\nimport { Checkbox } from \"@/components/ui/core/checkbox\";\nimport { FieldError, Label } from \"@/components/ui/core/field\";\nimport { Input } from \"@/components/ui/core/input\";\nimport { Loader } from \"@/components/ui/core/loader\";\nimport { TextField } from \"@/components/ui/core/text-field\";\nimport { Form } from \"../../core/form\";\n\nexport function BasicAuth() {\n  return (\n    <div className=\"flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10\">\n      <div className=\"w-full max-w-sm\">\n        <div className=\"flex flex-col gap-8\">\n          <div className=\"flex flex-col items-center gap-4\">\n            <Link\n              href=\"#\"\n              className=\"flex flex-col items-center gap-2 font-medium\"\n            >\n              <div className=\"mb-1 flex h-9 w-9 items-center justify-center rounded-md\"></div>\n              <span className=\"sr-only\">Sign in</span>\n            </Link>\n\n            <div className=\"space-y-2 text-center\">\n              <h1 className=\"text-xl font-medium\">Sign in</h1>\n              <p className=\"text-center text-sm text-muted-foreground\"></p>\n            </div>\n          </div>\n\n          <Form className=\"flex flex-col gap-6\">\n            <div className=\"grid gap-6\">\n              <TextField isRequired>\n                <Label>Email address</Label>\n                <Input\n                  type=\"email\"\n                  name=\"email\"\n                  autoFocus\n                  autoComplete=\"email\"\n                  placeholder=\"email@example.com\"\n                />\n                <FieldError />\n              </TextField>\n\n              <TextField isRequired>\n                <div className=\"flex items-center\">\n                  <Label>Password</Label>\n                  <Link href=\"#\" className=\"ml-auto text-sm\">\n                    Forgot password?\n                  </Link>\n                </div>\n                <Input\n                  type=\"password\"\n                  name=\"password\"\n                  autoComplete=\"current-password\"\n                  placeholder=\"Password\"\n                />\n                <FieldError />\n              </TextField>\n\n              <div className=\"flex items-center space-x-3\">\n                <Checkbox id=\"remember\" name=\"remember\" label=\"Remember me\" />\n              </div>\n\n              <Button\n                type=\"submit\"\n                className=\"mt-4 w-full\"\n                data-test=\"login-button\"\n              >\n                Log in\n              </Button>\n            </div>\n\n            <div className=\"text-center text-sm text-muted-foreground\">\n              <Link href=\"#\" className=\"ml-auto text-sm\">\n                {\"Don't\"} have an account? Sign up\n              </Link>\n            </div>\n          </Form>\n        </div>\n      </div>\n    </div>\n  );\n}\n"
-      }
-    ]
-  },
   "components/ui/block/bento": {
     "name": "bento",
     "type": "registry:file",
@@ -6094,6 +6089,30 @@
     "type": "registry:file",
     "docs": [
       {
+        "displayName": "SidebarProvider",
+        "description": "",
+        "props": {
+          "defaultOpen": {
+            "type": "boolean",
+            "required": false,
+            "description": "",
+            "defaultValue": "true"
+          },
+          "open": {
+            "type": "boolean",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "onOpenChange": {
+            "type": "(open: boolean) => void",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      },
+      {
         "displayName": "Sidebar",
         "description": "",
         "props": {
@@ -6134,7 +6153,7 @@
             "defaultValue": null
           },
           "variant": {
-            "type": "\"sidebar\" | \"floating\" | \"inset\"",
+            "type": "\"sidebar\" | \"float\" | \"inset\"",
             "required": false,
             "description": "",
             "defaultValue": "sidebar"
@@ -6144,318 +6163,6 @@
             "required": false,
             "description": "",
             "defaultValue": "offcanvas"
-          }
-        }
-      },
-      {
-        "displayName": "SidebarContent",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarFooter",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarGroup",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarGroupAction",
-        "description": "",
-        "props": {
-          "tone": {
-            "type": "null | \"link\" | \"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"unstyled\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "size": {
-            "type": "null | \"default\" | \"xs\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "radius": {
-            "type": "null | \"none\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\" | \"md\" | \"full\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "iconOnly": {
-            "type": "null | false | true",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "loader": {
-            "type": "ReactNode",
-            "required": false,
-            "description": "The content to display when isPending or isLoading is true. Defaults to a standard spinner.",
-            "defaultValue": null
-          },
-          "isLoading": {
-            "type": "boolean",
-            "required": false,
-            "description": "Whether the button is in a loading state.",
-            "defaultValue": null
-          }
-        }
-      },
-      {
-        "displayName": "SidebarGroupContent",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarGroupLabel",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarHeader",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarInset",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarMenu",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarMenuAction",
-        "description": "",
-        "props": {
-          "tone": {
-            "type": "null | \"link\" | \"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"unstyled\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "size": {
-            "type": "null | \"default\" | \"xs\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "radius": {
-            "type": "null | \"none\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\" | \"md\" | \"full\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "iconOnly": {
-            "type": "null | false | true",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "loader": {
-            "type": "ReactNode",
-            "required": false,
-            "description": "The content to display when isPending or isLoading is true. Defaults to a standard spinner.",
-            "defaultValue": null
-          },
-          "isLoading": {
-            "type": "boolean",
-            "required": false,
-            "description": "Whether the button is in a loading state.",
-            "defaultValue": null
-          },
-          "showOnHover": {
-            "type": "boolean",
-            "required": false,
-            "description": "",
-            "defaultValue": "false"
-          }
-        }
-      },
-      {
-        "displayName": "SidebarMenuBadge",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarMenuButton",
-        "description": "",
-        "props": {
-          "tone": {
-            "type": "null | \"link\" | \"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"unstyled\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "size": {
-            "type": "null | \"default\" | \"xs\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "radius": {
-            "type": "null | \"none\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\" | \"md\" | \"full\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "iconOnly": {
-            "type": "null | false | true",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "loader": {
-            "type": "ReactNode",
-            "required": false,
-            "description": "The content to display when isPending or isLoading is true. Defaults to a standard spinner.",
-            "defaultValue": null
-          },
-          "isLoading": {
-            "type": "boolean",
-            "required": false,
-            "description": "Whether the button is in a loading state.",
-            "defaultValue": null
-          },
-          "isActive": {
-            "type": "boolean",
-            "required": false,
-            "description": "",
-            "defaultValue": "false"
-          },
-          "tooltip": {
-            "type": "string | Omit<TooltipProps, \"children\"> & VariantProps<(props?: (ConfigVariants<{ tone: { default: string; inverse: string; destructive: string; success: string; warning: string; info: string; }; isEntering: { ...; }; isExiting: { ...; }; }> & ClassProp) | undefined) => string> & { ...; }",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          }
-        }
-      },
-      {
-        "displayName": "SidebarMenuItem",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarMenuSkeleton",
-        "description": "",
-        "props": {
-          "showIcon": {
-            "type": "boolean",
-            "required": false,
-            "description": "",
-            "defaultValue": "false"
-          }
-        }
-      },
-      {
-        "displayName": "SidebarMenuSub",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarMenuSubButton",
-        "description": "",
-        "props": {
-          "size": {
-            "type": "\"sm\" | \"md\"",
-            "required": false,
-            "description": "",
-            "defaultValue": "md"
-          },
-          "isActive": {
-            "type": "boolean",
-            "required": false,
-            "description": "",
-            "defaultValue": "false"
-          }
-        }
-      },
-      {
-        "displayName": "SidebarMenuSubItem",
-        "description": "",
-        "props": {}
-      },
-      {
-        "displayName": "SidebarProvider",
-        "description": "",
-        "props": {
-          "defaultOpen": {
-            "type": "boolean",
-            "required": false,
-            "description": "",
-            "defaultValue": "true"
-          },
-          "open": {
-            "type": "boolean",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "onOpenChange": {
-            "type": "(open: boolean) => void",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          }
-        }
-      },
-      {
-        "displayName": "SidebarRail",
-        "description": "",
-        "props": {
-          "tone": {
-            "type": "null | \"link\" | \"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"unstyled\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "size": {
-            "type": "null | \"default\" | \"xs\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "radius": {
-            "type": "null | \"none\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\" | \"md\" | \"full\"",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "iconOnly": {
-            "type": "null | false | true",
-            "required": false,
-            "description": "",
-            "defaultValue": null
-          },
-          "loader": {
-            "type": "ReactNode",
-            "required": false,
-            "description": "The content to display when isPending or isLoading is true. Defaults to a standard spinner.",
-            "defaultValue": null
-          },
-          "isLoading": {
-            "type": "boolean",
-            "required": false,
-            "description": "Whether the button is in a loading state.",
-            "defaultValue": null
-          }
-        }
-      },
-      {
-        "displayName": "SidebarSeparator",
-        "description": "",
-        "props": {
-          "text": {
-            "type": "string",
-            "required": false,
-            "description": "",
-            "defaultValue": null
           }
         }
       },
@@ -6500,12 +6207,86 @@
             "defaultValue": null
           }
         }
+      },
+      {
+        "displayName": "SidebarItem",
+        "description": "",
+        "props": {
+          "tone": {
+            "type": "null | \"link\" | \"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"unstyled\"",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "size": {
+            "type": "null | \"default\" | \"xs\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\"",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "radius": {
+            "type": "null | \"none\" | \"sm\" | \"lg\" | \"xl\" | \"2xl\" | \"md\" | \"full\"",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "iconOnly": {
+            "type": "null | false | true",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "loader": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "The content to display when isPending or isLoading is true. Defaults to a standard spinner.",
+            "defaultValue": null
+          },
+          "isLoading": {
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the button is in a loading state.",
+            "defaultValue": null
+          },
+          "href": {
+            "type": "string",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "isActive": {
+            "type": "boolean",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      },
+      {
+        "displayName": "SidebarHeader",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "SidebarBody",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "SidebarContent",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "SidebarFooter",
+        "description": "",
+        "props": {}
       }
     ],
     "files": [
       {
         "path": "components/ui/block/sidebar.tsx",
-        "code": "\"use client\";\n\nimport { PanelLeftCloseIcon, PanelLeftOpenIcon } from \"lucide-react\";\nimport * as React from \"react\";\n\nimport { Button } from \"@/components/ui/core/button\";\nimport {\n  DockBody,\n  DockContent,\n  DockDescription,\n  DockHeader,\n  DockTitle,\n} from \"@/components/ui/core/dock\";\nimport { Separator } from \"@/components/ui/core/separator\";\nimport { Skeleton } from \"@/components/ui/core/skeleton\";\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipTrigger,\n} from \"@/components/ui/core/tooltip\";\nimport { useIsMobile } from \"@/hooks/use-mobile\";\nimport { cn } from \"@/lib/utils\";\n\nconst SIDEBAR_COOKIE_NAME = \"sidebar_state\";\nconst SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;\nconst SIDEBAR_WIDTH = \"16rem\";\nconst SIDEBAR_WIDTH_ICON = \"3rem\";\nconst SIDEBAR_KEYBOARD_SHORTCUT = \"b\";\n\ntype SidebarContext = {\n  state: \"expanded\" | \"collapsed\";\n  open: boolean;\n  setOpen: (open: boolean) => void;\n  openMobile: boolean;\n  setOpenMobile: (open: boolean) => void;\n  isMobile: boolean;\n  toggleSidebar: () => void;\n};\n\nconst SidebarContext = React.createContext<SidebarContext | null>(null);\n\nfunction useSidebar() {\n  const context = React.useContext(SidebarContext);\n  if (!context) {\n    return {\n      state: \"expanded\",\n      open: true,\n      setOpen: () => {},\n      openMobile: false,\n      setOpenMobile: () => {},\n      isMobile: false,\n      toggleSidebar: () => {},\n    } as SidebarContext;\n  }\n\n  return context;\n}\n\nfunction SidebarProvider({\n  defaultOpen = true,\n  open: openProp,\n  onOpenChange: setOpenProp,\n  className,\n  style,\n  children,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  defaultOpen?: boolean;\n  open?: boolean;\n  onOpenChange?: (open: boolean) => void;\n}) {\n  const isMobile = useIsMobile();\n  const [openMobile, setOpenMobile] = React.useState(false);\n\n  // This is the internal state of the sidebar.\n  // We use openProp and setOpenProp for control from outside the component.\n  const [_open, _setOpen] = React.useState(defaultOpen);\n  const open = openProp ?? _open;\n  const setOpen = React.useCallback(\n    (value: boolean | ((value: boolean) => boolean)) => {\n      const openState = typeof value === \"function\" ? value(open) : value;\n      if (setOpenProp) {\n        setOpenProp(openState);\n      } else {\n        _setOpen(openState);\n      }\n\n      // This sets the cookie to keep the sidebar state.\n      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;\n    },\n    [setOpenProp, open],\n  );\n\n  // Helper to toggle the sidebar.\n  const toggleSidebar = React.useCallback(() => {\n    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);\n  }, [isMobile, setOpen, setOpenMobile]);\n\n  // Adds a keyboard shortcut to toggle the sidebar.\n  React.useEffect(() => {\n    const handleKeyDown = (event: KeyboardEvent) => {\n      if (\n        event.key === SIDEBAR_KEYBOARD_SHORTCUT &&\n        (event.metaKey || event.ctrlKey)\n      ) {\n        event.preventDefault();\n        toggleSidebar();\n      }\n    };\n\n    window.addEventListener(\"keydown\", handleKeyDown);\n    return () => window.removeEventListener(\"keydown\", handleKeyDown);\n  }, [toggleSidebar]);\n\n  // We add a state so that we can do data-state=\"expanded\" or \"collapsed\".\n  // This makes it easier to style the sidebar with Tailwind classes.\n  const state = open ? \"expanded\" : \"collapsed\";\n\n  const contextValue = React.useMemo<SidebarContext>(\n    () => ({\n      state,\n      open,\n      setOpen,\n      isMobile,\n      openMobile,\n      setOpenMobile,\n      toggleSidebar,\n    }),\n    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],\n  );\n\n  return (\n    <SidebarContext.Provider value={contextValue}>\n      <div\n        data-slot=\"sidebar-wrapper\"\n        style={\n          {\n            \"--sidebar-width\": SIDEBAR_WIDTH,\n            \"--sidebar-width-icon\": SIDEBAR_WIDTH_ICON,\n            ...style,\n          } as React.CSSProperties\n        }\n        className={cn(\n          \"group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar\",\n          className,\n        )}\n        {...props}\n      >\n        {children}\n      </div>\n    </SidebarContext.Provider>\n  );\n}\n\ntype SidebarProps = React.ComponentProps<\"div\"> &\n  React.ComponentProps<typeof DockContent> & {\n    side?: \"left\" | \"right\";\n    variant?: \"sidebar\" | \"floating\" | \"inset\";\n    collapsible?: \"offcanvas\" | \"icon\" | \"none\";\n  };\n\nfunction Sidebar({\n  side = \"left\",\n  variant = \"sidebar\",\n  collapsible = \"offcanvas\",\n  className,\n  children,\n  ...props\n}: SidebarProps) {\n  const { isMobile, state, openMobile, setOpenMobile } = useSidebar();\n\n  if (collapsible === \"none\") {\n    return (\n      <div\n        data-slot=\"sidebar\"\n        className={cn(\n          \"flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground\",\n          className,\n        )}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n\n  if (isMobile) {\n    return (\n      <DockContent\n        isOpen={openMobile}\n        onOpenChange={setOpenMobile}\n        side=\"left\"\n        isFloat={false}\n        classNames={{\n          content:\n            \"bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden h-full w-[280px] rounded-none border-r fixed inset-y-0 left-0 z-50\",\n          overlay: \"fixed inset-0 z-50 bg-black/80 backdrop-blur-sm\",\n          wrapper: \"fixed inset-y-0 left-0 z-50 h-full w-[280px]\",\n        }}\n        {...props}\n      >\n        <DockHeader className=\"sr-only\">\n          <DockTitle>Sidebar</DockTitle>\n          <DockDescription>Displays the mobile sidebar.</DockDescription>\n        </DockHeader>\n        <DockBody className=\"flex h-full w-full flex-col\">{children}</DockBody>\n      </DockContent>\n    );\n  }\n\n  return (\n    <div\n      className=\"group peer hidden text-sidebar-foreground md:block\"\n      data-state={state}\n      data-collapsible={state === \"collapsed\" ? collapsible : \"\"}\n      data-variant={variant}\n      data-side={side}\n      data-slot=\"sidebar\"\n    >\n      {/* This is what handles the sidebar gap on desktop */}\n      <div\n        className={cn(\n          \"relative h-svh w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear\",\n          \"group-data-[collapsible=offcanvas]:w-0\",\n          \"group-data-[side=right]:rotate-180\",\n          variant === \"floating\" || variant === \"inset\"\n            ? \"group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]\"\n            : \"group-data-[collapsible=icon]:w-(--sidebar-width-icon)\",\n        )}\n      />\n      <div\n        className={cn(\n          \"fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex\",\n          side === \"left\"\n            ? \"left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]\"\n            : \"right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]\",\n          // Adjust the padding for floating and inset variants.\n          variant === \"floating\" || variant === \"inset\"\n            ? \"p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]\"\n            : \"group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l\",\n          className,\n        )}\n        {...props}\n      >\n        <div\n          data-sidebar=\"sidebar\"\n          className=\"flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm\"\n        >\n          {children}\n        </div>\n      </div>\n    </div>\n  );\n}\n\nfunction SidebarTrigger({\n  onClick,\n  ...props\n}: React.ComponentProps<typeof Button>) {\n  const { toggleSidebar, isMobile, state } = useSidebar();\n\n  return (\n    <Button\n      data-sidebar=\"trigger\"\n      data-slot=\"sidebar-trigger\"\n      tone=\"ghost\"\n      iconOnly\n      onClick={(event) => {\n        onClick?.(event);\n        toggleSidebar();\n      }}\n      {...props}\n    >\n      {isMobile || state === \"collapsed\" ? (\n        <PanelLeftOpenIcon className=\"size-4\" />\n      ) : (\n        <PanelLeftCloseIcon className=\"size-4\" />\n      )}\n      <span className=\"sr-only\">Toggle Sidebar</span>\n    </Button>\n  );\n}\n\nfunction SidebarRail({\n  className,\n  ...props\n}: React.ComponentProps<typeof Button>) {\n  const { toggleSidebar } = useSidebar();\n\n  return (\n    <Button\n      data-sidebar=\"rail\"\n      data-slot=\"sidebar-rail\"\n      aria-label=\"Toggle Sidebar\"\n      onClick={toggleSidebar}\n      tone=\"unstyled\"\n      className={cn(\n        \"absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex\",\n        \"in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize\",\n        \"[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize\",\n        \"group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar\",\n        \"[[data-side=left][data-collapsible=offcanvas]_&]:-right-2\",\n        \"[[data-side=right][data-collapsible=offcanvas]_&]:-left-2\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarInset({ className, ...props }: React.ComponentProps<\"main\">) {\n  return (\n    <main\n      data-slot=\"sidebar-inset\"\n      className={cn(\n        \"relative flex min-h-svh max-w-full flex-1 flex-col bg-background\",\n        \"peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-header\"\n      data-sidebar=\"header\"\n      className={cn(\"flex flex-col gap-2 p-2\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-footer\"\n      data-sidebar=\"footer\"\n      className={cn(\"flex flex-col gap-2 p-2\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarSeparator({\n  className,\n  ...props\n}: React.ComponentProps<typeof Separator>) {\n  return (\n    <Separator\n      data-slot=\"sidebar-separator\"\n      data-sidebar=\"separator\"\n      className={cn(\"mx-2 w-auto bg-sidebar-border\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-content\"\n      data-sidebar=\"content\"\n      className={cn(\n        \"flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-group\"\n      data-sidebar=\"group\"\n      className={cn(\"relative flex w-full min-w-0 flex-col p-2\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarGroupLabel({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-group-label\"\n      data-sidebar=\"group-label\"\n      className={cn(\n        \"flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0\",\n        \"group-data-[collapsible=icon]:pointer-events-none group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:select-none\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarGroupAction({\n  className,\n  isDisabled = false,\n  ...props\n}: React.ComponentProps<typeof Button>) {\n  return (\n    <Button\n      data-slot=\"sidebar-group-action\"\n      data-sidebar=\"group-action\"\n      tone=\"ghost\"\n      iconOnly\n      isDisabled={isDisabled}\n      className={cn(\n        \"absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0\",\n        // Increases the hit area of the button on mobile.\n        \"after:absolute after:-inset-2 md:after:hidden\",\n        \"group-data-[collapsible=icon]:hidden\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarGroupContent({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-group-content\"\n      data-sidebar=\"group-content\"\n      className={cn(\"w-full text-sm\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarMenu({ className, ...props }: React.ComponentProps<\"ul\">) {\n  return (\n    <ul\n      data-slot=\"sidebar-menu\"\n      data-sidebar=\"menu\"\n      className={cn(\"flex w-full min-w-0 flex-col gap-1\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarMenuItem({ className, ...props }: React.ComponentProps<\"li\">) {\n  return (\n    <li\n      data-slot=\"sidebar-menu-item\"\n      data-sidebar=\"menu-item\"\n      className={cn(\"group/menu-item relative\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarMenuButton({\n  isActive = false,\n  tooltip,\n  children,\n  className,\n  ...props\n}: React.ComponentProps<typeof Button> & {\n  isActive?: boolean;\n  tooltip?: string | React.ComponentProps<typeof TooltipContent>;\n}) {\n  const { isMobile, state } = useSidebar();\n\n  const button = (\n    <TooltipTrigger\n      data-sidebar=\"menu-button\"\n      data-size={props.size}\n      data-active={isActive}\n      tone={props.tone ?? \"ghost\"}\n      iconOnly={state === \"collapsed\"}\n      className={cn(\n        \"w-full\",\n        state !== \"collapsed\" && \"justify-start\",\n        isActive &&\n          \"bg-sidebar-accent font-medium text-sidebar-accent-foreground\",\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </TooltipTrigger>\n  );\n\n  if (!tooltip) {\n    return button;\n  }\n\n  if (typeof tooltip === \"string\") {\n    tooltip = {\n      children: tooltip,\n    };\n  }\n\n  return (\n    <Tooltip>\n      {button}\n      <TooltipContent\n        placement=\"end\"\n        hidden={state !== \"collapsed\" || isMobile}\n        {...tooltip}\n      >\n        {tooltip.children}\n      </TooltipContent>\n    </Tooltip>\n  );\n}\n\nfunction SidebarMenuAction({\n  className,\n  showOnHover = false,\n  ...props\n}: React.ComponentProps<typeof Button> & {\n  showOnHover?: boolean;\n}) {\n  return (\n    <Button\n      data-slot=\"sidebar-menu-action\"\n      data-sidebar=\"menu-action\"\n      tone=\"ghost\"\n      iconOnly\n      className={cn(\n        \"absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0\",\n        // Increases the hit area of the button on mobile.\n        \"after:absolute after:-inset-2 md:after:hidden\",\n        \"peer-data-[size=sm]/menu-button:top-1\",\n        \"peer-data-[size=default]/menu-button:top-1.5\",\n        \"peer-data-[size=lg]/menu-button:top-2.5\",\n        \"group-data-[collapsible=icon]:hidden\",\n        showOnHover &&\n          \"group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground data-[state=open]:opacity-100 md:opacity-0\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarMenuBadge({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-menu-badge\"\n      data-sidebar=\"menu-badge\"\n      className={cn(\n        \"pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium text-sidebar-foreground tabular-nums select-none\",\n        \"peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground\",\n        \"peer-data-[size=sm]/menu-button:top-1\",\n        \"peer-data-[size=default]/menu-button:top-1.5\",\n        \"peer-data-[size=lg]/menu-button:top-2.5\",\n        \"group-data-[collapsible=icon]:hidden\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarMenuSkeleton({\n  className,\n  showIcon = false,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  showIcon?: boolean;\n}) {\n  // wrapping in useState to ensure the width is stable across renders\n  // also ensures we have a stable reference to the style object\n  const [skeletonStyle] = React.useState(\n    () =>\n      ({\n        \"--skeleton-width\": `${Math.floor(Math.random() * 40) + 50}%`, // Random width between 50 to 90%.\n      }) as React.CSSProperties,\n  );\n\n  return (\n    <div\n      data-slot=\"sidebar-menu-skeleton\"\n      data-sidebar=\"menu-skeleton\"\n      className={cn(\"flex h-8 items-center gap-2 rounded-md px-2\", className)}\n      {...props}\n    >\n      {showIcon && (\n        <Skeleton\n          className=\"size-4 rounded-md\"\n          data-sidebar=\"menu-skeleton-icon\"\n        />\n      )}\n      <Skeleton\n        className=\"h-4 max-w-(--skeleton-width) flex-1\"\n        data-sidebar=\"menu-skeleton-text\"\n        style={skeletonStyle}\n      />\n    </div>\n  );\n}\n\nfunction SidebarMenuSub({ className, ...props }: React.ComponentProps<\"ul\">) {\n  return (\n    <ul\n      data-slot=\"sidebar-menu-sub\"\n      data-sidebar=\"menu-sub\"\n      className={cn(\n        \"mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5\",\n        \"group-data-[collapsible=icon]:hidden\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarMenuSubItem({\n  className,\n  ...props\n}: React.ComponentProps<\"li\">) {\n  return (\n    <li\n      data-slot=\"sidebar-menu-sub-item\"\n      data-sidebar=\"menu-sub-item\"\n      className={cn(\"group/menu-sub-item relative\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarMenuSubButton({\n  size = \"md\",\n  isActive = false,\n  className,\n  ...props\n}: React.ComponentProps<\"a\"> & {\n  size?: \"sm\" | \"md\";\n  isActive?: boolean;\n}) {\n  return (\n    <a\n      data-slot=\"sidebar-menu-sub-button\"\n      data-sidebar=\"menu-sub-button\"\n      data-size={size}\n      data-active={isActive}\n      className={cn(\n        \"flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground\",\n        \"data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground\",\n        size === \"sm\" && \"text-xs\",\n        size === \"md\" && \"text-sm\",\n        \"group-data-[collapsible=icon]:hidden\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport {\n  Sidebar,\n  SidebarContent,\n  SidebarFooter,\n  SidebarGroup,\n  SidebarGroupAction,\n  SidebarGroupContent,\n  SidebarGroupLabel,\n  SidebarHeader,\n  SidebarInset,\n  SidebarMenu,\n  SidebarMenuAction,\n  SidebarMenuBadge,\n  SidebarMenuButton,\n  SidebarMenuItem,\n  SidebarMenuSkeleton,\n  SidebarMenuSub,\n  SidebarMenuSubButton,\n  SidebarMenuSubItem,\n  SidebarProvider,\n  SidebarRail,\n  SidebarSeparator,\n  SidebarTrigger,\n  useSidebar,\n};\n"
+        "code": "\"use client\";\n\nimport * as React from \"react\";\nimport { PanelLeftCloseIcon, PanelLeftOpenIcon } from \"lucide-react\";\nimport { cva } from \"class-variance-authority\";\nimport { Button, ButtonProps } from \"@/components/ui/core/button\";\nimport {\n  DockBody,\n  DockContent,\n  DockDescription,\n  DockHeader,\n  DockTitle,\n  type DockContentProps,\n} from \"@/components/ui/core/dock\";\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipTrigger,\n} from \"@/components/ui/core/tooltip\";\nimport { useIsMobile } from \"@/hooks/use-mobile\";\nimport { cn } from \"@/lib/utils\";\nimport { Link, type LinkProps } from \"@/components/ui/core/link\";\n\nconst SIDEBAR_STORAGE_KEY = \"sidebar_state\";\nconst SIDEBAR_WIDTH = \"16rem\";\nconst SIDEBAR_WIDTH_ICON = \"3rem\";\nconst SIDEBAR_KEYBOARD_SHORTCUT = \"b\";\n\ntype SidebarVariant = \"sidebar\" | \"float\" | \"inset\";\ntype SidebarCollapsible = \"offcanvas\" | \"icon\" | \"none\";\ntype SidebarSide = \"left\" | \"right\";\ntype SidebarState = \"expanded\" | \"collapsed\";\n\ntype SidebarConfig = {\n  variant: SidebarVariant;\n  collapsible: SidebarCollapsible;\n  side: SidebarSide;\n};\n\ntype SidebarContextValue = {\n  open: boolean;\n  setOpen: (open: boolean) => void;\n  toggle: () => void;\n  isMobile: boolean;\n  variant: SidebarVariant;\n  collapsible: SidebarCollapsible;\n  side: SidebarSide;\n  setConfig: (config: SidebarConfig) => void;\n};\n\nconst DEFAULT_CONFIG: SidebarConfig = {\n  variant: \"sidebar\",\n  collapsible: \"offcanvas\",\n  side: \"left\",\n};\n\nconst SidebarContext = React.createContext<SidebarContextValue | null>(null);\n\nfunction useSidebarContext(): SidebarContextValue {\n  const context = React.useContext(SidebarContext);\n\n  if (!context) {\n    throw new Error(\"useSidebar must be used within SidebarProvider\");\n  }\n\n  return context;\n}\n\nfunction useSidebar(): Omit<SidebarContextValue, \"setConfig\"> {\n  const { setConfig: _setConfig, ...context } = useSidebarContext();\n  return context;\n}\n\ntype SidebarProviderProps = React.ComponentProps<\"div\"> & {\n  defaultOpen?: boolean;\n  open?: boolean;\n  onOpenChange?: (open: boolean) => void;\n};\n\nfunction readPersistedOpen(): boolean | null {\n  if (typeof window === \"undefined\") {\n    return null;\n  }\n\n  try {\n    const value = window.localStorage.getItem(SIDEBAR_STORAGE_KEY);\n\n    if (value === \"true\") {\n      return true;\n    }\n\n    if (value === \"false\") {\n      return false;\n    }\n  } catch {\n    return null;\n  }\n\n  return null;\n}\n\nfunction writePersistedOpen(open: boolean): void {\n  if (typeof window === \"undefined\") {\n    return;\n  }\n\n  try {\n    window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(open));\n  } catch {\n    return;\n  }\n}\n\nfunction SidebarProvider({\n  defaultOpen = true,\n  open: openProp,\n  onOpenChange,\n  className,\n  style,\n  children,\n  ...props\n}: SidebarProviderProps) {\n  const isControlled = openProp !== undefined;\n  const isMobile = useIsMobile();\n  const [internalOpen, setInternalOpen] = React.useState(defaultOpen);\n  const [hydrated, setHydrated] = React.useState(false);\n  const [config, setConfig] = React.useState<SidebarConfig>(DEFAULT_CONFIG);\n\n  React.useEffect(() => {\n    setHydrated(true);\n\n    if (isControlled) {\n      return;\n    }\n\n    const persistedOpen = readPersistedOpen();\n\n    if (persistedOpen !== null) {\n      setInternalOpen(persistedOpen);\n    }\n  }, [isControlled]);\n\n  const open = isControlled ? openProp === true : internalOpen;\n\n  const setOpen = React.useCallback(\n    (nextOpen: boolean) => {\n      if (!isControlled) {\n        setInternalOpen(nextOpen);\n      }\n\n      onOpenChange?.(nextOpen);\n    },\n    [isControlled, onOpenChange],\n  );\n\n  const toggle = React.useCallback(() => {\n    setOpen(!open);\n  }, [open, setOpen]);\n\n  React.useEffect(() => {\n    if (!hydrated) {\n      return;\n    }\n\n    writePersistedOpen(open);\n  }, [hydrated, open]);\n\n  React.useEffect(() => {\n    const handleKeyDown = (event: KeyboardEvent) => {\n      if (\n        event.key.toLowerCase() === SIDEBAR_KEYBOARD_SHORTCUT &&\n        (event.metaKey || event.ctrlKey)\n      ) {\n        event.preventDefault();\n        toggle();\n      }\n    };\n\n    window.addEventListener(\"keydown\", handleKeyDown);\n    return () => window.removeEventListener(\"keydown\", handleKeyDown);\n  }, [toggle]);\n\n  const contextValue = React.useMemo<SidebarContextValue>(\n    () => ({\n      open,\n      setOpen,\n      toggle,\n      isMobile,\n      variant: config.variant,\n      collapsible: config.collapsible,\n      side: config.side,\n      setConfig,\n    }),\n    [open, setOpen, toggle, isMobile, config],\n  );\n\n  return (\n    <SidebarContext.Provider value={contextValue}>\n      <div\n        data-slot=\"sidebar-wrapper\"\n        style={\n          {\n            \"--sidebar-width\": SIDEBAR_WIDTH,\n            \"--sidebar-width-icon\": SIDEBAR_WIDTH_ICON,\n            ...style,\n          } as React.CSSProperties\n        }\n        className={cn(\n          \"relative flex h-svh w-full overflow-hidden has-data-[variant=inset]:bg-sidebar\",\n          className,\n        )}\n        {...props}\n      >\n        <div className=\"flex h-full min-h-0 w-full items-stretch overflow-hidden\">\n          {children}\n        </div>\n      </div>\n    </SidebarContext.Provider>\n  );\n}\n\nconst sidebarSpacerVariants = cva(\n  \"relative shrink-0 bg-transparent transition-[width] duration-200 ease-linear\",\n  {\n    variants: {\n      variant: {\n        sidebar: \"h-svh\",\n        float: \"hidden\",\n        inset: \"h-svh\",\n      },\n      collapsible: {\n        none: \"w-[var(--sidebar-width)]\",\n        offcanvas: \"\",\n        icon: \"\",\n      },\n      state: {\n        expanded: \"w-[var(--sidebar-width)]\",\n        collapsed: \"w-0\",\n      },\n      side: {\n        left: \"\",\n        right: \"\",\n      },\n    },\n    compoundVariants: [\n      {\n        collapsible: \"icon\",\n        state: \"collapsed\",\n        variant: \"sidebar\",\n        className: \"w-[var(--sidebar-width-icon)]\",\n      },\n      {\n        collapsible: \"icon\",\n        state: \"collapsed\",\n        variant: \"float\",\n        className: \"w-[var(--sidebar-width-icon)]\",\n      },\n      {\n        collapsible: \"icon\",\n        state: \"collapsed\",\n        variant: \"inset\",\n        className: \"w-[var(--sidebar-width-icon)]\",\n      },\n    ],\n    defaultVariants: {\n      variant: \"sidebar\",\n      collapsible: \"offcanvas\",\n      state: \"expanded\",\n      side: \"left\",\n    },\n  },\n);\n\nconst sidebarDesktopShellVariants = cva(\n  \"fixed inset-y-0 z-10 hidden h-svh w-[var(--sidebar-width)] transition-[left,right,width,transform] duration-200 ease-linear md:flex\",\n  {\n    variants: {\n      variant: {\n        sidebar: \"\",\n        float: \"p-2\",\n        inset: \"pt-2\",\n      },\n      side: {\n        left: \"left-0\",\n        right: \"right-0\",\n      },\n      collapsible: {\n        none: \"\",\n        offcanvas: \"\",\n        icon: \"\",\n      },\n      state: {\n        expanded: \"\",\n        collapsed: \"\",\n      },\n    },\n    compoundVariants: [\n      {\n        side: \"left\",\n        collapsible: \"offcanvas\",\n        state: \"collapsed\",\n        className: \"left-[calc(var(--sidebar-width)*-1)]\",\n      },\n      {\n        side: \"right\",\n        collapsible: \"offcanvas\",\n        state: \"collapsed\",\n        className: \"right-[calc(var(--sidebar-width)*-1)]\",\n      },\n      {\n        collapsible: \"icon\",\n        state: \"collapsed\",\n        className: \"w-[var(--sidebar-width-icon)]\",\n      },\n      {\n        variant: \"float\",\n        collapsible: \"icon\",\n        state: \"collapsed\",\n        className: \"w-[calc(var(--sidebar-width-icon)+1rem)]\",\n      },\n      {\n        variant: \"sidebar\",\n        side: \"left\",\n        className: \"border-r\",\n      },\n      {\n        variant: \"sidebar\",\n        side: \"right\",\n        className: \"border-l\",\n      },\n    ],\n    defaultVariants: {\n      variant: \"sidebar\",\n      side: \"left\",\n      collapsible: \"offcanvas\",\n      state: \"expanded\",\n    },\n  },\n);\n\nconst sidebarPanelVariants = cva(\n  \"flex h-full w-full flex-col overflow-hidden text-sidebar-foreground bg-sidebar\",\n  {\n    variants: {\n      variant: {\n        sidebar: \"\",\n        float: \"rounded-xl\",\n        inset: \"rounded-xl\",\n      },\n      state: {\n        expanded: \"\",\n        collapsed: \"justify-center\",\n      },\n    },\n    defaultVariants: {\n      variant: \"sidebar\",\n      state: \"expanded\",\n    },\n  },\n);\n\ntype SidebarProps = React.ComponentProps<\"div\"> &\n  DockContentProps & {\n    side?: SidebarSide;\n    variant?: SidebarVariant;\n    collapsible?: SidebarCollapsible;\n  };\n\nfunction Sidebar({\n  side = \"left\",\n  variant = \"sidebar\",\n  collapsible = \"offcanvas\",\n  className,\n  children,\n  ...props\n}: SidebarProps) {\n  const { open, setOpen, isMobile, setConfig } = useSidebarContext();\n  const state: \"expanded\" | \"collapsed\" =\n    collapsible === \"none\" ? \"expanded\" : open ? \"expanded\" : \"collapsed\";\n\n  React.useLayoutEffect(() => {\n    setConfig({\n      variant,\n      collapsible,\n      side,\n    });\n\n    return () => {\n      setConfig(DEFAULT_CONFIG);\n    };\n  }, [variant, collapsible, side, setConfig]);\n\n  if (isMobile) {\n    return (\n      <DockContent\n        isOpen={open}\n        onOpenChange={setOpen}\n        side={side}\n        isFloat={variant !== \"sidebar\"}\n        isBlurred={variant === \"float\"}\n        notch={variant === \"float\"}\n        closeButton\n        classNames={{\n          content: cn(\n            \"bg-sidebar p-0 text-sidebar-foreground h-full w-[280px] rounded-none border-0\",\n            side === \"left\" && \"border-r\",\n            side === \"right\" && \"border-l\",\n          ),\n          overlay: \"fixed inset-0 z-50 bg-background/40 backdrop-blur-sm\",\n          wrapper:\n            side === \"left\"\n              ? \"fixed inset-y-0 left-0 z-50 h-full w-[280px]\"\n              : \"fixed inset-y-0 right-0 z-50 h-full w-[280px]\",\n        }}\n        {...props}\n      >\n        <DockHeader className=\"sr-only\">\n          <DockTitle>Sidebar</DockTitle>\n          <DockDescription>Displays the mobile sidebar.</DockDescription>\n        </DockHeader>\n        <DockBody className=\"flex h-full w-full flex-col\">{children}</DockBody>\n      </DockContent>\n    );\n  }\n\n  return (\n    <div\n      data-slot=\"sidebar\"\n      data-state={state}\n      data-collapsible={state === \"collapsed\" ? collapsible : undefined}\n      data-variant={variant}\n      data-side={side}\n      className={cn(side === \"right\" && \"md:order-2\", className)}\n      {...props}\n    >\n      <div\n        className={cn(\n          sidebarSpacerVariants({\n            variant,\n            collapsible,\n            state,\n            side,\n          }),\n        )}\n      />\n      <aside\n        className={cn(\n          sidebarDesktopShellVariants({\n            variant,\n            collapsible,\n            state,\n            side,\n          }),\n        )}\n      >\n        <div className={sidebarPanelVariants({ variant, state })}>\n          {children}\n        </div>\n      </aside>\n    </div>\n  );\n}\n\nfunction SidebarItem({\n  href,\n  isActive,\n  children,\n}: ButtonProps & {\n  href?: LinkProps[\"href\"];\n  isActive?: boolean;\n}) {\n  const { open } = useSidebar();\n  const Comp = href ? Link : \"span\";\n\n  return (\n    <Comp href={href} className=\"w-full\">\n      <Button\n        tone=\"ghost\"\n        iconOnly={open}\n        className={cn(\n          \"justify-start w-full p-2\",\n          !open && \"[&>*:not(:first-child)]:hidden justify-center\",\n          isActive && \"bg-foreground/10\",\n        )}\n      >\n        {children}\n      </Button>\n    </Comp>\n  );\n}\n\nfunction SidebarHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-header\"\n      className={cn(\"flex flex-col gap-2 p-2\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarBody({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-body\"\n      className={cn(\n        \"flex min-h-0 w-full h-full flex-col gap-2 overflow-auto p-2\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nconst sidebarContentVariants = cva(\n  \"relative flex flex-1 min-h-0 overflow-auto max-w-full flex-1 flex-col bg-background\",\n  {\n    variants: {\n      variant: {\n        sidebar: \"\",\n        float: \"\",\n        inset: \"m-2 rounded-xl shadow-sm\",\n      },\n    },\n    defaultVariants: {\n      variant: \"sidebar\",\n    },\n  },\n);\n\nfunction SidebarContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  const { variant } = useSidebar();\n\n  return (\n    <div\n      data-slot=\"sidebar-content\"\n      className={cn(sidebarContentVariants({ variant }), className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"sidebar-footer\"\n      className={cn(\"flex flex-col gap-2 p-2\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction SidebarTrigger({\n  className,\n  onClick,\n  children,\n  ...props\n}: React.ComponentProps<typeof TooltipTrigger>) {\n  const { open, toggle, isMobile } = useSidebar();\n  const collapsed = !open;\n\n  return (\n    <Tooltip>\n      <TooltipTrigger\n        data-slot=\"sidebar-trigger\"\n        data-sidebar=\"trigger\"\n        tone=\"ghost\"\n        iconOnly\n        aria-label={open ? \"Collapse sidebar\" : \"Expand sidebar\"}\n        onClick={(event) => {\n          onClick?.(event);\n          toggle();\n        }}\n        {...props}\n      >\n        {children ?? (\n          <>\n            {isMobile || collapsed ? (\n              <PanelLeftOpenIcon className=\"size-4\" />\n            ) : (\n              <PanelLeftCloseIcon className=\"size-4\" />\n            )}\n          </>\n        )}\n      </TooltipTrigger>\n      <TooltipContent placement=\"end\" hidden={!collapsed || isMobile}>\n        {collapsed ? \"Expand sidebar\" : \"Collapse sidebar\"}\n      </TooltipContent>\n    </Tooltip>\n  );\n}\n\nexport {\n  SidebarProvider,\n  Sidebar,\n  SidebarTrigger,\n  SidebarItem,\n  SidebarHeader,\n  SidebarBody,\n  SidebarContent,\n  SidebarFooter,\n  useSidebar,\n};\n"
       }
     ]
   },
@@ -7148,7 +6929,7 @@
     "files": [
       {
         "path": "components/ui/core/card.tsx",
-        "code": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/lib/utils\";\n\ntype CardProps = React.HTMLAttributes<HTMLDivElement> &\n  VariantProps<typeof cardVariants> & {\n    circleGradient?: boolean;\n  };\n\nconst cardVariants = cva(\"relative overflow-hidden\", {\n  variants: {\n    variant: {\n      soft: \"\",\n      solid: \"\",\n      outline: \"border\",\n      glass: \"backdrop-blur-sm\",\n      gradient: \"\",\n    },\n    tone: {\n      neutral: \"\",\n      primary: \"\",\n      destructive: \"\",\n      success: \"\",\n      warning: \"\",\n    },\n    radius: {\n      none: \"rounded-none\",\n      sm: \"rounded-sm\",\n      md: \"rounded-md\",\n      lg: \"rounded-lg\",\n      xl: \"rounded-xl\",\n      \"2xl\": \"rounded-2xl\",\n      full: \"rounded-full\",\n    },\n    shadow: {\n      none: \"shadow-none\",\n      sm: \"shadow-sm\",\n      md: \"shadow-md\",\n      lg: \"shadow-lg\",\n    },\n    padding: {\n      none: \"p-0\",\n      sm: \"p-3\",\n      md: \"p-6\",\n      lg: \"p-8\",\n    },\n  },\n  compoundVariants: [\n    {\n      variant: \"soft\",\n      tone: \"neutral\",\n      className: \"bg-card text-card-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"primary\",\n      className: \"bg-primary/20 text-primary-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"destructive\",\n      className: \"bg-destructive/20 text-destructive-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"success\",\n      className: \"bg-success/20 text-success-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"warning\",\n      className: \"bg-warning/20 text-warning-foreground\",\n    },\n\n    {\n      variant: \"solid\",\n      tone: \"neutral\",\n      className: \"bg-card-foreground text-card-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"primary\",\n      className: \"bg-primary text-primary-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"destructive\",\n      className: \"bg-destructive text-destructive-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"success\",\n      className: \"bg-success text-success-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"warning\",\n      className: \"bg-warning text-warning-foreground\",\n    },\n\n    {\n      variant: \"outline\",\n      tone: \"neutral\",\n      className: \"bg-transparent border-border text-card-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"primary\",\n      className: \"bg-transparent border-primary/30 text-primary-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"destructive\",\n      className:\n        \"bg-transparent border-destructive/30 text-destructive-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"success\",\n      className: \"bg-transparent border-success/30 text-success-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"warning\",\n      className: \"bg-transparent border-warning/30 text-warning-foreground\",\n    },\n\n    {\n      variant: \"glass\",\n      tone: \"neutral\",\n      className: \"bg-foreground/6 border border-foreground/6 text-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"primary\",\n      className:\n        \"bg-primary/10 border border-primary/20 text-primary-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"destructive\",\n      className:\n        \"bg-destructive/10 border border-destructive/20 text-destructive-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"success\",\n      className:\n        \"bg-success/10 border border-success/20 text-success-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"warning\",\n      className:\n        \"bg-warning/10 border border-warning/20 text-warning-foreground\",\n    },\n    {\n      variant: \"glass\",\n      className: \"bg-foreground/6 border\",\n    },\n\n    {\n      variant: \"gradient\",\n      tone: \"neutral\",\n      className:\n        \"bg-linear-to-b from-foreground/3 to-foreground/2 border border-foreground/6\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"primary\",\n      className: \"bg-linear-to-tr from-primary/30 to-primary/25\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"destructive\",\n      className:\n        \"bg-linear-to-b from-red-900/30 to-red-900/10 ring-1 ring-red-700/30 border border-red-800/20\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"success\",\n      className:\n        \"bg-linear-to-b from-green-600/30 to-green-600/10 border border-green-700/20\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"warning\",\n      className:\n        \"bg-linear-to-b from-amber-800/30 to-amber-800/10 border border-amber-700/20\",\n    },\n  ],\n  defaultVariants: {\n    variant: \"soft\",\n    tone: \"neutral\",\n    radius: \"lg\",\n    shadow: \"none\",\n    padding: \"md\",\n  },\n});\n\nconst Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {\n  const {\n    variant,\n    tone = \"neutral\",\n    radius,\n    shadow,\n    padding,\n    className,\n    children,\n    circleGradient = false,\n    ...rest\n  } = props;\n\n  const classes = cn(\n    cardVariants({ variant, tone, radius, shadow, padding }),\n    className ?? \"\",\n  );\n\n  return (\n    <div ref={ref} data-slot=\"card\" className={classes} {...rest}>\n      {circleGradient && (\n        <div\n          className={cn(\n            \"absolute -left-20 -top-20 w-[420px] h-[420px] rounded-full bg-linear-to-tr blur-3xl pointer-events-none\",\n            (tone === \"neutral\" || tone === \"primary\") &&\n              \"from-primary/70 to-primary-65 dark:from-primary/20 dark:to-primary/6\",\n            tone === \"destructive\" &&\n              \"from-destructive/70 to-destructive-65 dark:from-destructive/20 dark:to-destructive/6\",\n            tone === \"success\" &&\n              \"from-success/70 to-success-65 dark:from-success/20 dark:to-success/6\",\n            tone === \"warning\" &&\n              \"from-warning/70 to-warning-65 dark:from-warning/20 dark:to-warning/6\",\n          )}\n        />\n      )}\n      {children}\n    </div>\n  );\n});\nCard.displayName = \"Card\";\n\nconst CardHeader = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, children, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-header\"\n      className={cn(\"w-full [&>*:first-child]:mb-1.5\", className)}\n      {...props}\n    >\n      {children}\n    </div>\n  );\n});\nCardHeader.displayName = \"CardHeader\";\n\nconst CardContent = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, children, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-content\"\n      className={cn(className)}\n      {...props}\n    >\n      {children}\n    </div>\n  );\n});\nCardContent.displayName = \"CardContent\";\n\nconst CardFooter = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, children, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-footer\"\n      className={cn(\"w-full\", className)}\n      {...props}\n    >\n      {children}\n    </div>\n  );\n});\nCardFooter.displayName = \"CardFooter\";\n\nconst CardAction = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className,\n      )}\n      {...props}\n    />\n  );\n});\nCardAction.displayName = \"CardAction\";\n\nconst CardTitle = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  );\n});\nCardTitle.displayName = \"CardTitle\";\n\nconst CardDescription = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-description\"\n      className={cn(\"text-muted-foreground text-sm\", className)}\n      {...props}\n    />\n  );\n});\nCardDescription.displayName = \"CardDescription\";\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n  type CardProps,\n};\n"
+        "code": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"@/lib/utils\";\n\ntype CardProps = React.HTMLAttributes<HTMLDivElement> &\n  VariantProps<typeof cardVariants> & {\n    circleGradient?: boolean;\n  };\n\nconst cardVariants = cva(\"relative overflow-hidden\", {\n  variants: {\n    variant: {\n      soft: \"\",\n      solid: \"\",\n      outline: \"border\",\n      glass: \"backdrop-blur-sm\",\n      gradient: \"\",\n    },\n    tone: {\n      neutral: \"\",\n      primary: \"\",\n      destructive: \"\",\n      success: \"\",\n      warning: \"\",\n    },\n    radius: {\n      none: \"rounded-none\",\n      sm: \"rounded-sm\",\n      md: \"rounded-md\",\n      lg: \"rounded-lg\",\n      xl: \"rounded-xl\",\n      \"2xl\": \"rounded-2xl\",\n      full: \"rounded-full\",\n    },\n    shadow: {\n      none: \"shadow-none\",\n      sm: \"shadow-sm\",\n      md: \"shadow-md\",\n      lg: \"shadow-lg\",\n    },\n    padding: {\n      none: \"p-0\",\n      sm: \"p-3\",\n      md: \"p-6\",\n      lg: \"p-8\",\n    },\n  },\n  compoundVariants: [\n    {\n      variant: \"soft\",\n      tone: \"neutral\",\n      className: \"bg-card text-card-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"primary\",\n      className: \"bg-primary/20 text-primary-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"destructive\",\n      className: \"bg-destructive/20 text-destructive-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"success\",\n      className: \"bg-success/20 text-success-foreground\",\n    },\n    {\n      variant: \"soft\",\n      tone: \"warning\",\n      className: \"bg-warning/20 text-warning-foreground\",\n    },\n\n    {\n      variant: \"solid\",\n      tone: \"neutral\",\n      className: \"bg-card-foreground text-card-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"primary\",\n      className: \"bg-primary text-primary-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"destructive\",\n      className: \"bg-destructive text-destructive-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"success\",\n      className: \"bg-success text-success-foreground\",\n    },\n    {\n      variant: \"solid\",\n      tone: \"warning\",\n      className: \"bg-warning text-warning-foreground\",\n    },\n\n    {\n      variant: \"outline\",\n      tone: \"neutral\",\n      className: \"bg-transparent border-border text-card-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"primary\",\n      className: \"bg-transparent border-primary/30 text-primary-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"destructive\",\n      className:\n        \"bg-transparent border-destructive/30 text-destructive-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"success\",\n      className: \"bg-transparent border-success/30 text-success-foreground\",\n    },\n    {\n      variant: \"outline\",\n      tone: \"warning\",\n      className: \"bg-transparent border-warning/30 text-warning-foreground\",\n    },\n\n    {\n      variant: \"glass\",\n      tone: \"neutral\",\n      className: \"bg-foreground/6 border border-foreground/6 text-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"primary\",\n      className:\n        \"bg-primary/10 border border-primary/20 text-primary-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"destructive\",\n      className:\n        \"bg-destructive/10 border border-destructive/20 text-destructive-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"success\",\n      className:\n        \"bg-success/10 border border-success/20 text-success-foreground\",\n    },\n    {\n      variant: \"glass\",\n      tone: \"warning\",\n      className:\n        \"bg-warning/10 border border-warning/20 text-warning-foreground\",\n    },\n    {\n      variant: \"glass\",\n      className: \"bg-foreground/6 border\",\n    },\n\n    {\n      variant: \"gradient\",\n      tone: \"neutral\",\n      className:\n        \"bg-linear-to-b from-foreground/3 to-foreground/2 border border-foreground/6\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"primary\",\n      className: \"bg-linear-to-tr from-primary/30 to-primary/25\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"destructive\",\n      className:\n        \"bg-linear-to-b from-red-900/30 to-red-900/10 ring-1 ring-red-700/30 border border-red-800/20\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"success\",\n      className:\n        \"bg-linear-to-b from-green-600/30 to-green-600/10 border border-green-700/20\",\n    },\n    {\n      variant: \"gradient\",\n      tone: \"warning\",\n      className:\n        \"bg-linear-to-b from-amber-800/30 to-amber-800/10 border border-amber-700/20\",\n    },\n  ],\n  defaultVariants: {\n    variant: \"soft\",\n    tone: \"neutral\",\n    radius: \"lg\",\n    shadow: \"none\",\n    padding: \"md\",\n  },\n});\n\nconst Card = React.forwardRef<HTMLDivElement, CardProps>((props, ref) => {\n  const {\n    variant,\n    tone = \"neutral\",\n    radius,\n    shadow,\n    padding,\n    className,\n    children,\n    circleGradient = false,\n    ...rest\n  } = props;\n\n  const classes = cn(\n    cardVariants({ variant, tone, radius, shadow, padding }),\n    className ?? \"\",\n  );\n\n  return (\n    <div ref={ref} data-slot=\"card\" className={classes} {...rest}>\n      {circleGradient && (\n        <div\n          className={cn(\n            \"absolute -left-20 -top-20 size-105 rounded-full bg-linear-to-tr blur-3xl pointer-events-none\",\n            (tone === \"neutral\" || tone === \"primary\") &&\n              \"from-primary/70 to-primary-65 dark:from-primary/20 dark:to-primary/6\",\n            tone === \"destructive\" &&\n              \"from-destructive/70 to-destructive-65 dark:from-destructive/20 dark:to-destructive/6\",\n            tone === \"success\" &&\n              \"from-success/70 to-success-65 dark:from-success/20 dark:to-success/6\",\n            tone === \"warning\" &&\n              \"from-warning/70 to-warning-65 dark:from-warning/20 dark:to-warning/6\",\n          )}\n        />\n      )}\n      {children}\n    </div>\n  );\n});\nCard.displayName = \"Card\";\n\nconst CardHeader = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, children, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-header\"\n      className={cn(\"w-full [&>*:first-child]:mb-1.5\", className)}\n      {...props}\n    >\n      {children}\n    </div>\n  );\n});\nCardHeader.displayName = \"CardHeader\";\n\nconst CardContent = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, children, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-content\"\n      className={cn(className)}\n      {...props}\n    >\n      {children}\n    </div>\n  );\n});\nCardContent.displayName = \"CardContent\";\n\nconst CardFooter = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, children, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-footer\"\n      className={cn(\"w-full\", className)}\n      {...props}\n    >\n      {children}\n    </div>\n  );\n});\nCardFooter.displayName = \"CardFooter\";\n\nconst CardAction = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className,\n      )}\n      {...props}\n    />\n  );\n});\nCardAction.displayName = \"CardAction\";\n\nconst CardTitle = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  );\n});\nCardTitle.displayName = \"CardTitle\";\n\nconst CardDescription = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement>\n>(({ className, ...props }, ref) => {\n  return (\n    <div\n      ref={ref}\n      data-slot=\"card-description\"\n      className={cn(\"text-muted-foreground text-sm\", className)}\n      {...props}\n    />\n  );\n});\nCardDescription.displayName = \"CardDescription\";\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n  type CardProps,\n};\n"
       }
     ]
   },
@@ -18440,14 +18221,144 @@
     },
     "auth": {
       "title": "Authentication",
-      "description": "Authentication flows.",
+      "description": "Beautifully designed authentication layouts and form blocks tailored for seamless login, signup, and auth experiences.",
       "variants": [
         {
-          "name": "01",
+          "name": "simple",
           "type": "registry:block",
-          "preview": "/blocks/auth/01",
+          "preview": "/blocks/auth/simple",
+          "previewEntry": "page.tsx",
           "docs": [],
-          "files": []
+          "files": [
+            {
+              "path": "app/blocks/auth/simple/auth-layout.tsx",
+              "code": "import Link from \"next/link\";\nimport { LibraryBig } from \"lucide-react\";\nimport type { PropsWithChildren } from \"react\";\n\nexport function AuthLayout({\n  children,\n  title,\n  description,\n}: PropsWithChildren<{\n  title?: string;\n  description?: string;\n}>) {\n  return (\n    <div className=\"flex min-h-svh flex-col items-center justify-center bg-background p-6 md:p-10\">\n      <div className=\"w-full max-w-sm\">\n        <div className=\"flex flex-col gap-8\">\n          <div className=\"flex flex-col items-center gap-4\">\n            <Link\n              href=\"/\"\n              className=\"flex flex-col items-center gap-2 font-medium\"\n            >\n              <div className=\"flex h-9 w-9 items-center justify-center rounded-md\">\n                <LibraryBig className=\"size-6\" />\n              </div>\n\n              <span className=\"sr-only\">{title}</span>\n            </Link>\n\n            <div className=\"space-y-2 text-center\">\n              <h1 className=\"text-xl font-medium\">{title}</h1>\n\n              <p className=\"text-sm text-muted-foreground\">{description}</p>\n            </div>\n          </div>\n\n          {children}\n        </div>\n      </div>\n    </div>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/auth/simple/page.tsx",
+              "code": "\"use client\";\n\nimport Link from \"next/link\";\nimport { AuthLayout } from \"./auth-layout\";\nimport { Form } from \"@/components/ui/core/form\";\nimport { TextField } from \"@/components/ui/core/text-field\";\nimport { AtSign, Lock } from \"lucide-react\";\nimport { Button } from \"@/components/ui/core/button\";\nimport { Label } from \"@/components/ui/core/field\";\nimport { Input } from \"@/components/ui/core/input\";\n\nexport default function AuthCardPage() {\n  return (\n    <AuthLayout\n      title=\"Welcome Back\"\n      description=\"Enter your email and password to access your account\"\n    >\n      <Form className=\"grid gap-6 w-full\">\n        <div className=\"flex flex-col gap-6\">\n          <TextField isRequired>\n            <Label>Username</Label>\n            <Input\n              type=\"text\"\n              id=\"username\"\n              placeholder=\"beatrix_kiddo\"\n              startContent={<AtSign />}\n            />\n          </TextField>\n          <TextField isRequired>\n            <div className=\"flex justify-between items-center\">\n              <Label>Password</Label>\n              <a\n                href=\"#\"\n                className=\"ml-auto inline-block text-xs underline-offset-4 hover:underline\"\n              >\n                Forgot your password?\n              </a>\n            </div>\n            <Input\n              type=\"password\"\n              id=\"password\"\n              placeholder=\"It's a secret..\"\n              startContent={<Lock />}\n            />\n          </TextField>\n        </div>\n        <div className=\"grid gap-2\">\n          <Button type=\"submit\" className=\"w-full\">\n            Login\n          </Button>\n          <Button tone=\"outline\" className=\"w-full\">\n            <i className=\"devicon-google-plain\" aria-hidden=\"true\" />\n            Login with Google\n          </Button>\n        </div>\n        <p className=\"text-center text-sm text-muted-foreground\">\n          {\"Don't\"} have an account?{\" \"}\n          <a\n            href=\"#\"\n            className=\"text-primary underline underline-offset-4 hover:opacity-80\"\n          >\n            Sign up\n          </a>\n        </p>\n      </Form>\n    </AuthLayout>\n  );\n}\n"
+            }
+          ]
+        },
+        {
+          "name": "card",
+          "type": "registry:block",
+          "preview": "/blocks/auth/card",
+          "previewEntry": "page.tsx",
+          "docs": [],
+          "files": [
+            {
+              "path": "app/blocks/auth/card/auth-layout.tsx",
+              "code": "import type { PropsWithChildren, ReactNode } from \"react\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/core/card\";\nimport { LibraryBig } from \"lucide-react\";\n\nexport function AuthLayout({\n  children,\n  title,\n  description,\n  footer,\n}: PropsWithChildren<{\n  name?: string;\n  title?: string;\n  description?: string;\n  footer?: ReactNode;\n}>) {\n  return (\n    <div className=\"flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10\">\n      <Card radius=\"xl\" className=\"flex flex-col gap-6\">\n        <CardHeader className=\"grid w-full text-center\">\n          <div className=\"mx-auto flex\">\n            <LibraryBig />\n          </div>\n\n          <CardTitle className=\"text-xl\">{title}</CardTitle>\n          <CardDescription>{description}</CardDescription>\n        </CardHeader>\n\n        <CardContent className=\"w-full\">{children}</CardContent>\n      </Card>\n\n      {footer && (\n        <div className=\"text-center text-xs text-muted-foreground max-w-sm\">\n          {footer}\n        </div>\n      )}\n    </div>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/auth/card/page.tsx",
+              "code": "\"use client\";\n\nimport Link from \"next/link\";\nimport { AuthLayout } from \"./auth-layout\";\nimport { Form } from \"@/components/ui/core/form\";\nimport { TextField } from \"@/components/ui/core/text-field\";\nimport { AtSign, Lock } from \"lucide-react\";\nimport { Button } from \"@/components/ui/core/button\";\nimport { Label } from \"@/components/ui/core/field\";\nimport { Input } from \"@/components/ui/core/input\";\n\nexport default function AuthCardPage() {\n  return (\n    <AuthLayout\n      title=\"Welcome Back\"\n      description=\"Enter your email and password to access your account\"\n      footer={\n        <>\n          By clicking continue, you agree to our{\" \"}\n          <a href=\"#\" className=\"underline\">\n            Terms of Service\n          </a>{\" \"}\n          and{\" \"}\n          <a href=\"#\" className=\"underline\">\n            Privacy Policy\n          </a>\n          .\n        </>\n      }\n    >\n      <Form className=\"grid gap-6 w-full\">\n        <div className=\"flex flex-col gap-6\">\n          <TextField isRequired>\n            <Label>Username</Label>\n            <Input\n              type=\"text\"\n              id=\"username\"\n              placeholder=\"beatrix_kiddo\"\n              startContent={<AtSign />}\n            />\n          </TextField>\n          <TextField isRequired>\n            <div className=\"flex justify-between items-center\">\n              <Label>Password</Label>\n              <a\n                href=\"#\"\n                className=\"ml-auto inline-block text-xs underline-offset-4 hover:underline\"\n              >\n                Forgot your password?\n              </a>\n            </div>\n            <Input\n              type=\"password\"\n              id=\"password\"\n              placeholder=\"It's a secret..\"\n              startContent={<Lock />}\n            />\n          </TextField>\n        </div>\n        <div className=\"grid gap-2\">\n          <Button type=\"submit\" className=\"w-full\">\n            Login\n          </Button>\n          <Button tone=\"outline\" className=\"w-full\">\n            <i className=\"devicon-google-plain\" aria-hidden=\"true\" />\n            Login with Google\n          </Button>\n        </div>\n        <p className=\"text-center text-sm text-muted-foreground\">\n          {\"Don't\"} have an account?{\" \"}\n          <a\n            href=\"#\"\n            className=\"text-primary underline underline-offset-4 hover:opacity-80\"\n          >\n            Sign up\n          </a>\n        </p>\n      </Form>\n    </AuthLayout>\n  );\n}\n"
+            }
+          ]
+        },
+        {
+          "name": "card-image",
+          "type": "registry:block",
+          "preview": "/blocks/auth/card-image",
+          "previewEntry": "page.tsx",
+          "docs": [],
+          "files": [
+            {
+              "path": "app/blocks/auth/card-image/auth-layout.tsx",
+              "code": "import type { PropsWithChildren } from \"react\";\n\nexport function AuthLayout({\n  children,\n  title,\n  description,\n  footer,\n}: PropsWithChildren<{\n  title?: string;\n  description?: string;\n  footer?: string;\n}>) {\n  return (\n    <div className=\"flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10\">\n      <div className=\"w-full max-w-4xl\">\n        <div className=\"grid overflow-hidden rounded-2xl border bg-card md:grid-cols-2\">\n          <div className=\"relative hidden md:block\">\n            <img\n              src=\"/placeholder.svg\"\n              alt=\"auth\"\n              className=\"absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale\"\n            />\n          </div>\n\n          <div className=\"flex flex-col p-6 md:p-8\">\n            <div className=\"mb-6 space-y-2 text-center md:text-left\">\n              {title && <h1 className=\"text-2xl font-bold\">{title}</h1>}\n\n              {description && (\n                <p className=\"text-sm text-muted-foreground\">{description}</p>\n              )}\n            </div>\n\n            {children}\n          </div>\n        </div>\n      </div>\n      {footer && (\n        <div className=\"text-center text-xs text-muted-foreground mt-2\">\n          {footer}\n        </div>\n      )}\n    </div>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/auth/card-image/page.tsx",
+              "code": "\"use client\";\n\nimport Link from \"next/link\";\nimport { AuthLayout } from \"./auth-layout\";\nimport { Form } from \"@/components/ui/core/form\";\nimport { TextField } from \"@/components/ui/core/text-field\";\nimport { AtSign, Lock } from \"lucide-react\";\nimport { Button } from \"@/components/ui/core/button\";\nimport { Label } from \"@/components/ui/core/field\";\nimport { Input } from \"@/components/ui/core/input\";\n\nexport default function AuthCardPage() {\n  return (\n    <AuthLayout\n      title=\"Welcome Back\"\n      description=\"Enter your email and password to access your account\"\n      footer={\n        <>\n          By clicking continue, you agree to our{\" \"}\n          <a href=\"#\" className=\"underline\">\n            Terms of Service\n          </a>{\" \"}\n          and{\" \"}\n          <a href=\"#\" className=\"underline\">\n            Privacy Policy\n          </a>\n          .\n        </>\n      }\n    >\n      <Form className=\"grid gap-6 w-full\">\n        <div className=\"flex flex-col gap-6\">\n          <TextField isRequired>\n            <Label>Username</Label>\n            <Input\n              type=\"text\"\n              id=\"username\"\n              placeholder=\"beatrix_kiddo\"\n              startContent={<AtSign />}\n            />\n          </TextField>\n          <TextField isRequired>\n            <div className=\"flex justify-between items-center\">\n              <Label>Password</Label>\n              <a\n                href=\"#\"\n                className=\"ml-auto inline-block text-xs underline-offset-4 hover:underline\"\n              >\n                Forgot your password?\n              </a>\n            </div>\n            <Input\n              type=\"password\"\n              id=\"password\"\n              placeholder=\"It's a secret..\"\n              startContent={<Lock />}\n            />\n          </TextField>\n        </div>\n        <div className=\"grid gap-2\">\n          <Button type=\"submit\" className=\"w-full\">\n            Login\n          </Button>\n          <Button tone=\"outline\" className=\"w-full\">\n            <i className=\"devicon-google-plain\" aria-hidden=\"true\" />\n            Login with Google\n          </Button>\n        </div>\n        <p className=\"text-center text-sm text-muted-foreground\">\n          {\"Don't\"} have an account?{\" \"}\n          <a\n            href=\"#\"\n            className=\"text-primary underline underline-offset-4 hover:opacity-80\"\n          >\n            Sign up\n          </a>\n        </p>\n      </Form>\n    </AuthLayout>\n  );\n}\n"
+            }
+          ]
+        },
+        {
+          "name": "split",
+          "type": "registry:block",
+          "preview": "/blocks/auth/split",
+          "previewEntry": "page.tsx",
+          "docs": [],
+          "files": [
+            {
+              "path": "app/blocks/auth/split/auth-layout.tsx",
+              "code": "import Link from \"next/link\";\nimport type { PropsWithChildren } from \"react\";\nimport { LibraryBig } from \"lucide-react\";\n\nexport function AuthLayout({\n  children,\n  title,\n  description,\n}: PropsWithChildren<{\n  title?: string;\n  description?: string;\n}>) {\n  return (\n    <div className=\"relative grid h-dvh lg:grid-cols-2\">\n      <div className=\"relative hidden h-full flex-col p-12 text-foreground lg:flex\">\n        <img\n          src=\"/placeholder.svg\"\n          alt=\"Image\"\n          className=\"absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale\"\n        />\n\n        <div className=\"relative flex w-full items-center\">\n          <Link href=\"/\">\n            <LibraryBig className=\"size-8\" />\n          </Link>\n        </div>\n\n        <div className=\"relative mt-auto\">\n          <blockquote className=\"space-y-2\">\n            <p className=\"text-4xl\">\n              &ldquo;The future belongs to those who build it.&rdquo;\n            </p>\n\n            <footer className=\"text-xl opacity-70\">~ Anonymous</footer>\n          </blockquote>\n        </div>\n      </div>\n\n      <div className=\"flex h-full w-full flex-col\">\n        <Link href=\"/\" className=\"relative mt-8 self-center lg:hidden\">\n          <LibraryBig className=\"size-8\" />\n        </Link>\n\n        <div className=\"mx-auto flex w-full flex-1 flex-col justify-center space-y-6 px-8 sm:w-md\">\n          <div className=\"flex flex-col items-center gap-2 text-center\">\n            <h1 className=\"text-xl font-medium tracking-tighter lg:text-4xl\">\n              {title}\n            </h1>\n\n            <p className=\"text-sm text-balance text-muted-foreground\">\n              {description}\n            </p>\n          </div>\n\n          {children}\n        </div>\n      </div>\n    </div>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/auth/split/page.tsx",
+              "code": "\"use client\";\n\nimport Link from \"next/link\";\nimport { AuthLayout } from \"./auth-layout\";\nimport { Form } from \"@/components/ui/core/form\";\nimport { TextField } from \"@/components/ui/core/text-field\";\nimport { AtSign, Lock } from \"lucide-react\";\nimport { Button } from \"@/components/ui/core/button\";\nimport { Label } from \"@/components/ui/core/field\";\nimport { Input } from \"@/components/ui/core/input\";\n\nexport default function AuthCardPage() {\n  return (\n    <AuthLayout\n      title=\"Welcome Back\"\n      description=\"Enter your email and password to access your account\"\n      quote={{\n        message: \"The future belongs to those who build it.\",\n        author: \"Anonymous\",\n      }}\n    >\n      <Form className=\"grid gap-6 w-full\">\n        <div className=\"flex flex-col gap-6\">\n          <TextField isRequired>\n            <Label>Username</Label>\n            <Input\n              type=\"text\"\n              id=\"username\"\n              placeholder=\"beatrix_kiddo\"\n              startContent={<AtSign />}\n            />\n          </TextField>\n          <TextField isRequired>\n            <div className=\"flex justify-between items-center\">\n              <Label>Password</Label>\n              <a\n                href=\"#\"\n                className=\"ml-auto inline-block text-xs underline-offset-4 hover:underline\"\n              >\n                Forgot your password?\n              </a>\n            </div>\n            <Input\n              type=\"password\"\n              id=\"password\"\n              placeholder=\"It's a secret..\"\n              startContent={<Lock />}\n            />\n          </TextField>\n        </div>\n        <div className=\"grid gap-2\">\n          <Button type=\"submit\" className=\"w-full\">\n            Login\n          </Button>\n          <Button tone=\"outline\" className=\"w-full\">\n            <i className=\"devicon-google-plain\" aria-hidden=\"true\" />\n            Login with Google\n          </Button>\n        </div>\n        <p className=\"text-center text-sm text-muted-foreground\">\n          {\"Don't\"} have an account?{\" \"}\n          <a\n            href=\"#\"\n            className=\"text-primary underline underline-offset-4 hover:opacity-80\"\n          >\n            Sign up\n          </a>\n        </p>\n      </Form>\n    </AuthLayout>\n  );\n}\n"
+            }
+          ]
+        }
+      ]
+    },
+    "sidebar": {
+      "title": "Sidebar",
+      "description": "Versatile vertical navigation panels with support for collapsible menus, nested links, and responsive mobile behaviors.",
+      "variants": [
+        {
+          "name": "default",
+          "type": "registry:block",
+          "preview": "/blocks/sidebar/default",
+          "previewEntry": "page.tsx",
+          "docs": [],
+          "files": [
+            {
+              "path": "app/blocks/sidebar/default/app-sidebar.tsx",
+              "code": "\"use client\";\n\nimport {\n  ChartColumnIcon,\n  CheckSquareIcon,\n  FolderKanbanIcon,\n  LayoutDashboardIcon,\n  SettingsIcon,\n} from \"lucide-react\";\nimport {\n  Sidebar,\n  SidebarBody,\n  SidebarFooter,\n  SidebarHeader,\n  useSidebar,\n  SidebarItem,\n} from \"@/components/ui/block/sidebar\";\nimport { cn } from \"@/lib/utils\";\nimport { Avatar } from \"@/components/ui/core/avatar\";\nimport { UserMenu } from \"./user-menu\";\n\nconst navigationItems = [\n  {\n    label: \"Dashboard\",\n    icon: LayoutDashboardIcon,\n    active: true,\n  },\n  {\n    label: \"Projects\",\n    icon: FolderKanbanIcon,\n    active: false,\n  },\n  {\n    label: \"Tasks\",\n    icon: CheckSquareIcon,\n    active: false,\n  },\n  {\n    label: \"Analytics\",\n    icon: ChartColumnIcon,\n    active: false,\n  },\n  {\n    label: \"Settings\",\n    icon: SettingsIcon,\n    active: false,\n  },\n] as const;\n\nexport function AppSidebar() {\n  const { open } = useSidebar();\n\n  return (\n    <Sidebar collapsible=\"icon\">\n      <SidebarHeader>\n        <div\n          className={cn(\n            \"flex items-center gap-3 px-2 py-1\",\n            !open && \"justify-center\",\n          )}\n        >\n          <Avatar initials=\"A\" shape=\"square\" size=\"sm\" />\n\n          {open && (\n            <div className=\"min-w-0\">\n              <p className=\"truncate text-sm font-semibold\">Acme Inc.</p>\n              <p className=\"truncate text-xs text-muted-foreground\">\n                Workspace\n              </p>\n            </div>\n          )}\n        </div>\n      </SidebarHeader>\n\n      <SidebarBody>\n        {navigationItems.map((item) => (\n          <SidebarItem key={item.label}>\n            <item.icon className=\"size-4 shrink-0\" />\n\n            <span>{item.label}</span>\n          </SidebarItem>\n        ))}\n      </SidebarBody>\n\n      <SidebarFooter>\n        <div\n          className={cn(\n            \"flex items-center gap-3 px-2 py-1\",\n            !open && \"justify-center\",\n          )}\n        >\n          <UserMenu open={open} />\n        </div>\n      </SidebarFooter>\n    </Sidebar>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/sidebar/default/page.tsx",
+              "code": "\"use client\";\n\nimport type { SVGProps } from \"react\";\nimport { useId } from \"react\";\n\nimport { AppSidebar } from \"./app-sidebar\";\n\nimport {\n  SidebarContent,\n  SidebarProvider,\n  SidebarTrigger,\n} from \"@/components/ui/block/sidebar\";\n\nexport default function DefaultSidebarPage() {\n  return (\n    <SidebarProvider defaultOpen>\n      <AppSidebar />\n\n      <SidebarContent>\n        <header className=\"flex h-14 items-center border-b p-2\">\n          <SidebarTrigger />\n        </header>\n\n        <div className=\"flex flex-col gap-4 p-4\">\n          <div className=\"grid auto-rows-min gap-4 md:grid-cols-3\">\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n          </div>\n\n          <div className=\"relative min-h-150 flex-1 overflow-hidden rounded-xl border\">\n            <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n          </div>\n        </div>\n      </SidebarContent>\n    </SidebarProvider>\n  );\n}\n\nfunction PlaceholderPattern({ className, ...props }: SVGProps<SVGSVGElement>) {\n  const patternId = useId();\n\n  return (\n    <svg\n      className={className}\n      fill=\"none\"\n      xmlns=\"http://www.w3.org/2000/svg\"\n      {...props}\n    >\n      <defs>\n        <pattern\n          id={patternId}\n          x=\"0\"\n          y=\"0\"\n          width=\"10\"\n          height=\"10\"\n          patternUnits=\"userSpaceOnUse\"\n        >\n          <path d=\"M-3 13 15-5M-5 5l18-18M-1 21 17 3\" />\n        </pattern>\n      </defs>\n\n      <rect\n        width=\"100%\"\n        height=\"100%\"\n        stroke=\"none\"\n        fill={`url(#${patternId})`}\n      />\n    </svg>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/sidebar/default/user-menu.tsx",
+              "code": "\"use client\";\n\nimport { Avatar } from \"@/components/ui/core/avatar\";\nimport {\n  DropdownMenu,\n  DropdownMenuTrigger,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuGroup,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n  DropdownMenuHeader,\n} from \"@/components/ui/core/dropdown-menu\";\n\nimport {\n  CreditCard,\n  Bell,\n  Settings,\n  LogOut,\n  User,\n  Sparkles,\n  ChevronsUpDown,\n} from \"lucide-react\";\n\nexport function UserMenu({ open }: { open: boolean }) {\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger\n        aria-label=\"Open Menu\"\n        tone={open ? \"ghost\" : \"unstyled\"}\n        size=\"lg\"\n        iconOnly={!open}\n        className=\"w-full justify-start px-2\"\n      >\n        <Avatar\n          alt=\"Martin Scorsese\"\n          size=\"sm\"\n          src=\"https://i.ytimg.com/vi/QWFWIU-D36E/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDpdsuMduBqYtN7kAkne7irbTKLlg\"\n          shape=\"square\"\n          className=\"cursor-pointer\"\n        />\n\n        {open && (\n          <>\n            <div className=\"text-start min-w-0 truncate text-xs\">\n              <p className=\"font-medium\">John Doe</p>\n              <p className=\"text-muted-foreground\">Administrator</p>\n            </div>\n            <ChevronsUpDown className=\"ml-auto\" />\n          </>\n        )}\n      </DropdownMenuTrigger>\n\n      <DropdownMenuContent\n        className=\"min-w-72\"\n        popover={{\n          placement: \"right\",\n        }}\n      >\n        <DropdownMenuHeader className=\"flex flex-col gap-1 px-2\">\n          <div className=\"text-sm font-medium leading-none\">\n            Martin Scorsese\n          </div>\n\n          <div className=\"text-xs text-muted-foreground\">\n            martin@filmstudio.com\n          </div>\n        </DropdownMenuHeader>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuGroup title=\"Account\">\n          <DropdownMenuItem>\n            <User className=\"mr-2 size-4\" />\n            Profile\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <Bell className=\"mr-2 size-4\" />\n            Notifications\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <CreditCard className=\"mr-2 size-4\" />\n            Billing\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuGroup title=\"Workspace\">\n          <DropdownMenuItem>\n            <Sparkles className=\"mr-2 size-4\" />\n            Upgrade Plan\n            <DropdownMenuShortcut keys=\"PRO\" />\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <Settings className=\"mr-2 size-4\" />\n            Settings\n            <DropdownMenuShortcut keys=\"⌘,\" />\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuItem tone=\"destructive\">\n          <LogOut className=\"mr-2 size-4\" />\n          Log out\n        </DropdownMenuItem>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n"
+            }
+          ]
+        },
+        {
+          "name": "float",
+          "type": "registry:block",
+          "preview": "/blocks/sidebar/float",
+          "previewEntry": "page.tsx",
+          "docs": [],
+          "files": [
+            {
+              "path": "app/blocks/sidebar/float/app-sidebar.tsx",
+              "code": "\"use client\";\n\nimport {\n  ChartColumnIcon,\n  CheckSquareIcon,\n  FolderKanbanIcon,\n  LayoutDashboardIcon,\n  SettingsIcon,\n} from \"lucide-react\";\nimport {\n  Sidebar,\n  SidebarBody,\n  SidebarFooter,\n  SidebarHeader,\n  SidebarItem,\n} from \"@/components/ui/block/sidebar\";\nimport { cn } from \"@/lib/utils\";\nimport { Avatar } from \"@/components/ui/core/avatar\";\nimport { UserMenu } from \"./user-menu\";\n\nconst navigationItems = [\n  {\n    label: \"Dashboard\",\n    icon: LayoutDashboardIcon,\n    active: true,\n  },\n  {\n    label: \"Projects\",\n    icon: FolderKanbanIcon,\n    active: false,\n  },\n  {\n    label: \"Tasks\",\n    icon: CheckSquareIcon,\n    active: false,\n  },\n  {\n    label: \"Analytics\",\n    icon: ChartColumnIcon,\n    active: false,\n  },\n  {\n    label: \"Settings\",\n    icon: SettingsIcon,\n    active: false,\n  },\n] as const;\n\nexport function AppSidebar({\n  open,\n  setOpen,\n}: {\n  open: boolean;\n  setOpen: (open: boolean) => void;\n}) {\n  return (\n    <Sidebar\n      variant=\"float\"\n      collapsible=\"icon\"\n      onMouseOver={() => setOpen(true)}\n      onMouseLeave={() => setOpen(false)}\n    >\n      <SidebarHeader>\n        <div\n          className={cn(\n            \"flex items-center gap-3 px-2 py-1 w-full\",\n            !open && \"justify-center\",\n          )}\n        >\n          <Avatar initials=\"A\" shape=\"square\" size=\"sm\" />\n\n          {open && (\n            <div className=\"min-w-0\">\n              <p className=\"truncate text-sm font-semibold\">Acme Inc.</p>\n              <p className=\"truncate text-xs text-muted-foreground\">\n                Workspace\n              </p>\n            </div>\n          )}\n        </div>\n      </SidebarHeader>\n\n      <SidebarBody>\n        {navigationItems.map((item) => (\n          <SidebarItem key={item.label}>\n            <item.icon className=\"size-4 shrink-0\" />\n\n            <span>{item.label}</span>\n          </SidebarItem>\n        ))}\n      </SidebarBody>\n\n      <SidebarFooter>\n        <div\n          className={cn(\n            \"flex items-center gap-3 px-2 py-1\",\n            !open && \"justify-center\",\n          )}\n        >\n          <UserMenu open={open} />\n        </div>\n      </SidebarFooter>\n    </Sidebar>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/sidebar/float/page.tsx",
+              "code": "\"use client\";\n\nimport { useState, type SVGProps } from \"react\";\nimport { useId } from \"react\";\nimport { AppSidebar } from \"./app-sidebar\";\nimport {\n  SidebarContent,\n  SidebarProvider,\n  SidebarTrigger,\n} from \"@/components/ui/block/sidebar\";\n\nexport default function FloatSidebarPage() {\n  const [open, setOpen] = useState(false);\n\n  return (\n    <SidebarProvider open={open} onOpenChange={setOpen}>\n      <AppSidebar open={open} setOpen={setOpen} />\n\n      <SidebarContent>\n        <div className=\"flex flex-col gap-4 p-4\">\n          <div className=\"grid auto-rows-min gap-4 md:grid-cols-3\">\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n          </div>\n\n          <div className=\"relative min-h-150 flex-1 overflow-hidden rounded-xl border\">\n            <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n          </div>\n        </div>\n      </SidebarContent>\n    </SidebarProvider>\n  );\n}\n\nfunction PlaceholderPattern({ className, ...props }: SVGProps<SVGSVGElement>) {\n  const patternId = useId();\n\n  return (\n    <svg\n      className={className}\n      fill=\"none\"\n      xmlns=\"http://www.w3.org/2000/svg\"\n      {...props}\n    >\n      <defs>\n        <pattern\n          id={patternId}\n          x=\"0\"\n          y=\"0\"\n          width=\"10\"\n          height=\"10\"\n          patternUnits=\"userSpaceOnUse\"\n        >\n          <path d=\"M-3 13 15-5M-5 5l18-18M-1 21 17 3\" />\n        </pattern>\n      </defs>\n\n      <rect\n        width=\"100%\"\n        height=\"100%\"\n        stroke=\"none\"\n        fill={`url(#${patternId})`}\n      />\n    </svg>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/sidebar/float/user-menu.tsx",
+              "code": "\"use client\";\n\nimport { Avatar } from \"@/components/ui/core/avatar\";\nimport {\n  DropdownMenu,\n  DropdownMenuTrigger,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuGroup,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n  DropdownMenuHeader,\n} from \"@/components/ui/core/dropdown-menu\";\n\nimport {\n  CreditCard,\n  Bell,\n  Settings,\n  LogOut,\n  User,\n  Sparkles,\n  ChevronsUpDown,\n} from \"lucide-react\";\n\nexport function UserMenu({ open }: { open: boolean }) {\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger\n        aria-label=\"Open Menu\"\n        tone={open ? \"ghost\" : \"unstyled\"}\n        size=\"lg\"\n        iconOnly={!open}\n        className=\"w-full justify-start px-2\"\n      >\n        <Avatar\n          alt=\"Martin Scorsese\"\n          size=\"sm\"\n          src=\"https://i.ytimg.com/vi/QWFWIU-D36E/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDpdsuMduBqYtN7kAkne7irbTKLlg\"\n          shape=\"square\"\n          className=\"cursor-pointer\"\n        />\n\n        {open && (\n          <>\n            <div className=\"text-start min-w-0 truncate text-xs\">\n              <p className=\"font-medium\">John Doe</p>\n              <p className=\"text-muted-foreground\">Administrator</p>\n            </div>\n            <ChevronsUpDown className=\"ml-auto\" />\n          </>\n        )}\n      </DropdownMenuTrigger>\n\n      <DropdownMenuContent\n        className=\"min-w-72\"\n        popover={{\n          placement: \"right\",\n        }}\n      >\n        <DropdownMenuHeader className=\"flex flex-col gap-1 px-2\">\n          <div className=\"text-sm font-medium leading-none\">\n            Martin Scorsese\n          </div>\n\n          <div className=\"text-xs text-muted-foreground\">\n            martin@filmstudio.com\n          </div>\n        </DropdownMenuHeader>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuGroup title=\"Account\">\n          <DropdownMenuItem>\n            <User className=\"mr-2 size-4\" />\n            Profile\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <Bell className=\"mr-2 size-4\" />\n            Notifications\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <CreditCard className=\"mr-2 size-4\" />\n            Billing\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuGroup title=\"Workspace\">\n          <DropdownMenuItem>\n            <Sparkles className=\"mr-2 size-4\" />\n            Upgrade Plan\n            <DropdownMenuShortcut keys=\"PRO\" />\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <Settings className=\"mr-2 size-4\" />\n            Settings\n            <DropdownMenuShortcut keys=\"⌘,\" />\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuItem tone=\"destructive\">\n          <LogOut className=\"mr-2 size-4\" />\n          Log out\n        </DropdownMenuItem>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n"
+            }
+          ]
+        },
+        {
+          "name": "inset",
+          "type": "registry:block",
+          "preview": "/blocks/sidebar/inset",
+          "previewEntry": "page.tsx",
+          "docs": [],
+          "files": [
+            {
+              "path": "app/blocks/sidebar/inset/app-sidebar.tsx",
+              "code": "\"use client\";\n\nimport {\n  ChartColumnIcon,\n  CheckSquareIcon,\n  FolderKanbanIcon,\n  LayoutDashboardIcon,\n  SettingsIcon,\n} from \"lucide-react\";\nimport {\n  Sidebar,\n  SidebarBody,\n  SidebarFooter,\n  SidebarHeader,\n  useSidebar,\n  SidebarItem,\n} from \"@/components/ui/block/sidebar\";\nimport { cn } from \"@/lib/utils\";\nimport { Avatar } from \"@/components/ui/core/avatar\";\nimport { UserMenu } from \"./user-menu\";\n\nconst navigationItems = [\n  {\n    label: \"Dashboard\",\n    icon: LayoutDashboardIcon,\n    active: true,\n  },\n  {\n    label: \"Projects\",\n    icon: FolderKanbanIcon,\n    active: false,\n  },\n  {\n    label: \"Tasks\",\n    icon: CheckSquareIcon,\n    active: false,\n  },\n  {\n    label: \"Analytics\",\n    icon: ChartColumnIcon,\n    active: false,\n  },\n  {\n    label: \"Settings\",\n    icon: SettingsIcon,\n    active: false,\n  },\n] as const;\n\nexport function AppSidebar() {\n  const { open } = useSidebar();\n\n  return (\n    <Sidebar variant=\"inset\" side=\"right\" collapsible=\"icon\">\n      <SidebarHeader>\n        <div\n          className={cn(\"flex items-center gap-3\", !open && \"justify-center\")}\n        >\n          <Avatar initials=\"A\" shape=\"square\" size=\"sm\" />\n\n          {open && (\n            <div className=\"min-w-0\">\n              <p className=\"truncate text-sm font-semibold\">Acme Inc.</p>\n              <p className=\"truncate text-xs text-muted-foreground\">\n                Workspace\n              </p>\n            </div>\n          )}\n        </div>\n      </SidebarHeader>\n\n      <SidebarBody>\n        {navigationItems.map((item) => (\n          <SidebarItem key={item.label}>\n            <item.icon className=\"size-4 shrink-0\" />\n\n            <span>{item.label}</span>\n          </SidebarItem>\n        ))}\n      </SidebarBody>\n\n      <SidebarFooter>\n        <UserMenu open={open} />\n      </SidebarFooter>\n    </Sidebar>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/sidebar/inset/page.tsx",
+              "code": "\"use client\";\n\nimport type { SVGProps } from \"react\";\nimport { useId } from \"react\";\n\nimport { AppSidebar } from \"./app-sidebar\";\n\nimport {\n  SidebarContent,\n  SidebarProvider,\n  SidebarTrigger,\n} from \"@/components/ui/block/sidebar\";\n\nexport default function InsetSidebarPage() {\n  return (\n    <SidebarProvider defaultOpen>\n      <AppSidebar />\n\n      <SidebarContent>\n        <header className=\"flex h-14 items-center justify-end border-b p-2\">\n          <SidebarTrigger className=\"rotate-180!\" />\n        </header>\n\n        <div className=\"flex flex-col gap-4 p-4\">\n          <div className=\"grid auto-rows-min gap-4 md:grid-cols-3\">\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n\n            <div className=\"relative aspect-video overflow-hidden rounded-xl border\">\n              <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n            </div>\n          </div>\n\n          <div className=\"relative min-h-150 flex-1 overflow-hidden rounded-xl border\">\n            <PlaceholderPattern className=\"absolute inset-0 size-full stroke-foreground/20\" />\n          </div>\n        </div>\n      </SidebarContent>\n    </SidebarProvider>\n  );\n}\n\nfunction PlaceholderPattern({ className, ...props }: SVGProps<SVGSVGElement>) {\n  const patternId = useId();\n\n  return (\n    <svg\n      className={className}\n      fill=\"none\"\n      xmlns=\"http://www.w3.org/2000/svg\"\n      {...props}\n    >\n      <defs>\n        <pattern\n          id={patternId}\n          x=\"0\"\n          y=\"0\"\n          width=\"10\"\n          height=\"10\"\n          patternUnits=\"userSpaceOnUse\"\n        >\n          <path d=\"M-3 13 15-5M-5 5l18-18M-1 21 17 3\" />\n        </pattern>\n      </defs>\n\n      <rect\n        width=\"100%\"\n        height=\"100%\"\n        stroke=\"none\"\n        fill={`url(#${patternId})`}\n      />\n    </svg>\n  );\n}\n"
+            },
+            {
+              "path": "app/blocks/sidebar/inset/user-menu.tsx",
+              "code": "\"use client\";\n\nimport { Avatar } from \"@/components/ui/core/avatar\";\nimport {\n  DropdownMenu,\n  DropdownMenuTrigger,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuGroup,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n  DropdownMenuHeader,\n} from \"@/components/ui/core/dropdown-menu\";\n\nimport {\n  CreditCard,\n  Bell,\n  Settings,\n  LogOut,\n  User,\n  Sparkles,\n  ChevronsUpDown,\n} from \"lucide-react\";\n\nexport function UserMenu({ open }: { open: boolean }) {\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger\n        aria-label=\"Open Menu\"\n        tone={open ? \"ghost\" : \"unstyled\"}\n        size=\"lg\"\n        iconOnly={!open}\n        className=\"w-full justify-start px-2\"\n      >\n        <Avatar\n          alt=\"Martin Scorsese\"\n          size=\"sm\"\n          src=\"https://i.ytimg.com/vi/QWFWIU-D36E/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDpdsuMduBqYtN7kAkne7irbTKLlg\"\n          shape=\"square\"\n          className=\"cursor-pointer\"\n        />\n\n        {open && (\n          <>\n            <div className=\"text-start min-w-0 truncate text-xs\">\n              <p className=\"font-medium\">John Doe</p>\n              <p className=\"text-muted-foreground\">Administrator</p>\n            </div>\n            <ChevronsUpDown className=\"ml-auto\" />\n          </>\n        )}\n      </DropdownMenuTrigger>\n\n      <DropdownMenuContent\n        className=\"min-w-72\"\n        popover={{\n          placement: \"right\",\n        }}\n      >\n        <DropdownMenuHeader className=\"flex flex-col gap-1 px-2\">\n          <div className=\"text-sm font-medium leading-none\">\n            Martin Scorsese\n          </div>\n\n          <div className=\"text-xs text-muted-foreground\">\n            martin@filmstudio.com\n          </div>\n        </DropdownMenuHeader>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuGroup title=\"Account\">\n          <DropdownMenuItem>\n            <User className=\"mr-2 size-4\" />\n            Profile\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <Bell className=\"mr-2 size-4\" />\n            Notifications\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <CreditCard className=\"mr-2 size-4\" />\n            Billing\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuGroup title=\"Workspace\">\n          <DropdownMenuItem>\n            <Sparkles className=\"mr-2 size-4\" />\n            Upgrade Plan\n            <DropdownMenuShortcut keys=\"PRO\" />\n          </DropdownMenuItem>\n\n          <DropdownMenuItem>\n            <Settings className=\"mr-2 size-4\" />\n            Settings\n            <DropdownMenuShortcut keys=\"⌘,\" />\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n\n        <DropdownMenuSeparator />\n\n        <DropdownMenuItem tone=\"destructive\">\n          <LogOut className=\"mr-2 size-4\" />\n          Log out\n        </DropdownMenuItem>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n"
+            }
+          ]
         }
       ]
     }

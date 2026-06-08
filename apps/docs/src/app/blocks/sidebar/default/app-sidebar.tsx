@@ -51,24 +51,15 @@ export function AppSidebar() {
   const { open } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="offcanvas">
       <SidebarHeader>
-        <div
-          className={cn(
-            "flex items-center gap-3 px-2 py-1",
-            !open && "justify-center",
-          )}
-        >
+        <div className="flex items-center gap-3 px-2 py-1">
           <Avatar initials="A" shape="square" size="sm" />
 
-          {open && (
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">Acme Inc.</p>
-              <p className="truncate text-xs text-muted-foreground">
-                Workspace
-              </p>
-            </div>
-          )}
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold">Acme Inc.</p>
+            <p className="truncate text-xs text-muted-foreground">Workspace</p>
+          </div>
         </div>
       </SidebarHeader>
 
@@ -83,13 +74,8 @@ export function AppSidebar() {
       </SidebarBody>
 
       <SidebarFooter>
-        <div
-          className={cn(
-            "flex items-center gap-3 px-2 py-1",
-            !open && "justify-center",
-          )}
-        >
-          <UserMenu open={open} />
+        <div className="flex items-center gap-3 px-2 py-1">
+          <UserMenu />
         </div>
       </SidebarFooter>
     </Sidebar>

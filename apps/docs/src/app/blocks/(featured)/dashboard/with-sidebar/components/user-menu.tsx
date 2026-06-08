@@ -22,13 +22,14 @@ import {
   ChevronsUpDown,
 } from "lucide-react";
 
-export function UserMenu() {
+export function UserMenu({ open }: { open: boolean }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label="Open Menu"
-        tone="ghost"
+        tone={open ? "ghost" : "unstyled"}
         size="lg"
+        iconOnly={!open}
         className="w-full justify-start px-2"
       >
         <Avatar
@@ -39,13 +40,15 @@ export function UserMenu() {
           className="cursor-pointer"
         />
 
-        <>
-          <div className="text-start min-w-0 truncate text-xs">
-            <p className="font-medium">John Doe</p>
-            <p className="text-muted-foreground">Administrator</p>
-          </div>
-          <ChevronsUpDown className="ml-auto" />
-        </>
+        {open && (
+          <>
+            <div className="text-start min-w-0 truncate text-xs">
+              <p className="font-medium">John Doe</p>
+              <p className="text-muted-foreground">Administrator</p>
+            </div>
+            <ChevronsUpDown className="ml-auto" />
+          </>
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

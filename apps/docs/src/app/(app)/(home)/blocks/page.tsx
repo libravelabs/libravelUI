@@ -1,9 +1,15 @@
 import { ExternalLink } from "lucide-react";
-import { BlocksLayout } from "../base-blocks-layout";
+import { BaseBlocksLayout } from "./base-blocks-layout";
+import { Sandbox } from "@/components/app/sandbox/sandbox";
+import registry from "@/../public/registry.json";
 
 export default function BlockPage() {
+  const blocks = registry.blocks;
+
+  console.log(blocks);
+
   return (
-    <BlocksLayout
+    <BaseBlocksLayout
       header={{
         title: "Blocks",
         description:
@@ -21,6 +27,21 @@ export default function BlockPage() {
           },
         },
       }}
-    ></BlocksLayout>
+    >
+      {Object.entries(blocks).map(([key, block], i) => {
+        const variant = block.variants[0];
+
+        if (!variant) return null;
+
+        return (
+          <Sandbox
+            key={variant.name}
+            title={`${block.title} ${variant.name}`}
+            comp={variant}
+            number={i + 1}
+          />
+        );
+      })}
+    </BaseBlocksLayout>
   );
 }

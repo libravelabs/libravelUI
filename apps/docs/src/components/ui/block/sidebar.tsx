@@ -469,7 +469,7 @@ function SidebarItem({
   href?: LinkProps["href"];
   isActive?: boolean;
 }) {
-  const { open } = useSidebar();
+  const { open, collapsible } = useSidebar();
   const Comp = href ? Link : "span";
 
   return (
@@ -479,7 +479,9 @@ function SidebarItem({
         iconOnly={open}
         className={cn(
           "justify-start w-full p-2",
-          !open && "[&>*:not(:first-child)]:hidden justify-center",
+          !open &&
+            collapsible === "icon" &&
+            "[&>*:not(:first-child)]:hidden justify-center",
           isActive && "bg-foreground/10",
         )}
       >

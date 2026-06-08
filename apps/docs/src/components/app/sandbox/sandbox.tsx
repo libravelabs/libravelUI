@@ -28,10 +28,12 @@ const deviceWidth = {
 export function Sandbox({
   comp,
   number,
+  title,
   ...iframe
 }: {
   comp: BlockVariant;
   number?: number;
+  title?: string;
   iframe?: HTMLMotionProps<"iframe">;
 }) {
   const [key, setKey] = useState<number>(0);
@@ -48,7 +50,7 @@ export function Sandbox({
         <div className="flex items-center justify-between lg:justify-start w-full gap-4">
           <Heading level={1} className="capitalize">
             {number ? `#${number} ` : ""}
-            {comp?.name}
+            {title ? title : comp?.name}
           </Heading>
 
           <Separator orientation="vertical" className="h-6 hidden lg:block" />
@@ -81,69 +83,68 @@ export function Sandbox({
         </div>
       </div>
 
-      <div key={key}>
-        <TabContent id="preview" className="p-0 border-0">
-          <div className="bg-dots">
-            <motion.iframe
-              animate={{
-                width: deviceWidth[device],
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 200,
-                damping: 24,
-              }}
-              className="aspect-video rounded-lg border h-96 md:h-auto md:min-h-160"
-              src={comp.preview}
-              {...iframe}
-            />
-          </div>
-        </TabContent>
-        <TabContent id="code" className="p-0">
-          <Tabs
-            orientation="vertical"
-            width="full"
-            radius="lg"
-            tone="underline"
-            className="gap-0"
-          >
-            <TabList className="w-72 shrink-0">
-              <TabTrigger
-                isDisabled
-                className="h-9.5 opacity-100! border-b rounded-none"
-              >
-                Files
-              </TabTrigger>
-              {comp?.files.map((file) => (
-                <TabTrigger
-                  key={file.path}
-                  id={file.path}
-                  className="outline-none!"
-                >
-                  {file.path.split("/").pop()}
-                </TabTrigger>
-              ))}
-            </TabList>
-
+      <TabContent id="preview" className="p-0 border-0">
+        <div className="bg-dots">
+          <motion.iframe
+            key={key}
+            animate={{
+              width: deviceWidth[device],
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 24,
+            }}
+            className="aspect-video rounded-lg border h-96 md:h-auto md:min-h-160"
+            src={comp.preview}
+            {...iframe}
+          />
+        </div>
+      </TabContent>
+      <TabContent id="code" className="p-0">
+        <Tabs
+          orientation="vertical"
+          width="full"
+          radius="lg"
+          tone="underline"
+          className="gap-0"
+        >
+          <TabList className="w-72 shrink-0">
+            <TabTrigger
+              isDisabled
+              className="h-9.5 opacity-100! border-b rounded-none"
+            >
+              Files
+            </TabTrigger>
             {comp?.files.map((file) => (
-              <TabContent
+              <TabTrigger
                 key={file.path}
                 id={file.path}
-                className="overflow-auto p-0 shadow-none border-s rounded-none"
+                className="outline-none!"
               >
-                <div className="h-9.5 opacity-100! border-b rounded-none p-2 text-sm text-muted-foreground">
-                  {file.path.split("/").pop()}
-                </div>
-                <CodeBlock
-                  code={file.code}
-                  lang="ts"
-                  className="rounded-none border-none h-96 md:h-auto md:min-h-160"
-                />
-              </TabContent>
+                {file.path.split("/").pop()}
+              </TabTrigger>
             ))}
-          </Tabs>
-        </TabContent>
-      </div>
+          </TabList>
+
+          {comp?.files.map((file) => (
+            <TabContent
+              key={file.path}
+              id={file.path}
+              className="overflow-auto p-0 shadow-none border-s rounded-none"
+            >
+              <div className="h-9.5 opacity-100! border-b rounded-none p-2 text-sm text-muted-foreground">
+                {file.path.split("/").pop()}
+              </div>
+              <CodeBlock
+                code={file.code}
+                lang="ts"
+                className="rounded-none border-none h-96 md:h-auto md:min-h-160"
+              />
+            </TabContent>
+          ))}
+        </Tabs>
+      </TabContent>
     </Tabs>
   );
 }
