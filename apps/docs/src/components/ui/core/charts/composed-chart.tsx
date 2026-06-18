@@ -1,154 +1,126 @@
 "use client";
 
+import type { CSSProperties, ComponentProps } from "react";
 import {
-  ComposedChart as RechartsComposedChart,
-  Area,
-  Bar,
-  Line,
+  Area as RechartsArea,
+  Bar as RechartsBar,
   CartesianGrid,
+  ComposedChart as RechartsComposedChart,
+  Legend,
+  Line as RechartsLine,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
-import { ChartContainer } from "./chart-container";
-import { ChartLegend, ChartTooltip } from "./chart-tooltip";
-import type { ComposedChartProps } from "./chart-types";
-import { cn } from "@/lib/utils";
 import {
-  getVisibleSeriesKeys,
-  getSeriesColor,
-  getSeriesConfig,
+  ChartSurface,
+  getChartColor,
   getSeriesLabel,
-} from "./chart-utils";
+  type ChartConfig,
+  type ChartDatum,
+  type NumericSeriesKey,
+  type ChartSeriesType,
+} from "./chart-shell";
+import { ChartTooltip } from "./chart-tooltip";
 
-export function ComposedChart<TData extends Record<string, unknown>>({
+export type ComposedChartProps<TData extends ChartDatum> = Omit<
+  ComponentProps<typeof RechartsComposedChart>,
+  "data" | "width" | "height" | "children"
+> & {
+  data: TData[];
+  dataKey: Extract<keyof TData, string>;
+  config: Partial<Record<NumericSeriesKey<TData>, ChartConfig<TData>[NumericSeriesKey<TData>] & { type?: ChartSeriesType }>>;
+  containerHeight?: number | string;
+  className?: string;
+  style?: CSSProperties;
+  xAxisProps?: Omit<ComponentProps<typeof XAxis>, "dataKey">;
+  yAxisProps?: Omit<ComponentProps<typeof YAxis>, "dataKey">;
+  cartesianGridProps?: ComponentProps<typeof CartesianGrid>;
+  tooltipProps?: ComponentProps<typeof ChartTooltip>;
+  legendProps?: ComponentProps<typeof Legend>;
+  hideGrid?: boolean;
+  hideXAxis?: boolean;
+  hideYAxis?: boolean;
+  hideTooltip?: boolean;
+  hideLegend?: boolean;
+};
+
+export function ComposedChart<TData extends ChartDatum>({
   data,
   dataKey,
   config,
-  containerHeight = 320,
-  classNames,
-  showGrid = true,
-  showLegend = true,
-  showTooltip = true,
-  margin = { top: 5, right: 8, bottom: 0, left: 0 },
+  containerHeight,
+  className,
+  style,
   xAxisProps,
   yAxisProps,
-  gridProps,
+  cartesianGridProps,
+  tooltipProps,
   legendProps,
-  renderTooltip,
-  renderLegend,
-}: ComposedChartProps<TData>) {
-  const seriesKeys = getVisibleSeriesKeys(config);
+  hideGrid = false,
+  hideXAxis = false,
+  hideYAxis = false,
+  hideTooltip = false,
+  hideLegend = false,
+  margin,
+  ...chartProps
+}: ComposedChartProps<TData>): JSX.Element {
+  const series = Object.entries(config) as Array<
+    [NumericSeriesKey<TData>, NonNullable<ComposedChartProps<TData>["config"][NumericSeriesKey<TData>]>]
+  >;
 
   return (
-    <ChartContainer
-      height={containerHeight}
-      classNames={classNames}
-    >
-      <div className={cn("h-full min-h-0", classNames?.chart)}>
-        <ResponsiveContainer width="100%" height="100%">
-        <RechartsComposedChart data={data} margin={margin}>
-          {showGrid ? (
-            <CartesianGrid
-              stroke="var(--border)"
-              strokeDasharray="3 3"
-              vertical={false}
-              {...gridProps}
+    <ChartSurface containerHeight={containerHeight} className={className} style={style}>
+      <RechartsComposedChart data={data} margin={margin} {...chartProps}>
+        {!hideGrid ? <CartesianGrid strokeDasharray="3 3" {...cartesianGridProps} /> : null}
+        {!hideXAxis ? <XAxis dataKey={dataKey} tickLine={false} axisLine={false} {...xAxisProps} /> : null}
+        {!hideYAxis ? <YAxis tickLine={false} axisLine={false} width={40} {...yAxisProps} /> : null}
+        {!hideTooltip ? <ChartTooltip {...tooltipProps} /> : null}
+        {!hideLegend ? <Legend {...legendProps} /> : null}
+
+        {series.map(([seriesKey, seriesConfig], index) => {
+          const color = getChartColor(index, seriesConfig.color);
+          const label = getSeriesLabel(seriesConfig.label, seriesKey);
+          const type = seriesConfig.type ?? "line";
+
+          if (type === "area") {
+            return (
+              <RechartsArea
+                key={seriesKey}
+                dataKey={seriesKey}
+                name={label}
+                stroke={color}
+                fill={color}
+                fillOpacity={0.22}
+                type="monotone"
+              />
+            );
+          }
+
+          if (type === "bar") {
+            return (
+              <RechartsBar
+                key={seriesKey}
+                dataKey={seriesKey}
+                name={label}
+                fill={color}
+                radius={[8, 8, 0, 0]}
+              />
+            );
+          }
+
+          return (
+            <RechartsLine
+              key={seriesKey}
+              dataKey={seriesKey}
+              name={label}
+              stroke={color}
+              strokeWidth={2}
+              dot={false}
+              type="monotone"
             />
-          ) : null}
-
-          <XAxis
-            dataKey={dataKey}
-            tickLine={false}
-            axisLine={false}
-            tickMargin={10}
-            {...xAxisProps}
-          />
-          <YAxis
-            tickLine={false}
-            axisLine={false}
-            tickMargin={10}
-            {...yAxisProps}
-          />
-
-          {showTooltip ? (
-            renderTooltip ? (
-              <Tooltip
-                cursor={{ stroke: "var(--border)" }}
-                content={(props) => renderTooltip(props as never)}
-              />
-            ) : (
-              <Tooltip
-                cursor={{ stroke: "var(--border)" }}
-                content={(props) => <ChartTooltip {...props} config={config} classNames={{ root: classNames?.tooltip }} />}
-              />
-            )
-          ) : null}
-
-          {showLegend ? (
-            renderLegend ? (
-              <Legend content={(props) => renderLegend(props as never)} {...legendProps} />
-            ) : (
-              <Legend content={(props) => <ChartLegend {...props} config={config} classNames={{ root: classNames?.legend }} />} {...legendProps} />
-            )
-          ) : null}
-
-          {seriesKeys.map((seriesKey, index) => {
-            const series = getSeriesConfig(config, seriesKey);
-            const color = getSeriesColor(config, seriesKey, index);
-            const label = getSeriesLabel(config, seriesKey);
-
-            switch (series?.type) {
-              case "bar":
-                return (
-                  <Bar
-                    key={seriesKey}
-                    dataKey={seriesKey}
-                    name={label}
-                    fill={color}
-                    radius={series.radius ?? 4}
-                    stackId={series.stackId}
-                    hide={series.hide}
-                    unit={series.unit}
-                  />
-                );
-              case "area":
-                return (
-                  <Area
-                    key={seriesKey}
-                    dataKey={seriesKey}
-                    name={label}
-                    type="monotone"
-                    stroke={color}
-                    fill={color}
-                    fillOpacity={series.fillOpacity ?? 0.2}
-                    strokeWidth={series.strokeWidth ?? 2}
-                    hide={series.hide}
-                    unit={series.unit}
-                  />
-                );
-              default:
-                return (
-                  <Line
-                    key={seriesKey}
-                    dataKey={seriesKey}
-                    name={label}
-                    type={series?.type ?? "monotone"}
-                    stroke={color}
-                    strokeWidth={series?.strokeWidth ?? 2}
-                    dot={false}
-                    activeDot={{ r: 4 }}
-                    hide={series?.hide}
-                    unit={series?.unit}
-                  />
-                );
-            }
-          })}
-        </RechartsComposedChart>
-        </ResponsiveContainer>
-      </div>
-    </ChartContainer>
+          );
+        })}
+      </RechartsComposedChart>
+    </ChartSurface>
   );
 }

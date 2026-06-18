@@ -1,235 +1,160 @@
-export type ShopTrafficPoint = {
+import type { ChartConfig, PieDatum, FunnelDatum, TreemapNode } from "@/components/ui/core/charts";
+
+export type TrafficDatum = {
   day: string;
   sessions: number;
-  addToCart: number;
   orders: number;
   returningCustomers: number;
 };
 
-export type RevenuePoint = {
+export type RevenueDatum = {
   month: string;
   revenue: number;
   grossProfit: number;
   adSpend: number;
 };
 
-export type CategorySalesPoint = {
+export type CategorySalesDatum = {
   category: string;
   revenue: number;
   refunds: number;
   units: number;
 };
 
-export type CheckoutStagePoint = {
-  stage: string;
-  value: number;
-};
+export type FunnelStageDatum = FunnelDatum;
+export type ChannelDatum = PieDatum;
 
-export type ChannelMixPoint = {
-  name: string;
-  value: number;
-};
-
-export type StoreHealthPoint = {
+export type HealthDatum = {
   subject: string;
   current: number;
   target: number;
 };
 
-export type OperationsKpiPoint = {
+export type OperationsDatum = {
   metric: string;
   actual: number;
   target: number;
 };
 
-export type CampaignPoint = {
-  cac: number;
+export type ScatterPoint = {
+  cost: number;
   roas: number;
 };
 
-export type ScatterSeriesPoint = {
-  name: string;
-  color: string;
-  data: readonly CampaignPoint[];
-  xKey: "cac";
-  yKey: "roas";
+export const shopTrafficData: readonly TrafficDatum[] = [
+  { day: "Mon", sessions: 1240, orders: 84, returningCustomers: 310 },
+  { day: "Tue", sessions: 1385, orders: 92, returningCustomers: 340 },
+  { day: "Wed", sessions: 1268, orders: 88, returningCustomers: 322 },
+  { day: "Thu", sessions: 1492, orders: 105, returningCustomers: 381 },
+  { day: "Fri", sessions: 1710, orders: 126, returningCustomers: 430 },
+  { day: "Sat", sessions: 1608, orders: 118, returningCustomers: 392 },
+  { day: "Sun", sessions: 1422, orders: 97, returningCustomers: 355 },
+];
+
+export const shopTrafficConfig: ChartConfig<keyof TrafficDatum & string> = {
+  sessions: { label: "Sessions", color: "var(--chart-1)", fill: "var(--chart-1)", stroke: "var(--chart-1)", strokeWidth: 2 },
+  orders: { label: "Orders", color: "var(--chart-2)", fill: "var(--chart-2)", stroke: "var(--chart-2)", strokeWidth: 2 },
+  returningCustomers: { label: "Returning customers", color: "var(--chart-3)", fill: "var(--chart-3)", stroke: "var(--chart-3)", strokeWidth: 2 },
 };
 
-export type PartitionLayoutPoint = {
-  name: string;
-  value: number;
-  fill?: string;
+export const revenueData: readonly RevenueDatum[] = [
+  { month: "Jan", revenue: 42000, grossProfit: 24500, adSpend: 8200 },
+  { month: "Feb", revenue: 46800, grossProfit: 27100, adSpend: 9100 },
+  { month: "Mar", revenue: 50100, grossProfit: 28800, adSpend: 9800 },
+  { month: "Apr", revenue: 53900, grossProfit: 31400, adSpend: 10200 },
+  { month: "May", revenue: 58400, grossProfit: 33900, adSpend: 10800 },
+  { month: "Jun", revenue: 62200, grossProfit: 36100, adSpend: 11400 },
+];
+
+export const revenueConfig: ChartConfig<keyof RevenueDatum & string> = {
+  revenue: { label: "Revenue", color: "var(--chart-4)", fill: "var(--chart-4)", stroke: "var(--chart-4)", fillOpacity: 0.18 },
+  grossProfit: { label: "Gross profit", color: "var(--chart-2)", fill: "var(--chart-2)", stroke: "var(--chart-2)", fillOpacity: 0.18 },
+  adSpend: { label: "Ad spend", color: "var(--chart-1)", fill: "var(--chart-1)", stroke: "var(--chart-1)", fillOpacity: 0.18 },
 };
 
-export const shopTrafficData: readonly ShopTrafficPoint[] = [
-  {
-    day: "Mon",
-    sessions: 4120,
-    addToCart: 398,
-    orders: 164,
-    returningCustomers: 71,
-  },
-  {
-    day: "Tue",
-    sessions: 4380,
-    addToCart: 425,
-    orders: 181,
-    returningCustomers: 78,
-  },
-  {
-    day: "Wed",
-    sessions: 4510,
-    addToCart: 441,
-    orders: 176,
-    returningCustomers: 82,
-  },
-  {
-    day: "Thu",
-    sessions: 4870,
-    addToCart: 489,
-    orders: 210,
-    returningCustomers: 91,
-  },
-  {
-    day: "Fri",
-    sessions: 5290,
-    addToCart: 540,
-    orders: 228,
-    returningCustomers: 97,
-  },
-  {
-    day: "Sat",
-    sessions: 4680,
-    addToCart: 472,
-    orders: 201,
-    returningCustomers: 88,
-  },
-  {
-    day: "Sun",
-    sessions: 5015,
-    addToCart: 498,
-    orders: 217,
-    returningCustomers: 94,
-  },
+export const categorySalesData: readonly CategorySalesDatum[] = [
+  { category: "Electronics", revenue: 124000, refunds: 6200, units: 310 },
+  { category: "Accessories", revenue: 73000, refunds: 2800, units: 540 },
+  { category: "Home", revenue: 98000, refunds: 4100, units: 460 },
+  { category: "Beauty", revenue: 54000, refunds: 1900, units: 370 },
+];
+
+export const categorySalesConfig: ChartConfig<keyof CategorySalesDatum & string> = {
+  revenue: { label: "Revenue", color: "var(--chart-4)", fill: "var(--chart-4)", radius: 8 },
+  refunds: { label: "Refunds", color: "var(--chart-2)", fill: "var(--chart-2)", radius: 8 },
+  units: { label: "Units sold", color: "var(--chart-1)", fill: "var(--chart-1)", radius: 8 },
+};
+
+export const checkoutFunnelData: readonly FunnelStageDatum[] = [
+  { label: "Product view", value: 14000, valueLabel: "14.0k sessions", color: "var(--chart-1)" },
+  { label: "Add to cart", value: 5200, valueLabel: "5.2k sessions", color: "var(--chart-2)" },
+  { label: "Shipping", value: 3100, valueLabel: "3.1k sessions", color: "var(--chart-3)" },
+  { label: "Payment", value: 1900, valueLabel: "1.9k sessions", color: "var(--chart-4)" },
+  { label: "Purchase", value: 1240, valueLabel: "1.24k orders", color: "var(--chart-5)" },
+];
+
+export const checkoutFunnelConfig: ChartConfig<string> = {
+  "Product view": { label: "Product view", color: "var(--chart-1)" },
+  "Add to cart": { label: "Add to cart", color: "var(--chart-2)" },
+  Shipping: { label: "Shipping", color: "var(--chart-3)" },
+  Payment: { label: "Payment", color: "var(--chart-4)" },
+  Purchase: { label: "Purchase", color: "var(--chart-5)" },
+};
+
+export const channelMixData: readonly ChannelDatum[] = [
+  { label: "Organic search", value: 42, valueLabel: "42%", color: "var(--chart-1)", textColor: "var(--background)" },
+  { label: "Paid search", value: 21, valueLabel: "21%", color: "var(--chart-2)", textColor: "var(--background)" },
+  { label: "Email", value: 14, valueLabel: "14%", color: "var(--chart-3)", textColor: "var(--background)" },
+  { label: "Social", value: 13, valueLabel: "13%", color: "var(--chart-4)", textColor: "var(--background)" },
+  { label: "Direct", value: 10, valueLabel: "10%", color: "var(--chart-5)", textColor: "var(--background)" },
+];
+
+export const channelMixConfig: ChartConfig<string> = {
+  "Organic search": { label: "Organic search", color: "var(--chart-1)", fill: "var(--chart-1)", textColor: "var(--background)" },
+  "Paid search": { label: "Paid search", color: "var(--chart-2)", fill: "var(--chart-2)", textColor: "var(--background)" },
+  Email: { label: "Email", color: "var(--chart-3)", fill: "var(--chart-3)", textColor: "var(--background)" },
+  Social: { label: "Social", color: "var(--chart-4)", fill: "var(--chart-4)", textColor: "var(--background)" },
+  Direct: { label: "Direct", color: "var(--chart-5)", fill: "var(--chart-5)", textColor: "var(--background)" },
+};
+
+export const storeHealthData: readonly HealthDatum[] = [
+  { subject: "Checkout", current: 82, target: 92 },
+  { subject: "Search", current: 74, target: 88 },
+  { subject: "Support", current: 69, target: 85 },
+  { subject: "Inventory", current: 77, target: 90 },
+  { subject: "Delivery", current: 71, target: 87 },
+];
+
+export const storeHealthConfig: ChartConfig<keyof HealthDatum & string> = {
+  current: { label: "Current", color: "var(--chart-1)", fill: "var(--chart-1)" },
+  target: { label: "Target", color: "var(--chart-3)", fill: "var(--chart-3)" },
+};
+
+export const operationsKpiData: readonly OperationsDatum[] = [
+  { metric: "Uptime", actual: 98, target: 99 },
+  { metric: "On-time", actual: 91, target: 95 },
+  { metric: "Accuracy", actual: 96, target: 98 },
+  { metric: "Satisfaction", actual: 88, target: 92 },
+];
+
+export const operationsKpiConfig: ChartConfig<keyof OperationsDatum & string> = {
+  actual: { label: "Actual", color: "var(--chart-1)", fill: "var(--chart-1)" },
+  target: { label: "Target", color: "var(--chart-2)", fill: "var(--chart-2)" },
+};
+
+export const acquisitionScatterData = [
+  { name: "Brand A", data: [
+    { cost: 12, roas: 4.6 }, { cost: 16, roas: 4.1 }, { cost: 18, roas: 3.8 },
+  ], xKey: "cost", yKey: "roas", color: "var(--chart-1)" },
+  { name: "Brand B", data: [
+    { cost: 20, roas: 3.2 }, { cost: 24, roas: 3.0 }, { cost: 28, roas: 2.8 },
+  ], xKey: "cost", yKey: "roas", color: "var(--chart-3)" },
 ] as const;
 
-export const revenueData: readonly RevenuePoint[] = [
-  { month: "Jan", revenue: 28400, grossProfit: 9800, adSpend: 4200 },
-  { month: "Feb", revenue: 30100, grossProfit: 10350, adSpend: 4600 },
-  { month: "Mar", revenue: 29650, grossProfit: 10120, adSpend: 4400 },
-  { month: "Apr", revenue: 33800, grossProfit: 11640, adSpend: 4900 },
-  { month: "May", revenue: 36250, grossProfit: 12480, adSpend: 5300 },
-  { month: "Jun", revenue: 38850, grossProfit: 13390, adSpend: 5600 },
-] as const;
-
-export const categorySalesData: readonly CategorySalesPoint[] = [
-  { category: "Apparel", revenue: 18400, refunds: 620, units: 960 },
-  { category: "Footwear", revenue: 22100, refunds: 840, units: 730 },
-  { category: "Accessories", revenue: 14900, refunds: 310, units: 1180 },
-  { category: "Home", revenue: 17350, refunds: 540, units: 510 },
-  { category: "Beauty", revenue: 12600, refunds: 260, units: 640 },
-] as const;
-
-export const checkoutFunnelData: readonly CheckoutStagePoint[] = [
-  { stage: "Product view", value: 12600 },
-  { stage: "Add to cart", value: 4680 },
-  { stage: "Shipping", value: 2860 },
-  { stage: "Payment", value: 1890 },
-  { stage: "Purchase", value: 1460 },
-] as const;
-
-export const channelMixData: readonly ChannelMixPoint[] = [
-  {
-    name: "Organic search",
-    value: 38,
-    fill: "var(--chart-1)",
-    stroke: "var(--background)",
-    className: "fill-[var(--chart-1)] hover:opacity-80",
-    textColor: "var(--foreground)",
-    labelClassName: "font-semibold text-[11px]",
-  },
-  {
-    name: "Paid search",
-    value: 24,
-    fill: "var(--chart-2)",
-    stroke: "var(--background)",
-    className: "fill-[var(--chart-2)]",
-    textColor: "var(--foreground)",
-  },
-  {
-    name: "Email",
-    value: 15,
-    fill: "var(--chart-3)",
-    stroke: "var(--background)",
-    className: "fill-[var(--chart-3)]",
-    textColor: "var(--foreground)",
-  },
-] as const;
-
-export const storeHealthData: readonly StoreHealthPoint[] = [
-  { subject: "Speed", current: 86, target: 92 },
-  { subject: "UX", current: 89, target: 90 },
-  { subject: "Trust", current: 84, target: 88 },
-  { subject: "Support", current: 91, target: 89 },
-  { subject: "Retention", current: 77, target: 82 },
-] as const;
-
-export const operationsKpiData: readonly OperationsKpiPoint[] = [
-  { metric: "Pick accuracy", actual: 97, target: 99 },
-  { metric: "On-time dispatch", actual: 94, target: 96 },
-  { metric: "Return handling", actual: 89, target: 92 },
-  { metric: "Inventory sync", actual: 98, target: 99 },
-] as const;
-
-export const acquisitionScatterData: readonly ScatterSeriesPoint[] = [
-  {
-    name: "Prospecting",
-    color: "var(--chart-1)",
-    xKey: "cac",
-    yKey: "roas",
-    data: [
-      { cac: 18, roas: 3.1 },
-      { cac: 21, roas: 2.9 },
-      { cac: 24, roas: 2.7 },
-      { cac: 27, roas: 2.4 },
-    ],
-  },
-  {
-    name: "Retargeting",
-    color: "var(--chart-3)",
-    xKey: "cac",
-    yKey: "roas",
-    data: [
-      { cac: 9, roas: 5.2 },
-      { cac: 11, roas: 4.8 },
-      { cac: 13, roas: 4.4 },
-      { cac: 15, roas: 4.1 },
-    ],
-  },
-] as const;
-
-export const storageAllocationData = [
-  {
-    name: "EFI System",
-    value: Math.log10(17 + 1),
-    fill: "var(--chart-1)",
-    textColor: "#000",
-  },
-  {
-    name: "Microsoft Reserved",
-    value: Math.log10(16 + 1),
-    fill: "var(--chart-2)",
-    textColor: "#000",
-  },
-  {
-    name: "NTFS (C:)",
-    value: Math.log10(512000 + 1),
-    fill: "var(--chart-3)",
-    textColor: "#000",
-  },
-  {
-    name: "Free Space",
-    value: Math.log10(980 + 1),
-    fill: "var(--muted)",
-  },
-] as const;
+export const storageAllocationData: readonly TreemapNode[] = [
+  { id: "efi", label: "EFI System", value: 2, valueLabel: "2 GB", color: "var(--chart-1)", textColor: "var(--background)" },
+  { id: "msr", label: "Microsoft Reserved", value: 1, valueLabel: "1 GB", color: "var(--chart-2)", textColor: "var(--background)" },
+  { id: "windows", label: "Windows (C:)", value: 68, valueLabel: "68 GB", color: "var(--chart-3)", textColor: "var(--background)" },
+  { id: "recovery", label: "Recovery", value: 7, valueLabel: "7 GB", color: "var(--chart-4)", textColor: "var(--background)" },
+  { id: "free", label: "Free Space", value: 22, valueLabel: "22 GB", color: "var(--muted)", textColor: "var(--foreground)" },
+];

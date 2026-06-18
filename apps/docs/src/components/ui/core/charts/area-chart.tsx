@@ -1,142 +1,99 @@
 "use client";
 
+import type { CSSProperties, ComponentProps } from "react";
 import {
+  Area as RechartsArea,
   AreaChart as RechartsAreaChart,
-  Area,
   CartesianGrid,
+  Legend,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
-import { ChartContainer } from "./chart-container";
-import { ChartLegend, ChartTooltip } from "./chart-tooltip";
-import type { CartesianChartProps } from "./chart-types";
-import { cn } from "@/lib/utils";
 import {
-  getVisibleSeriesKeys,
-  getSeriesColor,
-  getSeriesConfig,
+  ChartSurface,
+  getChartColor,
   getSeriesLabel,
-} from "./chart-utils";
+  joinClassNames,
+  type ChartConfig,
+  type ChartDatum,
+  type NumericSeriesKey,
+} from "./chart-shell";
+import { ChartTooltip } from "./chart-tooltip";
 
-export function AreaChart<TData extends Record<string, unknown>>({
+export type AreaChartProps<TData extends ChartDatum> = Omit<
+  ComponentProps<typeof RechartsAreaChart>,
+  "data" | "width" | "height" | "children"
+> & {
+  data: TData[];
+  dataKey: Extract<keyof TData, string>;
+  config: ChartConfig<TData>;
+  containerHeight?: number | string;
+  className?: string;
+  style?: CSSProperties;
+  xAxisProps?: Omit<ComponentProps<typeof XAxis>, "dataKey">;
+  yAxisProps?: Omit<ComponentProps<typeof YAxis>, "dataKey">;
+  cartesianGridProps?: ComponentProps<typeof CartesianGrid>;
+  tooltipProps?: ComponentProps<typeof ChartTooltip>;
+  legendProps?: ComponentProps<typeof Legend>;
+  hideGrid?: boolean;
+  hideXAxis?: boolean;
+  hideYAxis?: boolean;
+  hideTooltip?: boolean;
+  hideLegend?: boolean;
+  stacked?: boolean;
+  type?: ComponentProps<typeof RechartsArea>["type"];
+};
+
+export function AreaChart<TData extends ChartDatum>({
   data,
   dataKey,
   config,
-  containerHeight = 320,
-  classNames,
-  showGrid = true,
-  showLegend = true,
-  showTooltip = true,
-  margin = { top: 5, right: 8, bottom: 0, left: 0 },
+  containerHeight,
+  className,
+  style,
   xAxisProps,
   yAxisProps,
-  gridProps,
+  cartesianGridProps,
+  tooltipProps,
   legendProps,
-  renderTooltip,
-  renderLegend,
-  renderXAxis,
-  renderYAxis,
-}: CartesianChartProps<TData>) {
-  const seriesKeys = getVisibleSeriesKeys(config);
+  hideGrid = false,
+  hideXAxis = false,
+  hideYAxis = false,
+  hideTooltip = false,
+  hideLegend = false,
+  stacked = false,
+  type = "monotone",
+  margin,
+  ...chartProps
+}: AreaChartProps<TData>): JSX.Element {
+  const series = Object.entries(config) as Array<
+    [NumericSeriesKey<TData>, NonNullable<ChartConfig<TData>[NumericSeriesKey<TData>]>]
+  >;
 
   return (
-    <ChartContainer
-      height={containerHeight}
-      classNames={classNames}
-    >
-      <div className={cn("h-full min-h-0", classNames?.chart)}>
-        <ResponsiveContainer width="100%" height="100%">
-        <RechartsAreaChart data={data} margin={margin}>
-          {showGrid ? (
-            <CartesianGrid
-              stroke="var(--border)"
-              strokeDasharray="3 3"
-              vertical={false}
-              {...gridProps}
-            />
-          ) : null}
+    <ChartSurface containerHeight={containerHeight} className={className} style={style}>
+      <RechartsAreaChart data={data} margin={margin} {...chartProps}>
+        {!hideGrid ? <CartesianGrid strokeDasharray="3 3" {...cartesianGridProps} /> : null}
+        {!hideXAxis ? <XAxis dataKey={dataKey} tickLine={false} axisLine={false} {...xAxisProps} /> : null}
+        {!hideYAxis ? <YAxis tickLine={false} axisLine={false} width={40} {...yAxisProps} /> : null}
+        {!hideTooltip ? <ChartTooltip {...tooltipProps} /> : null}
+        {!hideLegend ? <Legend {...legendProps} /> : null}
 
-          {renderXAxis ? (
-            renderXAxis({
-              dataKey,
-              tickLine: false,
-              axisLine: false,
-              tickMargin: 10,
-              ...xAxisProps,
-            } as never)
-          ) : (
-            <XAxis
-              dataKey={dataKey}
-              tickLine={false}
-              axisLine={false}
-              tickMargin={10}
-              {...xAxisProps}
-            />
-          )}
-
-          {renderYAxis ? (
-            renderYAxis({
-              tickLine: false,
-              axisLine: false,
-              tickMargin: 10,
-              ...yAxisProps,
-            } as never)
-          ) : (
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={10}
-              {...yAxisProps}
-            />
-          )}
-
-          {showTooltip ? (
-            renderTooltip ? (
-              <Tooltip
-                cursor={{ stroke: "var(--border)" }}
-                content={(props) => renderTooltip(props as never)}
-              />
-            ) : (
-              <Tooltip
-                cursor={{ stroke: "var(--border)" }}
-                content={(props) => <ChartTooltip {...props} config={config} classNames={{ root: classNames?.tooltip }} />}
-              />
-            )
-          ) : null}
-
-          {showLegend ? (
-            renderLegend ? (
-              <Legend content={(props) => renderLegend(props as never)} {...legendProps} />
-            ) : (
-              <Legend content={(props) => <ChartLegend {...props} config={config} classNames={{ root: classNames?.legend }} />} {...legendProps} />
-            )
-          ) : null}
-
-          {seriesKeys.map((seriesKey, index) => {
-            const series = getSeriesConfig(config, seriesKey);
-            const color = getSeriesColor(config, seriesKey, index);
-
-            return (
-              <Area
-                key={seriesKey}
-                dataKey={seriesKey}
-                name={getSeriesLabel(config, seriesKey)}
-                type={series?.type ?? "monotone"}
-                stroke={color}
-                fill={color}
-                fillOpacity={series?.fillOpacity ?? 0.2}
-                strokeWidth={series?.strokeWidth ?? 2}
-                unit={series?.unit}
-                hide={series?.hide}
-              />
-            );
-          })}
-        </RechartsAreaChart>
-        </ResponsiveContainer>
-      </div>
-    </ChartContainer>
+        {series.map(([seriesKey, seriesConfig], index) => (
+          <RechartsArea
+            key={seriesKey}
+            dataKey={seriesKey}
+            name={getSeriesLabel(seriesConfig.label, seriesKey)}
+            stroke={getChartColor(index, seriesConfig.color)}
+            fill={getChartColor(index, seriesConfig.color)}
+            fillOpacity={0.22}
+            type={type}
+            stackId={stacked ? "stack" : undefined}
+            dot={false}
+            activeDot={{ r: 4 }}
+          />
+        ))}
+      </RechartsAreaChart>
+    </ChartSurface>
   );
 }

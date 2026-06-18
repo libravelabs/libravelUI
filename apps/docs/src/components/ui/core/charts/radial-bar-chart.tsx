@@ -1,107 +1,117 @@
 "use client";
 
+import type { CSSProperties, ComponentProps } from "react";
 import {
-  RadialBarChart as RechartsRadialBarChart,
-  RadialBar,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Tooltip,
+  Cell,
   Legend,
-  ResponsiveContainer,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  RadialBar as RechartsRadialBar,
+  RadialBarChart as RechartsRadialBarChart,
 } from "recharts";
-import { ChartContainer } from "./chart-container";
-import { ChartLegend, ChartTooltip } from "./chart-tooltip";
-import type { RadialBarChartProps } from "./chart-types";
-import { cn } from "@/lib/utils";
 import {
-  getVisibleSeriesKeys,
-  getSeriesColor,
-  getSeriesConfig,
-  getSeriesLabel,
-} from "./chart-utils";
+  ChartSurface,
+  getChartColor,
+  type ChartSeriesConfig,
+} from "./chart-shell";
+import { ChartTooltip } from "./chart-tooltip";
+
+export type RadialBarChartProps<TData extends Record<string, unknown>> = Omit<
+  ComponentProps<typeof RechartsRadialBarChart>,
+  "data" | "width" | "height" | "children"
+> & {
+  data: TData[];
+  nameKey: Extract<keyof TData, string>;
+  valueKey: Extract<keyof TData, string>;
+  config?: ChartSeriesConfig;
+  containerHeight?: number | string;
+  className?: string;
+  style?: CSSProperties;
+  tooltipProps?: ComponentProps<typeof ChartTooltip>;
+  legendProps?: ComponentProps<typeof Legend>;
+  angleAxisProps?: Omit<ComponentProps<typeof PolarAngleAxis>, "dataKey">;
+  radiusAxisProps?: ComponentProps<typeof PolarRadiusAxis>;
+  hideTooltip?: boolean;
+  hideLegend?: boolean;
+  innerRadius?: number | string;
+  outerRadius?: number | string;
+  startAngle?: number;
+  endAngle?: number;
+  barSize?: number;
+};
 
 export function RadialBarChart<TData extends Record<string, unknown>>({
   data,
-  dataKey,
+  nameKey,
+  valueKey,
   config,
-  containerHeight = 320,
-  classNames,
-  showLegend = true,
-  showTooltip = true,
-  startAngle = 90,
-  endAngle = -270,
-  innerRadius = 30,
-  outerRadius = 120,
-  barSize,
+  containerHeight,
+  className,
+  style,
+  tooltipProps,
+  legendProps,
   angleAxisProps,
   radiusAxisProps,
-  renderTooltip,
-  renderLegend,
-}: RadialBarChartProps<TData>) {
-  const seriesKeys = getVisibleSeriesKeys(config);
+  hideTooltip = false,
+  hideLegend = true,
+  innerRadius = "20%",
+  outerRadius = "90%",
+  startAngle = 180,
+  endAngle = 0,
+  barSize,
+  ...chartProps
+}: RadialBarChartProps<TData>): JSX.Element {
+  const label = config?.label ?? valueKey;
+  const seriesName =
+    typeof label === "string" || typeof label === "number" ? String(label) : valueKey;
+  const seriesColor = config?.color;
 
   return (
-    <ChartContainer
-      height={containerHeight}
-      classNames={classNames}
-    >
-      <div className={cn("h-full min-h-0", classNames?.chart)}>
-        <ResponsiveContainer width="100%" height="100%">
-        <RechartsRadialBarChart
-          data={data}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
+    <ChartSurface containerHeight={containerHeight} className={className} style={style}>
+      <RechartsRadialBarChart
+        data={data}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        barSize={barSize}
+        {...chartProps}
+      >
+        <PolarGrid gridType="circle" />
+        <PolarAngleAxis
+          dataKey={nameKey}
+          type="category"
+          tickLine={false}
+          axisLine={false}
+          {...angleAxisProps}
+        />
+        <PolarRadiusAxis
+          tick={false}
+          tickLine={false}
+          axisLine={false}
+          {...radiusAxisProps}
+        />
+        {!hideTooltip ? <ChartTooltip {...tooltipProps} /> : null}
+        {!hideLegend ? <Legend {...legendProps} /> : null}
+
+        <RechartsRadialBar
+          dataKey={valueKey}
+          name={seriesName}
+          fill={getChartColor(0, seriesColor)}
+          cornerRadius={8}
         >
-          <PolarAngleAxis
-            dataKey={dataKey}
-            type="category"
-            tick={{ fill: "var(--muted-foreground)" }}
-            {...angleAxisProps}
-          />
-          <PolarRadiusAxis
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "var(--muted-foreground)" }}
-            {...radiusAxisProps}
-          />
+          {data.map((entry, index) => {
+            const entryRecord = entry as Record<string, unknown>;
+            const entryColor =
+              typeof entryRecord.color === "string"
+                ? entryRecord.color
+                : getChartColor(index, seriesColor);
 
-          {showTooltip ? (
-            renderTooltip ? (
-              <Tooltip content={(props) => renderTooltip(props as never)} />
-            ) : (
-              <Tooltip content={(props) => <ChartTooltip {...props} config={config} classNames={{ root: classNames?.tooltip }} />} />
-            )
-          ) : null}
-
-          {showLegend ? (
-            renderLegend ? (
-              <Legend content={(props) => renderLegend(props as never)} />
-            ) : (
-              <Legend content={(props) => <ChartLegend {...props} config={config} classNames={{ root: classNames?.legend }} />} />
-            )
-          ) : null}
-
-          {seriesKeys.map((seriesKey, index) => {
-            const series = getSeriesConfig(config, seriesKey);
-            const color = getSeriesColor(config, seriesKey, index);
-
-            return (
-              <RadialBar
-                key={seriesKey}
-                dataKey={seriesKey}
-                name={getSeriesLabel(config, seriesKey)}
-                fill={color}
-                barSize={barSize}
-                cornerRadius={series?.radius ?? 4}
-                hide={series?.hide}
-              />
-            );
+            return <Cell key={String(entryRecord[nameKey] ?? index)} fill={entryColor} />;
           })}
-        </RechartsRadialBarChart>
-        </ResponsiveContainer>
-      </div>
-    </ChartContainer>
+        </RechartsRadialBar>
+      </RechartsRadialBarChart>
+    </ChartSurface>
   );
 }

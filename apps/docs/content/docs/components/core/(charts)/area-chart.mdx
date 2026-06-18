@@ -1,0 +1,58 @@
+---
+title: Area Chart
+description: An area chart displays quantitative data over a continuous axis with filled regions that highlight trends and changes over time.
+component: true
+doc: AreaChart
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/area-chart/basic.tsx" />
+
+## Features
+
+- Trend-friendly and ideal for time-based data.
+- Built on Recharts with LibravelUI surface styling.
+- Uses the default chart palette from theme tokens.
+- Supports multiple series, custom axes, and custom tooltip props.
+- Keeps the API compact while still staying flexible.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Copy the shared chart utilities and the chart component you need into your project.
+
+    <ComponentSource comp="components/ui/core/charts/chart-shell" />
+
+    <ComponentSource comp="components/ui/core/charts/chart-tooltip" />
+
+    <ComponentSource comp="components/ui/core/charts/area-chart" />
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add area-chart
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { AreaChart } from "@/components/ui/core/charts/area-chart";
+```
+
+```tsx
+<AreaChart
+  data={data}
+  dataKey="month"
+  config={{
+    revenue: { label: "Revenue" },
+    profit: { label: "Profit" },
+  }}
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/area-chart" />

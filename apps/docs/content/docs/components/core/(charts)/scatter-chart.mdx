@@ -1,0 +1,59 @@
+---
+title: Scatter Chart
+description: A scatter chart plots point relationships across two or more numeric axes, making it useful for distribution and correlation analysis.
+component: true
+doc: ScatterChart
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/scatter-chart/basic.tsx" />
+
+## Features
+
+- Ideal for correlation and clustering analysis.
+- Supports optional Z-axis sizing.
+- Uses LibravelUI chart colors and tooltip styling.
+- Allows numeric axes to be customized as needed.
+- Works well with dense or exploratory datasets.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Copy the shared chart utilities and the chart component you need into your project.
+
+    <ComponentSource comp="components/ui/core/charts/chart-shell" />
+
+    <ComponentSource comp="components/ui/core/charts/chart-tooltip" />
+
+    <ComponentSource comp="components/ui/core/charts/scatter-chart" />
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add scatter-chart
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { ScatterChart } from "@/components/ui/core/charts/scatter-chart";
+```
+
+```tsx
+<ScatterChart
+  data={data}
+  xDataKey="x"
+  yDataKey="y"
+  zDataKey="z"
+  config={{
+    label: "Points",
+  }}
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/scatter-chart" />

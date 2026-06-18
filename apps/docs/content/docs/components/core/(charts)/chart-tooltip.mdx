@@ -1,0 +1,32 @@
+---
+title: Chart Tooltip
+description: A chart tooltip is a reusable wrapper around the Recharts tooltip and is styled to match LibravelUI surfaces, borders, and typography.
+component: true
+doc: ChartTooltip
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/chart-tooltip/basic.tsx" />
+
+## Features
+
+- Uses LibravelUI popover and border tokens.
+- Formats labels and values consistently.
+- Supports custom label and indicator classes.
+- Works across every chart component in the package.
+- Keeps the hover preview visually aligned with the rest of the system.
+
+## Anatomy
+
+```tsx
+import { ChartTooltip } from "@/components/ui/core/charts/chart-tooltip";
+```
+
+```tsx
+<ChartTooltip />
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/chart-tooltip" />

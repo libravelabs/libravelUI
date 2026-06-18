@@ -1,17 +1,7 @@
 "use client";
 
-import {
-  AreaChart,
-  BarChart,
-  ComposedChart,
-  FunnelChart,
-  LineChart,
-  PieChart,
-  RadarChart,
-  RadialBarChart,
-  ScatterChart,
-  TreemapChart,
-} from "@/components/ui/core/charts";
+import * as React from "react";
+import { Badge } from "@/components/ui/core/badge";
 import {
   Card,
   CardContent,
@@ -19,234 +9,372 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/core/card";
-import { Badge } from "@/components/ui/core/badge";
-import type { ReactNode } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
-  acquisitionScatterData,
-  categorySalesData,
-  checkoutFunnelData,
-  channelMixData,
-  operationsKpiData,
-  revenueData,
-  shopTrafficData,
-  storageAllocationData,
-  storeHealthData,
-} from "./chart-example-data";
+  AreaChart,
+  BarChart,
+  LineChart,
+  PieChart,
+  RadarChart,
+  RadialBarChart,
+  TreemapChart,
+  ComposedChart,
+  ScatterChart,
+  FunnelChart,
+} from "@/components/ui/core/charts";
 
-function ExampleCard({
+type EngagementPoint = {
+  day: string;
+  likes: number;
+  comments: number;
+  shares: number;
+};
+
+type TrafficPoint = {
+  day: string;
+  desktop: number;
+  mobile: number;
+  tablet: number;
+};
+
+type SalesPoint = {
+  month: string;
+  revenue: number;
+  profit: number;
+};
+
+type ChannelPoint = {
+  name: string;
+  value: number;
+};
+
+type RadarPoint = {
+  subject: string;
+  current: number;
+  target: number;
+  fullMark: number;
+};
+
+type BubblePoint = {
+  x: number;
+  y: number;
+  z: number;
+};
+
+type TreemapNode = {
+  name: string;
+  size?: number;
+  valueLabel?: string;
+  children?: TreemapNode[];
+};
+
+const fileTree: TreemapNode[] = [
+  {
+    name: "Documents",
+    children: [
+      { name: "report.pdf", size: 12.5, valueLabel: "12.5 MB" },
+      { name: "proposal.docx", size: 8.2, valueLabel: "8.2 MB" },
+      { name: "notes.txt", size: 1.1, valueLabel: "1.1 MB" },
+    ],
+  },
+  {
+    name: "Images",
+    children: [
+      { name: "banner.png", size: 24.3, valueLabel: "24.3 MB" },
+      { name: "logo.svg", size: 2.4, valueLabel: "2.4 MB" },
+      { name: "photo.jpg", size: 18.7, valueLabel: "18.7 MB" },
+    ],
+  },
+  {
+    name: "Videos",
+    children: [
+      { name: "intro.mp4", size: 120.5, valueLabel: "120.5 MB" },
+      { name: "tutorial.mp4", size: 85.9, valueLabel: "85.9 MB" },
+    ],
+  },
+] as const;
+
+function ShowcaseCard({
   title,
   description,
   children,
 }: {
   title: string;
   description: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="gap-2">
-        <CardTitle className="text-base sm:text-lg">{title}</CardTitle>
-        <CardDescription className="max-w-2xl">{description}</CardDescription>
+    <Card className="rounded-2xl">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="pt-0">{children}</CardContent>
+      <CardContent>
+        <div className="h-72 min-w-0">{children}</div>
+      </CardContent>
     </Card>
   );
 }
 
-export default function ChartsDemoPage() {
+export default function ChartShowcasePage() {
+  const isMobile = useIsMobile();
+
+  const engagementData = React.useMemo<EngagementPoint[]>(
+    () =>
+      Array.from({ length: 7 }, (_, i) => ({
+        day: `Day ${i + 1}`,
+        likes: Math.floor(100 + Math.random() * 300),
+        comments: Math.floor(20 + Math.random() * 80),
+        shares: Math.floor(10 + Math.random() * 50),
+      })),
+    [],
+  );
+
+  const trafficData = React.useMemo<TrafficPoint[]>(
+    () =>
+      Array.from({ length: 7 }, (_, i) => ({
+        day: `Day ${i + 1}`,
+        desktop: Math.floor(100 + Math.random() * 200),
+        mobile: Math.floor(120 + Math.random() * 220),
+        tablet: Math.floor(30 + Math.random() * 80),
+      })),
+    [],
+  );
+
+  const salesData = React.useMemo<SalesPoint[]>(
+    () => [
+      { month: "Jan", revenue: 1200, profit: 420 },
+      { month: "Feb", revenue: 1800, profit: 520 },
+      { month: "Mar", revenue: 1600, profit: 600 },
+      { month: "Apr", revenue: 2400, profit: 910 },
+      { month: "May", revenue: 2100, profit: 760 },
+      { month: "Jun", revenue: 2600, profit: 1040 },
+    ],
+    [],
+  );
+
+  const channelsData = React.useMemo<ChannelPoint[]>(
+    () => [
+      { name: "Organic", value: 42 },
+      { name: "Paid", value: 28 },
+      { name: "Referral", value: 18 },
+      { name: "Direct", value: 12 },
+    ],
+    [],
+  );
+
+  const radarData = React.useMemo<RadarPoint[]>(
+    () => [
+      { subject: "UI", current: 120, target: 150, fullMark: 150 },
+      { subject: "Perf", current: 98, target: 130, fullMark: 150 },
+      { subject: "DX", current: 86, target: 130, fullMark: 150 },
+      { subject: "A11y", current: 99, target: 100, fullMark: 150 },
+      { subject: "Scale", current: 85, target: 90, fullMark: 150 },
+      { subject: "Docs", current: 65, target: 85, fullMark: 150 },
+    ],
+    [],
+  );
+
+  const radialData = React.useMemo(
+    () => [
+      { name: "Completion", value: 78 },
+      { name: "Retention", value: 64 },
+      { name: "Satisfaction", value: 91 },
+    ],
+    [],
+  );
+
+  const scatterData = React.useMemo<BubblePoint[]>(
+    () => [
+      { x: 12, y: 18, z: 120 },
+      { x: 18, y: 25, z: 180 },
+      { x: 25, y: 30, z: 140 },
+      { x: 32, y: 44, z: 260 },
+      { x: 42, y: 51, z: 210 },
+      { x: 51, y: 54, z: 320 },
+      { x: 61, y: 67, z: 220 },
+      { x: 72, y: 73, z: 380 },
+    ],
+    [],
+  );
+
   return (
-    <main className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 py-10">
-      <header className="flex flex-col gap-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge tone="secondary">Charts Examples</Badge>
-          <Badge tone="outline">Realistic data</Badge>
-          <Badge tone="outline">No dashboard shell</Badge>
-        </div>
+    <div
+      header={{
+        title: "Charts",
+        description:
+          "Reusable chart components with Recharts-like data shape. User only passes data, config, and chart props.",
+      }}
+    >
+      <div className="flex flex-wrap gap-2">
+        <Badge tone="secondary">v2.3</Badge>
+        <Badge tone="outline">Mentahan</Badge>
+        <Badge tone="outline">Reusable</Badge>
+      </div>
 
-        <div className="max-w-3xl space-y-3">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            LibravelUI Charts in real application contexts
-          </h1>
-          <p className="text-muted-foreground leading-relaxed">
-            The datasets below are synthetic, but shaped like the data you would
-            actually see in an online shop or an operations panel. The goal is
-            to show charts as embedded components, not as a dashboard.
-          </p>
-        </div>
-      </header>
+      <div className="grid gap-5 xl:grid-cols-2">
+        <ShowcaseCard
+          title="AreaChart"
+          description="Cukup data, dataKey, config, dan containerHeight."
+        >
+          <AreaChart
+            containerHeight={isMobile ? 220 : 300}
+            data={engagementData}
+            dataKey="day"
+            xAxisProps={{ interval: 0 }}
+            config={{
+              likes: { label: "Likes" },
+              comments: { label: "Comments" },
+              shares: { label: "Shares" },
+            }}
+          />
+        </ShowcaseCard>
 
-      <section className="space-y-4">
-        <div className="space-y-2">
-          <Badge tone="outline">E-commerce</Badge>
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Store performance and conversion
-          </h2>
-          <p className="max-w-3xl text-sm text-muted-foreground">
-            A small-to-mid-sized online shop: traffic, revenue, product mix, and
-            checkout behavior over time.
-          </p>
-        </div>
+        <ShowcaseCard
+          title="BarChart"
+          description="Grouped bar chart tanpa nyusun axis manual."
+        >
+          <BarChart
+            containerHeight={isMobile ? 220 : 300}
+            data={trafficData}
+            dataKey="day"
+            xAxisProps={{ interval: 0 }}
+            config={{
+              desktop: { label: "Desktop" },
+              mobile: { label: "Mobile" },
+              tablet: { label: "Tablet" },
+            }}
+          />
+        </ShowcaseCard>
 
-        <div className="grid gap-6 xl:grid-cols-2">
-          <ExampleCard
-            title="Traffic and returning customers"
-            description="Weekly sessions, add-to-cart activity, and completed orders."
-          >
-            <LineChart
-              data={shopTrafficData}
-              dataKey="day"
-              config={{
-                sessions: { label: "Sessions" },
-                addToCart: { label: "Add to cart" },
-                orders: { label: "Orders" },
-                returningCustomers: { label: "Returning customers" },
-              }}
-              containerHeight={300}
-            />
-          </ExampleCard>
+        <ShowcaseCard
+          title="LineChart"
+          description="Line chart standar dengan label series konsisten."
+        >
+          <LineChart
+            containerHeight={isMobile ? 220 : 300}
+            data={salesData}
+            dataKey="month"
+            xAxisProps={{ interval: 0 }}
+            config={{
+              revenue: { label: "Revenue" },
+              profit: { label: "Profit" },
+            }}
+          />
+        </ShowcaseCard>
 
-          <ExampleCard
-            title="Revenue, gross profit, and ad spend"
-            description="A compact monthly trend that looks like a finance review in a real commerce team."
-          >
-            <AreaChart
-              data={revenueData}
-              dataKey="month"
-              config={{
-                revenue: { label: "Revenue", fillOpacity: 0.22 },
-                grossProfit: { label: "Gross profit", fillOpacity: 0.16 },
-                adSpend: { label: "Ad spend", fillOpacity: 0.12 },
-              }}
-              containerHeight={300}
-            />
-          </ExampleCard>
-
-          <ExampleCard
-            title="Category mix"
-            description="Where the store actually makes money across product categories."
-          >
-            <BarChart
-              data={categorySalesData}
-              dataKey="category"
-              config={{
-                revenue: { label: "Revenue" },
-                refunds: { label: "Refunds" },
-                units: { label: "Units sold" },
-              }}
-              containerHeight={300}
-            />
-          </ExampleCard>
-
-          <ExampleCard
-            title="Checkout funnel"
-            description="A realistic conversion funnel from product view to purchase."
-          >
-            <FunnelChart
-              data={checkoutFunnelData}
-              dataKey="value"
-              nameKey="stage"
-              containerHeight={300}
-            />
-          </ExampleCard>
-
-          <ExampleCard
-            title="Channel mix"
-            description="Order share by acquisition channel, useful for a campaign review."
-          >
-            <PieChart
-              data={channelMixData}
-              dataKey="value"
-              nameKey="name"
-              containerHeight={300}
-            />
-          </ExampleCard>
-
-          <ExampleCard
-            title="Campaign efficiency"
-            description="Scatter plot of customer acquisition cost against ROAS."
-          >
-            <ScatterChart
-              series={acquisitionScatterData}
-              containerHeight={300}
-            />
-          </ExampleCard>
-
-          <ExampleCard
-            title="Store health"
-            description="A radar view of product experience and service quality."
-          >
-            <RadarChart
-              data={storeHealthData}
-              dataKey="subject"
-              config={{
-                current: { label: "Current" },
-                target: { label: "Target", fillOpacity: 0.12 },
-              }}
-              containerHeight={300}
-            />
-          </ExampleCard>
-
-          <ExampleCard
-            title="Fulfillment KPI"
-            description="Operational targets for the warehouse and support team."
-          >
-            <RadialBarChart
-              data={operationsKpiData}
-              dataKey="metric"
-              config={{
-                actual: { label: "Actual" },
-                target: { label: "Target" },
-              }}
-              containerHeight={300}
-            />
-          </ExampleCard>
-        </div>
-
-        <ExampleCard
-          title="Conversion and revenue in one view"
-          description="A composed chart is useful when the team wants to compare multiple chart types without switching screens."
+        <ShowcaseCard
+          title="ComposedChart"
+          description="Campur bar dan line tetap dari wrapper yang sama."
         >
           <ComposedChart
-            data={shopTrafficData}
-            dataKey="day"
+            containerHeight={isMobile ? 220 : 300}
+            data={salesData}
+            dataKey="month"
+            xAxisProps={{ interval: 0 }}
             config={{
-              sessions: { label: "Sessions", type: "area", fillOpacity: 0.16 },
-              orders: { label: "Orders", type: "bar", radius: 6 },
-              returningCustomers: {
-                label: "Returning customers",
-                type: "line",
-              },
+              revenue: { label: "Revenue", type: "bar" },
+              profit: { label: "Profit", type: "line" },
             }}
-            containerHeight={300}
           />
-        </ExampleCard>
-      </section>
+        </ShowcaseCard>
 
-      <section className="space-y-4">
-        <div className="space-y-2">
-          <Badge tone="outline">Infrastructure</Badge>
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Disk partition layout like a partition manager
-          </h2>
-          <p className="max-w-3xl text-sm text-muted-foreground">
-            This is not a storage-contents treemap. It is a partition map: one
-            disk row, many partitions, and a free-space segment, just like a
-            qdisk or disk manager view.
-          </p>
-        </div>
-
-        <ExampleCard
-          title="Disk 0 partitions"
-          description="A single-row partition map with system, reserved, primary, recovery, and free-space segments."
+        <ShowcaseCard
+          title="PieChart"
+          description="Distribusi sederhana dengan default LibravelUI colors."
         >
-          <TreemapChart
-            data={storageAllocationData}
+          <PieChart
+            containerHeight={isMobile ? 220 : 300}
+            data={channelsData}
             dataKey="value"
             nameKey="name"
-            showLegend={false}
+            config={{
+              Organic: { label: "Organic" },
+              Paid: { label: "Paid" },
+              Referral: { label: "Referral" },
+              Direct: { label: "Direct" },
+            }}
           />
-        </ExampleCard>
-      </section>
-    </main>
+        </ShowcaseCard>
+
+        <ShowcaseCard
+          title="RadarChart"
+          description="Bandingkan current vs target tanpa manual polar setup."
+        >
+          <RadarChart
+            containerHeight={isMobile ? 220 : 300}
+            data={radarData}
+            dataKey="subject"
+            config={{
+              current: { label: "Current" },
+              target: { label: "Target" },
+            }}
+          />
+        </ShowcaseCard>
+
+        <ShowcaseCard
+          title="RadialBarChart"
+          description="Ring metrics yang fix, satu series saja."
+        >
+          <RadialBarChart
+            containerHeight={isMobile ? 220 : 300}
+            data={radialData}
+            nameKey="name"
+            valueKey="value"
+            config={{ label: "Score" }}
+          />
+        </ShowcaseCard>
+
+        <ShowcaseCard
+          title="ScatterChart"
+          description="Cocok untuk korelasi dan distribusi titik."
+        >
+          <ScatterChart
+            containerHeight={isMobile ? 220 : 300}
+            data={scatterData}
+            xDataKey="x"
+            yDataKey="y"
+            zDataKey="z"
+            config={{ label: "Points" }}
+          />
+        </ShowcaseCard>
+
+        <ShowcaseCard
+          title="FunnelChart"
+          description="Flow sederhana yang tetap mentahan."
+        >
+          <FunnelChart
+            containerHeight={isMobile ? 220 : 300}
+            data={[
+              { name: "Visited", value: 1000 },
+              { name: "Clicked", value: 742 },
+              { name: "Signed up", value: 428 },
+              { name: "Activated", value: 192 },
+              { name: "Paid", value: 84 },
+            ]}
+            dataKey="value"
+            nameKey="name"
+            config={{
+              Visited: { label: "Visited" },
+              Clicked: { label: "Clicked" },
+              "Signed up": { label: "Signed up" },
+              Activated: { label: "Activated" },
+              Paid: { label: "Paid" },
+            }}
+          />
+        </ShowcaseCard>
+
+        <ShowcaseCard
+          title="Treemap"
+          description="Data hirarkis mentahan, label leaf menampilkan valueLabel."
+        >
+          <TreemapChart
+            containerHeight={isMobile ? 220 : 300}
+            data={fileTree}
+            dataKey="size"
+          />
+        </ShowcaseCard>
+      </div>
+    </div>
   );
 }

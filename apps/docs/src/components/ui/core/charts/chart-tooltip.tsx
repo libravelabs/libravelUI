@@ -1,172 +1,159 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import type { ComponentProps, CSSProperties, ReactNode } from "react";
+import { Tooltip as RechartsTooltip } from "recharts";
 import type {
-  ChartConfig,
-  ChartLegendProps,
-  ChartTooltipItem,
-  ChartTooltipProps,
-} from "./chart-types";
-import {
-  formatChartValue,
-  getChartItemKey,
-  getSeriesColor,
-  getSeriesLabel,
-  getSeriesUnit,
-  isRecord,
-} from "./chart-utils";
+  NameType,
+  Payload,
+  ValueType,
+} from "recharts/types/component/DefaultTooltipContent";
+import { cn } from "@/lib/utils";
 
-function isNumericLike(value: ReactNode): boolean {
-  if (typeof value === "number") return true;
-  if (typeof value === "string") {
-    const trimmed = value.trim();
-    return trimmed !== "" && !Number.isNaN(Number(trimmed));
-  }
-  return false;
+export type ChartTooltipProps = Omit<
+  ComponentProps<typeof RechartsTooltip>,
+  "content"
+> & {
+  className?: string;
+  labelClassName?: string;
+  indicatorClassName?: string;
+};
+
+type TooltipItem = Payload<ValueType, NameType> & {
+  color?: string;
+  fill?: string;
+  stroke?: string;
+};
+
+function formatTooltipValue(value: unknown): ReactNode {
+  if (value === null || value === undefined) return "—";
+  if (typeof value === "number") return value.toLocaleString();
+  if (typeof value === "boolean") return value ? "true" : "false";
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) return value.join(", ");
+
+  return String(value);
 }
 
-function getPayloadLabel(item: ChartTooltipItem): string | undefined {
-  if (typeof item.name === "string" && item.name.trim() !== "") {
-    return item.name;
-  }
-
-  if (!isRecord(item.payload)) {
-    return undefined;
-  }
-
-  const candidateName = item.payload.name;
-  if (typeof candidateName === "string" && candidateName.trim() !== "") {
-    return candidateName;
-  }
-
-  const candidateLabel = item.payload.label;
-  if (typeof candidateLabel === "string" && candidateLabel.trim() !== "") {
-    return candidateLabel;
-  }
-
-  return undefined;
+function getItemColor(item: TooltipItem): string {
+  return item.color ?? item.fill ?? item.stroke ?? "var(--chart-1)";
 }
 
-function resolveHeaderLabel(
-  label: ReactNode,
-  firstItem: ChartTooltipItem | undefined,
-): ReactNode | undefined {
-  const payloadLabel = firstItem ? getPayloadLabel(firstItem) : undefined;
-  if (payloadLabel) {
-    if (!isNumericLike(label)) {
-      return label ?? payloadLabel;
-    }
-    return payloadLabel;
+function getItemLabel(item: TooltipItem): string {
+  const rawName = item.name;
+  if (typeof rawName === "string" && rawName.trim().length > 0) return rawName;
+  if (typeof rawName === "number") return String(rawName);
+  if (typeof item.dataKey === "string") return item.dataKey;
+
+  return "Value";
+}
+
+function getItemValue(item: TooltipItem): ReactNode {
+  if (Array.isArray(item.value)) {
+    return item.value.map(formatTooltipValue).join(" – ");
   }
-  return label;
+
+  return formatTooltipValue(item.value);
 }
 
 export function ChartTooltip({
-  active,
-  label,
-  payload,
-  config,
-  classNames,
-}: ChartTooltipProps) {
-  if (!active || !payload?.length) return null;
-
-  const items = payload.filter((item) => item.value !== undefined);
-  const firstItem = items[0];
-  const headerLabel = resolveHeaderLabel(label, firstItem);
-
+  labelFormatter,
+  formatter,
+  separator,
+  className,
+  labelClassName,
+  indicatorClassName,
+  cursor,
+  wrapperStyle,
+  contentStyle,
+  itemStyle,
+  ...tooltipProps
+}: ChartTooltipProps): JSX.Element {
   return (
-    <div
-      className={cn(
-        "min-w-[12rem] rounded-xl border border-border bg-popover px-3 py-2 text-popover-foreground shadow-lg backdrop-blur",
-        classNames?.root,
-      )}
-    >
-      {headerLabel != null ? (
-        <div
-          className={cn(
-            "mb-2 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground",
-            classNames?.header,
-          )}
-        >
-          {String(headerLabel)}
-        </div>
-      ) : null}
+    <RechartsTooltip
+      {...tooltipProps}
+      labelFormatter={labelFormatter}
+      formatter={formatter}
+      separator={separator}
+      cursor={cursor ?? { stroke: "var(--border)", strokeDasharray: "4 4" }}
+      wrapperStyle={{ outline: "none", ...wrapperStyle }}
+      content={({
+        active: isActive,
+        payload: contentPayload,
+        label: contentLabel,
+      }) => {
+        if (!isActive || !contentPayload || contentPayload.length === 0) {
+          return null;
+        }
 
-      <div className="grid gap-1.5">
-        {items.map((item, index) => {
-          const key = getChartItemKey(item);
-          const configuredLabel = config?.[key]?.label;
-          const payloadLabel = getPayloadLabel(item);
-          const labelText =
-            payloadLabel ??
-            (typeof configuredLabel === "string" ? configuredLabel : undefined) ??
-            item.name ??
-            getSeriesLabel(config, key) ??
-            key;
-          const unit = getSeriesUnit(config, key);
-          const color = item.color ?? getSeriesColor(config, key, index);
-
-          return (
-            <div
-              key={`${key}-${index}`}
-              className={cn(
-                "flex items-center justify-between gap-3",
-                classNames?.row,
-              )}
-            >
-              <div className="flex min-w-0 items-center gap-2">
-                <span
-                  className={cn("size-2.5 shrink-0 rounded-full", classNames?.marker)}
-                  style={{ backgroundColor: color }}
-                />
-                <span className={cn("truncate text-xs text-muted-foreground", classNames?.label)}>
-                  {labelText}
-                </span>
-              </div>
-              <span className={cn("text-xs font-medium text-foreground", classNames?.value)}>
-                {formatChartValue(item.value, unit)}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-export function ChartLegend({
-  payload,
-  config,
-  classNames,
-}: ChartLegendProps) {
-  const entries = payload?.length
-    ? payload
-    : Object.entries(config ?? {}).map(([key, value], index) => ({
-        dataKey: key,
-        value: value.label ?? key,
-        color: value.color ?? getSeriesColor(config, key, index),
-      }));
-
-  if (!entries?.length) return null;
-
-  return (
-    <div className={cn("flex flex-wrap items-center gap-3 text-xs", classNames?.root)}>
-      {entries.map((entry, index) => {
-        const key = typeof entry.dataKey === "string" ? entry.dataKey : `legend-${index}`;
-        const color = entry.color ?? getSeriesColor(config, key, index);
-        const label = entry.value ?? key;
+        const normalized = contentPayload as TooltipItem[];
+        const header = labelFormatter
+          ? labelFormatter(contentLabel, normalized)
+          : contentLabel;
 
         return (
-          <div key={`${key}-${index}`} className={cn("flex items-center gap-2", classNames?.item)}>
-            <span
-              className={cn("size-2.5 rounded-full", classNames?.marker)}
-              style={{ backgroundColor: color }}
-            />
-            <span className={cn("text-muted-foreground", classNames?.label)}>{label}</span>
+          <div
+            className={cn(
+              "min-w-[12rem] rounded-2xl border border-border/70 bg-popover/80 p-3 text-sm text-popover-foreground shadow-lg backdrop-blur-md",
+              className,
+            )}
+            style={contentStyle}
+          >
+            {header !== undefined && header !== null && header !== "" ? (
+              <div
+                className={cn(
+                  "mb-2 text-xs font-medium text-muted-foreground",
+                  labelClassName,
+                )}
+              >
+                {formatTooltipValue(header)}
+              </div>
+            ) : null}
+
+            <div className="space-y-1.5">
+              {normalized.map((item, index) => {
+                const itemName = getItemLabel(item);
+                const rawValue = getItemValue(item);
+                const renderedValue = formatter
+                  ? formatter(
+                      item.value as ValueType,
+                      item.name,
+                      item,
+                      index,
+                      normalized,
+                    )
+                  : rawValue;
+                const color = getItemColor(item);
+
+                return (
+                  <div
+                    key={`${String(item.dataKey ?? itemName)}-${index}`}
+                    className={cn(
+                      "flex items-center justify-between gap-2 rounded-xl",
+                    )}
+                    style={itemStyle as CSSProperties | undefined}
+                  >
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span
+                        className={cn(
+                          "size-2.5 shrink-0 rounded-full",
+                          indicatorClassName,
+                        )}
+                        style={{ backgroundColor: color }}
+                      />
+                      <span className="truncate text-muted-foreground">
+                        {itemName}
+                      </span>
+                    </div>
+                    <span className="font-medium tabular-nums text-foreground">
+                      {renderedValue as ReactNode}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         );
-      })}
-    </div>
+      }}
+    />
   );
 }

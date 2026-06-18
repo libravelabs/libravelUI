@@ -12,6 +12,7 @@ import { CardsSection } from "./components/cards-section";
 import { Separator } from "@/components/ui/core/separator";
 import { DataTable } from "./components/data-table";
 import { products } from "./products";
+import { DashboardChart } from "./components/dashboard-chart";
 
 export default function DashboardSidebarPage() {
   return (
@@ -30,8 +31,8 @@ export default function DashboardSidebarPage() {
             <CardsSection data={products} />
           </div>
 
-          <div className="relative min-h-150 flex-1 overflow-hidden rounded-xl border">
-            <PlaceholderPattern className="absolute inset-0 size-full stroke-foreground/20" />
+          <div className="relative flex-1 overflow-hidden rounded-xl border p-4">
+            <DashboardChart />
           </div>
 
           <DataTable data={products} />

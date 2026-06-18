@@ -1,161 +1,132 @@
 "use client";
 
-import {
-  Treemap as RechartsTreemap,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-import { ChartContainer } from "./chart-container";
-import { ChartLegend, ChartTooltip } from "./chart-tooltip";
-import type {
-  ChartConfig,
-  TreemapChartProps,
-  TreemapNode,
-} from "./chart-types";
-import { getSeriesColor, getSeriesLabel } from "./chart-utils";
+import type { CSSProperties, ComponentProps, ReactNode } from "react";
+import { Treemap as RechartsTreemap } from "recharts";
+import { ChartSurface, getChartColor, type RuntimeChartConfig } from "./chart-shell";
+import { ChartTooltip } from "./chart-tooltip";
+
+export type TreemapNode = {
+  name: string;
+  size?: number;
+  valueLabel?: ReactNode;
+  color?: string;
+  children?: TreemapNode[];
+};
+
+export type TreemapChartProps = Omit<
+  ComponentProps<typeof RechartsTreemap>,
+  "width" | "height" | "children"
+> & {
+  data: TreemapNode[];
+  dataKey?: "size";
+  config?: RuntimeChartConfig;
+  containerHeight?: number | string;
+  className?: string;
+  style?: CSSProperties;
+  hideValue?: boolean;
+  tooltipProps?: ComponentProps<typeof ChartTooltip>;
+  hideTooltip?: boolean;
+};
 
 type TreemapContentProps = {
   x?: number;
   y?: number;
   width?: number;
   height?: number;
-  name?: string;
-  value?: number;
   depth?: number;
-  payload?: TreemapNode;
-  fill?: string;
-  textColor?: string;
+  name?: string;
+  size?: number;
+  valueLabel?: ReactNode;
+  color?: string;
+  hideValue?: boolean;
+  tooltipProps?: ComponentProps<typeof ChartTooltip>;
+  hideTooltip?: boolean;
 };
 
-function TreemapCell({
-  x = 0,
-  y = 0,
-  width = 0,
-  height = 0,
-  name,
-  value,
-  fill,
-  textColor,
-}: TreemapContentProps) {
-  if (width <= 0 || height <= 0) return null;
+function formatSize(size: number): string {
+  if (size >= 1024) {
+    return `${(size / 1024).toFixed(1)} GB`;
+  }
+
+  return `${size.toFixed(1)} MB`;
+}
+
+type TreemapNodeColorable = TreemapNode & {
+  color?: string;
+};
+
+function attachTreeColors(
+  nodes: TreemapNode[],
+  palette: RuntimeChartConfig,
+  depth = 0,
+): TreemapNodeColorable[] {
+  return nodes.map((node, index) => {
+    const color = node.color ?? palette[node.name]?.color ?? getChartColor(index, palette[node.name]?.color);
+    const children = node.children ? attachTreeColors(node.children, palette, depth + 1) : undefined;
+
+    return {
+      ...node,
+      color,
+      children,
+    };
+  });
+}
+
+function TreemapContent(props: TreemapContentProps): JSX.Element | null {
+  const { x = 0, y = 0, width = 0, height = 0, depth = 0, name, size = 0, valueLabel, color, hideValue = false } = props;
+
+  if (depth !== 2) {
+    return null;
+  }
+
+  const showText = width >= 70 && height >= 40;
+  const fill = color ?? "var(--primary)";
 
   return (
     <g>
-      <rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        rx={12}
-        ry={12}
-        fill={fill}
-        stroke="var(--border)"
-        strokeWidth={1}
-      />
-      <foreignObject x={x} y={y} width={width} height={height}>
-        <div className="flex h-full w-full items-end p-3">
-          <div className="min-w-0">
-            <div
-              className="truncate text-sm font-medium invert"
-              style={{ color: textColor }}
-            >
-              {name}
-            </div>
-            <div
-              className="text-xs invert opacity-70"
-              style={{ color: textColor }}
-            >
-              {typeof value === "number" ? value.toLocaleString("en-US") : null}
-            </div>
-          </div>
-        </div>
-      </foreignObject>
+      <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--background)" strokeWidth={1} />
+      {showText ? (
+        <>
+          <text x={x + 8} y={y + 18} fill="white" fontSize={12} fontWeight={600}>
+            {name}
+          </text>
+          {!hideValue ? (
+            <text x={x + 8} y={y + 36} fill="rgba(255,255,255,0.82)" fontSize={11}>
+              {valueLabel ?? formatSize(size)}
+            </text>
+          ) : null}
+        </>
+      ) : null}
     </g>
   );
 }
 
-export function TreemapChart<TData extends TreemapNode>({
+export function TreemapChart({
   data,
-  dataKey = "value" as keyof TData & string,
-  nameKey = "name" as keyof TData & string,
+  dataKey = "size",
   config,
-  containerHeight = 320,
+  containerHeight,
   className,
-  contentClassName,
-  showTooltip = true,
-  showLegend = true,
-  aspectRatio = 1.618,
-  renderTooltip,
-  renderLegend,
-}: TreemapChartProps<TData>) {
-  const colorMap = new Map(data.map((d) => [String(d.name), (d as any).fill]));
+  style,
+  hideValue = false,
+  tooltipProps,
+  hideTooltip = false,
+  ...chartProps
+}: TreemapChartProps): JSX.Element {
+  const palette = config ?? {};
 
-  const legendConfig: ChartConfig = Object.fromEntries(
-    data.map((item, index) => [
-      String(item.name),
-      {
-        label: getSeriesLabel(config, String(item.name)),
-        color:
-          (item as any).fill ??
-          getSeriesColor(config ?? {}, String(item.name), index),
-      },
-    ]),
-  );
+  const dataWithColors = attachTreeColors(data, palette);
 
   return (
-    <ChartContainer
-      height={containerHeight}
-      className={className}
-      contentClassName={contentClassName}
-    >
-      <div className="flex h-full flex-col gap-3">
-        <div className="min-h-0 flex-1">
-          <ResponsiveContainer width="100%" height="100%">
-            <RechartsTreemap
-              data={data}
-              dataKey={dataKey}
-              nameKey={nameKey}
-              aspectRatio={aspectRatio}
-              content={(props: any) => {
-                const key = String(props[nameKey] ?? props.name ?? "");
-                const color = colorMap.get(key) ?? "var(--muted)";
-                const node = props.payload;
-                console.log(node);
-
-                return (
-                  <TreemapCell
-                    {...props}
-                    name={key}
-                    value={props.value}
-                    fill={color}
-                    textColor={node?.textColor}
-                  />
-                );
-              }}
-            >
-              {showTooltip ? (
-                renderTooltip ? (
-                  <Tooltip content={(p) => renderTooltip(p as any)} />
-                ) : (
-                  <Tooltip
-                    content={(p) => (
-                      <ChartTooltip {...p} config={legendConfig} />
-                    )}
-                  />
-                )
-              ) : null}
-            </RechartsTreemap>
-          </ResponsiveContainer>
-        </div>
-
-        {showLegend ? (
-          renderLegend ? (
-            <div>{renderLegend({ payload: [] })}</div>
-          ) : (
-            <ChartLegend config={legendConfig} className="px-1" />
-          )
-        ) : null}
-      </div>
-    </ChartContainer>
+    <ChartSurface containerHeight={containerHeight} className={className} style={style}>
+      <RechartsTreemap
+        data={dataWithColors}
+        dataKey={dataKey}
+        content={(props) => <TreemapContent {...props} hideValue={hideValue} />}
+        {...chartProps}
+      >
+        {!hideTooltip ? <ChartTooltip {...tooltipProps} /> : null}
+      </RechartsTreemap>
+    </ChartSurface>
   );
 }

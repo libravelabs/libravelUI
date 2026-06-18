@@ -1,142 +1,98 @@
 "use client";
 
+import type { CSSProperties, ComponentProps } from "react";
 import {
-  LineChart as RechartsLineChart,
-  Line,
   CartesianGrid,
+  Legend,
+  Line as RechartsLine,
+  LineChart as RechartsLineChart,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
-import { ChartContainer } from "./chart-container";
-import { ChartLegend, ChartTooltip } from "./chart-tooltip";
-import type { CartesianChartProps } from "./chart-types";
 import {
-  getVisibleSeriesKeys,
-  getSeriesColor,
-  getSeriesConfig,
+  ChartSurface,
+  getChartColor,
   getSeriesLabel,
-} from "./chart-utils";
-import { cn } from "@/lib/utils";
+  type ChartConfig,
+  type ChartDatum,
+  type NumericSeriesKey,
+} from "./chart-shell";
+import { ChartTooltip } from "./chart-tooltip";
 
-export function LineChart<TData extends Record<string, unknown>>({
+export type LineChartProps<TData extends ChartDatum> = Omit<
+  ComponentProps<typeof RechartsLineChart>,
+  "data" | "width" | "height" | "children"
+> & {
+  data: TData[];
+  dataKey: Extract<keyof TData, string>;
+  config: ChartConfig<TData>;
+  containerHeight?: number | string;
+  className?: string;
+  style?: CSSProperties;
+  xAxisProps?: Omit<ComponentProps<typeof XAxis>, "dataKey">;
+  yAxisProps?: Omit<ComponentProps<typeof YAxis>, "dataKey">;
+  cartesianGridProps?: ComponentProps<typeof CartesianGrid>;
+  tooltipProps?: ComponentProps<typeof ChartTooltip>;
+  legendProps?: ComponentProps<typeof Legend>;
+  hideGrid?: boolean;
+  hideXAxis?: boolean;
+  hideYAxis?: boolean;
+  hideTooltip?: boolean;
+  hideLegend?: boolean;
+  dot?: ComponentProps<typeof RechartsLine>["dot"];
+  activeDot?: ComponentProps<typeof RechartsLine>["activeDot"];
+  type?: ComponentProps<typeof RechartsLine>["type"];
+};
+
+export function LineChart<TData extends ChartDatum>({
   data,
   dataKey,
   config,
-  containerHeight = 320,
-  classNames,
-  showGrid = true,
-  showLegend = true,
-  showTooltip = true,
-  margin = { top: 5, right: 8, bottom: 0, left: 0 },
+  containerHeight,
+  className,
+  style,
   xAxisProps,
   yAxisProps,
-  gridProps,
+  cartesianGridProps,
+  tooltipProps,
   legendProps,
-  renderTooltip,
-  renderLegend,
-  renderXAxis,
-  renderYAxis,
-}: CartesianChartProps<TData>) {
-  const seriesKeys = getVisibleSeriesKeys(config);
+  hideGrid = false,
+  hideXAxis = false,
+  hideYAxis = false,
+  hideTooltip = false,
+  hideLegend = false,
+  dot = false,
+  activeDot = { r: 4 },
+  type = "monotone",
+  margin,
+  ...chartProps
+}: LineChartProps<TData>): JSX.Element {
+  const series = Object.entries(config) as Array<
+    [NumericSeriesKey<TData>, NonNullable<ChartConfig<TData>[NumericSeriesKey<TData>]>]
+  >;
 
   return (
-    <ChartContainer
-      height={containerHeight}
-      classNames={classNames}
-    >
-      <div className={cn("h-full min-h-0", classNames?.chart)}>
-        <ResponsiveContainer width="100%" height="100%">
-        <RechartsLineChart data={data} margin={margin}>
-          {showGrid ? (
-            <CartesianGrid
-              stroke="var(--border)"
-              strokeDasharray="3 3"
-              vertical={false}
-              {...gridProps}
-            />
-          ) : null}
+    <ChartSurface containerHeight={containerHeight} className={className} style={style}>
+      <RechartsLineChart data={data} margin={margin} {...chartProps}>
+        {!hideGrid ? <CartesianGrid strokeDasharray="3 3" {...cartesianGridProps} /> : null}
+        {!hideXAxis ? <XAxis dataKey={dataKey} tickLine={false} axisLine={false} {...xAxisProps} /> : null}
+        {!hideYAxis ? <YAxis tickLine={false} axisLine={false} width={40} {...yAxisProps} /> : null}
+        {!hideTooltip ? <ChartTooltip {...tooltipProps} /> : null}
+        {!hideLegend ? <Legend {...legendProps} /> : null}
 
-          {renderXAxis ? (
-            renderXAxis({
-              dataKey,
-              tickLine: false,
-              axisLine: false,
-              tickMargin: 10,
-              ...xAxisProps,
-            } as unknown as Parameters<typeof renderXAxis>[0])
-          ) : (
-            <XAxis
-              dataKey={dataKey}
-              tickLine={false}
-              axisLine={false}
-              tickMargin={10}
-              {...xAxisProps}
-            />
-          )}
-
-          {renderYAxis ? (
-            renderYAxis({
-              tickLine: false,
-              axisLine: false,
-              tickMargin: 10,
-              ...yAxisProps,
-            } as unknown as Parameters<typeof renderYAxis>[0])
-          ) : (
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={10}
-              {...yAxisProps}
-            />
-          )}
-
-          {showTooltip ? (
-            renderTooltip ? (
-              <Tooltip
-                cursor={{ stroke: "var(--border)" }}
-                content={(props) => renderTooltip(props as never)}
-              />
-            ) : (
-              <Tooltip
-                cursor={{ stroke: "var(--border)" }}
-                content={(props) => <ChartTooltip {...props} config={config} classNames={{ root: classNames?.tooltip }} />}
-              />
-            )
-          ) : null}
-
-          {showLegend ? (
-            renderLegend ? (
-              <Legend content={(props) => renderLegend(props as never)} {...legendProps} />
-            ) : (
-              <Legend content={(props) => <ChartLegend {...props} config={config} classNames={{ root: classNames?.legend }} />} {...legendProps} />
-            )
-          ) : null}
-
-          {seriesKeys.map((seriesKey, index) => {
-            const series = getSeriesConfig(config, seriesKey);
-            const color = getSeriesColor(config, seriesKey, index);
-
-            return (
-              <Line
-                key={seriesKey}
-                dataKey={seriesKey}
-                name={getSeriesLabel(config, seriesKey)}
-                type={series?.type ?? "monotone"}
-                stroke={color}
-                strokeWidth={series?.strokeWidth ?? 2}
-                dot={false}
-                activeDot={{ r: 4 }}
-                unit={series?.unit}
-                hide={series?.hide}
-              />
-            );
-          })}
-        </RechartsLineChart>
-        </ResponsiveContainer>
-      </div>
-    </ChartContainer>
+        {series.map(([seriesKey, seriesConfig], index) => (
+          <RechartsLine
+            key={seriesKey}
+            dataKey={seriesKey}
+            name={getSeriesLabel(seriesConfig.label, seriesKey)}
+            stroke={getChartColor(index, seriesConfig.color)}
+            dot={dot}
+            activeDot={activeDot}
+            type={type}
+            strokeWidth={2}
+          />
+        ))}
+      </RechartsLineChart>
+    </ChartSurface>
   );
 }

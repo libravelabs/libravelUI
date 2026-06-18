@@ -1,0 +1,58 @@
+---
+title: Line Chart
+description: A line chart shows how values change across a continuous axis and is well suited for trends, forecasts, and performance tracking.
+component: true
+doc: LineChart
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/line-chart/basic.tsx" />
+
+## Features
+
+- Best for trend and time-series data.
+- Supports multiple series with distinct labels.
+- Uses LibravelUI theme tokens for series colors.
+- Can be combined with the shared tooltip and legend.
+- Supports custom dots, axes, and line types.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Copy the shared chart utilities and the chart component you need into your project.
+
+    <ComponentSource comp="components/ui/core/charts/chart-shell" />
+
+    <ComponentSource comp="components/ui/core/charts/chart-tooltip" />
+
+    <ComponentSource comp="components/ui/core/charts/line-chart" />
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add line-chart
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { LineChart } from "@/components/ui/core/charts/line-chart";
+```
+
+```tsx
+<LineChart
+  data={data}
+  dataKey="month"
+  config={{
+    revenue: { label: "Revenue" },
+    profit: { label: "Profit" },
+  }}
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/line-chart" />

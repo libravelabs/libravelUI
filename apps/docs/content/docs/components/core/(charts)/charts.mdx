@@ -1,0 +1,60 @@
+---
+title: Charts
+description: LibravelUI charts are opinionated Recharts wrappers that use the default OKLCH theme palette through var(--chart-1) to var(--chart-4).
+---
+
+## Introduction
+
+LibravelUI charts are built on top of Recharts, but the public API is intentionally simplified and styled to match the rest of the design system.
+
+They are theme-aware by default. The chart palette is driven by CSS variables, so every chart automatically follows the active LibravelUI theme and any local palette overrides.
+
+## Features
+
+- **Theme-aware** – Uses `var(--chart-1)` through `var(--chart-4)` instead of hardcoded colors.
+- **OKLCH-based** – Follows the default LibravelUI theme tokens defined in the theme registry.
+- **Opinionated** – Surface, grid, tooltip, and legend styling are already composed for you.
+- **Reusable** – One consistent API across multiple chart types.
+- **Customizable** – Override colors, axes, tooltip formatting, or container height per chart.
+
+## Related Components
+<RelatedComponents
+  components={[
+    "area-chart",
+    "bar-chart",
+    "chart-shell",
+    "chart-tooltip",
+    "composed-chart",
+    "funnel-chart",
+    "line-chart",
+    "pie-chart",
+    "radar-chart",
+    "radial-bar-chart",
+    "scatter-chart",
+    "treemap-chart",
+  ]}
+/>
+
+## Custom Palette
+
+Override the chart variables at the container level when you need a local palette.
+
+```tsx
+<div
+  style={{
+    ["--chart-1" as string]: "oklch(0.72 0.17 18)",
+    ["--chart-2" as string]: "oklch(0.74 0.16 145)",
+    ["--chart-3" as string]: "oklch(0.72 0.15 250)",
+    ["--chart-4" as string]: "oklch(0.76 0.14 315)",
+  }}
+>
+  <BarChart
+    data={data}
+    dataKey="month"
+    config={{
+      revenue: { label: "Revenue" },
+      profit: { label: "Profit" },
+    }}
+  />
+</div>
+```

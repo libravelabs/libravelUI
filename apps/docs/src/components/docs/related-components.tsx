@@ -32,7 +32,7 @@ export async function RelatedComponents({
     <div
       className={cn(
         "my-4 grid gap-3",
-        pages.length === 1 ? "grid-cols-1" : "sm:grid-cols-2",
+        "[&>*:nth-last-child(1):nth-child(3n+1)]:lg:col-span-2 [&>*:nth-last-child(2):nth-child(3n+1)]:lg:col-span-1 [&>*:nth-last-child(1):nth-child(3n+2)]:lg:col-span-1",
         className,
       )}
     >

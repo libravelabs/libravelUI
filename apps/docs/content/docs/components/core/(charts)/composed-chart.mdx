@@ -1,0 +1,59 @@
+---
+title: Composed Chart
+description: A composed chart combines areas, bars, and lines in one surface so related metrics can be compared without switching chart types.
+component: true
+doc: ComposedChart
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/composed-chart/basic.tsx" />
+
+## Features
+
+- Mixes bar, line, and area series in one component.
+- Useful for comparing totals and trends together.
+- Shares the same theme palette as the other chart components.
+- Supports per-series type overrides.
+- Keeps the visual system consistent across dashboard views.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Copy the shared chart utilities and the chart component you need into your project.
+
+    <ComponentSource comp="components/ui/core/charts/chart-shell" />
+
+    <ComponentSource comp="components/ui/core/charts/chart-tooltip" />
+
+    <ComponentSource comp="components/ui/core/charts/composed-chart" />
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add composed-chart
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { ComposedChart } from "@/components/ui/core/charts/composed-chart";
+```
+
+```tsx
+<ComposedChart
+  data={data}
+  dataKey="month"
+  config={{
+    revenue: { label: "Revenue", type: "bar" },
+    profit: { label: "Profit", type: "line" },
+    visitors: { label: "Visitors", type: "area" },
+  }}
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/composed-chart" />

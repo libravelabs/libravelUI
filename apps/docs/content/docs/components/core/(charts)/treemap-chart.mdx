@@ -1,0 +1,35 @@
+---
+title: Treemap Chart
+description: A treemap chart shows hierarchical data using nested rectangles and is useful when size and grouping need to be understood together.
+component: true
+doc: TreemapChart
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/treemap-chart/basic.tsx" />
+
+## Features
+
+- Best for hierarchical size comparisons.
+- Supports nested groups and leaf nodes.
+- Uses LibravelUI colors through the shared chart palette.
+- Built-in tooltip support is included.
+- Leaf labels are handled inside the chart surface.
+
+## Anatomy
+
+```tsx
+import { TreemapChart } from "@/components/ui/core/charts/treemap-chart";
+```
+
+```tsx
+<TreemapChart
+  data={data}
+  hideValue={false}
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/treemap-chart" />

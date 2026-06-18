@@ -184,6 +184,83 @@ export const runtimeRegistry = {
     url: "/docs/components/core/card",
     section: "core"
   },
+"components/examples/core/charts/area-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/area-chart/basic")),
+    module: () => import("@/components/examples/core/charts/area-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/bar-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/bar-chart/basic")),
+    module: () => import("@/components/examples/core/charts/bar-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/chart-tooltip/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/chart-tooltip/basic")),
+    module: () => import("@/components/examples/core/charts/chart-tooltip/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/composed-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/composed-chart/basic")),
+    module: () => import("@/components/examples/core/charts/composed-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/funnel-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/funnel-chart/basic")),
+    module: () => import("@/components/examples/core/charts/funnel-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/line-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/line-chart/basic")),
+    module: () => import("@/components/examples/core/charts/line-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/pie-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/pie-chart/basic")),
+    module: () => import("@/components/examples/core/charts/pie-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/radar-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/radar-chart/basic")),
+    module: () => import("@/components/examples/core/charts/radar-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/radial-bar-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/radial-bar-chart/basic")),
+    module: () => import("@/components/examples/core/charts/radial-bar-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/scatter-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/scatter-chart/basic")),
+    module: () => import("@/components/examples/core/charts/scatter-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
+"components/examples/core/charts/treemap-chart/basic": {
+    Component: dynamic(() => import("@/components/examples/core/charts/treemap-chart/basic")),
+    module: () => import("@/components/examples/core/charts/treemap-chart/basic"),
+    name: "Charts",
+    url: "/docs/components/core/charts",
+    section: "core"
+  },
 "components/examples/core/checkbox/basic.demo": {
     Component: dynamic(() => import("@/components/examples/core/checkbox/basic.demo")),
     module: () => import("@/components/examples/core/checkbox/basic.demo"),
@@ -1689,6 +1766,7 @@ export const registryIndex = {
       { name: "Button", path: "components/examples/core/button/basic.demo", url: "/docs/components/core/button" },
       { name: "Calendar", path: "components/examples/core/calendar/basic", url: "/docs/components/core/calendar" },
       { name: "Card", path: "components/examples/core/card/basic", url: "/docs/components/core/card" },
+      { name: "Charts", path: "components/examples/core/charts/area-chart/basic", url: "/docs/components/core/charts" },
       { name: "Checkbox", path: "components/examples/core/checkbox/basic.demo", url: "/docs/components/core/checkbox" },
       { name: "Checkbox Group", path: "components/examples/core/checkbox-group/basic", url: "/docs/components/core/checkbox-group" },
       { name: "Color Area", path: "components/examples/core/color-area/basic", url: "/docs/components/core/color-area" },

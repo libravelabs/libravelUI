@@ -1,0 +1,55 @@
+---
+title: Funnel Chart
+description: A funnel chart visualizes a sequential process, helping users see how values decrease from one stage to the next.
+component: true
+doc: FunnelChart
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/funnel-chart/basic.tsx" />
+
+## Features
+
+- Ideal for conversion and pipeline views.
+- Supports custom labels for each stage.
+- Uses the shared LibravelUI chart tooltip.
+- Can be colored from the default chart palette or per-stage overrides.
+- Keeps the chart surface consistent with the rest of the system.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Copy the shared chart utilities and the chart component you need into your project.
+
+    <ComponentSource comp="components/ui/core/charts/chart-shell" />
+
+    <ComponentSource comp="components/ui/core/charts/chart-tooltip" />
+
+    <ComponentSource comp="components/ui/core/charts/funnel-chart" />
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add funnel-chart
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { FunnelChart } from "@/components/ui/core/charts/funnel-chart";
+```
+
+```tsx
+<FunnelChart
+  data={data}
+  dataKey="value"
+  nameKey="stage"
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/funnel-chart" />

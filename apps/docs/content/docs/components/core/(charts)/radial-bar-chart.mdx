@@ -1,0 +1,58 @@
+---
+title: Radial Bar Chart
+description: A radial bar chart presents values on a circular scale and works well for progress-style or compact comparison dashboards.
+component: true
+doc: RadialBarChart
+---
+
+## Example
+
+<Playground path="components/examples/core/charts/radial-bar-chart/basic.tsx" />
+
+## Features
+
+- Useful for progress and status visualizations.
+- Supports semicircle and full-circle layouts.
+- Uses LibravelUI chart colors by default.
+- Composed tooltip and legend are already included.
+- Can be customized with start and end angles.
+
+## Installation
+
+<Tabs items={["Manual", "CLI"]} defaultIndex={1}>
+  <Tab value="Manual">
+    Copy the shared chart utilities and the chart component you need into your project.
+
+    <ComponentSource comp="components/ui/core/charts/chart-shell" />
+
+    <ComponentSource comp="components/ui/core/charts/chart-tooltip" />
+
+    <ComponentSource comp="components/ui/core/charts/radial-bar-chart" />
+  </Tab>
+  <Tab value="CLI">
+    ```package-install
+    npx libravelui@latest add radial-bar-chart
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+import { RadialBarChart } from "@/components/ui/core/charts/radial-bar-chart";
+```
+
+```tsx
+<RadialBarChart
+  data={data}
+  nameKey="name"
+  valueKey="value"
+  config={{
+    label: "Progress",
+  }}
+/>
+```
+
+## Props
+
+<AutoTypeTable comp="@/components/ui/core/charts/radial-bar-chart" />
