@@ -149,10 +149,16 @@
           "description": "Footer with centered branding and navigation."
         },
         {
-          "title": "Columns",
-          "slug": "columns",
-          "href": "/blocks/footer/columns",
-          "description": "Multi-column footer for organizing links and resources."
+          "title": "Newsletter",
+          "slug": "newsletter",
+          "href": "/blocks/footer/newsletter",
+          "description": "Footer equipped with an email subscription form for newsletter updates."
+        },
+        {
+          "title": "Brand Focused",
+          "slug": "brand-focused",
+          "href": "/blocks/footer/brand-focused",
+          "description": "Footer layout that emphasizes the brand identity, logo, and social media presence."
         }
       ]
     }

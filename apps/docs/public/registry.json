@@ -5942,6 +5942,236 @@
       }
     ]
   },
+  "components/ui/block/footer": {
+    "name": "footer",
+    "type": "registry:file",
+    "docs": [
+      {
+        "displayName": "Footer",
+        "description": "",
+        "props": {
+          "variant": {
+            "type": "null | \"default\" | \"centered\"",
+            "required": false,
+            "description": "",
+            "defaultValue": "default"
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "description": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "sections": {
+            "type": "FooterSectionData[]",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "social": {
+            "type": "FooterSocialItem[]",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "newsletter": {
+            "type": "FooterNewsletterData",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "copyright": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "bottomLinks": {
+            "type": "FooterLinkItem[]",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      },
+      {
+        "displayName": "FooterContainer",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterBrand",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterLogo",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterDescription",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterNavigation",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterSection",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterSectionTitle",
+        "description": "",
+        "props": {
+          "level": {
+            "type": "null | 1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      },
+      {
+        "displayName": "FooterLinks",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterLink",
+        "description": "",
+        "props": {
+          "external": {
+            "type": "boolean",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "tone": {
+            "type": "null | \"default\" | \"primary\" | \"secondary\" | \"underline\"",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "ref": {
+            "type": "RefObject<HTMLAnchorElement>",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      },
+      {
+        "displayName": "FooterSocial",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterSocialLink",
+        "description": "",
+        "props": {
+          "label": {
+            "type": "string",
+            "required": true,
+            "description": "",
+            "defaultValue": null
+          },
+          "tone": {
+            "type": "null | \"default\" | \"primary\" | \"secondary\" | \"underline\"",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "ref": {
+            "type": "RefObject<HTMLAnchorElement>",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      },
+      {
+        "displayName": "FooterNewsletter",
+        "description": "",
+        "props": {
+          "ref": {
+            "type": "RefObject<HTMLFormElement>",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "title": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "",
+            "defaultValue": "Subscribe to updates"
+          },
+          "description": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          },
+          "placeholder": {
+            "type": "string",
+            "required": false,
+            "description": "",
+            "defaultValue": "you@example.com"
+          },
+          "buttonLabel": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "",
+            "defaultValue": "Subscribe"
+          },
+          "onSubmit": {
+            "type": "(email: string) => void",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      },
+      {
+        "displayName": "FooterBottom",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterCopyright",
+        "description": "",
+        "props": {}
+      },
+      {
+        "displayName": "FooterDivider",
+        "description": "",
+        "props": {
+          "text": {
+            "type": "string",
+            "required": false,
+            "description": "",
+            "defaultValue": null
+          }
+        }
+      }
+    ],
+    "files": [
+      {
+        "path": "components/ui/block/footer.tsx",
+        "code": "\"use client\";\r\n\r\nimport React, { createContext, useContext, useId, useState } from \"react\";\r\nimport { cva, type VariantProps } from \"class-variance-authority\";\r\nimport { Link, type LinkProps } from \"@/components/ui/core/link\";\r\nimport { Heading } from \"@/components/ui/core/heading\";\r\nimport { Separator } from \"@/components/ui/core/separator\";\r\nimport { Button } from \"@/components/ui/core/button\";\r\nimport { TextField } from \"@/components/ui/core/text-field\";\r\nimport { Input } from \"@/components/ui/core/input\";\r\nimport { LuArrowRight } from \"react-icons/lu\";\r\nimport { cn } from \"@/lib/utils\";\r\nimport { Form } from \"@/components/ui/core/form\";\r\nimport { FieldError } from \"@/components/ui/core/field\";\r\n\r\ntype FooterVariant = VariantProps<typeof footerVariants>[\"variant\"];\r\n\r\ninterface FooterLinkItem {\r\n  label: React.ReactNode;\r\n  href: string;\r\n  external?: boolean;\r\n}\r\n\r\ninterface FooterSectionData {\r\n  title: React.ReactNode;\r\n  links: FooterLinkItem[];\r\n}\r\n\r\ninterface FooterSocialItem {\r\n  label: string;\r\n  href: string;\r\n  icon: React.ReactNode;\r\n}\r\n\r\ninterface FooterNewsletterData {\r\n  title?: React.ReactNode;\r\n  description?: React.ReactNode;\r\n  placeholder?: string;\r\n  buttonLabel?: React.ReactNode;\r\n  onSubmit?: (email: string) => void;\r\n}\r\n\r\ninterface FooterContextValue {\r\n  variant: FooterVariant;\r\n}\r\n\r\nconst FooterContext = createContext<FooterContextValue>({\r\n  variant: \"default\",\r\n});\r\n\r\nfunction useFooterVariant() {\r\n  return useContext(FooterContext).variant;\r\n}\r\n\r\nconst footerVariants = cva(\r\n  \"w-full border-t border-border/40 bg-background text-foreground\",\r\n  {\r\n    variants: {\r\n      variant: {\r\n        default: \"\",\r\n        centered: \"text-center\",\r\n      },\r\n    },\r\n    defaultVariants: {\r\n      variant: \"default\",\r\n    },\r\n  },\r\n);\r\n\r\ntype FooterOwnProps = VariantProps<typeof footerVariants> & {\r\n  logo?: React.ReactNode;\r\n  description?: React.ReactNode;\r\n  sections?: FooterSectionData[];\r\n  social?: FooterSocialItem[];\r\n  newsletter?: FooterNewsletterData;\r\n  copyright?: React.ReactNode;\r\n  bottomLinks?: FooterLinkItem[];\r\n};\r\n\r\ntype FooterProps = Omit<React.ComponentProps<\"footer\">, \"children\"> &\r\n  FooterOwnProps & {\r\n    children?: React.ReactNode;\r\n  };\r\n\r\nfunction Footer({\r\n  variant = \"default\",\r\n  className,\r\n  children,\r\n  logo,\r\n  description,\r\n  sections,\r\n  social,\r\n  newsletter,\r\n  copyright,\r\n  bottomLinks,\r\n  \"aria-label\": ariaLabel = \"Footer\",\r\n  ...props\r\n}: FooterProps) {\r\n  const resolvedVariant = variant ?? \"default\";\r\n  const isDataDriven = !children;\r\n\r\n  return (\r\n    <FooterContext.Provider value={{ variant: resolvedVariant }}>\r\n      <footer\r\n        data-slot=\"footer\"\r\n        data-variant={resolvedVariant}\r\n        aria-label={ariaLabel}\r\n        className={cn(footerVariants({ variant: resolvedVariant }), className)}\r\n        {...props}\r\n      >\r\n        {isDataDriven ? (\r\n          <FooterAutoLayout\r\n            logo={logo}\r\n            description={description}\r\n            sections={sections}\r\n            social={social}\r\n            newsletter={newsletter}\r\n            copyright={copyright}\r\n            bottomLinks={bottomLinks}\r\n          />\r\n        ) : (\r\n          children\r\n        )}\r\n      </footer>\r\n    </FooterContext.Provider>\r\n  );\r\n}\r\n\r\nfunction FooterContainer({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  const variant = useFooterVariant();\r\n\r\n  return (\r\n    <div\r\n      data-slot=\"footer-container\"\r\n      className={cn(\r\n        \"mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12 sm:py-16 lg:px-8\",\r\n        variant === \"centered\" && \"items-center\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterBrand({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  const variant = useFooterVariant();\r\n\r\n  return (\r\n    <div\r\n      data-slot=\"footer-brand\"\r\n      className={cn(\r\n        \"flex max-w-sm flex-col gap-4\",\r\n        variant === \"centered\" && \"mx-auto items-center text-center\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterLogo({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  return (\r\n    <div\r\n      data-slot=\"footer-logo\"\r\n      className={cn(\"flex items-center gap-2\", className)}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterDescription({ className, ...props }: React.ComponentProps<\"p\">) {\r\n  return (\r\n    <p\r\n      data-slot=\"footer-description\"\r\n      className={cn(\"text-sm leading-relaxed text-muted-foreground\", className)}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterNavigation({\r\n  className,\r\n  ...props\r\n}: React.ComponentProps<\"nav\">) {\r\n  const variant = useFooterVariant();\r\n\r\n  return (\r\n    <nav\r\n      data-slot=\"footer-navigation\"\r\n      aria-label=\"Footer navigation\"\r\n      className={cn(\r\n        \"grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3\",\r\n        variant === \"centered\" &&\r\n          \"grid-cols-1 justify-items-center gap-y-10 text-center sm:grid-cols-2 md:grid-cols-3\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterSection({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  const variant = useFooterVariant();\r\n\r\n  return (\r\n    <div\r\n      data-slot=\"footer-section\"\r\n      className={cn(\r\n        \"flex flex-col gap-4\",\r\n        variant === \"centered\" && \"items-center\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterSectionTitle({\r\n  className,\r\n  ...props\r\n}: React.ComponentProps<typeof Heading>) {\r\n  return (\r\n    <Heading\r\n      level={4}\r\n      data-slot=\"footer-section-title\"\r\n      className={cn(\r\n        \"text-xs font-semibold tracking-wide text-foreground uppercase\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterLinks({ className, ...props }: React.ComponentProps<\"ul\">) {\r\n  return (\r\n    <ul\r\n      data-slot=\"footer-links\"\r\n      className={cn(\"flex flex-col gap-3\", className)}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\ninterface FooterLinkProps extends LinkProps {\r\n  external?: boolean;\r\n}\r\n\r\nfunction FooterLink({\r\n  className,\r\n  external,\r\n  target,\r\n  rel,\r\n  ...props\r\n}: FooterLinkProps) {\r\n  return (\r\n    <li data-slot=\"footer-link-item\">\r\n      <Link\r\n        data-slot=\"footer-link\"\r\n        tone=\"secondary\"\r\n        target={external ? \"_blank\" : target}\r\n        rel={external ? \"noreferrer\" : rel}\r\n        className={cn(\"text-sm\", className)}\r\n        {...props}\r\n      />\r\n    </li>\r\n  );\r\n}\r\n\r\nfunction FooterSocial({ className, ...props }: React.ComponentProps<\"nav\">) {\r\n  const variant = useFooterVariant();\r\n\r\n  return (\r\n    <nav\r\n      data-slot=\"footer-social\"\r\n      aria-label=\"Social media\"\r\n      className={cn(\r\n        \"flex items-center gap-3\",\r\n        variant === \"centered\" && \"justify-center\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\ninterface FooterSocialLinkProps extends LinkProps {\r\n  label: string;\r\n}\r\n\r\nfunction FooterSocialLink({\r\n  label,\r\n  className,\r\n  children,\r\n  ...props\r\n}: FooterSocialLinkProps) {\r\n  return (\r\n    <Link\r\n      data-slot=\"footer-social-link\"\r\n      aria-label={label}\r\n      target=\"_blank\"\r\n      rel=\"noreferrer\"\r\n      tone=\"secondary\"\r\n      className={cn(\"size-fit\", className)}\r\n      {...props}\r\n    >\r\n      {children}\r\n    </Link>\r\n  );\r\n}\r\n\r\ninterface FooterNewsletterProps\r\n  extends\r\n    Omit<React.ComponentProps<typeof Form>, \"onSubmit\">,\r\n    FooterNewsletterData {}\r\n\r\nfunction FooterNewsletter({\r\n  title = \"Subscribe to updates\",\r\n  description,\r\n  placeholder = \"you@example.com\",\r\n  buttonLabel = \"Subscribe\",\r\n  onSubmit,\r\n  className,\r\n  ...props\r\n}: FooterNewsletterProps) {\r\n  const [email, setEmail] = useState(\"\");\r\n  const fieldId = useId();\r\n\r\n  return (\r\n    <div\r\n      data-slot=\"footer-newsletter\"\r\n      className={cn(\"flex flex-col gap-3 max-w-sm\", className)}\r\n    >\r\n      {title && (\r\n        <FooterSectionTitle className=\"normal-case tracking-normal text-sm font-medium\">\r\n          {title}\r\n        </FooterSectionTitle>\r\n      )}\r\n      {description && <FooterDescription>{description}</FooterDescription>}\r\n      <Form\r\n        {...props}\r\n        onSubmit={(event) => {\r\n          event.preventDefault();\r\n          onSubmit?.(email);\r\n        }}\r\n        className=\"flex w-full flex-col gap-2 sm:flex-row\"\r\n      >\r\n        <TextField\r\n          aria-label=\"Email address\"\r\n          id={fieldId}\r\n          type=\"email\"\r\n          value={email}\r\n          onChange={setEmail}\r\n          isRequired\r\n          className=\"flex-1\"\r\n        >\r\n          <Input placeholder={placeholder} />\r\n          <FieldError />\r\n        </TextField>\r\n        <Button type=\"submit\" size=\"default\">\r\n          {buttonLabel}\r\n          <LuArrowRight />\r\n        </Button>\r\n      </Form>\r\n    </div>\r\n  );\r\n}\r\n\r\nfunction FooterBottom({ className, ...props }: React.ComponentProps<\"div\">) {\r\n  return (\r\n    <div\r\n      data-slot=\"footer-bottom\"\r\n      className={cn(\r\n        \"flex flex-col items-center gap-4 border-t border-border/40 pt-6 text-xs text-muted-foreground sm:flex-row sm:justify-between\",\r\n        className,\r\n      )}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterCopyright({ className, ...props }: React.ComponentProps<\"p\">) {\r\n  return (\r\n    <p\r\n      data-slot=\"footer-copyright\"\r\n      className={cn(\"text-xs text-muted-foreground\", className)}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterDivider({\r\n  className,\r\n  ...props\r\n}: React.ComponentProps<typeof Separator>) {\r\n  return (\r\n    <Separator\r\n      data-slot=\"footer-divider\"\r\n      className={cn(\"my-2\", className)}\r\n      {...props}\r\n    />\r\n  );\r\n}\r\n\r\nfunction FooterAutoLayout({\r\n  logo,\r\n  description,\r\n  sections,\r\n  social,\r\n  newsletter,\r\n  copyright,\r\n  bottomLinks,\r\n}: FooterOwnProps) {\r\n  const variant = useFooterVariant();\r\n  const hasBottom = Boolean(copyright || bottomLinks?.length);\r\n\r\n  return (\r\n    <FooterContainer>\r\n      <div\r\n        className={cn(\r\n          \"flex flex-col gap-10\",\r\n          variant !== \"centered\" && \"lg:flex-row lg:justify-between\",\r\n        )}\r\n      >\r\n        {(logo || description || social) && (\r\n          <FooterBrand>\r\n            {logo && <FooterLogo>{logo}</FooterLogo>}\r\n            {description && (\r\n              <FooterDescription>{description}</FooterDescription>\r\n            )}\r\n            {social && social.length > 0 && (\r\n              <FooterSocial>\r\n                {social.map((item) => (\r\n                  <FooterSocialLink\r\n                    key={item.href}\r\n                    href={item.href}\r\n                    label={item.label}\r\n                  >\r\n                    {item.icon}\r\n                  </FooterSocialLink>\r\n                ))}\r\n              </FooterSocial>\r\n            )}\r\n          </FooterBrand>\r\n        )}\r\n\r\n        {newsletter && <FooterNewsletter {...newsletter} />}\r\n\r\n        {sections && sections.length > 0 && (\r\n          <FooterNavigation className=\"lg:flex-1\">\r\n            {sections.map((section, i) => (\r\n              <FooterSection key={i}>\r\n                <FooterSectionTitle>{section.title}</FooterSectionTitle>\r\n                <FooterLinks>\r\n                  {section.links.map((link) => (\r\n                    <FooterLink\r\n                      key={link.href}\r\n                      href={link.href}\r\n                      external={link.external}\r\n                    >\r\n                      {link.label}\r\n                    </FooterLink>\r\n                  ))}\r\n                </FooterLinks>\r\n              </FooterSection>\r\n            ))}\r\n          </FooterNavigation>\r\n        )}\r\n      </div>\r\n\r\n      {hasBottom && (\r\n        <FooterBottom>\r\n          {copyright ? (\r\n            <FooterCopyright>{copyright}</FooterCopyright>\r\n          ) : (\r\n            <span />\r\n          )}\r\n          {bottomLinks && bottomLinks.length > 0 && (\r\n            <FooterLinks className=\"flex-row gap-6\">\r\n              {bottomLinks.map((link) => (\r\n                <FooterLink\r\n                  key={link.href}\r\n                  href={link.href}\r\n                  external={link.external}\r\n                >\r\n                  {link.label}\r\n                </FooterLink>\r\n              ))}\r\n            </FooterLinks>\r\n          )}\r\n        </FooterBottom>\r\n      )}\r\n    </FooterContainer>\r\n  );\r\n}\r\n\r\nexport {\r\n  Footer,\r\n  FooterContainer,\r\n  FooterBrand,\r\n  FooterLogo,\r\n  FooterDescription,\r\n  FooterNavigation,\r\n  FooterSection,\r\n  FooterSectionTitle,\r\n  FooterLinks,\r\n  FooterLink,\r\n  FooterSocial,\r\n  FooterSocialLink,\r\n  FooterNewsletter,\r\n  FooterBottom,\r\n  FooterCopyright,\r\n  FooterDivider,\r\n  useFooterVariant,\r\n};\r\n\r\nexport type {\r\n  FooterVariant,\r\n  FooterProps,\r\n  FooterLinkItem,\r\n  FooterSectionData,\r\n  FooterSocialItem,\r\n  FooterNewsletterData,\r\n  FooterLinkProps,\r\n  FooterSocialLinkProps,\r\n  FooterNewsletterProps,\r\n};\r\n"
+      }
+    ]
+  },
   "components/ui/block/mockup": {
     "name": "mockup",
     "type": "registry:file",
@@ -19839,7 +20069,7 @@
               },
               {
                 "path": "app/blocks/dashboard/with-navbar/page.tsx",
-                "code": "\"use client\";\r\n\r\nimport { NavbarProvider, NavbarContent } from \"@/components/ui/block/navbar\";\r\nimport { AppNavbar } from \"./components/app-navbar\";\r\nimport { Heading } from \"@/components/ui/core/heading\";\r\nimport { CardsSection } from \"./components/cards-section\";\r\nimport { Separator } from \"@/components/ui/core/separator\";\r\nimport { DataTable } from \"./components/data-table\";\r\nimport { products } from \"./products\";\r\nimport { DashboardChart } from \"./components/dashboard-chart\";\r\n\r\nexport default function NavbarDefaultPage() {\r\n  return (\r\n    <NavbarProvider>\r\n      <AppNavbar />\r\n\r\n      <NavbarContent>\r\n        <header className=\"flex gap-4 h-14 items-center border-b p-2\">\r\n          <span>Dashboard</span>\r\n        </header>\r\n\r\n        <div className=\"flex flex-col gap-4 p-4\">\r\n          <div className=\"grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-4\">\r\n            <CardsSection data={products} />\r\n          </div>\r\n\r\n          <div className=\"relative flex-1 overflow-hidden rounded-xl border p-4\">\r\n            <DashboardChart />\r\n          </div>\r\n\r\n          <DataTable data={products} />\r\n        </div>\r\n      </NavbarContent>\r\n    </NavbarProvider>\r\n  );\r\n}\r\n"
+                "code": "\"use client\";\r\n\r\nimport { NavbarProvider, NavbarContent } from \"@/components/ui/block/navbar\";\r\nimport { AppNavbar } from \"./components/app-navbar\";\r\nimport { Heading } from \"@/components/ui/core/heading\";\r\nimport { CardsSection } from \"./components/cards-section\";\r\nimport { Separator } from \"@/components/ui/core/separator\";\r\nimport { DataTable } from \"./components/data-table\";\r\nimport { products } from \"./products\";\r\nimport { DashboardChart } from \"./components/dashboard-chart\";\r\n\r\nexport default function NavbarDefaultPage() {\r\n  return (\r\n    <NavbarProvider>\r\n      <AppNavbar />\r\n\r\n      <NavbarContent>\r\n        <div className=\"flex flex-col gap-4 p-4\">\r\n          <div className=\"grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-4\">\r\n            <CardsSection data={products} />\r\n          </div>\r\n\r\n          <div className=\"relative flex-1 overflow-hidden rounded-xl border p-4\">\r\n            <DashboardChart />\r\n          </div>\r\n\r\n          <DataTable data={products} />\r\n        </div>\r\n      </NavbarContent>\r\n    </NavbarProvider>\r\n  );\r\n}\r\n"
               },
               {
                 "path": "app/blocks/dashboard/with-navbar/products.ts",
@@ -19935,7 +20165,85 @@
         "icon": "PanelBottom",
         "description": "Stylish footer blocks with multiple layouts, including simple, centered, and multi-column designs for various website needs.",
         "status": "coming_soon",
-        "variants": []
+        "variants": [
+          {
+            "title": "Default",
+            "slug": "default",
+            "href": "/blocks/footer/default",
+            "description": "Standard footer layout with essential links and information.",
+            "featured": true,
+            "type": "registry:block",
+            "previewEntry": "page.tsx",
+            "docs": [],
+            "files": [
+              {
+                "path": "app/blocks/footer/default/components/app-footer.tsx",
+                "code": "\"use client\";\r\n\r\nimport {\r\n  Footer,\r\n  FooterContainer,\r\n  FooterBrand,\r\n  FooterLogo,\r\n  FooterDescription,\r\n  FooterNavigation,\r\n  FooterSection,\r\n  FooterSectionTitle,\r\n  FooterLinks,\r\n  FooterLink,\r\n  FooterSocial,\r\n  FooterSocialLink,\r\n  FooterBottom,\r\n  FooterCopyright,\r\n} from \"@/components/ui/block/footer\";\r\nimport { AppLogo } from \"@/components/app/logo\";\r\nimport { FaGithub, FaXTwitter, FaLinkedin } from \"react-icons/fa6\";\r\n\r\nexport function AppFooter() {\r\n  return (\r\n    <Footer aria-label=\"Site footer\">\r\n      <FooterContainer>\r\n        <div className=\"flex flex-col gap-10 lg:flex-row lg:justify-between\">\r\n          <FooterBrand>\r\n            <FooterLogo>\r\n              <AppLogo />\r\n            </FooterLogo>\r\n            <FooterDescription>\r\n              Copy-paste React components you own and adapt — accessible,\r\n              unstyled by default, production ready.\r\n            </FooterDescription>\r\n            <FooterSocial>\r\n              <FooterSocialLink href=\"https://github.com\" label=\"GitHub\">\r\n                <FaGithub />\r\n              </FooterSocialLink>\r\n              <FooterSocialLink href=\"https://x.com\" label=\"X\">\r\n                <FaXTwitter />\r\n              </FooterSocialLink>\r\n              <FooterSocialLink href=\"https://linkedin.com\" label=\"LinkedIn\">\r\n                <FaLinkedin />\r\n              </FooterSocialLink>\r\n            </FooterSocial>\r\n          </FooterBrand>\r\n\r\n          <FooterNavigation className=\"lg:flex-1 lg:max-w-2xl\">\r\n            <FooterSection>\r\n              <FooterSectionTitle>Product</FooterSectionTitle>\r\n              <FooterLinks>\r\n                <FooterLink href=\"/components\">Components</FooterLink>\r\n                <FooterLink href=\"/blocks\">Blocks</FooterLink>\r\n                <FooterLink href=\"/templates\">Templates</FooterLink>\r\n              </FooterLinks>\r\n            </FooterSection>\r\n\r\n            <FooterSection>\r\n              <FooterSectionTitle>Resources</FooterSectionTitle>\r\n              <FooterLinks>\r\n                <FooterLink href=\"/docs\">Documentation</FooterLink>\r\n                <FooterLink href=\"/docs/starter-kits/nextjs\">\r\n                  Starter Kits\r\n                </FooterLink>\r\n                <FooterLink href=\"https://github.com\" external>\r\n                  GitHub\r\n                </FooterLink>\r\n              </FooterLinks>\r\n            </FooterSection>\r\n\r\n            <FooterSection>\r\n              <FooterSectionTitle>Company</FooterSectionTitle>\r\n              <FooterLinks>\r\n                <FooterLink href=\"/about\">About</FooterLink>\r\n                <FooterLink href=\"/blog\">Blog</FooterLink>\r\n                <FooterLink href=\"/contact\">Contact</FooterLink>\r\n              </FooterLinks>\r\n            </FooterSection>\r\n          </FooterNavigation>\r\n        </div>\r\n\r\n        <FooterBottom>\r\n          <FooterCopyright>\r\n            &copy; {new Date().getFullYear()} LibravelUI. All rights reserved.\r\n          </FooterCopyright>\r\n          <FooterLinks className=\"flex-row gap-6\">\r\n            <FooterLink href=\"/privacy\">Privacy</FooterLink>\r\n            <FooterLink href=\"/terms\">Terms</FooterLink>\r\n          </FooterLinks>\r\n        </FooterBottom>\r\n      </FooterContainer>\r\n    </Footer>\r\n  );\r\n}\r\n"
+              },
+              {
+                "path": "app/blocks/footer/default/page.tsx",
+                "code": "import { AppFooter } from \"./components/app-footer\";\r\n\r\nexport default function FooterDefaultPage() {\r\n  return (\r\n    <>\r\n      <div className=\"flex w-full h-full min-h-200\">\r\n        <h1 className=\"m-auto\">Scroll to bottom</h1>\r\n      </div>\r\n\r\n      <AppFooter />\r\n    </>\r\n  );\r\n}\r\n"
+              }
+            ]
+          },
+          {
+            "title": "Centered",
+            "slug": "centered",
+            "href": "/blocks/footer/centered",
+            "description": "Footer with centered branding and navigation.",
+            "type": "registry:block",
+            "previewEntry": "page.tsx",
+            "docs": [],
+            "files": [
+              {
+                "path": "app/blocks/footer/centered/components/app-footer.tsx",
+                "code": "import { Footer } from \"@/components/ui/block/footer\";\r\nimport { AppLogo } from \"@/components/app/logo\";\r\nimport { FaGithub, FaXTwitter, FaYoutube } from \"react-icons/fa6\";\r\n\r\nexport function AppFooter() {\r\n  return (\r\n    <Footer\r\n      variant=\"centered\"\r\n      aria-label=\"Site footer\"\r\n      logo={<AppLogo />}\r\n      description=\"Modern, accessible React components for building interfaces without limits.\"\r\n      sections={[\r\n        {\r\n          title: \"Product\",\r\n          links: [\r\n            { label: \"Components\", href: \"/components\" },\r\n            { label: \"Blocks\", href: \"/blocks\" },\r\n            { label: \"Pricing\", href: \"/pricing\" },\r\n          ],\r\n        },\r\n        {\r\n          title: \"Resources\",\r\n          links: [\r\n            { label: \"Documentation\", href: \"/docs\" },\r\n            { label: \"Changelog\", href: \"/changelog\" },\r\n          ],\r\n        },\r\n        {\r\n          title: \"Company\",\r\n          links: [\r\n            { label: \"About\", href: \"/about\" },\r\n            { label: \"Contact\", href: \"/contact\" },\r\n          ],\r\n        },\r\n      ]}\r\n      social={[\r\n        { label: \"GitHub\", href: \"https://github.com\", icon: <FaGithub /> },\r\n        { label: \"Twitter\", href: \"https://twitter.com\", icon: <FaXTwitter /> },\r\n        { label: \"YouTube\", href: \"https://youtube.com\", icon: <FaYoutube /> },\r\n      ]}\r\n      copyright=\"© 2025-2026 LibravelUI. All rights reserved.\"\r\n    />\r\n  );\r\n}\r\n"
+              },
+              {
+                "path": "app/blocks/footer/centered/page.tsx",
+                "code": "import { AppFooter } from \"./components/app-footer\";\r\n\r\nexport default function FooterCenteredPage() {\r\n  return (\r\n    <>\r\n      <div className=\"flex w-full h-full min-h-200\">\r\n        <h1 className=\"m-auto\">Scroll to bottom</h1>\r\n      </div>\r\n\r\n      <AppFooter />\r\n    </>\r\n  );\r\n}\r\n"
+              }
+            ]
+          },
+          {
+            "title": "Newsletter",
+            "slug": "newsletter",
+            "href": "/blocks/footer/newsletter",
+            "description": "Footer equipped with an email subscription form for newsletter updates.",
+            "type": "registry:block",
+            "previewEntry": "page.tsx",
+            "docs": [],
+            "files": [
+              {
+                "path": "app/blocks/footer/newsletter/components/app-footer.tsx",
+                "code": "\"use client\";\r\n\r\nimport {\r\n  Footer,\r\n  FooterContainer,\r\n  FooterBrand,\r\n  FooterLogo,\r\n  FooterDescription,\r\n  FooterNewsletter,\r\n  FooterNavigation,\r\n  FooterSection,\r\n  FooterSectionTitle,\r\n  FooterLinks,\r\n  FooterLink,\r\n  FooterBottom,\r\n  FooterCopyright,\r\n  type FooterSectionData,\r\n} from \"@/components/ui/block/footer\";\r\nimport { AppLogo } from \"@/components/app/logo\";\r\n\r\nconst sections: FooterSectionData[] = [\r\n  {\r\n    title: \"Product\",\r\n    links: [\r\n      { label: \"Components\", href: \"/components\" },\r\n      { label: \"Blocks\", href: \"/blocks\" },\r\n    ],\r\n  },\r\n  {\r\n    title: \"Company\",\r\n    links: [\r\n      { label: \"About\", href: \"/about\" },\r\n      { label: \"Blog\", href: \"/blog\" },\r\n    ],\r\n  },\r\n];\r\n\r\nexport function AppFooter() {\r\n  return (\r\n    <Footer aria-label=\"Site footer\">\r\n      <FooterContainer>\r\n        <div className=\"flex flex-col gap-10 lg:flex-row lg:justify-between\">\r\n          <FooterBrand>\r\n            <FooterLogo>\r\n              <AppLogo />\r\n            </FooterLogo>\r\n            <FooterDescription>\r\n              Get notified about new components and releases. No spam.\r\n            </FooterDescription>\r\n          </FooterBrand>\r\n\r\n          <FooterNewsletter\r\n            title=\"Stay in the loop\"\r\n            description=\"One email a month, unsubscribe anytime.\"\r\n            onSubmit={(email) => console.log(\"subscribe:\", email)}\r\n          />\r\n\r\n          <FooterNavigation className=\"lg:flex-1 lg:max-w-md\">\r\n            {sections.map((section, i) => (\r\n              <FooterSection key={i}>\r\n                <FooterSectionTitle>{section.title}</FooterSectionTitle>\r\n                <FooterLinks>\r\n                  {section.links.map((link) => (\r\n                    <FooterLink key={link.href} href={link.href}>\r\n                      {link.label}\r\n                    </FooterLink>\r\n                  ))}\r\n                </FooterLinks>\r\n              </FooterSection>\r\n            ))}\r\n          </FooterNavigation>\r\n        </div>\r\n\r\n        <FooterBottom>\r\n          <FooterCopyright>\r\n            &copy; 2025-2026 LibravelUI. All rights reserved.\r\n          </FooterCopyright>\r\n        </FooterBottom>\r\n      </FooterContainer>\r\n    </Footer>\r\n  );\r\n}\r\n"
+              },
+              {
+                "path": "app/blocks/footer/newsletter/page.tsx",
+                "code": "import { AppFooter } from \"./components/app-footer\";\r\n\r\nexport default function FooterNewsletterPage() {\r\n  return (\r\n    <>\r\n      <div className=\"flex w-full h-full min-h-200\">\r\n        <h1 className=\"m-auto\">Scroll to bottom</h1>\r\n      </div>\r\n\r\n      <AppFooter />\r\n    </>\r\n  );\r\n}\r\n"
+              }
+            ]
+          },
+          {
+            "title": "Brand Focused",
+            "slug": "brand-focused",
+            "href": "/blocks/footer/brand-focused",
+            "description": "Footer layout that emphasizes the brand identity, logo, and social media presence.",
+            "type": "registry:block",
+            "previewEntry": "page.tsx",
+            "docs": [],
+            "files": [
+              {
+                "path": "app/blocks/footer/brand-focused/components/app-footer.tsx",
+                "code": "import {\r\n  Footer,\r\n  FooterContainer,\r\n  FooterBrand,\r\n  FooterSocial,\r\n  FooterSocialLink,\r\n  FooterDivider,\r\n  FooterLinks,\r\n  FooterLink,\r\n  FooterBottom,\r\n  FooterCopyright,\r\n} from \"@/components/ui/block/footer\";\r\nimport { FaGithub, FaXTwitter, FaInstagram } from \"react-icons/fa6\";\r\n\r\nexport function AppFooter() {\r\n  return (\r\n    <Footer aria-label=\"Site footer\">\r\n      <FooterContainer className=\"gap-8\">\r\n        <FooterBrand className=\"max-w-2xl gap-6\">\r\n          <h2 className=\"serif text-4xl font-normal leading-tight tracking-tight text-foreground sm:text-5xl\">\r\n            Build interfaces{\" \"}\r\n            <em className=\"text-muted-foreground\">without limits.</em>\r\n          </h2>\r\n          <FooterSocial>\r\n            <FooterSocialLink href=\"https://github.com\" label=\"GitHub\">\r\n              <FaGithub />\r\n            </FooterSocialLink>\r\n            <FooterSocialLink href=\"https://twitter.com\" label=\"Twitter\">\r\n              <FaXTwitter />\r\n            </FooterSocialLink>\r\n            <FooterSocialLink href=\"https://instagram.com\" label=\"Instagram\">\r\n              <FaInstagram />\r\n            </FooterSocialLink>\r\n          </FooterSocial>\r\n        </FooterBrand>\r\n\r\n        <FooterDivider />\r\n\r\n        <FooterBottom className=\"border-t-0 pt-0\">\r\n          <FooterCopyright>\r\n            &copy; 2025-2026 LibravelUI. All rights reserved.\r\n          </FooterCopyright>\r\n          <FooterLinks className=\"flex-row gap-6\">\r\n            <FooterLink href=\"/privacy\">Privacy</FooterLink>\r\n            <FooterLink href=\"/terms\">Terms</FooterLink>\r\n          </FooterLinks>\r\n        </FooterBottom>\r\n      </FooterContainer>\r\n    </Footer>\r\n  );\r\n}\r\n"
+              },
+              {
+                "path": "app/blocks/footer/brand-focused/page.tsx",
+                "code": "import { AppFooter } from \"./components/app-footer\";\r\n\r\nexport default function FooterBrandFocusedPage() {\r\n  return (\r\n    <>\r\n      <div className=\"flex w-full h-full min-h-200\">\r\n        <h1 className=\"m-auto\">Scroll to bottom</h1>\r\n      </div>\r\n\r\n      <AppFooter />\r\n    </>\r\n  );\r\n}\r\n"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
