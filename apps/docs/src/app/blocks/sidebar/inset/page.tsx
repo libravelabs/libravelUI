@@ -17,7 +17,7 @@ export default function InsetSidebarPage() {
       <AppSidebar />
 
       <SidebarContent>
-        <header className="flex h-14 items-center border-b p-2">
+        <header className="sticky top-0 z-10 bg-background flex h-14 items-center border-b p-2">
           <SidebarTrigger />
         </header>
 

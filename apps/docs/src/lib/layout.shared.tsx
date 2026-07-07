@@ -33,15 +33,8 @@ export function baseOptions(): BaseLayoutProps {
         text: "Components",
       },
       {
-        type: "custom",
-        children: (
-          <AnimatedTooltip
-            position="bottom"
-            trigger={<span className="text-sm opacity-40">Blocks</span>}
-          >
-            Coming Soon
-          </AnimatedTooltip>
-        ),
+        url: "/blocks",
+        text: "Blocks",
       },
     ],
   };

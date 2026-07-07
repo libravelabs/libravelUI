@@ -369,12 +369,16 @@ type SidebarProps = React.ComponentProps<"div"> &
 function Sidebar({
   side = "left",
   variant = "sidebar",
-  collapsible = "offcanvas",
+  collapsible: rawCollapsible = "offcanvas",
   className,
   children,
   ...props
 }: SidebarProps) {
   const { open, setOpen, isMobile, setConfig } = useSidebarContext();
+  const collapsible =
+    variant === "float" && rawCollapsible === "offcanvas"
+      ? "icon"
+      : rawCollapsible;
   const state: "expanded" | "collapsed" =
     collapsible === "none" ? "expanded" : open ? "expanded" : "collapsed";
 
@@ -523,7 +527,28 @@ const sidebarContentVariants = cva(
         float: "",
         inset: "m-2 rounded-xl shadow-sm",
       },
+      collapsible: {
+        none: "",
+        offcanvas: "",
+        icon: "",
+      },
     },
+    compoundVariants: [
+      {
+        variant: "float",
+        className: "ps-14 rounded-xl shadow-sm",
+      },
+      {
+        variant: "float",
+        collapsible: "icon",
+        className: "ps-14 rounded-xl shadow-sm",
+      },
+      {
+        variant: "float",
+        collapsible: "none",
+        className: "ps-14 rounded-xl shadow-sm",
+      },
+    ],
     defaultVariants: {
       variant: "sidebar",
     },
@@ -531,12 +556,15 @@ const sidebarContentVariants = cva(
 );
 
 function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
-  const { variant } = useSidebar();
+  const { variant, collapsible } = useSidebar();
 
   return (
     <div
       data-slot="sidebar-content"
-      className={cn(sidebarContentVariants({ variant }), className)}
+      className={cn(
+        sidebarContentVariants({ variant, collapsible }),
+        className,
+      )}
       {...props}
     />
   );

@@ -23,27 +23,50 @@ export type RegistryEntry = {
   files: RegistryFile[];
 };
 
-export type BlockVariant = {
-  name: string;
-  preview: string;
-  previewEntry?: string;
-  docs: ComponentDoc[];
-  files: RegistryFile[];
+type Status = "available" | "coming_soon" | "beta" | "deprecated";
+
+export type BaseMeta = {
+  title: string;
+  slug: string;
+  href: string;
+  description: string;
 };
 
-export type BlockMeta = {
-  title: string;
-  description?: string;
-  variants: string[];
+export type RegistryGroup = Omit<BaseMeta, "slug">;
+
+export type FeaturedMeta = {
+  thumbnail?: string;
+  featured?: boolean;
 };
 
-export type BlockCategory = {
-  title: string;
-  description?: string;
+export type BlockMetaVariant = BaseMeta & FeaturedMeta;
+
+export type BlockMetaItem = BaseMeta & {
+  icon?: string;
+  status?: Status;
+  variants: BlockMetaVariant[];
+};
+
+export type BlocksMeta = RegistryGroup & {
+  blocks: BlockMetaItem[];
+};
+
+export type BlockVariant = BaseMeta &
+  FeaturedMeta & {
+    type: "registry:block";
+    previewEntry?: string;
+    docs: ComponentDoc[];
+    files: RegistryFile[];
+  };
+
+export type BlockCategory = BaseMeta & {
+  icon?: string;
   variants: BlockVariant[];
 };
 
-export type BlocksRegistry = Record<string, BlockCategory>;
+export type BlocksRegistry = RegistryGroup & {
+  blocks: BlockCategory[];
+};
 
 export type Registry = Record<string, RegistryEntry> & {
   blocks?: BlocksRegistry;

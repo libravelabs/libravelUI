@@ -1,19 +1,160 @@
 {
-  "navbar": {
-    "title": "Navbar",
-    "description": "Ready-to-use navigation bar blocks with multiple variants for different layouts, links, and responsive app navigation.",
-    "variants": ["default", "float", "sticky", "inset", "bottom"]
-  },
-
-  "auth": {
-    "title": "Authentication",
-    "description": "Beautifully designed authentication layouts and form blocks tailored for seamless login, signup, and auth experiences.",
-    "variants": ["simple", "card", "card-image", "split"]
-  },
-
-  "sidebar": {
-    "title": "Sidebar",
-    "description": "Versatile vertical navigation panels with support for collapsible menus, nested links, and responsive mobile behaviors.",
-    "variants": ["default", "float", "inset"]
-  }
+  "title": "Blocks",
+  "description": "A collection of ready-to-use UI blocks for building modern websites and applications.",
+  "href": "/blocks",
+  "blocks": [
+    {
+      "title": "Navbar",
+      "slug": "navbar",
+      "href": "/blocks/navbar",
+      "icon": "PanelTop",
+      "description": "Ready-to-use navigation bar blocks with multiple variants for different layouts, links, and responsive app navigation.",
+      "variants": [
+        {
+          "title": "Default",
+          "slug": "default",
+          "href": "/blocks/navbar/default",
+          "description": "Standard responsive navigation bar suitable for most websites.",
+          "featured": true
+        },
+        {
+          "title": "Sticky",
+          "slug": "sticky",
+          "href": "/blocks/navbar/sticky",
+          "description": "Navigation bar that stays fixed at the top while scrolling."
+        },
+        {
+          "title": "Float",
+          "slug": "float",
+          "href": "/blocks/navbar/float",
+          "description": "Floating navigation bar with spacing from the viewport edges."
+        },
+        {
+          "title": "Inset",
+          "slug": "inset",
+          "href": "/blocks/navbar/inset",
+          "description": "Navigation bar displayed within an inset container."
+        },
+        {
+          "title": "Bottom",
+          "slug": "bottom",
+          "href": "/blocks/navbar/bottom",
+          "description": "Bottom navigation bar optimized for mobile applications."
+        }
+      ]
+    },
+    {
+      "title": "Authentication",
+      "slug": "auth",
+      "href": "/blocks/auth",
+      "icon": "ShieldCheck",
+      "description": "Beautifully designed authentication layouts and form blocks tailored for seamless login, signup, and auth experiences.",
+      "variants": [
+        {
+          "title": "Simple",
+          "slug": "simple",
+          "href": "/blocks/auth/simple",
+          "description": "Minimal authentication form with a clean layout.",
+          "featured": true
+        },
+        {
+          "title": "Card",
+          "slug": "card",
+          "href": "/blocks/auth/card",
+          "description": "Authentication form displayed inside a centered card."
+        },
+        {
+          "title": "Card Image",
+          "slug": "card-image",
+          "href": "/blocks/auth/card-image",
+          "description": "Card authentication layout paired with an illustration or image."
+        },
+        {
+          "title": "Split",
+          "slug": "split",
+          "href": "/blocks/auth/split",
+          "description": "Split-screen authentication layout with separate content and form sections."
+        }
+      ]
+    },
+    {
+      "title": "Dashboard",
+      "slug": "dashboard",
+      "href": "/blocks/dashboard",
+      "icon": "LayoutDashboard",
+      "description": "Comprehensive dashboard layouts with various components and data visualization options.",
+      "variants": [
+        {
+          "title": "With Sidebar",
+          "slug": "with-sidebar",
+          "href": "/blocks/dashboard/with-sidebar",
+          "description": "Dashboard layout with a sidebar.",
+          "featured": true
+        },
+        {
+          "title": "With Navbar",
+          "slug": "with-navbar",
+          "href": "/blocks/dashboard/with-navbar",
+          "description": "Dashboard layout with a navbar."
+        }
+      ]
+    },
+    {
+      "title": "Sidebar",
+      "slug": "sidebar",
+      "href": "/blocks/sidebar",
+      "icon": "PanelLeft",
+      "description": "Versatile vertical navigation panels with support for collapsible menus, nested links, and responsive mobile behaviors.",
+      "variants": [
+        {
+          "title": "Default",
+          "slug": "default",
+          "href": "/blocks/sidebar/default",
+          "description": "Standard vertical sidebar for application navigation.",
+          "featured": true
+        },
+        {
+          "title": "Float",
+          "slug": "float",
+          "href": "/blocks/sidebar/float",
+          "description": "Floating sidebar with spacing from the viewport edges."
+        },
+        {
+          "title": "Inset",
+          "slug": "inset",
+          "href": "/blocks/sidebar/inset",
+          "description": "Sidebar integrated within an inset layout container."
+        }
+      ]
+    },
+    {
+      "title": "Footer",
+      "slug": "footer",
+      "href": "/blocks/footer",
+      "icon": "PanelBottom",
+      "description": "Stylish footer blocks with multiple layouts, including simple, centered, and multi-column designs for various website needs.",
+      "status": "coming_soon",
+      "variants": [
+        {
+          "title": "Default",
+          "slug": "default",
+          "href": "/blocks/footer/default",
+          "description": "Standard footer layout with essential links and information.",
+          "featured": true
+        },
+        {
+          "title": "Centered",
+          "slug": "centered",
+          "href": "/blocks/footer/centered",
+          "description": "Footer with centered branding and navigation."
+        },
+        {
+          "title": "Columns",
+          "slug": "columns",
+          "href": "/blocks/footer/columns",
+          "description": "Multi-column footer for organizing links and resources."
+        }
+      ]
+    }
+  ]
 }

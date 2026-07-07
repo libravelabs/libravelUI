@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/core/separator";
 import { DataTable } from "./components/data-table";
 import { products } from "./products";
 import { DashboardChart } from "./components/dashboard-chart";
+import { Breadcrumb, BreadcrumbItem } from "@/components/ui/core/breadcrumbs";
 
 export default function DashboardSidebarPage() {
   return (
@@ -20,10 +21,13 @@ export default function DashboardSidebarPage() {
       <AppSidebar />
 
       <SidebarContent>
-        <header className="flex gap-4 h-14 items-center border-b p-2">
+        <header className="sticky top-0 z-10 bg-background flex gap-4 h-14 items-center border-b p-2">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
-          <span>Dashboard</span>
+
+          <Breadcrumb>
+            <BreadcrumbItem>Dashboard</BreadcrumbItem>
+          </Breadcrumb>
         </header>
 
         <div className="flex flex-col gap-4 p-4">
@@ -39,38 +43,5 @@ export default function DashboardSidebarPage() {
         </div>
       </SidebarContent>
     </SidebarProvider>
-  );
-}
-
-function PlaceholderPattern({ className, ...props }: SVGProps<SVGSVGElement>) {
-  const patternId = useId();
-
-  return (
-    <svg
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <defs>
-        <pattern
-          id={patternId}
-          x="0"
-          y="0"
-          width="10"
-          height="10"
-          patternUnits="userSpaceOnUse"
-        >
-          <path d="M-3 13 15-5M-5 5l18-18M-1 21 17 3" />
-        </pattern>
-      </defs>
-
-      <rect
-        width="100%"
-        height="100%"
-        stroke="none"
-        fill={`url(#${patternId})`}
-      />
-    </svg>
   );
 }

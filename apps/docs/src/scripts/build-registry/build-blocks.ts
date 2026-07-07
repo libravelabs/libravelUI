@@ -1,7 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { CONFIG, SRC_DIR } from "./config";
-import { BlockMeta, BlocksRegistry, Registry, RegistryEntry } from "./types";
+import {
+  BlockCategory,
+  BlockMetaItem,
+  BlockVariant,
+  BlocksMeta,
+  BlocksRegistry,
+} from "./types";
 import { isValidFile, readCode, toSrcRelative, walk } from "./utils";
 
 function collectFiles(dir: string) {
@@ -28,50 +34,34 @@ function resolveBlockEntry(blockRoot: string) {
 function readMeta() {
   const metaPath = path.join(SRC_DIR, CONFIG.sources.blocks.root, "meta.json");
 
-  return JSON.parse(fs.readFileSync(metaPath, "utf8")) as Record<
-    string,
-    BlockMeta
-  >;
+  return JSON.parse(fs.readFileSync(metaPath, "utf8")) as BlocksMeta;
 }
 
-export function buildBlocks() {
+export function buildBlocks(): BlocksRegistry {
   const meta = readMeta();
-
-  const blocks: BlocksRegistry = {};
-
   const blocksRoot = path.join(SRC_DIR, CONFIG.sources.blocks.root);
 
-  for (const [category, config] of Object.entries(meta)) {
-    const variants: RegistryEntry[] = [];
+  return {
+    ...meta,
+    blocks: meta.blocks.map(
+      (block): BlockCategory => ({
+        ...block,
+        variants: block.variants
+          .map((variant) => {
+            const variantDir = path.join(blocksRoot, block.slug, variant.slug);
 
-    for (const variant of config.variants) {
-      const variantDir = path.join(blocksRoot, category, variant);
+            if (!fs.existsSync(variantDir)) return null;
 
-      if (!fs.existsSync(variantDir)) {
-        continue;
-      }
-
-      variants.push({
-        name: variant,
-
-        type: "registry:block",
-
-        preview: `/blocks/${category}/${variant}`,
-
-        previewEntry: resolveBlockEntry(variantDir),
-
-        docs: [],
-
-        files: collectFiles(variantDir),
-      });
-    }
-
-    blocks[category] = {
-      title: config.title,
-      description: config.description,
-      variants,
-    };
-  }
-
-  return blocks;
+            return {
+              ...variant,
+              type: "registry:block",
+              previewEntry: resolveBlockEntry(variantDir),
+              docs: [],
+              files: collectFiles(variantDir),
+            };
+          })
+          .filter(Boolean),
+      }),
+    ),
+  };
 }

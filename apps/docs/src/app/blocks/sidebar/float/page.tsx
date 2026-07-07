@@ -17,8 +17,8 @@ export default function FloatSidebarPage() {
       <AppSidebar open={open} setOpen={setOpen} />
 
       <SidebarContent>
-        <div className="flex flex-col gap-4 p-4">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div className="flex flex-col gap-2 p-2">
+          <div className="grid auto-rows-min gap-2 md:grid-cols-3">
             <div className="relative aspect-video overflow-hidden rounded-xl border">
               <PlaceholderPattern className="absolute inset-0 size-full stroke-foreground/20" />
             </div>

@@ -8,7 +8,6 @@ import {
   NavbarDrawer,
   NavbarStart,
   NavbarGap,
-  NavbarInset,
 } from "@/components/ui/block/navbar";
 import { Command } from "lucide-react";
 import { UserMenu } from "./user-menu";

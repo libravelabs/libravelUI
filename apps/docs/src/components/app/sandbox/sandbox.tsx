@@ -50,7 +50,7 @@ export function Sandbox({
         <div className="flex items-center justify-between lg:justify-start w-full gap-4">
           <Heading level={1} className="capitalize">
             {number ? `#${number} ` : ""}
-            {title ? title : comp?.name}
+            {title ? title : comp?.title}
           </Heading>
 
           <Separator orientation="vertical" className="h-6 hidden lg:block" />
@@ -66,7 +66,7 @@ export function Sandbox({
 
         <div className="hidden lg:flex gap-4 items-center">
           <SandboxToolbar
-            href={comp.preview as string}
+            href={comp.href as string}
             device={device}
             setDevice={setDevice}
             isDisabled={tab === "code"}
@@ -77,7 +77,7 @@ export function Sandbox({
 
           <PackageInstall
             command="add"
-            packageName={comp.preview.replace("/", "")}
+            packageName={comp.href.replace("/", "")}
             showHeader={false}
           />
         </div>
@@ -96,7 +96,7 @@ export function Sandbox({
               damping: 24,
             }}
             className="aspect-video rounded-lg border h-96 md:h-auto md:min-h-160"
-            src={comp.preview}
+            src={comp.href}
             {...iframe}
           />
         </div>

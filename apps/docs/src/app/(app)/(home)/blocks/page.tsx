@@ -6,14 +6,11 @@ import registry from "@/../public/registry.json";
 export default function BlockPage() {
   const blocks = registry.blocks;
 
-  console.log(blocks);
-
   return (
     <BaseBlocksLayout
       header={{
-        title: "Blocks",
-        description:
-          "Ready-to-use modern React blocks with a clean design, easy integration, open-source licensing, and zero cost forever.",
+        title: blocks.title,
+        description: blocks.description,
         cta: {
           label: (
             <>
@@ -28,15 +25,15 @@ export default function BlockPage() {
         },
       }}
     >
-      {Object.entries(blocks).map(([key, block], i) => {
-        const variant = block.variants[0];
+      {blocks.blocks.map((block, i) => {
+        const variant = block.variants.find((v) => v.featured);
 
         if (!variant) return null;
 
         return (
           <Sandbox
-            key={variant.name}
-            title={`${block.title} ${variant.name}`}
+            key={variant.title}
+            title={`${block.title} ${variant.title}`}
             comp={variant}
             number={i + 1}
           />

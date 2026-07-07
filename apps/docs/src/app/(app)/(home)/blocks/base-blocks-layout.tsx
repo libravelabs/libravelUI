@@ -7,34 +7,7 @@ import { Heading } from "@/components/ui/core/heading";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
-
-type NavLinkItem = {
-  href: string;
-  label: React.ReactNode;
-};
-
-const navLinks: NavLinkItem[] = [
-  {
-    href: "/blocks/auth",
-    label: "Auth",
-  },
-  {
-    href: "/blocks/chart",
-    label: "Charts",
-  },
-  {
-    href: "/blocks",
-    label: "Featured",
-  },
-  {
-    href: "/blocks/navbar",
-    label: "Navbar",
-  },
-  {
-    href: "/blocks/sidebar",
-    label: "Sidebar",
-  },
-];
+import registry from "@/../public/registry.json";
 
 type HeaderCTA = {
   label: React.ReactNode;
@@ -88,13 +61,15 @@ export function BlocksHeader({ title, description, cta }: BlocksHeaderProps) {
 }
 
 export function BlocksNav() {
+  const navLinks = registry.blocks;
+
   return (
     <div className="border-y bg-popover -mx-10">
       <div className="px-8">
         <div className="flex items-center justify-center gap-x-2 sm:justify-start">
-          {navLinks.map((nav) => (
+          {navLinks.blocks.map((nav) => (
             <NavLink key={nav.href} href={nav.href}>
-              {nav.label}
+              {nav.title}
             </NavLink>
           ))}
         </div>

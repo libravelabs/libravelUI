@@ -65,17 +65,35 @@ export function AreaChart<TData extends ChartDatum>({
   type = "monotone",
   margin,
   ...chartProps
-}: AreaChartProps<TData>): JSX.Element {
+}: AreaChartProps<TData>) {
   const series = Object.entries(config) as Array<
-    [NumericSeriesKey<TData>, NonNullable<ChartConfig<TData>[NumericSeriesKey<TData>]>]
+    [
+      NumericSeriesKey<TData>,
+      NonNullable<ChartConfig<TData>[NumericSeriesKey<TData>]>,
+    ]
   >;
 
   return (
-    <ChartSurface containerHeight={containerHeight} className={className} style={style}>
+    <ChartSurface
+      containerHeight={containerHeight}
+      className={className}
+      style={style}
+    >
       <RechartsAreaChart data={data} margin={margin} {...chartProps}>
-        {!hideGrid ? <CartesianGrid strokeDasharray="3 3" {...cartesianGridProps} /> : null}
-        {!hideXAxis ? <XAxis dataKey={dataKey} tickLine={false} axisLine={false} {...xAxisProps} /> : null}
-        {!hideYAxis ? <YAxis tickLine={false} axisLine={false} width={40} {...yAxisProps} /> : null}
+        {!hideGrid ? (
+          <CartesianGrid strokeDasharray="3 3" {...cartesianGridProps} />
+        ) : null}
+        {!hideXAxis ? (
+          <XAxis
+            dataKey={dataKey}
+            tickLine={false}
+            axisLine={false}
+            {...xAxisProps}
+          />
+        ) : null}
+        {!hideYAxis ? (
+          <YAxis tickLine={false} axisLine={false} width={40} {...yAxisProps} />
+        ) : null}
         {!hideTooltip ? <ChartTooltip {...tooltipProps} /> : null}
         {!hideLegend ? <Legend {...legendProps} /> : null}
 

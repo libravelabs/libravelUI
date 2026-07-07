@@ -33,7 +33,7 @@ export function AppNavbar() {
         </NavbarSection>
       </NavbarDrawer>
 
-      <Navbar variant="float">
+      <Navbar variant="float" className="max-w-6xl">
         <NavbarStart className="flex items-center gap-2 px-2">
           <Command className="size-5" />
           <span className="font-semibold text-sm">Acme</span>

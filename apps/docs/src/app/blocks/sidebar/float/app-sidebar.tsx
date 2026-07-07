@@ -56,7 +56,6 @@ export function AppSidebar({
   return (
     <Sidebar
       variant="float"
-      collapsible="icon"
       onMouseOver={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
