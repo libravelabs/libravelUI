@@ -1,79 +1,86 @@
-import { usePage } from '@inertiajs/react';
-import { ChevronsUpDown } from 'lucide-react';
+"use client";
+
+import { usePage } from "@inertiajs/react";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/core/dropdown-menu';
+  CreditCard,
+  Bell,
+  Settings,
+  LogOut,
+  User,
+  Sparkles,
+  ChevronsUpDown,
+} from "lucide-react";
+import { Avatar } from "@/components/ui/core/avatar";
 import {
-    SidebarMenu,
-    SidebarMenuItem,
-    useSidebar,
-} from '@/components/ui/block/sidebar';
-import { UserInfo } from '@/components/user-info';
-import { UserMenuContent } from '@/components/user-menu-content';
-import { useIsMobile } from '@/hooks/use-mobile';
-import type { SharedData } from '@/types';
-import type { PopoverContentProps } from '@/components/ui/core/popover';
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuHeader,
+} from "@/components/ui/core/dropdown-menu";
+import { useSidebar } from "@/components/ui/block/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import type { SharedData } from "@/types";
+import type { PopoverContentProps } from "@/components/ui/core/popover";
+import { UserMenuContent } from "./user-menu-content";
+import { UserInfo } from "./user-info";
 
 export function NavUser({
-    variant = 'default',
-    popover,
+  variant = "default",
+  popover,
 }: {
-    variant?: 'default' | 'avatar';
-    popover?: PopoverContentProps;
+  variant?: "default" | "avatar";
+  popover?: PopoverContentProps;
 }) {
-    const { auth } = usePage<SharedData>().props;
-    const { state } = useSidebar();
-    const isMobile = useIsMobile();
+  const { auth } = usePage<SharedData>().props;
+  const { open } = useSidebar();
+  const isMobile = useIsMobile();
 
-    if (variant === 'avatar') {
-        return (
-            <DropdownMenu>
-                <DropdownMenuTrigger tone="unstyled" className="w-auto p-2">
-                    <UserInfo user={auth.user} showName={false} />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                    popover={{
-                        placement: 'bottom start',
-                        withArrow: true,
-                        ...popover,
-                    }}
-                >
-                    <UserMenuContent user={auth.user} />
-                </DropdownMenuContent>
-            </DropdownMenu>
-        );
-    }
+  const renderMenuContent = () => <UserMenuContent user={auth.user} />;
 
+  if (variant === "avatar") {
     return (
-        <SidebarMenu>
-            <SidebarMenuItem>
-                <DropdownMenu>
-                    <DropdownMenuTrigger
-                        tone={state === 'collapsed' ? 'unstyled' : 'ghost'}
-                        className="w-full"
-                    >
-                        <UserInfo user={auth.user} />
-                        {state !== 'collapsed' && (
-                            <ChevronsUpDown className="ml-auto size-4" />
-                        )}
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                        popover={{
-                            placement: isMobile
-                                ? 'bottom'
-                                : state === 'collapsed'
-                                  ? 'end'
-                                  : 'bottom',
-                            withArrow: true,
-                            ...popover,
-                        }}
-                    >
-                        <UserMenuContent user={auth.user} />
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </SidebarMenuItem>
-        </SidebarMenu>
+      <DropdownMenu>
+        <DropdownMenuTrigger tone="unstyled" className="w-auto p-2">
+          <UserInfo user={auth.user} showName={false} />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          popover={{
+            placement: "bottom start",
+            withArrow: true,
+            ...popover,
+          }}
+        >
+          {renderMenuContent()}
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        aria-label="Open Menu"
+        tone={open ? "ghost" : "unstyled"}
+        size="lg"
+        className="w-full justify-start px-2"
+      >
+        <UserInfo user={auth.user} />
+        {open && <ChevronsUpDown className="ml-auto size-4" />}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="min-w-72"
+        popover={{
+          placement: isMobile ? "bottom" : open ? "end" : "bottom",
+          withArrow: true,
+          ...popover,
+        }}
+      >
+        {renderMenuContent()}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }

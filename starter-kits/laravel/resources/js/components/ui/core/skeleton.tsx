@@ -1,34 +1,34 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
-    return (
-        <div
-            data-slot="skeleton"
-            className={cn('animate-pulse rounded-md bg-accent', className)}
-            {...props}
-        />
-    );
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="skeleton"
+      className={cn("bg-accent animate-pulse rounded-md", className)}
+      {...props}
+    />
+  );
 }
 
 function SkeletonText({
-    lines = 3,
-    className,
-    ...props
-}: { lines?: number } & React.ComponentProps<'div'>) {
-    return (
-        <div className="grid w-full gap-2">
-            {Array.from({ length: lines }).map((_, i) => (
-                <div
-                    key={i}
-                    {...props}
-                    className={cn(
-                        'h-4 w-full animate-pulse rounded-md bg-accent',
-                        className,
-                    )}
-                />
-            ))}
-        </div>
-    );
+  lines = 3,
+  className,
+  ...props
+}: { lines?: number } & React.ComponentProps<"div">) {
+  return (
+    <div className="grid gap-2 w-full">
+      {Array.from({ length: lines }).map((_, i) => (
+        <div
+          key={i}
+          {...props}
+          className={cn(
+            "h-4 bg-accent animate-pulse rounded-md w-full",
+            className
+          )}
+        />
+      ))}
+    </div>
+  );
 }
 
 export { Skeleton, SkeletonText };

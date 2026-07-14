@@ -1,37 +1,36 @@
-import { Link } from '@inertiajs/react';
+import { Link } from "@inertiajs/react";
 import {
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
-} from '@/components/ui/block/sidebar';
-import { useCurrentUrl } from '@/hooks/use-current-url';
-import type { NavItem } from '@/types';
+  SidebarBody,
+  SidebarItem,
+  useSidebar,
+} from "@/components/ui/block/sidebar";
+import { useCurrentUrl } from "@/hooks/use-current-url";
+import type { NavItem } from "@/types";
+import { cn, toUrl } from "@/lib/utils";
 
-export function NavMain({ items = [] }: { items: NavItem[] }) {
-    const { isCurrentUrl } = useCurrentUrl();
-    const { open } = useSidebar();
+export function NavMain({
+  items = [],
+  ...props
+}: React.ComponentProps<typeof SidebarBody> & { items: NavItem[] }) {
+  const { isCurrentUrl } = useCurrentUrl();
+  const { open } = useSidebar();
 
-    return (
-        <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarMenu>
-                {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                        <Link href={item.href} prefetch>
-                            <SidebarMenuButton
-                                isActive={isCurrentUrl(item.href)}
-                                tooltip={{ children: item.title }}
-                            >
-                                {item.icon && item.icon}
-                                {open && <span>{item.title}</span>}
-                            </SidebarMenuButton>
-                        </Link>
-                    </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-        </SidebarGroup>
-    );
+  return (
+    <SidebarBody
+      {...props}
+      className={cn("group-data-[collapsible=icon]:p-0", props.className)}
+    >
+      {items.map((item) => (
+        <SidebarItem
+          key={item.label}
+          isActive={isCurrentUrl(toUrl(item.link?.href as string))}
+          {...item.link}
+        >
+          {item.icon && <span className="size-4 shrink-0">{item.icon}</span>}
+
+          <span>{item.label}</span>
+        </SidebarItem>
+      ))}
+    </SidebarBody>
+  );
 }

@@ -1,73 +1,92 @@
-import { Link } from '@inertiajs/react';
-import { LayoutGrid, BookCopy, Files } from 'lucide-react';
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
+"use client";
+
+import { LuLayoutGrid, LuBookCopy, LuFiles } from "react-icons/lu";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
-} from '@/components/ui/block/sidebar';
-import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
-import { AppLogoIcon, AppName } from '@/components/logo';
-import { NavFooter } from '@/components/nav-footer';
+  Sidebar,
+  SidebarBody,
+  SidebarFooter,
+  SidebarHeader,
+  useSidebar,
+  SidebarItem,
+} from "@/components/ui/block/sidebar";
+import { cn, toUrl } from "@/lib/utils";
+import { Avatar } from "@/components/ui/core/avatar";
+import { NavUser } from "./nav-user";
+import { NavFooter } from "./nav-footer";
+import { dashboard } from "@/routes";
+import type { NavItem } from "@/types";
+import { useCurrentUrl } from "@/hooks/use-current-url";
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: <LayoutGrid />,
+  {
+    label: "Dashboard",
+    icon: <LuLayoutGrid />,
+    link: {
+      href: dashboard(),
     },
+  },
 ];
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/',
-        icon: <BookCopy />,
-        target: '_blank',
+  {
+    label: "Repository",
+    icon: <LuBookCopy />,
+    link: {
+      href: "https://github.com/libravelabs/libravelUI/",
+      target: "_blank",
     },
-    {
-        title: 'Docs',
-        href: 'https://github.com/libravelabs/libravelUI/',
-        icon: <Files />,
-        target: '_blank',
+  },
+  {
+    label: "Docs",
+    icon: <LuFiles />,
+    link: {
+      href: "https://ui.libravelabs.com/docs",
+      target: "_blank",
     },
+  },
 ];
 
 export function AppSidebar() {
-    const { state } = useSidebar();
+  const { open } = useSidebar();
+  const { isCurrentUrl } = useCurrentUrl();
 
-    return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <Link href={dashboard()} prefetch className="w-fit">
-                            <SidebarMenuButton className="w-fit gap-1 hover:bg-transparent">
-                                <AppLogoIcon className="size-5" />
-                                {state !== 'collapsed' && (
-                                    <AppName className="size-20" />
-                                )}
-                            </SidebarMenuButton>
-                        </Link>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarHeader>
+  return (
+    <Sidebar variant="inset" collapsible="icon">
+      <SidebarHeader>
+        <div
+          className={cn("flex items-center gap-3", !open && "justify-center")}
+        >
+          <Avatar initials="A" shape="square" size="sm" />
 
-            <SidebarContent>
-                <NavMain items={mainNavItems} />
-            </SidebarContent>
+          {open && (
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold">Acme Inc.</p>
+              <p className="truncate text-xs text-muted-foreground">
+                Workspace
+              </p>
+            </div>
+          )}
+        </div>
+      </SidebarHeader>
 
-            <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
-                <NavUser />
-            </SidebarFooter>
-        </Sidebar>
-    );
+      <SidebarBody>
+        {mainNavItems.map((item) => (
+          <SidebarItem
+            key={item.label}
+            isActive={isCurrentUrl(toUrl(item.link?.href as string))}
+            {...item.link}
+          >
+            {item.icon && <span className="size-4 shrink-0">{item.icon}</span>}
+
+            <span>{item.label}</span>
+          </SidebarItem>
+        ))}
+      </SidebarBody>
+
+      <SidebarFooter>
+        <NavFooter items={footerNavItems} className="mt-auto" />
+        <NavUser />
+      </SidebarFooter>
+    </Sidebar>
+  );
 }

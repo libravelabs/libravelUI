@@ -1,14 +1,13 @@
-import type { InertiaLinkProps } from '@inertiajs/react';
+import type { InertiaLinkProps } from "@inertiajs/react";
 
 export type BreadcrumbItem = {
-    title: string;
-    href: string;
+  label: string;
+  href: string;
 };
 
 export type NavItem = {
-    title: string;
-    href: NonNullable<InertiaLinkProps['href']>;
-    target?: '_self' | '_blank';
-    icon?: React.ReactNode;
-    isActive?: boolean;
+  label: string;
+  icon?: React.ReactNode;
+  isActive?: boolean;
+  link?: InertiaLinkProps;
 };

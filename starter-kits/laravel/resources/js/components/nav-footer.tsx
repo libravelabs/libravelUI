@@ -1,49 +1,29 @@
-import type { ComponentPropsWithoutRef } from 'react';
+import { Link } from "@inertiajs/react";
 import {
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
-} from '@/components/ui/block/sidebar';
-import { toUrl } from '@/lib/utils';
-import type { NavItem } from '@/types';
+  SidebarBody,
+  SidebarItem,
+  useSidebar,
+} from "@/components/ui/block/sidebar";
+import { useCurrentUrl } from "@/hooks/use-current-url";
+import type { NavItem } from "@/types";
+import { cn, toUrl } from "@/lib/utils";
 
 export function NavFooter({
-    items,
-    className,
-    ...props
-}: ComponentPropsWithoutRef<typeof SidebarGroup> & {
-    items: NavItem[];
-}) {
-    const { state } = useSidebar();
+  items = [],
+  ...props
+}: React.ComponentProps<typeof SidebarBody> & { items: NavItem[] }) {
+  const { isCurrentUrl } = useCurrentUrl();
+  const { open } = useSidebar();
 
-    return (
-        <SidebarGroup
-            {...props}
-            className={`group-data-[collapsible=icon]:p-0 ${className || ''}`}
-        >
-            <SidebarGroupContent>
-                <SidebarMenu>
-                    {items.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                            <a
-                                href={toUrl(item.href)}
-                                target={item.target}
-                                rel="noopener noreferrer"
-                            >
-                                <SidebarMenuButton>
-                                    {item.icon && item.icon}
-                                    {state !== 'collapsed' && (
-                                        <span>{item.title}</span>
-                                    )}
-                                </SidebarMenuButton>
-                            </a>
-                        </SidebarMenuItem>
-                    ))}
-                </SidebarMenu>
-            </SidebarGroupContent>
-        </SidebarGroup>
-    );
+  return items.map((item) => (
+    <SidebarItem
+      key={item.label}
+      isActive={isCurrentUrl(toUrl(item.link?.href as string))}
+      {...item.link}
+    >
+      {item.icon && <span className="size-4 shrink-0">{item.icon}</span>}
+
+      <span>{item.label}</span>
+    </SidebarItem>
+  ));
 }

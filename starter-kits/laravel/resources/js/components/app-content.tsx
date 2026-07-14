@@ -1,15 +1,34 @@
-import * as React from 'react';
-import { SidebarInset } from '@/components/ui/block/sidebar';
-import { NavbarInset } from '@/components/ui/block/navbar';
+import * as React from "react";
+import { SidebarContent } from "@/components/ui/block/sidebar";
+import { NavbarContent } from "@/components/ui/block/navbar";
 
-type Props = React.ComponentProps<typeof NavbarInset> & {
-    variant?: 'header' | 'sidebar';
+type ContentProps<V extends "header" | "sidebar"> = V extends "sidebar"
+  ? React.ComponentProps<typeof SidebarContent>
+  : React.ComponentProps<typeof NavbarContent>;
+
+type Props<V extends "header" | "sidebar" = "header"> = ContentProps<V> & {
+  variant?: V;
+  children?: React.ReactNode;
 };
 
-export function AppContent({ variant = 'header', children, ...props }: Props) {
-    if (variant === 'sidebar') {
-        return <SidebarInset {...props}>{children}</SidebarInset>;
-    }
+export function AppContent<V extends "header" | "sidebar" = "header">({
+  variant = "header" as V,
+  children,
+  ...props
+}: Props<V>) {
+  if (variant === "sidebar") {
+    return (
+      <SidebarContent
+        {...(props as React.ComponentProps<typeof SidebarContent>)}
+      >
+        {children}
+      </SidebarContent>
+    );
+  }
 
-    return <NavbarInset {...props}>{children}</NavbarInset>;
+  return (
+    <NavbarContent {...(props as React.ComponentProps<typeof NavbarContent>)}>
+      {children}
+    </NavbarContent>
+  );
 }
