@@ -14,11 +14,9 @@ export function AppShell({ children, variant = "header" }: Props) {
 
   if (variant === "header") {
     return (
-      <SidebarProvider>
-        <NavbarProvider breakpoint="lg" className="max-h-screen">
-          {children}
-        </NavbarProvider>
-      </SidebarProvider>
+      <NavbarProvider breakpoint="lg" className="max-h-screen">
+        {children}
+      </NavbarProvider>
     );
   }
 

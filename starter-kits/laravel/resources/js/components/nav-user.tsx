@@ -15,11 +15,6 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuGroup,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuHeader,
 } from "@/components/ui/core/dropdown-menu";
 import { useSidebar } from "@/components/ui/block/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";

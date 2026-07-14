@@ -30,9 +30,9 @@ export function UserMenuContent({ user }: Props) {
       <DropdownMenuHeader separator className="flex items-center gap-2">
         <UserInfo user={user} showEmail showName showAvatar={false} />
       </DropdownMenuHeader>
-      <DropdownMenuGroup>
+      <DropdownMenuGroup className="grid w-full">
         {/* @ts-expect-error closeOnSelect is valid prop but missing in types */}
-        <MenuItem closeOnSelect={false} className="mb-2">
+        <MenuItem closeOnSelect={false} className="mb-2 mx-auto">
           <AppearanceTab />
         </MenuItem>
         <DropdownMenuItem onAction={() => router.visit(dashboard())}>

@@ -15,9 +15,6 @@ export function UserInfo({
   showEmail?: boolean;
 }) {
   const getInitials = useInitials();
-  const { open } = useSidebar();
-
-  const shouldShowName = showName ?? open;
 
   return (
     <>
@@ -30,7 +27,7 @@ export function UserInfo({
           className="cursor-pointer transition-opacity ease-in-out hover:opacity-70"
         />
       )}
-      {shouldShowName && (
+      {showName && (
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-medium">{user.name}</span>
           {showEmail && (
