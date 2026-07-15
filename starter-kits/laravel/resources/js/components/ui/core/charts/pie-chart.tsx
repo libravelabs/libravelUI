@@ -1,5 +1,3 @@
-"use client";
-
 import type { CSSProperties, ComponentProps } from "react";
 import { Cell, Legend, Pie as RechartsPie, PieChart as RechartsPieChart } from "recharts";
 import { ChartSurface, getChartColor, type RuntimeChartConfig } from "./chart-shell";

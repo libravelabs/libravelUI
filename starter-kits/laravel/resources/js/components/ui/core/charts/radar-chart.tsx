@@ -1,5 +1,3 @@
-"use client";
-
 import type { CSSProperties, ComponentProps } from "react";
 import {
   Legend,

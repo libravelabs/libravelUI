@@ -1,5 +1,3 @@
-"use client";
-
 import { X, Menu } from "lucide-react";
 import * as React from "react";
 import { useEffect, useRef } from "react";

@@ -1,5 +1,3 @@
-"use client";
-
 import type {
   DialogTriggerProps,
   PopoverProps as PopoverPrimitiveProps,

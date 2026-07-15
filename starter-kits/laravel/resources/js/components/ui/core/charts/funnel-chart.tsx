@@ -1,5 +1,3 @@
-"use client";
-
 import type { CSSProperties, ComponentProps } from "react";
 import { Cell, Funnel as RechartsFunnel, FunnelChart as RechartsFunnelChart, Legend, LabelList } from "recharts";
 import { ChartSurface, getChartColor, type RuntimeChartConfig } from "./chart-shell";

@@ -1,5 +1,3 @@
-"use client";
-
 import {
   TextField as TextFieldPrimitive,
   type TextFieldProps as TextFieldPrimitiveProps,

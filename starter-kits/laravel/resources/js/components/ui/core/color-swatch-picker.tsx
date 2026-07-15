@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ColorSwatchPicker as ColorSwatchPickerPrimitive,
   ColorSwatchPickerItem as ColorSwatchPickerItemPrimitive,

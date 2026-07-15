@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { type Easing, motion } from "motion/react";
 import { cva, type VariantProps } from "class-variance-authority";

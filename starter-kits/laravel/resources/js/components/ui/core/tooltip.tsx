@@ -1,5 +1,3 @@
-"use client";
-
 import type { TooltipProps as TooltipPrimitiveProps } from "react-aria-components";
 import {
   composeRenderProps,

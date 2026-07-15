@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { DisclosureGroup as AccordionPrimitive } from "react-aria-components";
 import type { DisclosureGroupProps as AccordionPrimitiveProps } from "react-aria-components";

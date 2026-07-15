@@ -1,5 +1,3 @@
-"use client";
-
 import { usePage } from "@inertiajs/react";
 import {
   CreditCard,
@@ -63,7 +61,7 @@ export function NavUser({
         size="lg"
         className="w-full justify-start px-2"
       >
-        <UserInfo user={auth.user} />
+        <UserInfo user={auth.user} showName={open} />
         {open && <ChevronsUpDown className="ml-auto size-4" />}
       </DropdownMenuTrigger>
       <DropdownMenuContent

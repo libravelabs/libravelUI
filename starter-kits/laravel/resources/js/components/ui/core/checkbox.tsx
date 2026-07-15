@@ -1,5 +1,3 @@
-"use client";
-
 import type { CheckboxProps as CheckboxPrimitiveProps } from "react-aria-components";
 import {
   Checkbox as CheckboxPrimitive,

@@ -1,5 +1,3 @@
-"use client";
-
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { Tooltip as RechartsTooltip } from "recharts";
 import type {

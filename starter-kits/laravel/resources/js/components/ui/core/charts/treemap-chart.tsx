@@ -1,5 +1,3 @@
-"use client";
-
 import type { CSSProperties, ComponentProps, ReactNode } from "react";
 import { Treemap as RechartsTreemap } from "recharts";
 import { ChartSurface, getChartColor, type RuntimeChartConfig } from "./chart-shell";

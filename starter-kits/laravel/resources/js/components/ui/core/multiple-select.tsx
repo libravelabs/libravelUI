@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useMemo, useRef, useState } from "react";
 import type { AutocompleteProps } from "react-aria-components";
 import {

@@ -1,5 +1,3 @@
-"use client";
-
 import type { CheckboxGroupProps as CheckboxGroupPrimitiveProps } from "react-aria-components";
 import { CheckboxGroup as CheckboxGroupPrimitive } from "react-aria-components";
 import { cn } from "@/lib/utils";

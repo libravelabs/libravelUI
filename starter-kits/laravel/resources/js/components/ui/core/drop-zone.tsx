@@ -1,4 +1,3 @@
-"use client";
 import type { DropZoneProps as DragAndDropPrimitiveProps } from "react-aria-components";
 import {
   composeRenderProps,

@@ -1,5 +1,3 @@
-"use client";
-
 import { LuLayoutGrid, LuBookCopy, LuFiles } from "react-icons/lu";
 import {
   Sidebar,

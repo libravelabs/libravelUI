@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useCallback, ReactNode } from "react";
 import { motion } from "motion/react";
 import { Power, PowerOff } from "lucide-react";

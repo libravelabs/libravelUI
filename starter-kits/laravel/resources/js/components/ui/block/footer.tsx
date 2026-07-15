@@ -1,5 +1,3 @@
-"use client";
-
 import React, { createContext, useContext, useId, useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Link, type InertiaLinkProps } from "@inertiajs/react";

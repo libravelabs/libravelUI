@@ -1,5 +1,3 @@
-"use client";
-
 import React, { createContext, useContext, useState, useRef } from "react";
 import { motion, LayoutGroup } from "motion/react";
 import { cn } from "@/lib/utils";

@@ -1,4 +1,3 @@
-"use client";
 import type {
   TimeFieldProps as TimeFieldPrimitiveProps,
   TimeValue,

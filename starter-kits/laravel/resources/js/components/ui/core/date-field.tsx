@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DateField as DateFieldPrimitive,
   DateInput as DateInputPrimitive,

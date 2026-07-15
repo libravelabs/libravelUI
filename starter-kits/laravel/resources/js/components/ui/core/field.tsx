@@ -1,5 +1,3 @@
-"use client";
-
 import type {
   FieldErrorProps as FieldErrorPrimitiveProps,
   GroupProps,

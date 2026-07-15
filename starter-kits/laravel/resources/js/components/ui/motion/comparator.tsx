@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { useState, createContext, useContext } from "react";
 import {

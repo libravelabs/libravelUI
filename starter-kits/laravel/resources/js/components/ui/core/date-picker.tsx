@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DatePicker as DatePickerPrimitive,
   type DatePickerProps as DatePickerPrimitiveProps,

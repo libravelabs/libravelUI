@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Tabs as TabsPrimitive,
   TabList as TabListPrimitive,

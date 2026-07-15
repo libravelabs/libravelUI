@@ -1,5 +1,3 @@
-"use client";
-
 import {
   TextArea,
   type TextAreaProps as TextAreaPrimitiveProps,

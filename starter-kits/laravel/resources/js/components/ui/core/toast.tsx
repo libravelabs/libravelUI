@@ -1,5 +1,3 @@
-"use client";
-
 import { Toaster as ToasterPrimitive, type ToasterProps } from "sonner";
 import { useTheme } from "next-themes";
 
