@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/core/card";
+import { cn } from "fumadocs-ui/utils/cn";
 
 export function LegalCardHeader({
   header,
@@ -15,7 +16,7 @@ export function LegalCardHeader({
       shadow="md"
       variant="gradient"
       circleGradient
-      className="grid gap-8"
+      className={cn("flex flex-col gap-8", props.className)}
       {...props}
     >
       {header && <CardHeader>{header}</CardHeader>}

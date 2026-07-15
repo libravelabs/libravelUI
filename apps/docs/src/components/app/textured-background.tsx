@@ -14,7 +14,6 @@ export function TexturedBackgroundPrimitive({
 }: TexturedBackgroundPrimitiveProps) {
   return (
     <div className={cn("relative", className)}>
-      <div className="pointer-events-none fixed inset-0 z-999999 bg-[url(/assets/grain.svg)] bg-repeat mix-blend-soft-light opacity-70" />
       <div
         className="
           pointer-events-none absolute inset-0 z-9999
@@ -22,8 +21,7 @@ export function TexturedBackgroundPrimitive({
           mask-image:[radial-gradient(circle_at_center,white_60%,transparent_100%)]
           bg-repeat
           mix-blend-overlay
-          opacity-[0.35]
-          dark:opacity-40
+          opacity-40
         "
       />
 
@@ -34,13 +32,15 @@ export function TexturedBackgroundPrimitive({
           mask-image:[radial-gradient(circle_at_center,white_60%,transparent_100%)]
           bg-repeat
           mix-blend-multiply
-          opacity-[0.22]
-          dark:opacity-20
+          opacity-20
         "
       />
-      <div className="relative z-10 min-h-screen">{children}</div>
+      <div className="relative z-10 min-h-screen bg-textured **:border-foreground/10">
+        {children}
+      </div>
     </div>
   );
+  9;
 }
 
 export function TexturedBackground({ children }: { children: ReactNode }) {

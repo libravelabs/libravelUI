@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const base = baseOptions();
 
   return (
-    <div data-scrollable className="w-full md:max-w-[calc(100vw-20rem)]">
+    <div data-scrollable className="w-full">
       {children}
     </div>
   );

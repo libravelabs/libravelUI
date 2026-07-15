@@ -54,3 +54,23 @@
     linear-gradient(to bottom, #80808008 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+.bg-textured {
+  background-color: var(--background);
+  background-image:
+    linear-gradient(
+      color-mix(in oklch, var(--background), transparent 75%),
+      color-mix(in oklch, var(--background), transparent 75%)
+    ),
+    url("https://www.transparenttextures.com/patterns/paper-2.png");
+}
+
+.dark .bg-textured {
+  background-color: var(--background);
+  background-image:
+    linear-gradient(
+      color-mix(in oklch, var(--background), transparent 15%),
+      color-mix(in oklch, var(--background), transparent 15%)
+    ),
+    url("https://www.transparenttextures.com/patterns/paper-2.png");
+}
