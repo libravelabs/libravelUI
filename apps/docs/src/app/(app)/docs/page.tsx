@@ -11,7 +11,7 @@ import {
 import { meta } from "@/lib/metadata/index";
 import { Badge } from "@/components/ui/core/badge";
 import { AnimatedCircleIndicator } from "@/components/ui/motion/animated-circle-indicator";
-import { cn } from "@/lib/utils";
+import { cn, removeExtension } from "@/lib/utils";
 
 export const metadata = meta.page({
   title: "Docs",
@@ -47,7 +47,7 @@ export default function DocsPage() {
           {sections.map((item) => (
             <Link
               key={item.name as React.Key}
-              href={`/docs/${item.$id}`}
+              href={`/legal/${removeExtension(item.$id as string)}`}
               className={cn(item.soon && "pointer-events-none")}
             >
               <Card variant="gradient" className="flex flex-col gap-2 h-full">

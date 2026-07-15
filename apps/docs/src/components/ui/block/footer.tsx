@@ -170,7 +170,7 @@ function FooterLogo({ className, ...props }: React.ComponentProps<"div">) {
 
 function FooterDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
-    <p
+    <div
       data-slot="footer-description"
       className={cn("text-sm leading-relaxed text-muted-foreground", className)}
       {...props}

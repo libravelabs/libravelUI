@@ -1,5 +1,6 @@
 import { loader } from "fumadocs-core/source";
-import { docs } from "@/.source";
+import { createMDXSource } from "fumadocs-mdx";
+import { docs, legal } from "@/.source";
 import { Badge } from "@/components/ui/core/badge";
 import { IconRegistry } from "@/lib/icon-registry";
 import * as CustomIcons from "@/icons";
@@ -43,5 +44,15 @@ export const source = loader({
   },
   icon(icon) {
     return iconRegistry.resolve(icon);
+  },
+});
+
+export const legalSource = loader({
+  source: createMDXSource(legal),
+  baseUrl: "/legal",
+  pageTree: {
+    attachFile(node) {
+      return node;
+    },
   },
 });

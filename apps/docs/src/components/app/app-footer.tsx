@@ -1,8 +1,23 @@
-"use client";
-
 import Link from "next/link";
-import { AppLogo } from "./logo";
+import {
+  Footer,
+  FooterContainer,
+  FooterBrand,
+  FooterLogo,
+  FooterDescription,
+  FooterNavigation,
+  FooterSection,
+  FooterSectionTitle,
+  FooterLinks,
+  FooterLink,
+  FooterSocial,
+  FooterSocialLink,
+  FooterBottom,
+  FooterCopyright,
+} from "@/components/ui/block/footer";
+import { AppLogo } from "@/components/app/logo";
 import { app } from "@/config/app";
+import { FaGithub } from "react-icons/fa6";
 
 const navigation = {
   resources: [
@@ -10,139 +25,148 @@ const navigation = {
     { name: "Components", href: "/components" },
     { name: "Docs", href: "/docs" },
   ],
-  templates: [
-    { name: "SaaS Dashboard", href: "/" },
-    { name: "Landing Page", href: "/" },
-    { name: "Portfolio", href: "/" },
-  ],
-  labs: [{ name: "GitHub", href: app.links.github }],
+
   starterKits: [
     { name: "Next.js", href: "/docs/starter-kits/nextjs" },
     { name: "Vite", href: "/docs/starter-kits/vite" },
     { name: "Laravel", href: "/docs/starter-kits/laravel" },
   ],
+
+  templates: [
+    { name: "SaaS Dashboard", href: "/" },
+    { name: "Landing Page", href: "/" },
+    { name: "Portfolio", href: "/" },
+  ],
+
+  labs: [
+    {
+      name: "GitHub",
+      href: app.links.github,
+      external: true,
+    },
+  ],
 };
 
-const currentYear = new Date().getFullYear();
-
 export function AppFooter() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="border-t border-border/40 bg-background pb-16 text-foreground sm:pb-0 z-20 relative">
-      <h2 id="footer-heading" className="sr-only">
-        Footer
-      </h2>
-      <div className="p-12 max-w-6xl">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-[20rem_auto] lg:grid-cols-[18rem_auto] xl:grid-cols-[20rem_auto] lg:gap-10 xl:gap-24">
-          <div>
-            <Link href="/" className="flex items-center w-fit">
-              <AppLogo />
-            </Link>
-            <div className="mt-4 space-y-3 text-sm text-muted-foreground leading-relaxed">
-              <p>{app.description}</p>
-              <p>
-                Crafted by{" "}
-                <Link
-                  href={app.author.url}
-                  className="text-foreground hover:underline"
-                >
-                  {app.author.name}
-                </Link>
-                . Peep the Source Code on{" "}
-                <Link
-                  href={app.repo.url}
-                  className="text-foreground hover:underline"
-                >
-                  GitHub
-                </Link>
-                .
-              </p>
-              <p>
-                Hosted on Vercel. The source {"code's"} got the MIT license.
-              </p>
-              <p className="text-foreground/80 font-medium">
-                2025 - {currentYear} &middot; {app.name} &trade;
-              </p>
-            </div>
-          </div>
+    <Footer aria-label="Site footer">
+      <FooterContainer>
+        <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
+          <FooterBrand>
+            <FooterLogo>
+              <Link href="/">
+                <AppLogo />
+              </Link>
+            </FooterLogo>
 
-          <div className="grid grid-cols-2 gap-y-10 lg:grid-cols-4 lg:gap-10 xl:gap-6 xl:gap-y-6">
-            <div>
-              <h3 className="font-medium text-base text-foreground mb-4">
-                Resources
-              </h3>
-              <ul className="space-y-3 text-sm">
+            <FooterDescription>
+              <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                <p>{app.description}</p>
+
+                <p>
+                  Crafted by{" "}
+                  <Link
+                    href={app.author.url}
+                    className="text-foreground hover:underline"
+                  >
+                    {app.author.name}
+                  </Link>
+                  . Peep the Source Code on{" "}
+                  <Link
+                    href={app.repo.url}
+                    className="text-foreground hover:underline"
+                  >
+                    GitHub
+                  </Link>
+                  .
+                </p>
+
+                <p>
+                  Hosted on Vercel. The source {"code's"} got the MIT license.
+                </p>
+              </div>
+            </FooterDescription>
+
+            <FooterSocial>
+              <FooterSocialLink href={app.links.github} label="GitHub">
+                <FaGithub />
+              </FooterSocialLink>
+            </FooterSocial>
+          </FooterBrand>
+
+          <FooterNavigation className="lg:flex-1 lg:max-w-3xl">
+            <FooterSection>
+              <FooterSectionTitle>Resources</FooterSectionTitle>
+
+              <FooterLinks>
                 {navigation.resources.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
+                  <FooterLink key={item.name} href={item.href}>
+                    {item.name}
+                  </FooterLink>
                 ))}
-              </ul>
-            </div>
+              </FooterLinks>
+            </FooterSection>
 
-            <div>
-              <h3 className="font-medium text-base text-foreground mb-4">
-                Starter Kits
-              </h3>
-              <ul className="space-y-3 text-sm">
-                {navigation.starterKits.map((kit) => (
-                  <li key={kit.name}>
-                    <Link
-                      href={kit.href}
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {kit.name}
-                    </Link>
-                  </li>
+            <FooterSection>
+              <FooterSectionTitle>Starter Kits</FooterSectionTitle>
+
+              <FooterLinks>
+                {navigation.starterKits.map((item) => (
+                  <FooterLink key={item.name} href={item.href}>
+                    {item.name}
+                  </FooterLink>
                 ))}
-              </ul>
-            </div>
+              </FooterLinks>
+            </FooterSection>
 
-            <div>
-              <h3 className="font-medium text-base text-foreground mb-4">
-                Templates
-              </h3>
-              <ul className="space-y-3 text-sm">
-                {/* {navigation.templates.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))} */}
-                Coming Soon
-              </ul>
-            </div>
+            <FooterSection>
+              <FooterSectionTitle>Templates</FooterSectionTitle>
 
-            <div>
-              <h3 className="font-medium text-base text-foreground mb-4">
-                Labs
-              </h3>
-              <ul className="space-y-3 text-sm">
+              <FooterLinks>
+                {navigation.templates.map((item) => (
+                  <FooterLink key={item.name} href={item.href}>
+                    {item.name}
+                  </FooterLink>
+                ))}
+              </FooterLinks>
+            </FooterSection>
+
+            <FooterSection>
+              <FooterSectionTitle>Labs</FooterSectionTitle>
+
+              <FooterLinks>
                 {navigation.labs.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
+                  <FooterLink key={item.name} href={item.href} external>
+                    {item.name}
+                  </FooterLink>
                 ))}
-              </ul>
-            </div>
-          </div>
+              </FooterLinks>
+            </FooterSection>
+          </FooterNavigation>
         </div>
-      </div>
-    </footer>
+
+        <FooterBottom>
+          <FooterCopyright>
+            © 2025 - {currentYear} {app.name}™ by{" "}
+            <Link
+              href={app.organization.url}
+              target="_blank"
+              className="text-foreground hover:underline"
+            >
+              {app.organization.name}
+            </Link>
+            . All rights reserved.
+          </FooterCopyright>
+
+          <FooterLinks className="flex-row gap-6">
+            <FooterLink href="/legal/privacy">Privacy</FooterLink>
+
+            <FooterLink href="/legal/terms">Terms</FooterLink>
+          </FooterLinks>
+        </FooterBottom>
+      </FooterContainer>
+    </Footer>
   );
 }

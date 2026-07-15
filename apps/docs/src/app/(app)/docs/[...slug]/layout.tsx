@@ -10,8 +10,6 @@ export default function Layout({ children }: { children: ReactNode }) {
     <DocsLayout
       {...base}
       data-scrollable
-      links={[]}
-      tree={source.pageTree}
       containerProps={{
         className: "md:!flex-row md:!pl-0 md:!pl-0 md:!w-full md:!mx-0",
       }}

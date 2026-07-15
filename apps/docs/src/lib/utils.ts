@@ -5,4 +5,16 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export { cn };
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
+
+function removeExtension(filename: string): string {
+  return filename.replace(/\.[^/.]+$/, "");
+}
+
+export { cn, slugify, removeExtension };

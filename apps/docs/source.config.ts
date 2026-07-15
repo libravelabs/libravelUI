@@ -3,6 +3,7 @@ import {
   defineDocs,
   frontmatterSchema,
   metaSchema,
+  defineCollections,
 } from "fumadocs-mdx/config";
 import { z as zod } from "zod";
 import { type LucideIcon } from "lucide-react";
@@ -55,7 +56,14 @@ export const docs = defineDocs({
   },
 });
 
+export const legal = defineCollections({
+  type: "doc",
+  dir: "content/legal",
+  schema: frontmatterSchema,
+});
+
 export default defineConfig({
+  lastModifiedTime: "git",
   mdxOptions: {
     remarkPlugins: [
       /* remarkDocCode */
