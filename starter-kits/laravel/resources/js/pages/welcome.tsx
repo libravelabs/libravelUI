@@ -81,7 +81,7 @@ export default function Welcome({
 
             <div className="flex flex-wrap items-center gap-4">
               <Link
-                href="https://ui.libravelabs.com/getting-started"
+                href="https://ui.libravelabs.com/docs/getting-started"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -92,7 +92,7 @@ export default function Welcome({
               </Link>
 
               <Link
-                href="https://ui.libravelabs.com/docs/installation"
+                href="https://ui.libravelabs.com/docs"
                 target="_blank"
                 rel="noopener noreferrer"
               >

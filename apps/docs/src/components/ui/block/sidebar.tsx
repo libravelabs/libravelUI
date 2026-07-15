@@ -466,18 +466,17 @@ function Sidebar({
 }
 
 function SidebarItem({
-  href,
   isActive,
   children,
-}: ButtonProps & {
-  href?: LinkProps["href"];
+  ...props
+}: LinkProps & {
   isActive?: boolean;
 }) {
   const { open, collapsible } = useSidebar();
-  const Comp = href ? Link : "span";
+  const Comp = props.href ? Link : "span";
 
   return (
-    <Comp href={href} className="w-full">
+    <Comp className="w-full" {...props}>
       <Button
         tone="ghost"
         iconOnly={open}
@@ -489,7 +488,7 @@ function SidebarItem({
           isActive && "bg-foreground/10",
         )}
       >
-        {children}
+        {children as ButtonProps["children"]}
       </Button>
     </Comp>
   );

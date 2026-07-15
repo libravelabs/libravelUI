@@ -96,9 +96,9 @@ function SelectRoot({
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         aria-label={props["aria-label"] ?? "select"}
-        selectedKey={value as any}
+        selectedKey={value}
         onSelectionChange={handleSelectionChange}
-        {...({ multiple } as any)}
+        {...{ multiple }}
         className={cn(className)}
         {...props}
       >

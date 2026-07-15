@@ -109,13 +109,23 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
 );
 ButtonGroup.displayName = "ButtonGroup";
 
+/**
+ * Props for the Button component.
+ */
 type ButtonProps = ButtonPrimitiveProps &
   VariantProps<typeof buttonVariants> & {
+    /** The content to display when isPending or isLoading is true. Defaults to a standard spinner. */
     loader?: React.ReactNode;
+    /** Whether the button is in a loading state. */
     isLoading?: boolean;
+    /** The content of the button. */
     children?: React.ReactNode;
   };
 
+/**
+ * A versatile button component that supports various tones, sizes, and states.
+ * Wraps React Aria Components Button with custom styling.
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {

@@ -43,7 +43,7 @@ function RadioGroup({
       className={cn(
         "group space-y-3 **:data-[slot=label]:font-normal",
         "has-[slot=description]:space-y-6 has-[slot=description]:**:data-[slot=label]:font-medium",
-        className
+        className,
       )}
     >
       <>
@@ -99,7 +99,7 @@ function Radio({
                 "grid grid-cols-[1.125rem_1fr] gap-x-3 gap-y-1 sm:grid-cols-[1rem_1fr]",
                 "*:data-[slot=label]:col-start-2 *:data-[slot=label]:row-start-1",
                 "*:[[slot=description]]:col-start-2 *:[[slot=description]]:row-start-2",
-                "has-[[slot=description]]:**:data-[slot=label]:font-medium"
+                "has-[[slot=description]]:**:data-[slot=label]:font-medium",
               )}
             >
               <span
@@ -109,7 +109,7 @@ function Radio({
                   isSelected && "inset-ring-ring bg-background",
                   isFocusVisible && "inset-ring-ring ring-3 ring-ring/20",
                   isInvalid &&
-                    "inset-ring-destructive/70 bg-destructive/5 text-destructive ring-destructive/20"
+                    "inset-ring-destructive/70 bg-destructive/5 text-destructive ring-destructive/20",
                 )}
               >
                 <AnimatePresence>
@@ -117,7 +117,7 @@ function Radio({
                     <motion.span
                       className={cn(
                         "absolute inset-0 m-auto rounded-full bg-primary",
-                        isInvalid && "bg-destructive"
+                        isInvalid && "bg-destructive",
                       )}
                       style={{ width: 8, height: 8 }}
                       initial={{ opacity: 0, scale: 0 }}
@@ -147,10 +147,11 @@ function Radio({
               )}
             </div>
           );
-        }
+        },
       )}
     </RadioPrimitive>
   );
 }
 
+export type { RadioProps, RadioGroupProps };
 export { Radio, RadioGroup };

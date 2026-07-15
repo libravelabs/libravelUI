@@ -18,8 +18,7 @@ export function AppFooter() {
       <FooterContainer className="gap-8">
         <FooterBrand className="max-w-2xl gap-6">
           <h2 className="serif text-4xl font-normal leading-tight tracking-tight text-foreground sm:text-5xl">
-            Build interfaces{" "}
-            <em className="text-muted-foreground">without limits.</em>
+            Build interfaces <em className="text-primary">without limits.</em>
           </h2>
           <FooterSocial>
             <FooterSocialLink href="https://github.com" label="GitHub">

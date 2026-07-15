@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Separator as Divider,
   type SeparatorProps,
@@ -8,7 +6,6 @@ import { cn } from "@/lib/utils";
 
 interface CustomSeparatorProps extends SeparatorProps {
   text?: string;
-  orientation?: "horizontal" | "vertical";
 }
 
 function Separator({
@@ -27,7 +24,7 @@ function Separator({
         className={cn(
           "bg-border shrink-0",
           isHorizontal ? "h-px w-full" : "w-px h-full",
-          className,
+          className
         )}
       />
     );
@@ -40,7 +37,7 @@ function Separator({
       className={cn(
         "flex items-center justify-center",
         isHorizontal ? "flex-row w-full" : "flex-col h-full",
-        className,
+        className
       )}
     >
       <Divider
@@ -48,13 +45,13 @@ function Separator({
         {...props}
         className={cn(
           "bg-border shrink-0",
-          isHorizontal ? "h-px flex-1" : "w-px flex-1",
+          isHorizontal ? "h-px flex-1" : "w-px flex-1"
         )}
       />
       <span
         className={cn(
           "text-sm text-muted-foreground bg-background",
-          isHorizontal ? "px-2" : "py-2",
+          isHorizontal ? "px-2" : "py-2"
         )}
       >
         {text}
@@ -64,7 +61,7 @@ function Separator({
         {...props}
         className={cn(
           "bg-border shrink-0",
-          isHorizontal ? "h-px flex-1" : "w-px flex-1",
+          isHorizontal ? "h-px flex-1" : "w-px flex-1"
         )}
       />
     </div>

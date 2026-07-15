@@ -45,7 +45,7 @@ const AnimatedToggleButton: React.FC<AnimatedToggleButtonProps> = ({
           "transition-colors duration-200",
           isChecked &&
             "bg-foreground/10 shadow-[0_3px_8px_rgba(0,0,0,0.40),0_1px_3px_rgba(0,0,0,0.30),inset_0_1px_0_rgba(255,255,255,0.05),inset_0_-1px_0_rgba(0,0,0,0.20)] dark:shadow-[0_3px_8px_var(--background),0_1px_3px_var(--background),inset_0_1px_0_rgba(255,255,255,0.05),inset_0_-1px_0_rgba(0,0,0,0.20)]",
-          className
+          className,
         )}
         {...props}
       >

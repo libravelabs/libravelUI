@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8 selection:bg-primary/20">
       <div className="relative w-full max-w-7xl min-h-[85vh] bg-card border border-border rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row transition-all duration-700">
-        <div className="flex-[1.2] p-10 lg:p-20 flex flex-col justify-between relative z-10">
+        <div className="flex-[1.2] p-10 gap-4 lg:p-20 flex flex-col justify-between relative z-10">
           <div className="space-y-16">
             <div className="flex items-center gap-4">
               <AppLogo className="w-32" />
@@ -33,7 +33,7 @@ export default function Home() {
 
             <div className="flex flex-wrap items-center gap-4">
               <a
-                href="https://ui.libravelabs.com/getting-started"
+                href="https://ui.libravelabs.com/docs/getting-started"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -44,7 +44,7 @@ export default function Home() {
               </a>
 
               <a
-                href="https://ui.libravelabs.com/docs/installation"
+                href="https://ui.libravelabs.com/docs"
                 target="_blank"
                 rel="noopener noreferrer"
               >

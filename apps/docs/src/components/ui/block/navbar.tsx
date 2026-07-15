@@ -425,53 +425,46 @@ const navbarItemStyle = cva(
 );
 
 interface NavbarItemProps extends React.ComponentProps<typeof Link> {
-  isCurrent?: boolean;
+  isActive?: boolean;
 }
 
 const NavbarItem = ({
   className,
-  isCurrent,
+  isActive,
   children,
   ...props
 }: NavbarItemProps) => {
-  const { layout } = useNavbar();
+  const { layout, open } = useNavbar();
+  const Comp = props.href ? Link : "span";
 
   return (
-    <Link
-      data-slot="navbar-item"
-      className={cn(
-        navbarItemStyle(),
-        layout === "mobile" ? "w-full rounded-s-md" : "w-fit rounded-md",
-        isCurrent &&
-          layout === "mobile" &&
-          "bg-foreground/10 hover:bg-foreground/8",
-        className,
-      )}
-      {...props}
-    >
-      {(values) => (
-        <>
-          {typeof children === "function" ? children(values) : children}
-          {isCurrent && (
-            <motion.span
-              data-slot="current-indicator"
-              layoutId="navbar-current-indicator"
-              transition={{
-                type: "spring",
-                stiffness: 500,
-                damping: 40,
-              }}
-              className={cn(
-                "absolute rounded-full bg-foreground",
-                layout === "mobile"
-                  ? "end-0 h-9 w-0.5"
-                  : "inset-x-0 -bottom-1 h-0.5 w-full",
-              )}
-            />
-          )}
-        </>
-      )}
-    </Link>
+    <Comp className="w-full" {...props}>
+      <Button
+        tone="ghost"
+        iconOnly={open}
+        className={cn("relative justify-start w-full p-2")}
+      >
+        {children as ButtonProps["children"]}
+
+        {isActive && (
+          <motion.span
+            data-slot="current-indicator"
+            layoutId="navbar-current-indicator"
+            transition={{
+              type: "spring",
+              stiffness: 500,
+              damping: 40,
+            }}
+            className={cn(
+              "absolute rounded-full bg-foreground",
+              layout === "mobile"
+                ? "end-0 h-9 w-0.5"
+                : "inset-x-0 -bottom-1 h-0.5 w-full",
+            )}
+          />
+        )}
+      </Button>
+    </Comp>
   );
 };
 
