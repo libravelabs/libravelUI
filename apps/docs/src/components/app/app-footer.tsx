@@ -27,9 +27,9 @@ const navigation = {
   ],
 
   starterKits: [
-    { name: "Next.js", href: "/docs/starter-kits/nextjs" },
-    { name: "Vite", href: "/docs/starter-kits/vite" },
-    { name: "Laravel", href: "/docs/starter-kits/laravel" },
+    { name: "Next.js", href: "/docs/getting-started/nextjs" },
+    { name: "Vite", href: "/docs/getting-started/vite" },
+    { name: "Laravel", href: "/docs/getting-started/laravel" },
   ],
 
   templates: [
@@ -125,11 +125,12 @@ export function AppFooter() {
               <FooterSectionTitle>Templates</FooterSectionTitle>
 
               <FooterLinks>
-                {navigation.templates.map((item) => (
+                {/* {navigation.templates.map((item) => (
                   <FooterLink key={item.name} href={item.href}>
                     {item.name}
                   </FooterLink>
-                ))}
+                ))} */}
+                <FooterLink>Coming Soon</FooterLink>
               </FooterLinks>
             </FooterSection>
 

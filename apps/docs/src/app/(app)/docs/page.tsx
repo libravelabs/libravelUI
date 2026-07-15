@@ -47,7 +47,7 @@ export default function DocsPage() {
           {sections.map((item) => (
             <Link
               key={item.name as React.Key}
-              href={`/legal/${removeExtension(item.$id as string)}`}
+              href={`/docs/${removeExtension(item.$id as string)}`}
               className={cn(item.soon && "pointer-events-none")}
             >
               <Card variant="gradient" className="flex flex-col gap-2 h-full">
