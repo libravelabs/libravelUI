@@ -6,7 +6,7 @@ import {
   defineCollections,
 } from "fumadocs-mdx/config";
 import { z as zod } from "zod";
-import { type LucideIcon } from "lucide-react";
+import { type IconType } from "react-icons";
 import { remarkDocCode } from "./src/lib/remark-doc-code";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
@@ -43,7 +43,7 @@ export const docs = defineDocs({
         .array(
           zod.object({
             title: zod.string(),
-            icon: zod.custom<LucideIcon>().optional(),
+            icon: zod.custom<IconType>().optional(),
           }),
         )
         .optional(),
