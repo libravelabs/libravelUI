@@ -5,9 +5,11 @@ component: true
 doc: Tooltip
 ---
 
+import { basicTooltip } from "@/components/examples/core/tooltip/tooltip.story";
+
 ## Example
 
-<Playground path="components/examples/core/tooltip/basic.demo.tsx" />
+<StoryBook story={basicTooltip} />
 
 ## Features
 
@@ -48,47 +50,23 @@ The HTML `title` attribute can be used to create a tooltip, but it cannot be sty
 ## Anatomy
 
 ```tsx
-[ANATOMY IMPORT HERE]
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/core/tooltip";
 ```
 
 ```tsx
-[ANATOMY CODE]
+<Tooltip>
+  <TooltipTrigger tone="unstyled">
+    <Badge tone="info">Settings</Badge>
+  </TooltipTrigger>
+  <TooltipContent tone="info">
+    Customize workspace behavior, themes, and integrations.
+  </TooltipContent>
+</Tooltip>
 ```
-
-## Another Examples
-
-### Placements
-
-The list above shows the primary directions, but you can also use more specific placements like `bottom left` or `top right`. Here are all the available placement options:
-
-| Primary Direction | Placement                                                             |
-| ----------------- | --------------------------------------------------------------------- |
-| `bottom`          | `bottom`, `bottom left`, `bottom right`, `bottom start`, `bottom end` |
-| `top`             | `top`, `top left`, `top right`, `top start`, `top end`                |
-| `left`            | `left`, `left top`, `left bottom`                                     |
-| `start`           | `start`, `start top`, `start bottom`                                  |
-| `right`           | `right`, `right top`, `right bottom`                                  |
-| `end`             | `end`, `end top`, `end bottom`                                        |
-
-<Playground path="components/examples/core/tooltip/placement.tsx" />
-
-### Tones
-
-Show different visual styles for tooltips, such as subtle, solid, or outlined, to match various interface themes and design preferences.
-
-<Playground path="components/examples/core/tooltip/tones.tsx" />
-
-### Without Arrow
-
-Display tooltips without the directional arrow for a cleaner, more minimal appearance while still providing helpful context.
-
-<Playground path="components/examples/core/tooltip/without-arrow.tsx" />
-
-### Delay
-
-Control the display timing of tooltips by adding a delay before they appear or disappear, improving usability and preventing accidental triggers.
-
-<Playground path="components/examples/core/tooltip/delay.tsx" />
 
 ## Props
 

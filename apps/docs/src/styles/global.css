@@ -1,5 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=TASA+Orbiter:wght@400..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap");
 
 @import "tailwindcss";
 @import "fumadocs-ui/css/shadcn.css";

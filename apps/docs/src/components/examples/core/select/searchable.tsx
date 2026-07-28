@@ -17,7 +17,7 @@ export default function SearchableSelect() {
       <SelectTrigger />
       <PopoverContent className="w-(--trigger-width)">
         <Autocomplete filter={contains}>
-          <SelectSearch className="rounded-lg bg-background" autoFocus />
+          <SelectSearch autoFocus />
           <ListBox className="max-h-96 overflow-y-auto mt-2" items={movies}>
             {(item) => (
               <SelectItem textValue={item.label}>{item.label}</SelectItem>

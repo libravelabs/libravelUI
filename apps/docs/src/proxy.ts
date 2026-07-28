@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { maintenanceMiddleware } from "./middleware/maintenance";
 
 export function proxy(request: NextRequest) {
@@ -7,6 +6,18 @@ export function proxy(request: NextRequest) {
 
   if (maintenance) {
     return maintenance;
+  }
+
+  const pathname = request.nextUrl.pathname;
+
+  if (pathname.startsWith("/docs/") && pathname.endsWith(".mdx")) {
+    const url = request.nextUrl.clone();
+
+    url.pathname = pathname
+      .replace(/^\/docs/, "/llms.mdx")
+      .replace(/\.mdx$/, "");
+
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();

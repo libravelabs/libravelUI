@@ -65,8 +65,6 @@ export const legal = defineCollections({
 export default defineConfig({
   lastModifiedTime: "git",
   mdxOptions: {
-    remarkPlugins: [
-      /* remarkDocCode */
-    ],
+    remarkPlugins: [/* remarkDocCode */],
   },
 });

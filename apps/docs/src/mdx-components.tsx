@@ -17,6 +17,7 @@ import { DocCard } from "@/components/examples/layout/doc-card";
 import { Step, Steps } from "fumadocs-ui/components/steps";
 import * as icons from "lucide-react";
 import * as primitives from "@/components/examples/layout/primitives";
+import { StoryBook } from "@/components/app/storybook/story-book";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -40,6 +41,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Callout,
     PreviewBlock,
     DocCard,
+    StoryBook,
     ...components,
   };
 }
