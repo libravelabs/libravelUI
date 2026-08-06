@@ -23,10 +23,11 @@ import { cn } from "@/lib/utils";
 
 type Breakpoint = "md" | "lg";
 type Layout = "mobile" | "desktop";
+type NavbarLayoutMode = "document" | "isolated";
 type Side = "left" | "right";
-type NavbarVariant = "default" | "float" | "inset";
-type NavbarPlacement = "top" | "bottom";
 type NavbarSticky = boolean;
+type NavbarVariant = NonNullable<NavbarSurfaceVariants["variant"]>;
+type NavbarPlacement = NonNullable<NavbarSurfaceVariants["placement"]>;
 
 type NavbarConfig = {
   variant: NavbarVariant;
@@ -41,6 +42,7 @@ interface NavbarContextProps {
   toggleNavbar: () => void;
   breakpoint: Breakpoint;
   layout: Layout;
+  layoutMode: NavbarLayoutMode;
   config: NavbarConfig;
   setConfig: (config: NavbarConfig) => void;
 }
@@ -110,6 +112,9 @@ const NavbarProvider = ({
   const layout: Layout =
     isMobile === undefined ? "desktop" : isMobile ? "mobile" : "desktop";
 
+  const layoutMode: NavbarLayoutMode =
+    config.variant === "inset" ? "isolated" : "document";
+
   const contextValue = useMemo<NavbarContextProps>(
     () => ({
       open,
@@ -118,10 +123,20 @@ const NavbarProvider = ({
       toggleNavbar,
       breakpoint,
       layout,
+      layoutMode,
       config,
       setConfig,
     }),
-    [open, setOpen, isMobile, toggleNavbar, breakpoint, layout, config],
+    [
+      open,
+      setOpen,
+      isMobile,
+      toggleNavbar,
+      breakpoint,
+      layout,
+      layoutMode,
+      config,
+    ],
   );
 
   if (isMobile === undefined) return null;
@@ -133,13 +148,21 @@ const NavbarProvider = ({
         data-variant={config.variant}
         data-placement={config.placement}
         data-sticky={config.isSticky ? "true" : "false"}
+        data-layout-mode={layoutMode}
         className={cn(
-          "relative flex h-svh w-full overflow-hidden data-[variant=inset]:bg-sidebar",
+          "relative flex w-full flex-col data-[variant=inset]:bg-sidebar",
+          layoutMode === "isolated" ? "h-svh overflow-hidden" : "min-h-dvh",
           className,
         )}
         {...props}
       >
-        <div className="flex h-full min-h-0 w-full flex-col items-stretch overflow-hidden data-[placement=bottom]:flex-col-reverse">
+        <div
+          className={cn(
+            "relative flex w-full flex-col data-[variant=inset]:bg-sidebar",
+            layoutMode === "isolated" ? "h-svh overflow-hidden" : "min-h-dvh",
+            className,
+          )}
+        >
           {children}
         </div>
       </div>
@@ -155,16 +178,17 @@ const navbarSurfaceStyle = cva("flex w-full items-center", {
         "mx-auto max-w-7xl rounded-xl border bg-sidebar px-4 py-2 shadow-xs",
       inset: "bg-sidebar px-6 pt-2",
     },
-    sticky: {
-      true: "fixed z-20",
-    },
     placement: {
-      top: "inset-x-0 top-0",
-      bottom: "inset-x-0 bottom-0",
+      top: "inset-x-0",
+      bottom: "inset-x-0",
     },
     breakpoint: {
       md: "md:flex",
       lg: "lg:flex",
+    },
+    isSticky: {
+      true: "z-999",
+      false: "",
     },
   },
   compoundVariants: [
@@ -179,36 +203,43 @@ const navbarSurfaceStyle = cva("flex w-full items-center", {
       className: "border-t",
     },
     {
-      sticky: true,
       variant: "float",
       placement: "top",
       className: "top-4",
     },
     {
-      sticky: true,
       variant: "float",
       placement: "bottom",
       className: "bottom-4",
     },
     {
-      sticky: true,
       variant: "inset",
       placement: "bottom",
       className: "bottom-2",
+    },
+    {
+      isSticky: true,
+      placement: "top",
+      className: "sticky top-0",
+    },
+    {
+      isSticky: true,
+      placement: "bottom",
+      className: "sticky bottom-0",
     },
   ],
   defaultVariants: {
     variant: "default",
     placement: "top",
+    breakpoint: "md",
+    isSticky: false,
   },
 });
 
 type NavbarSurfaceVariants = VariantProps<typeof navbarSurfaceStyle>;
 
 type NavbarProps = React.ComponentProps<"div"> &
-  Omit<NavbarSurfaceVariants, "sticky" | "breakpoint"> & {
-    isSticky?: boolean;
-  };
+  Omit<NavbarSurfaceVariants, "breakpoint">;
 
 function useFloatingNavbarVisibility(placement: NavbarPlacement) {
   const [isVisible, setIsVisible] = useState(true);
@@ -281,19 +312,24 @@ function useFloatingNavbarVisibility(placement: NavbarPlacement) {
 
 const Navbar = ({
   isSticky: isStickyProp = false,
-  placement = "top",
-  variant = "default",
+  placement: placementProp = "top",
+  variant: variantProp = "default",
   className,
   ref,
   ...props
 }: NavbarProps) => {
   const { breakpoint, isMobile, setConfig } = useNavbarContext();
+  const variant: NavbarVariant = variantProp ?? "default";
+  const placement: NavbarPlacement = placementProp ?? "top";
+
   const isSticky =
     placement === "bottom"
       ? true
       : variant === "inset"
         ? false
         : !!isStickyProp;
+
+  const { isVisible, hiddenOffset } = useFloatingNavbarVisibility(placement);
 
   useLayoutEffect(() => {
     setConfig({
@@ -310,8 +346,6 @@ const Navbar = ({
   if (isMobile) return null;
 
   if (variant === "float") {
-    const { isVisible, hiddenOffset } = useFloatingNavbarVisibility(placement);
-
     return (
       <motion.div
         data-navbar
@@ -340,8 +374,8 @@ const Navbar = ({
             navbarSurfaceStyle({
               variant,
               placement,
-              sticky: isSticky,
               breakpoint,
+              isSticky,
             }),
             className,
           )}
@@ -362,7 +396,7 @@ const Navbar = ({
         "peer/navbar",
         navbarSurfaceStyle({
           variant,
-          sticky: isSticky,
+          isSticky,
           placement,
           breakpoint,
         }),
@@ -428,12 +462,7 @@ interface NavbarItemProps extends React.ComponentProps<typeof Link> {
   isActive?: boolean;
 }
 
-const NavbarItem = ({
-  className,
-  isActive,
-  children,
-  ...props
-}: NavbarItemProps) => {
+const NavbarItem = ({ isActive, children, ...props }: NavbarItemProps) => {
   const { layout, open } = useNavbar();
   const Comp = props.href ? Link : "span";
 
@@ -458,7 +487,7 @@ const NavbarItem = ({
             className={cn(
               "absolute rounded-full bg-foreground",
               layout === "mobile"
-                ? "end-0 h-9 w-0.5"
+                ? "inset-e-0 h-9 w-0.5"
                 : "inset-x-0 -bottom-1 h-0.5 w-full",
             )}
           />
@@ -539,13 +568,13 @@ const NavbarMobile = ({
 };
 
 const navbarContentVariants = cva(
-  "relative flex flex-1 min-h-0 max-w-full flex-col overflow-auto bg-background",
+  "relative flex flex-1 min-h-0 max-w-full flex-col bg-background",
   {
     variants: {
       variant: {
         default: "",
         float: "",
-        inset: "m-2 rounded-xl shadow-sm",
+        inset: "m-2 overflow-y-auto overflow-x-hidden rounded-xl shadow-sm",
       },
       placement: {
         top: "",
@@ -557,18 +586,6 @@ const navbarContentVariants = cva(
       },
     },
     compoundVariants: [
-      {
-        variant: "default",
-        placement: "top",
-        isSticky: true,
-        className: "pt-16",
-      },
-      {
-        variant: "default",
-        placement: "bottom",
-        isSticky: true,
-        className: "pb-16",
-      },
       {
         variant: "float",
         placement: "top",

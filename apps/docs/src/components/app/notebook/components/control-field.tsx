@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "@/components/ui/core/input";
 import { Label } from "@/components/ui/core/field";
+import { Input } from "@/components/ui/core/input";
 import { NumberField, NumberInput } from "@/components/ui/core/number-field";
 import { Select } from "@/components/ui/core/select";
 import { Switch } from "@/components/ui/core/switch";
@@ -9,21 +9,22 @@ import { Textarea } from "@/components/ui/core/text-area";
 import { TextField } from "@/components/ui/core/text-field";
 import { ToggleGroup, ToggleItem } from "@/components/ui/core/toggle-group";
 
-import type { StoryBookControl } from "./types";
+import type { NotebookControl } from "../types";
+import type { Key } from "react-aria-components";
 
-type StoryBookControlProps = {
+type NotebookControlProps = {
   name: string;
-  control: StoryBookControl;
+  control: NotebookControl;
   value: unknown;
   onChange: (value: unknown) => void;
 };
 
-export function StoryBookControlField({
+export function NotebookControlField({
   name,
   control,
   value,
   onChange,
-}: StoryBookControlProps) {
+}: NotebookControlProps) {
   const label = control.label ?? name;
 
   switch (control.type) {
@@ -31,8 +32,8 @@ export function StoryBookControlField({
       return (
         <Select
           label={label}
-          selectedKey={value as string | number}
-          onSelectionChange={(key) => onChange(key ?? "")}
+          selectedKey={value as Key}
+          onSelectionChange={(key: Key) => onChange(key as Key)}
           items={control.options.map((option) => ({
             id: option.value,
             label: option.label,
@@ -42,22 +43,22 @@ export function StoryBookControlField({
 
     case "toggle-group":
       return (
-        <div className="flex flex-col gap-2">
-          <Label className="capitalize">{label}</Label>
+        <div className="flex flex-col">
+          <Label className="mb-1.25 capitalize">{label}</Label>
           <ToggleGroup
             disallowEmptySelection
             selectionMode="single"
-            selectedKeys={new Set([value as string | number])}
+            selectedKeys={new Set([value as Key])}
             onSelectionChange={(selected) => {
-              const selectedValue = selected.values().next().value;
-              if (selectedValue !== undefined) {
-                onChange(selectedValue);
+              const nextValue = selected.values().next().value;
+              if (nextValue !== undefined) {
+                onChange(nextValue as Key);
               }
             }}
           >
-            {control.options.map((item) => (
-              <ToggleItem key={item.value} id={item.value}>
-                {item.label}
+            {control.options.map((option) => (
+              <ToggleItem key={option.value} id={option.value}>
+                {option.label}
               </ToggleItem>
             ))}
           </ToggleGroup>
@@ -66,7 +67,7 @@ export function StoryBookControlField({
 
     case "boolean":
       return (
-        <div className="flex items-center justify-between">
+        <div className="flex size-fit items-center justify-between">
           <Switch
             isSelected={Boolean(value)}
             onChange={(checked) => onChange(checked)}
@@ -80,9 +81,9 @@ export function StoryBookControlField({
       return (
         <TextField
           value={String(value ?? "")}
-          onChange={(val) => onChange(val)}
+          onChange={(nextValue) => onChange(nextValue)}
         >
-          <Label className="capitalize">{label}</Label>
+          <Label className="mb-1.25 capitalize">{label}</Label>
           <Input placeholder={control.placeholder} />
         </TextField>
       );
@@ -91,9 +92,9 @@ export function StoryBookControlField({
       return (
         <TextField
           value={String(value ?? "")}
-          onChange={(val) => onChange(val)}
+          onChange={(nextValue) => onChange(nextValue)}
         >
-          <Label className="capitalize">{label}</Label>
+          <Label className="mb-1.25 capitalize">{label}</Label>
           <Textarea placeholder={control.placeholder} />
         </TextField>
       );
@@ -102,11 +103,13 @@ export function StoryBookControlField({
       return (
         <NumberField
           value={Number(value ?? 0)}
-          onChange={(val) => onChange(Number.isNaN(val) ? 0 : val)}
+          onChange={(nextValue) =>
+            onChange(Number.isNaN(nextValue) ? 0 : nextValue)
+          }
           minValue={control.min}
           maxValue={control.max}
         >
-          <Label className="capitalize">{label}</Label>
+          <Label className="mb-1.25 capitalize">{label}</Label>
           <NumberInput placeholder={control.placeholder} />
         </NumberField>
       );

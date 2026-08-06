@@ -1,487 +1,705 @@
-import React, {
-    createContext,
-    useContext,
-    useCallback,
-    useId,
-    useMemo,
-    useState,
-} from 'react';
-import { LayoutGroup, motion } from 'motion/react';
-import { Link } from '@/components/ui/core/link';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Button, type ButtonProps } from '@/components/ui/core/button';
-import { Separator } from '@/components/ui/core/separator';
-import { Dock, DockContent } from '@/components/ui/core/dock';
-import { cn } from '@/lib/utils';
-import { Menu } from 'lucide-react';
-import { cva } from 'class-variance-authority';
+"use client";
 
-type Breakpoint = 'md' | 'lg';
-type Layout = 'mobile' | 'desktop';
-type Side = 'left' | 'right';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { LayoutGroup, motion } from "motion/react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Menu } from "lucide-react";
+import { Link } from "@/components/ui/core/link";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Button, type ButtonProps } from "@/components/ui/core/button";
+import { Separator } from "@/components/ui/core/separator";
+import { Dock, DockContent } from "@/components/ui/core/dock";
+import { cn } from "@/lib/utils";
+
+type Breakpoint = "md" | "lg";
+type Layout = "mobile" | "desktop";
+type NavbarLayoutMode = "document" | "isolated";
+type Side = "left" | "right";
+type NavbarSticky = boolean;
+type NavbarVariant = NonNullable<NavbarSurfaceVariants["variant"]>;
+type NavbarPlacement = NonNullable<NavbarSurfaceVariants["placement"]>;
+
+type NavbarConfig = {
+  variant: NavbarVariant;
+  placement: NavbarPlacement;
+  isSticky: NavbarSticky;
+};
 
 interface NavbarContextProps {
-    open: boolean;
-    setOpen: (open: boolean) => void;
-    isMobile: boolean;
-    toggleNavbar: () => void;
-    breakpoint: Breakpoint;
-    layout: Layout;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isMobile: boolean;
+  toggleNavbar: () => void;
+  breakpoint: Breakpoint;
+  layout: Layout;
+  layoutMode: NavbarLayoutMode;
+  config: NavbarConfig;
+  setConfig: (config: NavbarConfig) => void;
 }
+
+const DEFAULT_CONFIG: NavbarConfig = {
+  variant: "default",
+  placement: "top",
+  isSticky: false,
+};
 
 const NavbarContext = createContext<NavbarContextProps | null>(null);
 
-const useNavbar = () => {
-    const context = useContext(NavbarContext);
-    if (!context) {
-        throw new Error('useNavbar must be used within a NavbarProvider.');
-    }
-    return context;
+const useNavbarContext = () => {
+  const context = useContext(NavbarContext);
+  if (!context) {
+    throw new Error("useNavbar must be used within a NavbarProvider.");
+  }
+  return context;
 };
 
-interface NavbarProviderProps extends React.ComponentProps<'div'> {
-    defaultOpen?: boolean;
-    isOpen?: boolean;
-    onOpenChange?: (open: boolean) => void;
-    breakpoint?: Breakpoint;
+const useNavbar = () => {
+  const { setConfig: _setConfig, ...context } = useNavbarContext();
+  return context;
+};
+
+interface NavbarProviderProps extends React.ComponentProps<"div"> {
+  defaultOpen?: boolean;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  breakpoint?: Breakpoint;
 }
 
 const NavbarProvider = ({
-    isOpen: openProp,
-    onOpenChange: setOpenProp,
-    defaultOpen = false,
-    breakpoint = 'md',
-    className,
-    ...props
+  isOpen: openProp,
+  onOpenChange: setOpenProp,
+  defaultOpen = false,
+  breakpoint = "md",
+  className,
+  children,
+  ...props
 }: NavbarProviderProps) => {
-    const [openInternal, setOpenInternal] = useState(defaultOpen);
-    const open = openProp ?? openInternal;
+  const [openInternal, setOpenInternal] = useState(defaultOpen);
+  const [config, setConfig] = useState<NavbarConfig>(DEFAULT_CONFIG);
 
-    const setOpen = useCallback(
-        (value: boolean | ((value: boolean) => boolean)) => {
-            if (setOpenProp) {
-                setOpenProp(typeof value === 'function' ? value(open) : value);
-                return;
-            }
-            setOpenInternal(typeof value === 'function' ? value(open) : value);
-        },
-        [setOpenProp, open],
-    );
+  const open = openProp ?? openInternal;
 
-    const toggleNavbar = useCallback(() => {
-        setOpen((prev) => !prev);
-    }, [setOpen]);
+  const setOpen = useCallback(
+    (value: boolean | ((value: boolean) => boolean)) => {
+      const nextValue = typeof value === "function" ? value(open) : value;
 
-    const isMobile = useIsMobile(breakpoint === 'md' ? 768 : 1024);
+      if (setOpenProp) {
+        setOpenProp(nextValue);
+        return;
+      }
 
-    const layout: Layout =
-        isMobile === undefined ? 'desktop' : isMobile ? 'mobile' : 'desktop';
+      setOpenInternal(nextValue);
+    },
+    [setOpenProp, open],
+  );
 
-    const contextValue = useMemo<NavbarContextProps>(
-        () => ({
-            open,
-            setOpen,
-            isMobile: !!isMobile,
-            toggleNavbar,
-            breakpoint,
-            layout,
-        }),
-        [open, setOpen, isMobile, toggleNavbar, breakpoint, layout],
-    );
+  const toggleNavbar = useCallback(() => {
+    setOpen((prev) => !prev);
+  }, [setOpen]);
 
-    if (isMobile === undefined) return null;
+  const isMobile = useIsMobile(breakpoint === "md" ? 768 : 1024);
 
-    return (
-        <NavbarContext.Provider value={contextValue}>
-            <div
-                className={cn(
-                    'flex min-h-svh w-full flex-col overflow-hidden',
-                    breakpoint === 'md'
-                        ? 'has-data-[variant=float]:md:block'
-                        : 'has-data-[variant=float]:lg:block',
+  const layout: Layout =
+    isMobile === undefined ? "desktop" : isMobile ? "mobile" : "desktop";
 
-                    // base spacing
-                    breakpoint === 'md' ? 'md:pt-0' : 'lg:pt-0',
-                    breakpoint === 'md'
-                        ? 'has-data-[sticky=true]:md:pt-16'
-                        : 'has-data-[sticky=true]:lg:pt-16',
+  const layoutMode: NavbarLayoutMode =
+    config.variant === "inset" ? "isolated" : "document";
 
-                    // variant: float
-                    'has-data-[variant=float]:overflow-auto',
-                    breakpoint === 'md'
-                        ? 'has-data-[variant=float]:md:pt-4'
-                        : 'has-data-[variant=float]:lg:pt-4',
+  const contextValue = useMemo<NavbarContextProps>(
+    () => ({
+      open,
+      setOpen,
+      isMobile: !!isMobile,
+      toggleNavbar,
+      breakpoint,
+      layout,
+      layoutMode,
+      config,
+      setConfig,
+    }),
+    [
+      open,
+      setOpen,
+      isMobile,
+      toggleNavbar,
+      breakpoint,
+      layout,
+      layoutMode,
+      config,
+    ],
+  );
 
-                    // variant: inset
-                    'has-data-[variant=inset]:bg-sidebar',
+  if (isMobile === undefined) return null;
 
-                    // placement: bottom (default)
-                    'has-placement-bottom:pt-0',
-                    'has-placement-bottom:pb-16',
-
-                    // float + bottom
-                    'has-data-[variant=float]:has-placement-bottom:pt-0',
-                    'has-data-[variant=float]:has-placement-bottom:pb-0',
-
-                    // inset + bottom
-                    'has-data-[variant=inset]:has-placement-bottom:pt-6',
-                    'has-data-[variant=inset]:has-placement-bottom:pb-12',
-
-                    className,
-                )}
-                {...props}
-            />
-        </NavbarContext.Provider>
-    );
+  return (
+    <NavbarContext.Provider value={contextValue}>
+      <div
+        data-slot="navbar-wrapper"
+        data-variant={config.variant}
+        data-placement={config.placement}
+        data-sticky={config.isSticky ? "true" : "false"}
+        data-layout-mode={layoutMode}
+        className={cn(
+          "relative flex w-full flex-col data-[variant=inset]:bg-sidebar",
+          layoutMode === "isolated" ? "h-svh overflow-hidden" : "min-h-dvh",
+          className,
+        )}
+        {...props}
+      >
+        <div
+          className={cn(
+            "relative flex w-full flex-col data-[variant=inset]:bg-sidebar",
+            layoutMode === "isolated" ? "h-svh overflow-hidden" : "min-h-dvh",
+            className,
+          )}
+        >
+          {children}
+        </div>
+      </div>
+    </NavbarContext.Provider>
+  );
 };
 
-const navbarSurfaceStyle = cva('flex w-full items-center', {
-    variants: {
-        variant: {
-            default:
-                'bg-background p-4 placement-top:border-b placement-bottom:border-t',
-            float: 'mx-auto max-w-7xl rounded-xl border bg-sidebar px-4 py-2 shadow-xs',
-            inset: 'bg-sidebar px-6 pt-2',
-        },
-        sticky: {
-            true: 'fixed z-10',
-        },
-        placement: {
-            top: 'inset-x-0 top-0',
-            bottom: 'inset-x-0 bottom-0',
-        },
-        breakpoint: {
-            md: 'md:flex',
-            lg: 'lg:flex',
-        },
+const navbarSurfaceStyle = cva("flex w-full items-center", {
+  variants: {
+    variant: {
+      default: "bg-background p-4",
+      float:
+        "mx-auto max-w-7xl rounded-xl border bg-sidebar px-4 py-2 shadow-xs",
+      inset: "bg-sidebar px-6 pt-2",
     },
-    compoundVariants: [
-        {
-            sticky: true,
-            variant: 'float',
-            placement: 'top',
-            className: 'top-4',
-        },
-        {
-            sticky: true,
-            variant: 'float',
-            placement: 'bottom',
-            className: 'bottom-4',
-        },
-        {
-            sticky: true,
-            variant: 'inset',
-            placement: 'bottom',
-            className: 'bottom-2',
-        },
-    ],
-    defaultVariants: {
-        variant: 'default',
-        placement: 'top',
+    placement: {
+      top: "inset-x-0",
+      bottom: "inset-x-0",
     },
+    breakpoint: {
+      md: "md:flex",
+      lg: "lg:flex",
+    },
+    isSticky: {
+      true: "z-999",
+      false: "",
+    },
+  },
+  compoundVariants: [
+    {
+      variant: "default",
+      placement: "top",
+      className: "border-b",
+    },
+    {
+      variant: "default",
+      placement: "bottom",
+      className: "border-t",
+    },
+    {
+      variant: "float",
+      placement: "top",
+      className: "top-4",
+    },
+    {
+      variant: "float",
+      placement: "bottom",
+      className: "bottom-4",
+    },
+    {
+      variant: "inset",
+      placement: "bottom",
+      className: "bottom-2",
+    },
+    {
+      isSticky: true,
+      placement: "top",
+      className: "sticky top-0",
+    },
+    {
+      isSticky: true,
+      placement: "bottom",
+      className: "sticky bottom-0",
+    },
+  ],
+  defaultVariants: {
+    variant: "default",
+    placement: "top",
+    breakpoint: "md",
+    isSticky: false,
+  },
 });
 
-type NavbarProps = React.ComponentProps<'div'> &
-    React.ComponentProps<typeof navbarSurfaceStyle> & {
-        isSticky?: boolean;
+type NavbarSurfaceVariants = VariantProps<typeof navbarSurfaceStyle>;
+
+type NavbarProps = React.ComponentProps<"div"> &
+  Omit<NavbarSurfaceVariants, "breakpoint">;
+
+function useFloatingNavbarVisibility(placement: NavbarPlacement) {
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  const showNav = useCallback(() => {
+    setIsVisible(true);
+  }, []);
+
+  const hideNav = useCallback(() => {
+    setIsVisible(false);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const listenerOptions: AddEventListenerOptions = {
+      passive: true,
+      capture: true,
     };
 
+    const getCurrentScrollTop = (target: EventTarget | null) => {
+      if (target === window || target === document) {
+        return window.scrollY;
+      }
+
+      if (
+        target instanceof HTMLElement &&
+        target.hasAttribute("data-scrollable")
+      ) {
+        return target.scrollTop;
+      }
+
+      return null;
+    };
+
+    const initialTarget = document.querySelector("[data-scrollable]");
+    lastScrollY.current =
+      initialTarget instanceof HTMLElement
+        ? initialTarget.scrollTop
+        : window.scrollY;
+
+    const handleScroll = (event: Event) => {
+      const current = getCurrentScrollTop(event.target);
+      if (current === null) return;
+
+      const diff = current - lastScrollY.current;
+
+      if (diff > 6) {
+        hideNav();
+      } else if (diff < -6) {
+        showNav();
+      }
+
+      lastScrollY.current = current;
+    };
+
+    window.addEventListener("scroll", handleScroll, listenerOptions);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll, listenerOptions);
+    };
+  }, [hideNav, showNav]);
+
+  return {
+    isVisible,
+    hiddenOffset: placement === "top" ? -16 : 16,
+  };
+}
+
 const Navbar = ({
-    isSticky,
-    placement = 'top',
-    variant = 'default',
-    className,
-    ref,
-    ...props
+  isSticky: isStickyProp = false,
+  placement: placementProp = "top",
+  variant: variantProp = "default",
+  className,
+  ref,
+  ...props
 }: NavbarProps) => {
-    const { breakpoint, isMobile } = useNavbar();
+  const { breakpoint, isMobile, setConfig } = useNavbarContext();
+  const variant: NavbarVariant = variantProp ?? "default";
+  const placement: NavbarPlacement = placementProp ?? "top";
 
-    if (isMobile) return null;
+  const isSticky =
+    placement === "bottom"
+      ? true
+      : variant === "inset"
+        ? false
+        : !!isStickyProp;
 
+  const { isVisible, hiddenOffset } = useFloatingNavbarVisibility(placement);
+
+  useLayoutEffect(() => {
+    setConfig({
+      variant,
+      placement,
+      isSticky,
+    });
+
+    return () => {
+      setConfig(DEFAULT_CONFIG);
+    };
+  }, [variant, placement, isSticky, setConfig]);
+
+  if (isMobile) return null;
+
+  if (variant === "float") {
     return (
+      <motion.div
+        data-navbar
+        data-variant={variant}
+        data-placement={placement}
+        data-sticky={isSticky ? "true" : "false"}
+        initial={false}
+        animate={{
+          y: isVisible ? 0 : hiddenOffset,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 420,
+          damping: 36,
+        }}
+        className={cn(
+          "peer/navbar fixed inset-x-0 z-20 px-4",
+          placement === "top" ? "top-4" : "bottom-4",
+          isVisible ? "pointer-events-auto" : "pointer-events-none",
+        )}
+      >
         <div
-            ref={ref}
-            data-navbar
-            data-variant={variant}
-            data-placement={placement}
-            data-sticky={
-                variant === 'inset' ? true : isSticky ? 'true' : 'false'
-            }
-            className={cn(
-                'peer/navbar',
-                navbarSurfaceStyle({
-                    variant,
-                    sticky:
-                        variant === 'inset' || variant === 'default'
-                            ? true
-                            : isSticky,
-                    placement,
-                    breakpoint,
-                }),
-                className,
-            )}
-            {...props}
+          ref={ref}
+          className={cn(
+            navbarSurfaceStyle({
+              variant,
+              placement,
+              breakpoint,
+              isSticky,
+            }),
+            className,
+          )}
+          {...props}
         />
+      </motion.div>
     );
+  }
+
+  return (
+    <div
+      ref={ref}
+      data-navbar
+      data-variant={variant}
+      data-placement={placement}
+      data-sticky={isSticky ? "true" : "false"}
+      className={cn(
+        "peer/navbar",
+        navbarSurfaceStyle({
+          variant,
+          isSticky,
+          placement,
+          breakpoint,
+        }),
+        className,
+      )}
+      {...props}
+    />
+  );
 };
 
 const NavbarDrawer = ({
-    children,
-    side = 'left',
-    ...props
+  children,
+  side = "left",
+  ...props
 }: React.ComponentProps<typeof Dock> & { side?: Side }) => {
-    const { open, setOpen, isMobile } = useNavbar();
-    if (!isMobile) return null;
+  const { open, setOpen, isMobile } = useNavbar();
 
-    return (
-        <Dock isOpen={open} onOpenChange={setOpen} {...props}>
-            <DockContent
-                side={side}
-                aria-label="Mobile Navigation"
-                classNames={{
-                    content:
-                        'entering:blur-in exiting:blur-out [&>button]:hidden pe-0',
-                }}
-            >
-                {children}
-            </DockContent>
-        </Dock>
-    );
+  if (!isMobile) return null;
+
+  return (
+    <Dock isOpen={open} onOpenChange={setOpen} {...props}>
+      <DockContent
+        side={side}
+        aria-label="Mobile Navigation"
+        classNames={{
+          content: "entering:blur-in exiting:blur-out [&>button]:hidden pe-0",
+        }}
+      >
+        {children}
+      </DockContent>
+    </Dock>
+  );
 };
 
 const NavbarSection = ({
-    className,
-    ...props
-}: React.ComponentProps<'div'>) => {
-    const id = useId();
-    const { layout } = useNavbar();
+  className,
+  ...props
+}: React.ComponentProps<"div">) => {
+  const id = useId();
+  const { layout } = useNavbar();
 
-    return (
-        <LayoutGroup id={id}>
-            <div
-                data-slot="navbar-section"
-                className={cn(
-                    'col-span-full grid grid-cols-[auto_1fr] gap-3 gap-y-0.5',
-                    layout === 'desktop' &&
-                        'flex flex-none grid-cols-none flex-row items-center gap-2.5',
-                    className,
-                )}
-                {...props}
-            />
-        </LayoutGroup>
-    );
+  return (
+    <LayoutGroup id={id}>
+      <div
+        data-slot="navbar-section"
+        className={cn(
+          "col-span-full grid grid-cols-[auto_1fr] gap-3 gap-y-0.5",
+          layout === "desktop" &&
+            "flex flex-none grid-cols-none flex-row items-center gap-2.5",
+          className,
+        )}
+        {...props}
+      />
+    </LayoutGroup>
+  );
 };
 
 const navbarItemStyle = cva(
-    'group relative col-span-2 inline-flex h-9 items-center gap-2 bg-transparent px-4 py-2 text-sm font-medium ring-ring/10 outline-ring/50 transition-[color,box-shadow] hover:bg-foreground/10 focus-visible:ring-4 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*="size-"])]:size-4',
+  "group relative col-span-2 inline-flex h-9 items-center gap-2 bg-transparent px-4 py-2 text-sm font-medium ring-ring/10 outline-ring/50 transition-[color,box-shadow] hover:bg-foreground/10 focus-visible:ring-4 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4",
 );
 
 interface NavbarItemProps extends React.ComponentProps<typeof Link> {
-    isCurrent?: boolean;
+  isActive?: boolean;
 }
 
-const NavbarItem = ({
-    className,
-    isCurrent,
-    children,
-    ...props
-}: NavbarItemProps) => {
-    const { layout } = useNavbar();
+const NavbarItem = ({ isActive, children, ...props }: NavbarItemProps) => {
+  const { layout, open } = useNavbar();
+  const Comp = props.href ? Link : "span";
 
-    return (
-        <Link
-            data-slot="navbar-item"
+  return (
+    <Comp className="w-full" {...props}>
+      <Button
+        tone="ghost"
+        iconOnly={open}
+        className={cn("relative justify-start w-full p-2")}
+      >
+        {children as ButtonProps["children"]}
+
+        {isActive && (
+          <motion.span
+            data-slot="current-indicator"
+            layoutId="navbar-current-indicator"
+            transition={{
+              type: "spring",
+              stiffness: 500,
+              damping: 40,
+            }}
             className={cn(
-                navbarItemStyle(),
-                layout === 'mobile'
-                    ? 'w-full rounded-s-md'
-                    : 'w-fit rounded-md',
-                isCurrent &&
-                    layout === 'mobile' &&
-                    'bg-foreground/10 hover:bg-foreground/8',
-                className,
+              "absolute rounded-full bg-foreground",
+              layout === "mobile"
+                ? "inset-e-0 h-9 w-0.5"
+                : "inset-x-0 -bottom-1 h-0.5 w-full",
             )}
-            {...props}
-        >
-            {(values) => (
-                <>
-                    {typeof children === 'function'
-                        ? children(values)
-                        : children}
-                    {isCurrent && (
-                        <motion.span
-                            data-slot="current-indicator"
-                            layoutId="navbar-current-indicator"
-                            transition={{
-                                type: 'spring',
-                                stiffness: 500,
-                                damping: 40,
-                            }}
-                            className={cn(
-                                'absolute rounded-full bg-foreground',
-                                layout === 'mobile'
-                                    ? 'end-0 h-9 w-0.5'
-                                    : 'inset-x-0 -bottom-1 h-0.5 w-full',
-                            )}
-                        />
-                    )}
-                </>
-            )}
-        </Link>
-    );
+          />
+        )}
+      </Button>
+    </Comp>
+  );
 };
 
 const NavbarSpacer = ({
-    className,
-    ref,
-    ...props
-}: React.ComponentProps<'div'>) => {
-    return <div ref={ref} className={cn('flex-1', className)} {...props} />;
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
+  return <div ref={ref} className={cn("flex-1", className)} {...props} />;
 };
 
 const NavbarStart = ({
-    className,
-    ref,
-    ...props
-}: React.ComponentProps<'div'>) => {
-    const { layout } = useNavbar();
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
+  const { layout } = useNavbar();
 
-    return (
-        <div
-            ref={ref}
-            className={cn(
-                'relative p-2 py-4',
-                layout === 'desktop' && 'p-0.5',
-                className,
-            )}
-            {...props}
-        />
-    );
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "relative p-2 py-4",
+        layout === "desktop" && "p-0.5",
+        className,
+      )}
+      {...props}
+    />
+  );
 };
 
 const NavbarGap = ({
-    className,
-    ref,
-    ...props
-}: React.ComponentProps<'div'>) => {
-    return <div ref={ref} className={cn('mx-2', className)} {...props} />;
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
+  return <div ref={ref} className={cn("mx-2", className)} {...props} />;
 };
 
 const NavbarSeparator = ({
-    className,
-    ...props
+  className,
+  ...props
 }: React.ComponentProps<typeof Separator>) => {
-    return (
-        <Separator
-            orientation="vertical"
-            className={cn('h-5', className)}
-            {...props}
-        />
-    );
+  return (
+    <Separator
+      orientation="vertical"
+      className={cn("h-5", className)}
+      {...props}
+    />
+  );
 };
 
 const NavbarMobile = ({
-    className,
-    ref,
-    ...props
-}: React.ComponentProps<'div'>) => {
-    const { breakpoint } = useNavbar();
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
+  const { breakpoint } = useNavbar();
 
-    return (
-        <div
-            ref={ref}
-            data-slot="navbar-mobile"
-            className={cn(
-                'flex items-center gap-x-3 px-4 py-2.5',
-                breakpoint === 'md' ? 'md:hidden' : 'lg:hidden',
-                className,
-            )}
-            {...props}
-        />
-    );
+  return (
+    <div
+      ref={ref}
+      data-slot="navbar-mobile"
+      className={cn(
+        "flex items-center gap-x-3 px-4 py-2.5",
+        breakpoint === "md" ? "md:hidden" : "lg:hidden",
+        className,
+      )}
+      {...props}
+    />
+  );
 };
 
-const NavbarInset = ({ className, ...props }: React.ComponentProps<'main'>) => {
-    return (
-        <main
-            data-slot="navbar-inset"
-            className={cn(
-                'relative flex flex-1 flex-col overflow-auto',
-                'peer-data-[variant=float]/navbar:overflow-y-hidden peer-data-[variant=inset]/navbar:m-2 peer-data-[variant=inset]/navbar:-mt-4 peer-data-[variant=inset]/navbar:rounded-xl peer-data-[variant=inset]/navbar:bg-background',
-                className,
-            )}
-            {...props}
-        />
-    );
-};
+const navbarContentVariants = cva(
+  "relative flex flex-1 min-h-0 max-w-full flex-col bg-background",
+  {
+    variants: {
+      variant: {
+        default: "",
+        float: "",
+        inset: "m-2 overflow-y-auto overflow-x-hidden rounded-xl shadow-sm",
+      },
+      placement: {
+        top: "",
+        bottom: "",
+      },
+      isSticky: {
+        true: "",
+        false: "",
+      },
+    },
+    compoundVariants: [
+      {
+        variant: "float",
+        placement: "top",
+        className: "pt-20",
+      },
+      {
+        variant: "float",
+        placement: "bottom",
+        className: "pb-20",
+      },
+      {
+        variant: "inset",
+        isSticky: true,
+        placement: "top",
+        className: "mt-12",
+      },
+      {
+        variant: "inset",
+        isSticky: true,
+        placement: "bottom",
+        className: "mb-12",
+      },
+    ],
+    defaultVariants: {
+      variant: "default",
+      placement: "top",
+      isSticky: false,
+    },
+  },
+);
+
+function NavbarContent({ className, ...props }: React.ComponentProps<"div">) {
+  const { config } = useNavbarContext();
+
+  return (
+    <div
+      data-slot="navbar-content"
+      className={cn(
+        navbarContentVariants({
+          variant: config.variant,
+          placement: config.placement,
+          isSticky: config.isSticky,
+        }),
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
 interface NavbarTriggerProps extends ButtonProps {
-    ref?: React.RefObject<HTMLButtonElement>;
+  ref?: React.RefObject<HTMLButtonElement>;
 }
 
 const NavbarTrigger = ({
-    className,
-    onPress,
-    ref,
-    ...props
+  className,
+  onPress,
+  ref,
+  ...props
 }: NavbarTriggerProps) => {
-    const { toggleNavbar, breakpoint } = useNavbar();
+  const { toggleNavbar, breakpoint } = useNavbar();
 
-    return (
-        <Button
-            ref={ref}
-            data-slot="navbar-trigger"
-            tone="ghost"
-            aria-label={props['aria-label'] || 'Toggle Navbar'}
-            size="sm"
-            iconOnly
-            className={cn(
-                breakpoint === 'md' ? 'md:hidden' : 'lg:hidden',
-                className,
-            )}
-            onPress={(event) => {
-                onPress?.(event);
-                toggleNavbar();
-            }}
-            {...props}
-        >
-            <Menu />
-            <span className="sr-only">Toggle Navbar</span>
-        </Button>
-    );
+  return (
+    <Button
+      ref={ref}
+      data-slot="navbar-trigger"
+      tone="ghost"
+      aria-label={props["aria-label"] || "Toggle Navbar"}
+      size="sm"
+      iconOnly
+      className={cn(breakpoint === "md" ? "md:hidden" : "lg:hidden", className)}
+      onPress={(event) => {
+        onPress?.(event);
+        toggleNavbar();
+      }}
+      {...props}
+    >
+      <Menu />
+      <span className="sr-only">Toggle Navbar</span>
+    </Button>
+  );
 };
 
-const NavbarLabel = ({ className, ...props }: React.ComponentProps<'span'>) => {
-    return (
-        <span
-            data-slot="navbar-label"
-            className={cn('truncate', className)}
-            {...props}
-        />
-    );
+const NavbarLabel = ({ className, ...props }: React.ComponentProps<"span">) => {
+  return (
+    <span
+      data-slot="navbar-label"
+      className={cn("truncate", className)}
+      {...props}
+    />
+  );
 };
 
 export {
-    useNavbar,
-    NavbarProvider,
-    Navbar,
-    NavbarMobile,
-    NavbarDrawer,
-    NavbarInset,
-    NavbarTrigger,
-    NavbarItem,
-    NavbarSection,
-    NavbarSpacer,
-    NavbarLabel,
-    NavbarSeparator,
-    NavbarStart,
-    NavbarGap,
-    navbarItemStyle,
+  useNavbar,
+  NavbarProvider,
+  Navbar,
+  NavbarMobile,
+  NavbarDrawer,
+  NavbarContent,
+  NavbarTrigger,
+  NavbarItem,
+  NavbarSection,
+  NavbarSpacer,
+  NavbarLabel,
+  NavbarSeparator,
+  NavbarStart,
+  NavbarGap,
+  navbarItemStyle,
 };
 
 export type {
-    NavbarProviderProps,
-    NavbarProps,
-    NavbarTriggerProps,
-    NavbarItemProps,
+  NavbarProviderProps,
+  NavbarProps,
+  NavbarTriggerProps,
+  NavbarItemProps,
 };

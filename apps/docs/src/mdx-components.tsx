@@ -15,9 +15,9 @@ import { RelatedComponents } from "@/components/docs/related-components";
 import { PreviewBlock } from "@/components/docs/preview-block";
 import { DocCard } from "@/components/examples/layout/doc-card";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import * as icons from "lucide-react";
+import * as icons from "react-icons/lu";
 import * as primitives from "@/components/examples/layout/primitives";
-import { StoryBook } from "@/components/app/storybook/story-book";
+import { Notebook } from "@/components/app/notebook/notebook";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -28,7 +28,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Tabs,
     Step,
     Steps,
-    AutoTypeTable: AutoTypeTable,
+    AutoTypeTable,
     TypeTable,
     RequiredBlock,
     TStoJSCodeBlock,
@@ -41,7 +41,11 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Callout,
     PreviewBlock,
     DocCard,
-    StoryBook,
+    Notebook: (props) => (
+      <div className="border rounded-xl">
+        <Notebook {...props} />
+      </div>
+    ),
     ...components,
   };
 }

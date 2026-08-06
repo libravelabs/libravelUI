@@ -9,8 +9,7 @@ import type {
   TooltipContentProps,
   TooltipProps,
 } from "@/components/ui/core/tooltip";
-import type { StoryBookConfig } from "@/components/app/storybook/types";
-import { serializeComponent } from "@/components/app/storybook/serialize";
+import type { StoryBookConfig } from "@/components/app/notebook/types";
 
 type TooltipStoryArgs = {
   placement: TooltipContentProps["placement"];
@@ -19,13 +18,35 @@ type TooltipStoryArgs = {
   showArrow: TooltipContentProps["showArrow"];
 };
 
-export const basicTooltip: StoryBookConfig<TooltipStoryArgs> = {
+const TooltipExample = (args: TooltipStoryArgs) => (
+  <Tooltip delay={args.delay}>
+    <TooltipTrigger>Hover me</TooltipTrigger>
+    <TooltipContent
+      placement={args.placement}
+      tone={args.tone}
+      showArrow={args.showArrow}
+    >
+      This is a tooltip
+    </TooltipContent>
+  </Tooltip>
+);
+
+export const tooltip = {
   title: "Tooltip",
-  component: Tooltip,
+
+  layout: {
+    control: {
+      columns: 2,
+      className: "gap-6",
+    },
+  },
 
   args: {
     placement: {
       defaultValue: "top",
+      style: {
+        colSpan: 2,
+      },
       control: {
         type: "select",
         options: [
@@ -57,6 +78,9 @@ export const basicTooltip: StoryBookConfig<TooltipStoryArgs> = {
 
     delay: {
       defaultValue: 0,
+      style: {
+        colSpan: 1,
+      },
       control: {
         type: "select",
         options: [
@@ -70,6 +94,9 @@ export const basicTooltip: StoryBookConfig<TooltipStoryArgs> = {
 
     tone: {
       defaultValue: "default",
+      style: {
+        colSpan: 1,
+      },
       control: {
         type: "select",
         options: [
@@ -85,56 +112,21 @@ export const basicTooltip: StoryBookConfig<TooltipStoryArgs> = {
 
     showArrow: {
       defaultValue: true,
+      style: {
+        colSpan: 1,
+      },
       control: {
         type: "boolean",
       },
     },
   },
 
-  render: (args) => (
-    <div className="flex items-center justify-center p-12">
-      <Tooltip delay={args.delay}>
-        <TooltipTrigger>Hover me</TooltipTrigger>
-        <TooltipContent
-          placement={args.placement}
-          tone={args.tone}
-          showArrow={args.showArrow}
-        >
-          This is a tooltip
-        </TooltipContent>
-      </Tooltip>
-    </div>
-  ),
+  render: TooltipExample,
 
   code: (args) => ({
     imports: [
       'import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/core/tooltip";',
     ],
-    code: serializeComponent({
-      name: "Tooltip",
-      props: {
-        delay: args.delay,
-      },
-      defaults: {
-        delay: 0,
-      },
-      children: `
-<TooltipTrigger>Hover me</TooltipTrigger>
-${serializeComponent({
-  name: "TooltipContent",
-  props: {
-    placement: args.placement,
-    tone: args.tone,
-    showArrow: args.showArrow,
-  },
-  defaults: {
-    placement: "top",
-    tone: "default",
-    showArrow: true,
-  },
-  children: "This is a tooltip",
-})}
-`,
-    }),
+    element: TooltipExample(args),
   }),
-};
+} satisfies StoryBookConfig<TooltipStoryArgs>;

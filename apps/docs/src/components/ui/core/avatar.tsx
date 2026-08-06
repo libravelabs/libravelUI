@@ -1,90 +1,103 @@
 "use client";
 
+import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const avatarVariants = cva(
-  "-outline-offset-1 inline-flex shrink-0 align-middle outline-1 outline-foreground/(--ring-opacity) [--avatar-radius:20%] [--ring-opacity:20%]",
+  "inline-flex shrink-0 overflow-hidden items-center justify-center bg-background font-medium uppercase select-none",
   {
     variants: {
       size: {
-        xs: "size-6",
-        sm: "size-8",
-        md: "size-10",
-        lg: "size-12",
-        xl: "size-16",
-        "2xl": "size-20",
-        "3xl": "size-24",
-        "4xl": "size-26",
-        "5xl": "size-32",
-        "6xl": "size-36",
-        "7xl": "size-40",
-        "8xl": "size-44",
-        "9xl": "size-48",
-        "10xl": "size-52",
+        xs: "size-6 text-xs",
+        sm: "size-8 text-sm",
+        md: "size-10 text-base",
+        lg: "size-12 text-lg",
+        xl: "size-16 text-xl",
+        "2xl": "size-20 text-2xl",
+        "3xl": "size-24 text-3xl",
+        "4xl": "size-26 text-4xl",
+        "5xl": "size-32 text-5xl",
+        "6xl": "size-36 text-6xl",
+        "7xl": "size-40 text-7xl",
+        "8xl": "size-44 text-8xl",
+        "9xl": "size-48 text-9xl",
+        "10xl": "size-52 text-10xl",
       },
       shape: {
-        circle: "rounded-full *:rounded-full",
-        square: "rounded-(--avatar-radius) *:rounded-(--avatar-radius)",
+        circle: "rounded-full",
+        square: "rounded-[20%]",
       },
     },
     defaultVariants: {
       size: "md",
       shape: "circle",
     },
-  }
+  },
 );
 
 interface AvatarProps
-  extends React.ComponentProps<"span">, VariantProps<typeof avatarVariants> {
+  extends
+    Omit<React.ComponentProps<"img">, "src">,
+    VariantProps<typeof avatarVariants> {
   src?: string | null;
   initials?: string;
-  alt?: string;
 }
 
 function Avatar({
-  src = null,
+  src,
   initials,
   alt = "",
-  className,
-  shape,
   size,
+  shape,
+  className,
   ...props
 }: AvatarProps) {
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={alt}
+        className={cn(
+          avatarVariants({
+            size,
+            shape,
+          }),
+          "object-cover object-center",
+          className,
+        )}
+        {...props}
+      />
+    );
+  }
+
   return (
     <span
-      data-slot="avatar"
-      {...props}
-      className={cn(avatarVariants({ size, shape }), className)}
+      className={cn(
+        avatarVariants({
+          size,
+          shape,
+        }),
+        className,
+      )}
     >
-      {initials && (
-        <svg
-          className="size-full select-none fill-current p-[5%] font-md text-[48px] uppercase bg-background"
-          viewBox="0 0 100 100"
-          aria-hidden={alt ? undefined : "true"}
+      <svg
+        className="size-full select-none fill-current p-[5%] font-md text-[48px] uppercase bg-background"
+        viewBox="0 0 100 100"
+        aria-hidden={alt ? undefined : "true"}
+      >
+        {alt && <title>{alt}</title>}
+        <text
+          x="50%"
+          y="50%"
+          alignmentBaseline="middle"
+          dominantBaseline="middle"
+          textAnchor="middle"
+          dy=".125em"
         >
-          {alt && <title>{alt}</title>}
-          <text
-            x="50%"
-            y="50%"
-            alignmentBaseline="middle"
-            dominantBaseline="middle"
-            textAnchor="middle"
-            dy=".125em"
-          >
-            {initials}
-          </text>
-        </svg>
-      )}
-
-      {/* Use Image from next/image if you're in NextJS */}
-      {src && (
-        <img
-          className="size-full object-cover object-center"
-          src={src}
-          alt={alt}
-        />
-      )}
+          {initials}
+        </text>
+      </svg>
     </span>
   );
 }
