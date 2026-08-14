@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import type { CSSProperties, ReactNode } from "react";
 import { ResponsiveContainer } from "recharts";
 
@@ -20,9 +21,12 @@ export type ChartSeriesConfig = {
 
 export type ChartDatum = Record<string, unknown>;
 
-export type NumericSeriesKey<TData extends ChartDatum> = Extract<{
-  [K in keyof TData]-?: NonNullable<TData[K]> extends number ? K : never;
-}[keyof TData], string>;
+export type NumericSeriesKey<TData extends ChartDatum> = Extract<
+  {
+    [K in keyof TData]-?: NonNullable<TData[K]> extends number ? K : never;
+  }[keyof TData],
+  string
+>;
 
 export type ChartConfig<TData extends ChartDatum> = Partial<
   Record<NumericSeriesKey<TData>, ChartSeriesConfig>
@@ -37,15 +41,14 @@ export type ChartSurfaceProps = {
   children: ReactNode;
 };
 
-export function joinClassNames(...classes: Array<string | false | null | undefined>): string {
-  return classes.filter(Boolean).join(" ");
-}
-
 export function getChartColor(index: number, color?: string): string {
   return color ?? CHART_COLORS[index % CHART_COLORS.length] ?? CHART_COLORS[0];
 }
 
-export function getSeriesLabel(label: ReactNode | undefined, key: string): ReactNode {
+export function getSeriesLabel(
+  label: ReactNode | undefined,
+  key: string,
+): ReactNode {
   return label ?? key;
 }
 
@@ -57,8 +60,8 @@ export function ChartSurface({
 }: ChartSurfaceProps): JSX.Element {
   return (
     <div
-      className={joinClassNames(
-        "w-full min-w-0 overflow-hidden rounded-2xl border bg-card p-3 shadow-sm",
+      className={cn(
+        "w-full min-w-0 overflow-hidden rounded-2xl shadow-sm",
         className,
       )}
       style={{
@@ -69,7 +72,12 @@ export function ChartSurface({
       }}
     >
       <div className="h-full min-h-0 min-w-0">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={0}
+          minHeight={0}
+        >
           {children}
         </ResponsiveContainer>
       </div>

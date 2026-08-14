@@ -13,7 +13,6 @@ import {
   ChartSurface,
   getChartColor,
   getSeriesLabel,
-  joinClassNames,
   type ChartConfig,
   type ChartDatum,
   type NumericSeriesKey,
